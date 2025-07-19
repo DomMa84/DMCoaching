@@ -1,0 +1,24 @@
+---
+import IconSVG from './IconSVG.astro';
+
+interface Props {
+  iconPath: string;
+  title: string;
+  description: string;
+  delay?: number;
+}
+
+const { iconPath, title, description, delay = 100 } = Astro.props;
+---
+
+<div 
+  class="bg-white dark:bg-dark rounded-lg shadow-md p-6"
+  data-aos="flip-left"
+  data-aos-delay={delay}
+>
+  <div class="bg-primary-gold/10 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+    <IconSVG iconPath={iconPath} className="w-8 h-8 text-primary-gold" />
+  </div>
+  <h3 class="text-xl font-semibold mb-4 text-center text-text-dark dark:text-text-light">{title}</h3>
+  <p class="text-text-muted text-center">{description}</p>
+</div>

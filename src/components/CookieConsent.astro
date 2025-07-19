@@ -1,0 +1,227 @@
+<div id="cookie-consent-banner" class="cookie-banner">
+  <div class="cookie-content">
+    <h3>Wir verwenden Cookies</h3>
+    <p>
+      Wir verwenden Cookies, um Ihnen die beste Online-Erfahrung zu bieten. 
+      Mit Ihrer Zustimmung akzeptieren Sie die Verwendung von Cookies in Übereinstimmung 
+      mit unserer <a href="/datenschutz">Datenschutzrichtlinie</a>.
+    </p>
+    <div class="cookie-buttons">
+      <button id="accept-cookies" class="btn-accept">Alle akzeptieren</button>
+      <button id="decline-cookies" class="btn-decline">Nur notwendige</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const cookieBanner = document.getElementById('cookie-consent-banner');
+    const acceptBtn = document.getElementById('accept-cookies');
+    const declineBtn = document.getElementById('decline-cookies');
+    
+    // Check if user has already made a choice
+    const cookieConsent = getCookie('cookie-consent');
+    
+    if (cookieConsent) {
+      cookieBanner.style.display = 'none';
+      
+      // If user accepted analytics cookies, load analytics
+      if (cookieConsent === 'accept') {
+        loadAnalytics();
+      }
+    } else {
+      cookieBanner.style.display = 'flex';
+    }
+    
+    // Accept all cookies
+    acceptBtn.addEventListener('click', function() {
+      setCookie('cookie-consent', 'accept', 180); // 180 days
+      cookieBanner.style.display = 'none';
+      loadAnalytics();
+    });
+    
+    // Accept only necessary cookies
+    declineBtn.addEventListener('click', function() {
+      setCookie('cookie-consent', 'decline', 180); // 180 days
+      cookieBanner.style.display = 'none';
+    });
+    
+    // Apply theme based on current site theme
+    applyTheme();
+    
+    // Listen for theme changes
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        setTimeout(applyTheme, 100);
+      });
+    }
+    
+    // Helper function to set a cookie
+    function setCookie(name, value, days) {
+      let expires = '';
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = '; expires=' + date.toUTCString();
+      }
+      document.cookie = name + '=' + value + expires + '; path=/; SameSite=Lax';
+    }
+    
+    // Helper function to get a cookie value
+    function getCookie(name) {
+      const nameEQ = name + '=';
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+    
+    // Function to load analytics scripts (if user consented)
+    function loadAnalytics() {
+      const gaScript = document.createElement('script');
+      gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-08H9EG15DE';
+      gaScript.async = true;
+      document.head.appendChild(gaScript);
+      
+      const gaConfigScript = document.createElement('script');
+      gaConfigScript.text = `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-08H9EG15DE');
+      `;
+      document.head.appendChild(gaConfigScript);
+    }
+    
+    // Apply theme based on current site theme
+    function applyTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        cookieBanner.classList.add('dark-mode');
+      } else {
+        cookieBanner.classList.remove('dark-mode');
+      }
+    }
+  });
+</script>
+
+<style is:global>
+  /* Cookie banner styles */
+  .cookie-banner {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
+    z-index: 9999;
+    display: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  .cookie-content {
+    width: 100%;
+  }
+  
+  .cookie-content h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+  
+  .cookie-content p {
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555555;
+  }
+  
+  .cookie-content a {
+    color: #D4AF37;
+    text-decoration: underline;
+  }
+  
+  .cookie-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .btn-accept, .btn-decline {
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    border: none;
+  }
+  
+  .btn-accept {
+    background-color: #D4AF37;
+    color: white;
+  }
+  
+  .btn-accept:hover {
+    background-color: #B89728;
+  }
+  
+  .btn-decline {
+    background-color: #F5F5F5;
+    color: #1A1A1A;
+  }
+  
+  .btn-decline:hover {
+    background-color: #E6E6E6;
+  }
+  
+  /* Dark mode styles */
+  .cookie-banner.dark-mode {
+    background-color: #2A2A2A;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .cookie-banner.dark-mode .cookie-content h3 {
+    color: #FFFFFF;
+  }
+  
+  .cookie-banner.dark-mode .cookie-content p {
+    color: #BBBBBB;
+  }
+  
+  .cookie-banner.dark-mode .btn-decline {
+    background-color: #3A3A3A;
+    color: #FFFFFF;
+  }
+  
+  .cookie-banner.dark-mode .btn-decline:hover {
+    background-color: #4A4A4A;
+  }
+  
+  @media (max-width: 768px) {
+    .cookie-banner {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+    
+    .cookie-buttons {
+      flex-direction: column;
+    }
+    
+    .btn-accept, .btn-decline {
+      width: 100%;
+    }
+  }
+</style>

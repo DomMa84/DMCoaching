@@ -1,0 +1,178 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Dominik Maier | Coaching & Interim Management",
+  description = "Dominik Maier hilft Ihnen, Ihren Vertrieb, Service und Marketing zu optimieren und weiterzuentwickeln – mit einem Fokus auf digitale Vertriebswege."
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <!-- Google tag (gtag.js) -->
+    <script is:inline>
+      // Only load GA if consent is given
+      if (localStorage.getItem('cookie-consent') === 'accept') {
+        const script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-08H9EG15DE';
+        script.async = true;
+        document.head.appendChild(script);
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-08H9EG15DE');
+      }
+    </script>
+    
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- Google Fonts: Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation - Load before initialization script -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    
+    <!-- Theme Color for mobile browsers -->
+    <meta name="theme-color" content="#D4AF37" />
+    
+    <!-- Theme detection script, now based on time of day and stored preference -->
+    <script is:inline>
+      // Function to determine theme based on time of day
+      function getTimeBasedTheme() {
+        const hour = new Date().getHours();
+        // Light mode from 6 AM to 6 PM (6-18), dark mode otherwise
+        return (hour >= 6 && hour < 18) ? 'light' : 'dark';
+      }
+
+      // Check for saved theme preference
+      const userTheme = localStorage.getItem('theme');
+      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // If user has manually set a theme, use that
+      if (userTheme) {
+        document.documentElement.classList.toggle('dark', userTheme === 'dark');
+      } 
+      // Otherwise, determine theme based on time of day
+      else {
+        const timeBasedTheme = getTimeBasedTheme();
+        document.documentElement.classList.toggle('dark', timeBasedTheme === 'dark');
+        localStorage.setItem('theme', timeBasedTheme); // Store the time-based theme
+      }
+      
+      // Recheck every hour to update theme if needed
+      setInterval(() => {
+        // Only update if user hasn't manually set a preference
+        if (!localStorage.getItem('userSetTheme')) {
+          const timeBasedTheme = getTimeBasedTheme();
+          document.documentElement.classList.toggle('dark', timeBasedTheme === 'dark');
+          localStorage.setItem('theme', timeBasedTheme);
+        }
+      }, 60 * 60 * 1000); // Check every hour
+    </script>
+    
+    <!-- Image fallback handler script -->
+    <script src="/js/image-fallback.js" defer></script>
+    
+    <!-- Dropdown behavior enhancement -->
+    <script src="/js/dropdown-behavior.js" defer></script>
+  </head>
+  <body class="font-sans bg-light dark:bg-dark text-text-dark dark:text-text-light min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-grow">
+      <slot />
+    </main>
+    <Footer />
+    <CookieConsent />
+    
+    <!-- AOS script and initialization -->
+    <script>
+      // First load the AOS script
+      document.addEventListener('DOMContentLoaded', () => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js';
+        script.onload = () => {
+          // Only initialize after script is fully loaded
+          if (typeof window.AOS !== 'undefined') {
+            window.AOS.init({
+              duration: 800,
+              easing: 'ease-out-cubic',
+              once: true
+            });
+          } else {
+            console.error('AOS library not available after loading script');
+          }
+        };
+        script.onerror = () => {
+          console.error('Failed to load AOS library');
+        };
+        document.body.appendChild(script);
+      });
+    </script>
+  </head>
+</html>
+
+<style is:global>
+  :root {
+    --swiper-theme-color: #D4AF37;
+  }
+  
+  body {
+    min-height: 100vh;
+    scroll-behavior: smooth;
+  }
+  
+  /* Smoother transitions for theme switching */
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* SVG icon fallbacks */
+  .fallback-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Add a pulsing animation for SVG loading */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  img.loading {
+    animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite;
+  }
+  
+  /* Enable hyphenation for better text wrapping */
+  .hyphens-auto {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+  }
+  
+  .break-words {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+</style>

@@ -1,0 +1,443 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import CircularProgressCard from '../../components/CircularProgressCard.astro';
+---
+
+<Layout 
+  title="Optimierung von Prozessen & Produkten | Dominik Maier"
+  description="Effiziente Prozessgestaltung und Produktoptimierung durch Value Management. Dominik Maier hilft Ihnen, Kosten zu senken und Qualität zu steigern."
+>
+  <!-- Hero Section -->
+  <section class="py-12 md:py-16 bg-light dark:bg-dark">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold text-text-dark dark:text-text-light mb-6" data-aos="fade-up">Optimierung von Prozessen & Produkten</h1>
+        
+        <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-6 md:p-8 shadow-md mb-8 md:mb-10" data-aos="fade-up" data-aos-delay="100">
+          <p class="text-base md:text-lg text-text-muted mb-6">
+            Mit Hilfe von Value Management helfen wir Ihnen, Ihre Produkte und Prozesse im gesamten Unternehmen zu optimieren. Erreichen Sie signifikante Kosteneinsparungen bei gleichzeitiger Steigerung von Qualität, Funktionalität und die Maximierung des Kundenutzens.
+          </p>
+          
+          <div class="flex items-start mb-6">
+            <div class="bg-primary-gold/10 p-3 rounded-full mr-4 mt-1 flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 leading-tight">Die Power des Value Management</h2>
+              <p class="text-text-muted text-sm md:text-base">
+                Value Management ist ein Managementstil, der besonders geeignet ist,
+Menschen zu mobilisieren, Fähigkeiten zu entwickeln sowie Synergie und
+Innovation zu fördern, mit dem Ziel, die Gesamtleistung einer
+Organisation zu maximieren. (EN 12973)
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="space-y-8 md:space-y-10">
+          <div data-aos="fade-up">
+            <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Messbare Ergebnisse durch Value Management</h2>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8 md:mb-10">
+              <CircularProgressCard
+                percentage="10-50%"
+                title="Kostenreduzierung"
+                description="Signifikante Einsparungen durch optimierte Prozesse und Produkte."
+                delay={100}
+              />
+              
+              <CircularProgressCard
+                percentage="25-50%"
+                title="Verkürzung Entwicklungszeit"
+                description="Beschleunigte Produktentwicklung durch verbesserte Ablaufprozesse."
+                delay={200}
+              />
+              
+              <CircularProgressCard
+                percentage="10-30%"
+                title="Verbesserung der Prozesse"
+                description="Effizientere und schlankere Abläufe in allen Unternehmensbereichen."
+                delay={300}
+              />
+              
+              <CircularProgressCard
+                percentage="< 2 Jahre"
+                title="Reduzierung Amortisationszeit"
+                description="Schnellere Rendite auf Investitionen durch optimierte Prozesse."
+                delay={400}
+              />
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+              <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center">
+                <div class="flex flex-col items-center">
+                  <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                      <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Qualität des Produkts gesteigert</h3>
+                  <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Höhere Produkt&shy;qualität und Kunden&shy;zufriedenheit durch systematische Optimierung.</p>
+                </div>
+              </div>
+              
+              <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center">
+                <div class="flex flex-col items-center">
+                  <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                      <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Funktionalität für den Kunden gesteigert</h3>
+                  <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Verbesserte Produkt&shy;funktionen und Nutzer&shy;erfahrung durch bedarfs&shy;orientierte Entwicklung.</p>
+                </div>
+              </div>
+              
+              <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center">
+                <div class="flex flex-col items-center">
+                  <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                      <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Verbesserung der Kommunikation</h3>
+                  <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Optimierte Kommunikations&shy;strukturen im Unternehmen für eine bessere Zusammenarbeit.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div data-aos="fade-up">
+            <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Unsere Leistungen im Bereich Value Management</h2>
+            
+            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 mb-5 md:mb-6">
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Prozessoptimierung</h3>
+              <p class="text-text-muted text-sm md:text-base mb-4">
+                Wir helfen Ihnen, Ihre Geschäftsprozesse effizienter und effektiver zu gestalten:
+              </p>
+              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+                <li>Analyse und Mapping bestehender Prozesse</li>
+                <li>Identifikation von Schwachstellen und Optimierungspotentialen</li>
+                <li>Entwicklung verbesserter Prozessabläufe</li>
+                <li>Implementierung von Prozessstandards und Best Practices</li>
+                <li>Aufbau eines kontinuierlichen Verbesserungsprozesses (KVP)</li>
+              </ul>
+            </div>
+            
+            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6">
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Produktoptimierung</h3>
+              <p class="text-text-muted text-sm md:text-base mb-4">
+                Systematische Verbesserung Ihrer Produkte hinsichtlich Kosten, Qualität und Kundenfunktionalität:
+              </p>
+              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+                <li>Funktionsanalyse bestehender Produkte</li>
+                <li>Bewertung von Funktionen nach Kundennutzen und Kosten</li>
+                <li>Entwicklung von Optimierungsansätzen</li>
+                <li>Überprüfung alternativer Lösungen und Materialien</li>
+                <li>Begleitung der Umsetzung von Produktverbesserungen</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div data-aos="fade-up">
+            <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Der Prozess (DIN EN 12973 / VDI 2800)</h2>
+            
+            <div class="relative max-w-4xl mx-auto">
+              <!-- Timeline line - only on desktop -->
+              <div class="absolute left-1/2 -ml-px h-full w-0.5 bg-primary-gold hidden md:block"></div>
+              
+              <!-- Mobile view - all steps in a column -->
+              <div class="md:hidden space-y-8">
+                <!-- Step 0 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">0</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Vorbereitung des Projekts</h3>
+                  <p class="text-text-muted text-sm">Prüfung der Machbarkeit. Zusammenstellung eines Teams. Festlegung von Zielen.</p>
+                </div>
+                
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">1</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Projektdefinition</h3>
+                  <p class="text-text-muted text-sm">Präzise Formulierung der Projektziele und Rahmenbedingungen.</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">2</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Planung</h3>
+                  <p class="text-text-muted text-sm">Erstellung eines detaillierten Projektplans mit Ressourcenmanagement.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">3</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Daten sammeln</h3>
+                  <p class="text-text-muted text-sm">Beschaffung umfassender Informationen über das Objekt und sein Umfeld.</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">4</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Funktionen- & Kostenanalyse</h3>
+                  <p class="text-text-muted text-sm">Identifikation und Bewertung der Funktionen und Kostenstrukturen.</p>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">5</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Lösungsideen finden</h3>
+                  <p class="text-text-muted text-sm">Kreative Entwicklung von Lösungsvorschlägen für definierte Ziele.</p>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">6</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Bewertung der Lösungen</h3>
+                  <p class="text-text-muted text-sm">Systematische Bewertung anhand von Kosten, Nutzen und Machbarkeit.</p>
+                </div>
+                
+                <!-- Step 7 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">7</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Ganzheitliche Vorschläge</h3>
+                  <p class="text-text-muted text-sm">Zusammenführung der besten Lösungsideen zu umfassenden Konzepten.</p>
+                </div>
+                
+                <!-- Step 8 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">8</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Präsentation</h3>
+                  <p class="text-text-muted text-sm">Vorstellung der erarbeiteten Lösungen vor Entscheidungsträgern.</p>
+                </div>
+                
+                <!-- Step 9 -->
+                <div class="flex flex-col items-center text-center">
+                  <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <span class="text-white font-bold">9</span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Realisierung</h3>
+                  <p class="text-text-muted text-sm">Umsetzung der ausgewählten Lösungsvorschläge in die Praxis.</p>
+                </div>
+              </div>
+              
+              <!-- Desktop view with alternating layout -->
+              <div class="hidden md:block space-y-12">
+                <!-- Step 0 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1 text-right pr-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Vorbereitung des Projekts</h3>
+                      <p class="text-text-muted text-sm md:text-base">Prüfung der Machbarkeit des Projekts. Zusammenstellung eines interdisziplinären Teams. Festlegung von Grobzielen und Budget.</p>
+                    </div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">0</span>
+                    </div>
+                    <div class="flex-1"></div>
+                  </div>
+                </div>
+                
+                <!-- Step 1 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1"></div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">1</span>
+                    </div>
+                    <div class="flex-1 pl-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Projektdefinition</h3>
+                      <p class="text-text-muted text-sm md:text-base">Präzise Formulierung der Projektziele. Festlegung des Untersuchungsgegenstands und der Rahmenbedingungen.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1 text-right pr-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Planung</h3>
+                      <p class="text-text-muted text-sm md:text-base">Erstellung eines detaillierten Projektplans mit Zeit- und Ressourcenmanagement.</p>
+                    </div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">2</span>
+                    </div>
+                    <div class="flex-1"></div>
+                  </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1"></div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">3</span>
+                    </div>
+                    <div class="flex-1 pl-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Daten sammeln</h3>
+                      <p class="text-text-muted text-sm md:text-base">Beschaffung umfassender Informationen über das Objekt und sein Umfeld. Analyse von bestehenden Prozessen, Kostenstrukturen und Marktanforderungen.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1 text-right pr-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Funktionenanalyse, Kostenanalyse und Detailziele</h3>
+                      <p class="text-text-muted text-sm md:text-base">Identifikation und Bewertung der Funktionen des Objekts. Ermittlung von Kostenstrukturen und Festlegung von spezifischen Zielvorgaben.</p>
+                    </div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">4</span>
+                    </div>
+                    <div class="flex-1"></div>
+                  </div>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1"></div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">5</span>
+                    </div>
+                    <div class="flex-1 pl-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Sammeln und Finden von Lösungsideen</h3>
+                      <p class="text-text-muted text-sm md:text-base">Kreative Entwicklung von Lösungsvorschlägen unter Berücksichtigung der definierten Ziele.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1 text-right pr-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Bewertung der Lösungsideen</h3>
+                      <p class="text-text-muted text-sm md:text-base">Systematische Bewertung der Ideen anhand festgelegter Kriterien wie Kosten, Nutzen und Machbarkeit.</p>
+                    </div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">6</span>
+                    </div>
+                    <div class="flex-1"></div>
+                  </div>
+                </div>
+                
+                <!-- Step 7 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1"></div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">7</span>
+                    </div>
+                    <div class="flex-1 pl-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Entwicklung ganzheitlicher Vorschläge</h3>
+                      <p class="text-text-muted text-sm md:text-base">Zusammenführung der besten Lösungsideen zu umfassenden Vorschlägen.</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Step 8 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1 text-right pr-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Präsentation der Vorschläge</h3>
+                      <p class="text-text-muted text-sm md:text-base">Vorstellung der erarbeiteten Lösungen vor Entscheidungsträgern.</p>
+                    </div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">8</span>
+                    </div>
+                    <div class="flex-1"></div>
+                  </div>
+                </div>
+                
+                <!-- Step 9 -->
+                <div class="relative" data-aos="fade-up">
+                  <div class="flex items-center">
+                    <div class="flex-1"></div>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold">9</span>
+                    </div>
+                    <div class="flex-1 pl-12">
+                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Realisierung</h3>
+                      <p class="text-text-muted text-sm md:text-base">Umsetzung der ausgewählten Lösungsvorschläge in die Praxis. Überwachung und Abschluss des Projekts.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 mt-8">
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Ihr Mehrwert</h3>
+              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+                <li>Signifikante Kosteneinsparungen bei gleichzeitiger Qualitätsverbesserung</li>
+                <li>Schnellere Time-to-Market durch optimierte Entwicklungsprozesse</li>
+                <li>Höhere Kundenzufriedenheit durch bessere Produktfunktionalität</li>
+                <li>Verbesserte Kommunikation zwischen Abteilungen</li>
+                <li>Langfristige Wettbewerbsvorteile durch effizientere Strukturen</li>
+                <li>Etablierung einer kontinuierlichen Verbesserungskultur</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Testimonial -->
+        <div class="my-8 md:my-12 bg-primary-gold/10 dark:bg-primary-gold/5 rounded-lg p-5 md:p-8" data-aos="fade-up">
+          <blockquote class="relative">
+            <svg class="absolute top-0 left-0 transform -translate-x-4 -translate-y-6 h-12 w-12 md:h-16 md:w-16 text-primary-gold/20" fill="currentColor" viewBox="0 0 32 32">
+              <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
+            </svg>
+            <p class="relative text-base md:text-lg text-text-dark dark:text-text-light italic mb-4 pl-6 md:pl-0">
+              Dominik Maier erfasst schnell Prozesse und versteht diese auf das Unternehmen sinnvoll anzupassen.
+            </p>
+            <footer class="text-text-muted text-sm md:text-base pl-6 md:pl-0">
+              — Irena Kugele Inhaberin Café Zeitraum
+            </footer>
+          </blockquote>
+        </div>
+        
+        <!-- CTA -->
+        <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-6 md:p-8" data-aos="fade-up">
+          <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4 text-center">Potential zur Optimierung in Ihrem Unternehmen?</h2>
+          <p class="text-text-muted mb-6 text-sm md:text-base text-center">
+            Lassen Sie uns gemeinsam das Value Management nutzen, um Ihre Produkte und Prozesse auf das nächste Level zu heben.
+          </p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hyphens-auto {
+    hyphens: auto;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+  }
+  
+  .break-words {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+</style>

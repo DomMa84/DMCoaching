@@ -1,0 +1,198 @@
+---
+interface Props {
+  complexity?: number; // 1-5
+  size?: "sm" | "md" | "lg" | "xl";
+}
+
+const { complexity = 3, size = "lg" } = Astro.props;
+
+// Size mapping
+const sizeMap = {
+  sm: "w-16 h-16",
+  md: "w-20 h-20",
+  lg: "w-24 h-24",
+  xl: "w-28 h-28"
+};
+
+const graphSize = sizeMap[size];
+---
+
+<div class="network-graph" style={`--complexity: ${complexity};`}>
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class={graphSize} aria-hidden="true">
+    <!-- Central node -->
+    <circle cx="50" cy="50" r="6" class="node central-node" />
+    
+    <!-- Connections and other nodes based on complexity -->
+    {complexity >= 2 && (
+      <>
+        <circle cx="25" cy="30" r="4" class="node" style="--index: 0;" />
+        <line x1="50" y1="50" x2="25" y2="30" class="connection" style="--index: 0;" />
+        
+        <circle cx="75" cy="30" r="4" class="node" style="--index: 1;" />
+        <line x1="50" y1="50" x2="75" y2="30" class="connection" style="--index: 1;" />
+      </>
+    )}
+    
+    {complexity >= 3 && (
+      <>
+        <circle cx="30" cy="70" r="4" class="node" style="--index: 2;" />
+        <line x1="50" y1="50" x2="30" y2="70" class="connection" style="--index: 2;" />
+        
+        <circle cx="70" cy="70" r="4" class="node" style="--index: 3;" />
+        <line x1="50" y1="50" x2="70" y2="70" class="connection" style="--index: 3;" />
+      </>
+    )}
+    
+    {complexity >= 4 && (
+      <>
+        <circle cx="15" cy="50" r="3" class="node" style="--index: 4;" />
+        <line x1="50" y1="50" x2="15" y2="50" class="connection" style="--index: 4;" />
+        
+        <circle cx="85" cy="50" r="3" class="node" style="--index: 5;" />
+        <line x1="50" y1="50" x2="85" y2="50" class="connection" style="--index: 5;" />
+      </>
+    )}
+    
+    {complexity >= 5 && (
+      <>
+        <circle cx="40" cy="15" r="3" class="node" style="--index: 6;" />
+        <line x1="50" y1="50" x2="40" y2="15" class="connection" style="--index: 6;" />
+        
+        <circle cx="60" cy="15" r="3" class="node" style="--index: 7;" />
+        <line x1="50" y1="50" x2="60" y2="15" class="connection" style="--index: 7;" />
+        
+        <circle cx="40" cy="85" r="3" class="node" style="--index: 8;" />
+        <line x1="50" y1="50" x2="40" y2="85" class="connection" style="--index: 8;" />
+        
+        <circle cx="60" cy="85" r="3" class="node" style="--index: 9;" />
+        <line x1="50" y1="50" x2="60" y2="85" class="connection" style="--index: 9;" />
+      </>
+    )}
+    
+    <!-- Data flow animations -->
+    <g class="data-flows">
+      {Array.from({ length: complexity * 2 }).map((_, i) => (
+        <circle class="data-packet" r="1.5">
+          <animateMotion
+            dur={`${2 + (i % 3)}s`}
+            repeatCount="indefinite"
+            path="M50,50 Q25,30 50,10 T50,50 T75,30 T50,50 T30,70 T50,50 T70,70 T50,50"
+            begin={`${i * 0.5}s`}
+          />
+        </circle>
+      ))}
+    </g>
+  </svg>
+</div>
+
+<style>
+  .network-graph {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .node {
+    fill: #D4AF37;
+    opacity: 0;
+    animation: appear 0.5s forwards;
+    animation-delay: calc(var(--index) * 0.1s);
+  }
+  
+  .central-node {
+    fill: #D4AF37;
+    opacity: 1;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      r: 6;
+      opacity: 1;
+    }
+    50% {
+      r: 6.5;
+      opacity: 0.8;
+    }
+    100% {
+      r: 6;
+      opacity: 1;
+    }
+  }
+  
+  .connection {
+    stroke: #D4AF37;
+    stroke-width: 1;
+    opacity: 0;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: draw-line 1s forwards;
+    animation-delay: calc(var(--index) * 0.1s + 0.2s);
+  }
+  
+  .data-packet {
+    fill: #D4AF37;
+    opacity: 0.8;
+  }
+  
+  @keyframes appear {
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes draw-line {
+    to {
+      opacity: 0.6;
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  /* Restart animations when element comes into view */
+  .network-graph.restart-animation .node:not(.central-node) {
+    animation: appear 0.5s forwards;
+  }
+  
+  .network-graph.restart-animation .connection {
+    animation: draw-line 1s forwards;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle animation restart when scrolling into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Reset and restart animations
+          const graph = entry.target;
+          
+          // Reset node animations
+          const nodes = graph.querySelectorAll('.node:not(.central-node)');
+          nodes.forEach(node => {
+            node.style.animation = 'none';
+            void node.offsetWidth;
+            node.style.animation = 'appear 0.5s forwards';
+            node.style.animationDelay = `calc(${node.style.getPropertyValue('--index')} * 0.1s)`;
+          });
+          
+          // Reset connection animations
+          const connections = graph.querySelectorAll('.connection');
+          connections.forEach(connection => {
+            connection.style.animation = 'none';
+            void connection.offsetWidth;
+            connection.style.animation = 'draw-line 1s forwards';
+            connection.style.animationDelay = `calc(${connection.style.getPropertyValue('--index')} * 0.1s + 0.2s)`;
+          });
+        }
+      });
+    }, {
+      threshold: 0.3
+    });
+    
+    // Observe all network graphs
+    document.querySelectorAll('.network-graph').forEach(graph => {
+      observer.observe(graph);
+    });
+  });
+</script>

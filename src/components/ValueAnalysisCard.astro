@@ -1,0 +1,22 @@
+---
+interface Props {
+  value: string;
+  title: string;
+  description: string;
+  delay?: number;
+}
+
+const { value, title, description, delay = 100 } = Astro.props;
+---
+
+<div 
+  class="bg-white dark:bg-dark rounded-lg shadow-md p-6 text-center"
+  data-aos="zoom-in"
+  data-aos-delay={delay}
+>
+  <div class="inline-flex items-center justify-center p-3 bg-primary-gold/20 rounded-full mb-4">
+    <span class="text-3xl font-bold text-primary-gold">{value}</span>
+  </div>
+  <h3 class="text-lg font-semibold mb-3 text-text-dark dark:text-text-light">{title}</h3>
+  <p class="text-text-muted">{description}</p>
+</div>

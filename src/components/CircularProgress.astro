@@ -1,0 +1,90 @@
+---
+interface Props {
+  value: number;
+  max?: number; // Optional machen, da ein Default-Wert gesetzt wird
+  label: string; // Wenn label immer vorhanden ist, kann es auch ohne ? bleiben
+  size?: number;
+  strokeWidth?: number;
+  primaryColor?: string;
+  secondaryColor?: string;
+}
+
+const { 
+  value, 
+  max = 100, 
+  label, 
+  size = 120, 
+  strokeWidth = 8,
+  primaryColor = "#D4AF37", // Standardwert Gold
+  secondaryColor = "#D4AF3730" // Standardwert leicht transparentes Gold
+} = Astro.props;
+
+const radius = (size - strokeWidth) / 2;
+const circumference = radius * 2 * Math.PI;
+const progress = value / max;
+const strokeDashoffset = circumference - progress * circumference;
+
+const viewBoxSize = size;
+const center = size / 2;
+---
+
+<div 
+  class="circular-progress"
+  style={`--primary-color: ${primaryColor}; --secondary-color: ${secondaryColor};`}
+>
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
+    class="transform -rotate-90"
+    role="progressbar"            aria-valuenow={value}        aria-valuemin="0"            aria-valuemax={max}          >
+    <circle 
+      stroke="var(--secondary-color)" fill="none"
+      cx={center}
+      cy={center}
+      r={radius}
+      stroke-width={strokeWidth}
+    />
+    
+    <circle 
+      stroke="var(--primary-color)" fill="none"
+      cx={center}
+      cy={center}
+      r={radius}
+      stroke-width={strokeWidth}
+      stroke-dasharray={circumference}
+      stroke-dashoffset={strokeDashoffset}
+      stroke-linecap="round"
+    />
+  </svg>
+  <div class="progress-label">
+    <span class="progress-value">{label}</span>
+  </div>
+</div>
+
+<style>
+  .circular-progress {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .progress-label {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    /* Stellt sicher, dass der Text die richtige Farbe hat */
+    color: var(--primary-color); 
+  }
+  
+  .progress-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    /* Farbe kommt jetzt über .progress-label oder direkt von var(--primary-color) */
+  }
+</style>

@@ -1,0 +1,130 @@
+---
+interface Props {
+  value: number;
+  maxValue?: number;
+  ringSize?: number;
+  strokeWidth?: number;
+  color?: string;
+  backgroundColor?: string;
+  animated?: boolean;
+}
+
+const { 
+  value, 
+  maxValue = 100, 
+  ringSize = 100, 
+  strokeWidth = 8, 
+  color = "#D4AF37", 
+  backgroundColor = "rgba(212,175,55,0.2)",
+  animated = true 
+} = Astro.props;
+
+// Calculate SVG parameters
+const normalizedValue = Math.min(Math.max(value, 0), maxValue);
+const percentage = (normalizedValue / maxValue) * 100;
+const radius = (ringSize - strokeWidth) / 2;
+const circumference = 2 * Math.PI * radius;
+const offset = circumference - (percentage / 100) * circumference;
+const halfSize = ringSize / 2;
+---
+
+<div class="progress-ring-container flex items-center justify-center">
+  <div class="relative inline-flex" style={`width: ${ringSize}px; height: ${ringSize}px;`}>
+    <svg class="w-full h-full transform -rotate-90" viewBox={`0 0 ${ringSize} ${ringSize}`}>
+      <!-- Background circle -->
+      <circle
+        cx={halfSize}
+        cy={halfSize}
+        r={radius}
+        stroke={backgroundColor}
+        stroke-width={strokeWidth}
+        fill="none"
+      />
+      
+      <!-- Progress circle -->
+      <circle
+        class="progress-ring-circle"
+        cx={halfSize}
+        cy={halfSize}
+        r={radius}
+        stroke={color}
+        stroke-width={strokeWidth}
+        stroke-linecap="round"
+        fill="none"
+        stroke-dasharray={circumference}
+        stroke-dashoffset={animated ? circumference : offset}
+        data-final-offset={offset}
+        data-circumference={circumference}
+      />
+    </svg>
+    
+    <!-- Centered content -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <slot />
+    </div>
+  </div>
+</div>
+
+<style>
+  .progress-ring-circle {
+    transition: stroke-dashoffset 1.5s ease-out;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Setup IntersectionObserver to animate progress rings when they come into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Find the progress ring circle
+          const circle = entry.target.querySelector('.progress-ring-circle');
+          if (circle) {
+            // Get the final offset and circumference
+            const finalOffset = parseFloat(circle.getAttribute('data-final-offset') || '0');
+            
+            // Animate to the final value
+            requestAnimationFrame(() => {
+              circle.style.strokeDashoffset = finalOffset + 'px';
+            });
+          }
+        }
+      });
+    }, {
+      threshold: 0.3, // Trigger when at least 30% of the element is visible
+      rootMargin: '0px 0px -100px 0px' // Slightly before element enters viewport
+    });
+    
+    // Observe all progress ring containers
+    document.querySelectorAll('.progress-ring-container').forEach(container => {
+      observer.observe(container);
+    });
+    
+    // Reset animation when leaving view
+    const resetObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          const circle = entry.target.querySelector('.progress-ring-circle');
+          if (circle) {
+            const circumference = parseFloat(circle.getAttribute('data-circumference') || '0');
+            circle.style.transition = 'none';
+            circle.style.strokeDashoffset = circumference + 'px';
+            
+            // Force reflow
+            void circle.offsetWidth;
+            
+            // Re-enable transition for next animation
+            circle.style.transition = 'stroke-dashoffset 1.5s ease-out';
+          }
+        }
+      });
+    }, {
+      threshold: 0,
+      rootMargin: '0px 0px 0px 0px'
+    });
+    
+    document.querySelectorAll('.progress-ring-container').forEach(container => {
+      resetObserver.observe(container);
+    });
+  });
+</script>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100">
+  <style>
+    .text { font-family: 'Montserrat', sans-serif; font-size: 14px; fill: #1A1A1A; }
+    .letter { fill: #1A1A1A; }
+    .gold-accent { fill: #D4AF37; }
+  </style>
+  
+  <!-- Main letter D -->
+  <path class="letter" d="M30,25 h25 a20,20 0 0,1 20,20 v10 a20,20 0 0,1 -20,20 h-25 z" />
+  
+  <!-- Gold accent -->
+  <rect class="gold-accent" x="30" y="25" width="5" height="50" />
+  
+  <!-- Letter M -->
+  <path class="letter" d="M85,25 h10 v50 h-10 v-30 l-10,20 l-10,-20 v30 h-10 v-50 h10 l10,20 z" />
+  
+  <!-- Text below -->
+  <text x="30" y="85" class="text">COACHING & INTERIM MANAGEMENT</text>
+</svg>

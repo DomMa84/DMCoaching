@@ -1,0 +1,54 @@
+# Set up proper MIME types
+<IfModule mod_mime.c>
+  # Add MIME type for WebP
+  AddType image/webp .webp
+  
+  # Add MIME type for SVG
+  AddType image/svg+xml .svg .svgz
+  
+  # Add MIME types for fonts
+  AddType application/font-woff .woff
+  AddType application/font-woff2 .woff2
+</IfModule>
+
+# Add proper caching headers for images
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/gif "access plus 1 year"
+  
+  # Fonts
+  ExpiresByType application/font-woff "access plus 1 month"
+  ExpiresByType application/font-woff2 "access plus 1 month"
+  
+  # Default
+  ExpiresDefault "access plus 1 week"
+</IfModule>
+
+# Enable GZIP compression for faster loading
+<IfModule mod_deflate.c>
+  # Images
+  AddOutputFilterByType DEFLATE image/svg+xml
+  
+  # Other common file types
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Configure webp image handling for supported browsers
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Check if browser supports WebP
+  RewriteCond %{HTTP_ACCEPT} image/webp
+  
+  # Check if WebP version exists
+  RewriteCond %{REQUEST_FILENAME}.webp -f
+  
+  # Serve WebP image instead
+  RewriteRule ^(.+)\.(jpe?g|png)$ $1.$2.webp [T=image/webp,L]
+</IfModule>

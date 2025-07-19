@@ -1,0 +1,113 @@
+---
+interface Props {
+  level: number; // 1-5
+  maxLevel?: number;
+  animated?: boolean;
+  size?: "sm" | "md" | "lg";
+}
+
+const { 
+  level, 
+  maxLevel = 5, 
+  animated = true, 
+  size = "md" 
+} = Astro.props;
+
+const normalizedLevel = Math.min(Math.max(Math.floor(level), 1), maxLevel);
+
+// Size classes
+const sizeMap = {
+  sm: "w-4 h-4",
+  md: "w-5 h-5",
+  lg: "w-6 h-6"
+};
+
+const starSize = sizeMap[size];
+---
+
+<div class="quality-meter flex items-center justify-center space-x-1">
+  {Array.from({ length: maxLevel }).map((_, index) => (
+    <div class={`quality-star ${index < normalizedLevel ? 'active' : 'inactive'}`} data-index={index}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class={starSize} aria-hidden="true">
+        <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
+      </svg>
+    </div>
+  ))}
+</div>
+
+<style>
+  .quality-star.active {
+    color: #D4AF37;
+    opacity: 0;
+    animation: star-appear 0.4s forwards;
+    transform-origin: center;
+  }
+  
+  .quality-star.inactive {
+    color: #D4AF3730;
+    opacity: 0;
+    animation: star-fade 0.4s 0.5s forwards;
+  }
+  
+  /* Individual animation delays for sequential appearance */
+  .quality-star.active:nth-child(1) { animation-delay: 0s; }
+  .quality-star.active:nth-child(2) { animation-delay: 0.15s; }
+  .quality-star.active:nth-child(3) { animation-delay: 0.3s; }
+  .quality-star.active:nth-child(4) { animation-delay: 0.45s; }
+  .quality-star.active:nth-child(5) { animation-delay: 0.6s; }
+  
+  @keyframes star-appear {
+    0% {
+      opacity: 0;
+      transform: scale(0.5) rotate(-20deg);
+    }
+    70% {
+      transform: scale(1.2) rotate(10deg);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1) rotate(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes star-fade {
+    to {
+      opacity: 1;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Handle animation restart when scrolling into view
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Reset and restart animations
+          const stars = entry.target.querySelectorAll('.quality-star');
+          
+          stars.forEach(star => {
+            star.style.animation = 'none';
+            void star.offsetWidth;
+            
+            if (star.classList.contains('active')) {
+              const index = parseInt(star.getAttribute('data-index') || '0', 10);
+              const delay = index * 0.15;
+              star.style.animation = `star-appear 0.4s forwards ${delay}s`;
+            } else {
+              star.style.animation = 'star-fade 0.4s 0.5s forwards';
+            }
+          });
+        }
+      });
+    }, {
+      threshold: 0.3
+    });
+    
+    // Observe all quality meters
+    document.querySelectorAll('.quality-meter').forEach(meter => {
+      observer.observe(meter);
+    });
+  });
+</script>

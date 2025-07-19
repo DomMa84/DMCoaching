@@ -1,0 +1,333 @@
+---
+// src/components/ContactForm.astro v15.0 (Final design integration)
+---
+
+<div class="w-full">
+  <form
+    x-data="{
+        showSuccess: false,
+        showError: false,
+        errorMessage: '',
+        isSubmitting: false,
+        version: 'Frontend v15.0 (Final design integration)',
+        formData: {
+            name: '',
+            email: '',
+            phone: '',
+            message: '',
+            gdprConsent: false,
+            honeypot: ''
+        },
+        regex: {
+            name: /^.{2,}$/,
+            email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            phone: /^.{6,20}$/
+        },
+        validation: {
+            name: true,
+            email: true,
+            phone: true,
+            gdprConsent: true
+        },
+
+        async submitForm() {
+            console.log('=== FORM SUBMISSION STARTED ===');
+            console.log('Frontend Version:', this.version);
+            
+            if (this.isSubmitting) {
+                console.log('Form is already being submitted');
+                return;
+            }
+            
+            this.isSubmitting = true;
+            this.showSuccess = false;
+            this.showError = false;
+            this.errorMessage = '';
+            this.validation.name = true;
+            this.validation.email = true;
+            this.validation.phone = true;
+            this.validation.gdprConsent = true;
+
+            let isValid = this.validateForm();
+            if (!isValid) {
+                this.showError = true;
+                this.errorMessage = 'Bitte korrigieren Sie die markierten Felder und stimmen Sie der Datenschutzerklärung zu.';
+                this.isSubmitting = false;
+                console.log('Frontend validation failed');
+                return;
+            }
+
+            const cleanFormData = {
+                name: this.formData.name.trim(),
+                email: this.formData.email.trim(),
+                phone: this.formData.phone.trim(),
+                message: this.formData.message.trim(),
+                gdprConsent: this.formData.gdprConsent,
+                honeypot: this.formData.honeypot
+            };
+
+            try {
+                const postData = {
+                    name: cleanFormData.name,
+                    email: cleanFormData.email,
+                    phone: cleanFormData.phone,
+                    message: cleanFormData.message,
+                    gdprConsent: cleanFormData.gdprConsent,
+                    leadForm: false,
+                    honeypot: cleanFormData.honeypot || ''
+                };
+                
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(postData)
+                });
+
+                await this.handleResponse(response);
+                
+            } catch (error) {
+                console.error('❌ Network error:', error);
+                this.showError = true;
+                this.errorMessage = 'Netzwerkfehler: ' + error.message;
+            } finally {
+                this.isSubmitting = false;
+            }
+        },
+
+        validateForm() {
+            let isValid = true;
+            
+            if (!this.formData.name || !this.regex.name.test(this.formData.name)) {
+                this.validation.name = false;
+                isValid = false;
+            }
+            if (!this.formData.email || !this.regex.email.test(this.formData.email)) {
+                this.validation.email = false;
+                isValid = false;
+            }
+            if (!this.formData.phone || !this.regex.phone.test(this.formData.phone)) {
+                this.validation.phone = false;
+                isValid = false;
+            }
+            if (!this.formData.gdprConsent) {
+                this.validation.gdprConsent = false;
+                isValid = false;
+            }
+            
+            return isValid;
+        },
+
+        async handleResponse(response) {
+            let result;
+            
+            try {
+                result = await response.json();
+                console.log('✅ Response data:', result);
+            } catch (parseError) {
+                console.error('❌ Failed to parse response JSON:', parseError);
+                this.showError = true;
+                this.errorMessage = 'Serverfehler: Ungültige Antwort';
+                return;
+            }
+            
+            if (response.ok && result.success) {
+                console.log('🎉 Success! Showing success message');
+                this.showSuccess = true;
+                this.showError = false;
+                this.resetForm();
+            } else {
+                this.showError = true;
+                this.errorMessage = result.message || 'Ein unbekannter Fehler ist aufgetreten.';
+            }
+        },
+
+        resetForm() {
+            this.formData.name = '';
+            this.formData.email = '';
+            this.formData.phone = '';
+            this.formData.message = '';
+            this.formData.gdprConsent = false;
+            this.formData.honeypot = '';
+        }
+    }"
+    x-on:submit.prevent="submitForm"
+    class="space-y-4 md:space-y-6"
+  >
+    <!-- Name Field -->
+    <div>
+      <label for="name" class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+        Name *
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        x-model="formData.name"
+        :class="!validation.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-light-darkest dark:border-dark-lightest focus:border-primary-gold focus:ring-primary-gold'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 transition-colors duration-300"
+        required
+        placeholder="Ihr vollständiger Name"
+      >
+      <template x-if="!validation.name">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+          Bitte geben Sie Ihren Namen ein (mindestens 2 Zeichen).
+        </p>
+      </template>
+    </div>
+
+    <!-- Email Field -->
+    <div>
+      <label for="email" class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+        E-Mail *
+      </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        x-model="formData.email"
+        :class="!validation.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-light-darkest dark:border-dark-lightest focus:border-primary-gold focus:ring-primary-gold'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 transition-colors duration-300"
+        required
+        placeholder="ihre.email@beispiel.de"
+      >
+      <template x-if="!validation.email">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+          Bitte geben Sie eine gültige E-Mail-Adresse ein.
+        </p>
+      </template>
+    </div>
+
+    <!-- Phone Field -->
+    <div>
+      <label for="phone" class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+        Telefon *
+      </label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        x-model="formData.phone"
+        :class="!validation.phone ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-light-darkest dark:border-dark-lightest focus:border-primary-gold focus:ring-primary-gold'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 transition-colors duration-300"
+        required
+        placeholder="+49 123 456789"
+      >
+      <template x-if="!validation.phone">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+          Bitte geben Sie eine gültige Telefonnummer ein (6-20 Zeichen).
+        </p>
+      </template>
+    </div>
+
+    <!-- Message Field -->
+    <div>
+      <label for="message" class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+        Ihre Nachricht
+      </label>
+      <textarea
+        id="message"
+        name="message"
+        x-model="formData.message"
+        rows="4"
+        class="w-full px-4 py-3 border border-light-darkest dark:border-dark-lightest rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
+        placeholder="Beschreiben Sie kurz Ihr Anliegen..."
+      ></textarea>
+    </div>
+
+    <!-- Honeypot Field (hidden) -->
+    <div style="position: absolute; left: -9999px; opacity: 0; height: 1px; overflow: hidden; pointer-events: none;">
+      <label for="honeypot" aria-hidden="true">Bitte dieses Feld nicht ausfüllen:</label>
+      <input
+        type="text"
+        id="honeypot"
+        name="honeypot"
+        x-model="formData.honeypot"
+        autocomplete="off"
+        tabindex="-1"
+        aria-hidden="true"
+      >
+    </div>
+
+    <!-- GDPR Consent -->
+    <div class="flex items-start space-x-3">
+      <input
+        type="checkbox"
+        id="gdprConsent"
+        name="gdprConsent"
+        x-model="formData.gdprConsent"
+        :class="!validation.gdprConsent ? 'border-red-500 focus:ring-red-500' : 'focus:ring-primary-gold'"
+        class="mt-1 h-4 w-4 text-primary-gold border-light-darkest dark:border-dark-lightest rounded focus:ring-2 bg-light-darker dark:bg-dark-lighter"
+        required
+      >
+      <label for="gdprConsent" class="text-sm text-text-dark dark:text-text-light">
+        Ich stimme der 
+        <a href="/datenschutz" class="text-primary-gold hover:underline" target="_blank">
+          Datenschutzerklärung
+        </a> 
+        zu. *
+      </label>
+    </div>
+    <template x-if="!validation.gdprConsent">
+      <p class="text-sm text-red-600 dark:text-red-400">
+        Bitte stimmen Sie der Datenschutzerklärung zu.
+      </p>
+    </template>
+
+    <!-- Submit Button -->
+    <div class="pt-2">
+      <button
+        type="submit"
+        :disabled="isSubmitting"
+        :class="isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'"
+        class="w-full bg-primary-gold text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 focus:ring-offset-light dark:focus:ring-offset-dark"
+      >
+        <span x-show="!isSubmitting" class="flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+          </svg>
+          Kostenloses Erstgespräch anfordern
+        </span>
+        <span x-show="isSubmitting" class="flex items-center justify-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Wird gesendet...
+        </span>
+      </button>
+    </div>
+
+    <!-- Success Message -->
+    <template x-if="showSuccess">
+      <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+        <div class="flex items-center">
+          <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <p class="text-sm text-green-700 dark:text-green-300 font-medium">
+            Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.
+          </p>
+        </div>
+      </div>
+    </template>
+    
+    <!-- Error Message -->
+    <template x-if="showError">
+      <div class="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+        <div class="flex items-center">
+          <svg class="h-5 w-5 text-red-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L10 10.414l1.707-1.707a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+          <p x-text="errorMessage" class="text-sm text-red-700 dark:text-red-300 font-medium"></p>
+        </div>
+      </div>
+    </template>
+    
+    <!-- Required Fields Note -->
+    <p class="text-xs text-text-muted mt-4">* Pflichtfelder</p>
+  </form>
+</div>

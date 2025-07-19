@@ -1,0 +1,156 @@
+---
+export interface Props {
+  src: string;
+  alt: string;
+  sizes?: string;
+  widths?: number[];
+  loading?: "eager" | "lazy";
+  fetchpriority?: "high" | "low" | "auto";
+  class?: string;
+  aspectRatio?: string;
+  format?: "webp" | "jpg" | "png" | "avif";
+  quality?: number;
+  baseUrl?: string;
+  objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
+}
+
+const {
+  src,
+  alt,
+  sizes = "100vw",
+  widths = [320, 640, 960, 1280, 1920, 2560],
+  loading = "lazy",
+  fetchpriority = "auto",
+  class: className = "",
+  aspectRatio = "16/9",
+  format = "webp",
+  quality = 80,
+  baseUrl = "",
+  objectFit = "cover",
+} = Astro.props;
+
+// Ensure src is a complete URL if it's a relative path and baseUrl is provided
+const fullSrc = src.startsWith("http") ? src : `${baseUrl}${src}`;
+
+// Clean up URL parameters if already present in the source
+const baseImgUrl = fullSrc.split("?")[0];
+
+// Build srcset URLs with width parameters
+function generateSrcset(imageUrl: string, format: string, quality: number) {
+  try {
+    return widths
+      .map(width => {
+        try {
+          // Create URL object to validate the URL
+          const url = new URL(imageUrl, Astro.site || 'http://localhost:3000');
+          
+          // Keep original URL parameters if present
+          const params = new URLSearchParams(url.search);
+          
+          // Append or update parameters
+          params.set("w", width.toString());
+          params.set("q", quality.toString());
+          params.set("auto", "format");
+          if (format) params.set("fm", format);
+          
+          // For CDN services that don't use query parameters
+          let finalUrl = `${url.origin}${url.pathname}`;
+          if (params.toString()) {
+            finalUrl += `?${params.toString()}`;
+          }
+          
+          return `${finalUrl} ${width}w`;
+        } catch (err) {
+          console.error(`Error generating srcset for width ${width}:`, err);
+          return '';
+        }
+      })
+      .filter(Boolean) // Remove any empty strings from failed URL generations
+      .join(", ");
+  } catch (err) {
+    console.error("Error generating srcset:", err);
+    return "";
+  }
+}
+
+// Generate srcset with error handling
+const srcset = generateSrcset(baseImgUrl, format, quality);
+
+// Generate placeholder for blur-up technique (tiny image URL) with error handling
+let placeholderUrl = '/images/fallback.jpg';
+try {
+  const url = new URL(baseImgUrl, Astro.site || 'http://localhost:3000');
+  placeholderUrl = `${url.origin}${url.pathname}?w=20&q=20&blur=10&auto=format`;
+} catch (err) {
+  console.error("Error generating placeholder URL:", err);
+}
+
+// Combine classes
+const combinedClasses = `responsive-image ${className}`.trim();
+
+// Fallback image URL
+const fallbackImageUrl = '/images/fallback.jpg';
+---
+
+<div class="responsive-image-container" style={`aspect-ratio: ${aspectRatio};`}>
+  <!-- Low-resolution placeholder for blur-up effect -->
+  <img
+    src={placeholderUrl}
+    alt=""
+    aria-hidden="true"
+    class="img-placeholder"
+    width="20"
+    height="20"
+    onerror={`this.onerror=null; this.src='${fallbackImageUrl}';`}
+  />
+  
+  <!-- Main image with srcset for responsive loading -->
+  <img
+    src={baseImgUrl || fallbackImageUrl}
+    srcset={srcset}
+    sizes={sizes}
+    alt={alt}
+    loading={loading}
+    fetchpriority={fetchpriority}
+    class={combinedClasses}
+    style={`object-fit: ${objectFit};`}
+    onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('hidden')"
+    onerror={`this.onerror=null; this.src='${fallbackImageUrl}'; this.alt='Image could not be loaded';`}
+  />
+</div>
+
+<style>
+  .responsive-image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .responsive-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .img-placeholder {
+    filter: blur(8px);
+    transform: scale(1.05);
+    transition: opacity 0.3s ease;
+  }
+  
+  .responsive-image {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  
+  .responsive-image.loaded {
+    opacity: 1;
+  }
+  
+  .hidden {
+    opacity: 0;
+  }
+</style>

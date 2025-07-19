@@ -1,0 +1,43 @@
+---
+interface Props {
+  iconPath: string;
+  fillRule?: string;
+  clipRule?: string;
+  className?: string;
+  viewBox?: string;
+  size?: "sm" | "md" | "lg" | "xl";
+}
+
+const { 
+  iconPath, 
+  fillRule = "", 
+  clipRule = "", 
+  className = "", 
+  viewBox = "0 0 24 24",
+  size = "md"
+} = Astro.props;
+
+// Standardized sizes
+const sizeClasses = {
+  sm: "w-4 h-4",
+  md: "w-6 h-6",
+  lg: "w-8 h-8",
+  xl: "w-10 h-10"
+};
+
+const combinedClasses = `${sizeClasses[size]} text-primary-gold ${className}`.trim();
+---
+
+<svg 
+  xmlns="http://www.w3.org/2000/svg" 
+  viewBox={viewBox} 
+  fill="currentColor" 
+  class={combinedClasses}
+  aria-hidden="true"
+>
+  <path 
+    d={iconPath} 
+    fill-rule={fillRule} 
+    clip-rule={clipRule}
+  />
+</svg>

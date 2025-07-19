@@ -1,0 +1,28 @@
+---
+import IconSVG from './IconSVG.astro';
+
+interface Props {
+  iconPath: string;
+  fillRule?: string;
+  clipRule?: string;
+  title: string;
+  description: string;
+  delay?: number;
+}
+
+const { iconPath, fillRule = "", clipRule = "", title, description, delay = 100 } = Astro.props;
+---
+
+<div 
+  class="bg-white dark:bg-dark rounded-lg shadow-md p-6"
+  data-aos="fade-up"
+  data-aos-delay={delay}
+>
+  <div class="flex items-center mb-4">
+    <div class="bg-primary-gold/20 p-2 rounded-full mr-4">
+      <IconSVG iconPath={iconPath} fillRule={fillRule} clipRule={clipRule} />
+    </div>
+    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">{title}</h3>
+  </div>
+  <p class="text-text-muted">{description}</p>
+</div>

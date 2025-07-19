@@ -1,0 +1,90 @@
+---
+interface Props {
+  percentage: string;
+  title: string;
+  description: string;
+  delay?: number;
+}
+
+const { percentage, title, description, delay = 100 } = Astro.props;
+
+// Convert percentage string to number for the progress circle
+const getPercentageValue = (percentageStr: string) => {
+  if (percentageStr.includes('-')) {
+    // For ranges like "10-50%", take the higher value
+    const [, max] = percentageStr.replace('%', '').split('-').map(Number);
+    return max;
+  }
+  if (percentageStr.includes('<')) {
+    // For values like "< 2 Jahre", return 100 since it's meant to show "full" progress
+    return 100; 
+  }
+  // Remove '%' for direct parsing if it's a simple percentage like "75%"
+  return parseInt(percentageStr.replace('%', ''));
+};
+
+const percentageValue = getPercentageValue(percentage);
+
+// Konstanten für den SVG-Kreis, die fest in der viewBox von 0-100 liegen
+const SVG_RADIUS = 45; // Radius des Kreises
+const SVG_STROKE_WIDTH = 8; // Strichstärke des Kreises
+const SVG_CENTER = 50; // Mittelpunkt des Kreises in 100x100 viewBox
+const SVG_CIRCUMFERENCE = SVG_RADIUS * 2 * Math.PI; // Umfang des Kreises
+
+const strokeDashoffsetValue = SVG_CIRCUMFERENCE * (1 - percentageValue / 100);
+---
+
+<div 
+  class="bg-white dark:bg-dark rounded-lg shadow-md p-4 md:p-6 text-center"
+  data-aos="zoom-in"
+  data-aos-delay={delay}
+>
+  <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 md:mb-6">
+    <svg class="w-full h-full" viewBox="0 0 100 100" role="img" aria-label={`Fortschritt: ${percentage}`}>
+      <circle
+        cx={SVG_CENTER}
+        cy={SVG_CENTER}
+        r={SVG_RADIUS}
+        fill="none"
+        stroke="currentColor"
+        stroke-width={SVG_STROKE_WIDTH}
+        class="text-primary-gold/20"
+      />
+      <circle
+        cx={SVG_CENTER}
+        cy={SVG_CENTER}
+        r={SVG_RADIUS}
+        fill="none"
+        stroke="currentColor"
+        stroke-width={SVG_STROKE_WIDTH}
+        stroke-linecap="round"
+        class="text-primary-gold progress-circle"
+        style={`stroke-dasharray: ${SVG_CIRCUMFERENCE}; stroke-dashoffset: ${strokeDashoffsetValue};`}
+        transform="rotate(-90 50 50)"
+      />
+    </svg>
+    <div class="absolute inset-0 flex items-center justify-center">
+      <span class="text-xl md:text-2xl font-bold text-primary-gold" aria-hidden="true">{percentage}</span>
+      </div>
+  </div>
+  <h3 class="text-base md:text-lg font-semibold mb-2 md:mb-3 text-text-dark dark:text-text-light leading-tight">{title}</h3>
+  <p class="text-text-muted text-xs md:text-sm">{description}</p>
+</div>
+
+<style>
+  .progress-circle {
+    /* WICHTIG: Die Transition bleibt hier, aber die Initialisierung des dashoffset
+       erfolgt NICHT mehr über eine AOS-spezifische CSS-Regel.
+       Der Wert im Style-Attribut ist der Endwert, von dem aus animiert wird,
+       sobald das Element im DOM ist und die Transition angewendet wird. */
+    transition: stroke-dashoffset 1.5s ease-in-out;
+  }
+  
+  /* Diese Regel wird ENTFERNT, da sie mit dem Style-Attribut und AOS kollidiert.
+     Der Initialzustand sollte nicht auf diese Weise festverdrahtet sein, wenn AOS
+     und das Style-Attribut den Endzustand definieren. */
+  /* [data-aos="zoom-in"] .progress-circle {
+       stroke-dashoffset: 282.74; 
+     } 
+  */
+</style>
