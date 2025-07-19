@@ -1,5 +1,5 @@
 ---
-// src/components/ContactForm.astro v15.0 (Final design integration)
+// src/components/ContactForm.astro v15.1 (Updated for /contact endpoint)
 ---
 
 <div class="w-full">
@@ -9,7 +9,7 @@
         showError: false,
         errorMessage: '',
         isSubmitting: false,
-        version: 'Frontend v15.0 (Final design integration)',
+        version: 'Frontend v15.1 (Updated for /contact endpoint)',
         formData: {
             name: '',
             email: '',
@@ -77,7 +77,8 @@
                     honeypot: cleanFormData.honeypot || ''
                 };
                 
-                const response = await fetch('/api/contact', {
+                // ✅ GEÄNDERT: Von '/api/contact' zu '/contact'
+                const response = await fetch('/contact', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
