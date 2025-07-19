@@ -1,13 +1,37 @@
-// src/pages/contact.js v17.2 (JavaScript - Build safe)
+// src/pages/contact.js v17.3 (Fixed JSON parsing)
 
-console.log('📧 Contact API v17.2 loaded (JavaScript)');
+console.log('📧 Contact API v17.3 loaded (Fixed JSON parsing)');
 
 export async function POST({ request }) {
-  console.log('=== CONTACT API v17.2 CALLED (JavaScript) ===');
+  console.log('=== CONTACT API v17.3 CALLED ===');
   
   try {
-    const data = await request.json();
-    console.log('📥 Empfangene Daten v17.2:', {
+    // ✅ Sicheres JSON-Parsing
+    let data;
+    try {
+      const rawBody = await request.text();
+      console.log('📥 Raw body received:', rawBody);
+      
+      if (!rawBody || rawBody.trim() === '') {
+        throw new Error('Empty request body');
+      }
+      
+      data = JSON.parse(rawBody);
+      console.log('📥 Parsed data successfully:', data);
+    } catch (parseError) {
+      console.error('❌ JSON Parse Error:', parseError.message);
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Ungültige Anfrage: JSON-Parsing fehlgeschlagen',
+        version: 'Contact API v17.3',
+        error: parseError.message
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    console.log('📥 Empfangene Daten v17.3:', {
       name: data.name,
       email: data.email,
       phone: data.phone,
@@ -19,11 +43,11 @@ export async function POST({ request }) {
 
     // Honeypot-Schutz
     if (data.honeypot && data.honeypot.trim() !== '') {
-      console.log('🚫 Honeypot-Schutz aktiviert v17.2 - Bot erkannt');
+      console.log('🚫 Honeypot-Schutz aktiviert v17.3 - Bot erkannt');
       return new Response(JSON.stringify({
         success: false,
         message: 'Spam erkannt',
-        version: 'Contact API v17.2 (JavaScript)'
+        version: 'Contact API v17.3'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -51,12 +75,12 @@ export async function POST({ request }) {
     }
 
     if (errors.length > 0) {
-      console.log('❌ Validierungsfehler v17.2:', errors);
+      console.log('❌ Validierungsfehler v17.3:', errors);
       return new Response(JSON.stringify({
         success: false,
         message: 'Validierungsfehler: ' + errors.join(', '),
         errors: errors,
-        version: 'Contact API v17.2 (JavaScript)'
+        version: 'Contact API v17.3'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -76,7 +100,7 @@ export async function POST({ request }) {
     };
 
     // Erstmal ohne Datenbank - einfach loggen
-    console.log('✅ Kontakt-Daten verarbeitet v17.2:', contactData);
+    console.log('✅ Kontakt-Daten verarbeitet v17.3:', contactData);
     
     // TODO: Hier später Datenbank-Speicherung hinzufügen
     // const contactId = await saveContact(contactData);
@@ -85,26 +109,32 @@ export async function POST({ request }) {
     // await sendConfirmationEmail(contactData);
     // await sendNotificationEmail(contactData);
 
-    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v17.2');
+    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v17.3');
     
     return new Response(JSON.stringify({
       success: true,
       message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.',
-      version: 'Contact API v17.2 (JavaScript)',
-      timestamp: new Date().toISOString()
+      version: 'Contact API v17.3',
+      timestamp: new Date().toISOString(),
+      receivedData: {
+        name: contactData.name,
+        email: contactData.email,
+        phone: contactData.phone
+      }
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('❌ CONTACT API ERROR v17.2:', error);
+    console.error('❌ CONTACT API ERROR v17.3:', error);
     
     return new Response(JSON.stringify({
       success: false,
       message: 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.',
-      version: 'Contact API v17.2 (JavaScript)',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error'
+      version: 'Contact API v17.3',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error',
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
