@@ -1,27 +1,70 @@
-// src/pages/contact.js v17.5 (Server-rendered)
+// src/pages/contact.js v17.6 (Build-ready with prerender)
 
-// ✅ Server-Rendering aktivieren
+// ✅ WICHTIG: Server-Rendering für Build aktivieren
 export const prerender = false;
 
-console.log('📧 Contact API v17.5 loaded (Server-rendered)');
+console.log('📧 Contact API v17.6 loaded (Build-ready)');
 
 export async function POST({ request }) {
-  console.log('=== CONTACT API v17.5 CALLED (Server-rendered) ===');
+  console.log('=== CONTACT API v17.3 CALLED ===');
   
   try {
-    // ✅ Direktes JSON-Parsing (sollte jetzt funktionieren)
-    const data = await request.json();
-    console.log('📥 Data received:', data);
+    // ✅ Sicheres JSON-Parsing
+    let data;
+    try {
+      const rawBody = await request.text();
+      console.log('📥 Raw body received:', rawBody);
+      
+      if (!rawBody || rawBody.trim() === '') {
+        throw new Error('Empty request body');
+      }
+      
+      data = JSON.parse(rawBody);
+      console.log('📥 Parsed data successfully:', data);
+    } catch (parseError) {
+      console.error('❌ JSON Parse Error:', parseError.message);
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Ungültige Anfrage: JSON-Parsing fehlgeschlagen',
+        version: 'Contact API v17.3',
+        error: parseError.message
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
-    // Validierung
+    console.log('📥 Empfangene Daten v17.3:', {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      hasMessage: !!data.message,
+      gdprConsent: data.gdprConsent,
+      leadForm: data.leadForm,
+      honeypot: data.honeypot
+    });
+
+    // Honeypot-Schutz
+    if (data.honeypot && data.honeypot.trim() !== '') {
+      console.log('🚫 Honeypot-Schutz aktiviert v17.3 - Bot erkannt');
+      return new Response(JSON.stringify({
+        success: false,
+        message: 'Spam erkannt',
+        version: 'Contact API v17.3'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // Server-seitige Validierung
     const errors = [];
     
     if (!data.name || data.name.trim().length < 2) {
       errors.push('Name muss mindestens 2 Zeichen lang sein');
     }
     
-    // ✅ Verbesserte E-Mail-Validation
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!data.email || !emailRegex.test(data.email)) {
       errors.push('Gültige E-Mail-Adresse erforderlich');
     }
@@ -35,60 +78,66 @@ export async function POST({ request }) {
     }
 
     if (errors.length > 0) {
-      console.log('❌ Validierungsfehler:', errors);
+      console.log('❌ Validierungsfehler v17.3:', errors);
       return new Response(JSON.stringify({
         success: false,
         message: 'Validierungsfehler: ' + errors.join(', '),
         errors: errors,
-        version: 'Contact API v17.5 (Server-rendered)'
+        version: 'Contact API v17.3'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    // Honeypot-Schutz
-    if (data.honeypot && data.honeypot.trim() !== '') {
-      console.log('🚫 Bot erkannt');
-      return new Response(JSON.stringify({
-        success: false,
-        message: 'Spam erkannt'
-      }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
-    }
-
-    // Kontakt-Daten verarbeiten
+    // Daten für Speicherung vorbereiten
     const contactData = {
       name: data.name.trim(),
       email: data.email.trim(),
       phone: data.phone.trim(),
       message: data.message?.trim() || '',
       gdprConsent: data.gdprConsent,
+      leadForm: data.leadForm || false,
+      honeypot: data.honeypot || '',
       timestamp: new Date().toISOString()
     };
 
-    console.log('✅ Kontakt erfolgreich verarbeitet:', contactData);
+    // Erstmal ohne Datenbank - einfach loggen
+    console.log('✅ Kontakt-Daten verarbeitet v17.3:', contactData);
+    
+    // TODO: Hier später Datenbank-Speicherung hinzufügen
+    // const contactId = await saveContact(contactData);
+    
+    // TODO: E-Mail versenden (falls gewünscht)
+    // await sendConfirmationEmail(contactData);
+    // await sendNotificationEmail(contactData);
+
+    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v17.3');
     
     return new Response(JSON.stringify({
       success: true,
       message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.',
-      version: 'Contact API v17.5 (Server-rendered)',
-      timestamp: contactData.timestamp
+      version: 'Contact API v17.3',
+      timestamp: new Date().toISOString(),
+      receivedData: {
+        name: contactData.name,
+        email: contactData.email,
+        phone: contactData.phone
+      }
     }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('❌ Contact API Error:', error);
+    console.error('❌ CONTACT API ERROR v17.3:', error);
     
     return new Response(JSON.stringify({
       success: false,
-      message: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.',
-      version: 'Contact API v17.5 (Server-rendered)',
-      error: error.message
+      message: 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.',
+      version: 'Contact API v17.3',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal Server Error',
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
