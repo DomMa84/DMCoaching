@@ -1,8 +1,9 @@
-// src/pages/api/admin/login.js - Login API mit ENV credentials
+// src/pages/api/admin/login.js - Login API mit ENV credentials v2.0
 
+// ✅ WICHTIG: Server-Rendering für Build aktivieren
 export const prerender = false;
 
-console.log('🔐 Admin Login API loaded');
+console.log('🔐 Admin Login API v2.0 loaded (Build-ready)');
 
 export async function POST({ request }) {
   console.log('=== ADMIN LOGIN API CALLED ===');
