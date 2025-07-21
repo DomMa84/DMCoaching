@@ -1,195 +1,405 @@
 ---
+// src/pages/logo-showcase.astro v1.0 (Server-Mode & SEO optimiert)
+// Logo-Showcase - Statische Seite mit prerender
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
+export const prerender = true;
+
 import Layout from '../layouts/Layout.astro';
 import Logo from '../components/Logo.astro';
+
+console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimization');
 ---
 
 <Layout 
-  title="Logo Showcase | Dominik Maier"
-  description="Übersicht aller Logoversionen für Dominik Maier Coaching & Interim Management."
+  title="Logo-Sammlung & Brand Guidelines | Dominik Maier Design-Assets"
+  description="✅ Komplette Logo-Sammlung von Dominik Maier Coaching. Download aller Formate: SVG, PNG, JPG. Monogramm, Farbversionen, Brand Guidelines & Usage-Richtlinien."
 >
   <section class="py-16 bg-light dark:bg-dark">
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-8 text-center">Logo Showcase</h1>
+        <!-- Header -->
+        <header class="text-center mb-12" data-aos="fade-up">
+          <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-4">Logo-Sammlung & Brand Assets</h1>
+          <p class="text-text-muted text-lg max-w-2xl mx-auto">
+            Vollständige Übersicht aller Logoversionen für Dominik Maier Coaching & Interim Management. 
+            Inklusive <strong>Download-Links</strong> und <strong>Brand Guidelines</strong> für die korrekte Verwendung.
+          </p>
+          <div class="flex flex-wrap justify-center gap-2 mt-4" aria-label="Logo-Features">
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">📁 Alle Formate</span>
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">🎨 Brand Guidelines</span>
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">💾 Sofort-Download</span>
+          </div>
+        </header>
         
         <div class="grid grid-cols-1 gap-16">
           <!-- Original vs. DM Monogram -->
-          <div>
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Original vs. DM Monogramm</h2>
+          <article id="logo-evolution" data-aos="fade-up">
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Logo-Evolution: Original vs. DM Monogramm</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md flex justify-center items-center">
                 <img 
                   src="/logo-dm.png" 
-                  alt="Original Logo" 
+                  alt="Dominik Maier Original-Logo mit vollständiger Wortmarke" 
                   class="max-w-full h-auto max-h-48"
+                  loading="lazy"
+                  width="300"
+                  height="192"
                 />
+                <div class="sr-only">Original-Logo mit Wortmarke "DOMINIK MAIER" und "COACHING UND INTERIM MANAGEMENT"</div>
               </div>
               <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md flex justify-center items-center">
                 <Logo height={120} />
+                <div class="sr-only">DM Monogramm - extrahierte Logo-Version ohne Wortmarke</div>
               </div>
             </div>
             <div class="mt-4 text-text-muted">
               <p class="mb-2">
-                <span class="font-semibold text-text-dark dark:text-text-light">Modifikationen:</span> Extraktion des DM Monogramms aus dem ursprünglichen Logo bei Beibehaltung der originalen Proportionen und Farbgebung.
+                <span class="font-semibold text-text-dark dark:text-text-light">Design-Modifikationen:</span> 
+                Extraktion des DM Monogramms aus dem ursprünglichen Logo bei Beibehaltung der originalen Proportionen und Farbgebung.
               </p>
-              <ul class="list-disc list-inside">
-                <li>Beibehaltene Elemente: Originalfarbe (#D2AE6C), Formsprache, stilistische Details</li>
-                <li>Entfernte Elemente: Wortmarke "DOMINIK MAIER" und "COACHING UND INTERIM MANAGEMENT"</li>
+              <ul class="list-disc list-inside space-y-1">
+                <li><strong>Beibehaltene Elemente:</strong> Originalfarbe (#D2AE6C), Formsprache, stilistische Details</li>
+                <li><strong>Entfernte Elemente:</strong> Wortmarke "DOMINIK MAIER" und "COACHING UND INTERIM MANAGEMENT"</li>
+                <li><strong>Vorteil:</strong> Kompakte Version für kleine Darstellungen und Icons</li>
               </ul>
             </div>
-          </div>
+          </article>
           
           <!-- Different Formats -->
-          <div>
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Verfügbare Formate</h2>
+          <article id="logo-formats" data-aos="fade-up">
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Verfügbare Logo-Formate</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
                 <div class="flex justify-center items-center h-32 mb-4">
                   <Logo height={80} />
                 </div>
-                <p class="text-center text-text-dark dark:text-text-light font-medium">Farbversion</p>
-                <p class="text-center text-text-muted text-sm mt-2">SVG, PNG, JPG</p>
+                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Farbversion</h3>
+                <p class="text-center text-text-muted text-sm mt-2">
+                  <strong>Formate:</strong> SVG, PNG (transparent), JPG<br>
+                  <strong>Verwendung:</strong> Web, Print, Präsentationen
+                </p>
               </div>
               
               <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
                 <div class="flex justify-center items-center h-32 mb-4">
                   <img 
                     src="/logo/logo-monochrome.svg" 
-                    alt="Schwarz-Weiß-Version" 
+                    alt="Dominik Maier Logo in Schwarz-Weiß-Version für einfarbigen Druck" 
                     class="max-w-full h-auto max-h-full"
+                    loading="lazy"
+                    width="80"
+                    height="80"
                   />
                 </div>
-                <p class="text-center text-text-dark dark:text-text-light font-medium">Monochrome Version</p>
-                <p class="text-center text-text-muted text-sm mt-2">SVG, PNG, JPG</p>
+                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Monochrome Version</h3>
+                <p class="text-center text-text-muted text-sm mt-2">
+                  <strong>Formate:</strong> SVG, PNG, JPG<br>
+                  <strong>Verwendung:</strong> Einfarbiger Druck, Gravur
+                </p>
               </div>
               
               <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
                 <div class="flex justify-center items-center h-32 mb-4 bg-dark rounded-md">
                   <Logo height={80} inverted={true} />
                 </div>
-                <p class="text-center text-text-dark dark:text-text-light font-medium">Weiße Version</p>
-                <p class="text-center text-text-muted text-sm mt-2">SVG, PNG, JPG</p>
+                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Weiße Version</h3>
+                <p class="text-center text-text-muted text-sm mt-2">
+                  <strong>Formate:</strong> SVG, PNG (transparent), JPG<br>
+                  <strong>Verwendung:</strong> Dunkle Hintergründe
+                </p>
               </div>
             </div>
-          </div>
+          </article>
           
           <!-- Enhanced Versions -->
-          <div>
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Erweiterte Versionen</h2>
+          <article id="enhanced-logos" data-aos="fade-up">
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Erweiterte Logo-Varianten</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
               <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
                 <div class="flex justify-center items-center h-40 mb-4">
                   <img 
                     src="/logo/logo-enhanced.svg" 
-                    alt="Logo mit Farbverlauf" 
+                    alt="Dominik Maier Logo mit elegantem Gold-Farbverlauf und Kontur-Design" 
                     class="max-w-full h-auto max-h-full"
                     onError="this.src='/logo/logo-full-color.svg'; this.alt='Standard Logo'"
+                    loading="lazy"
+                    width="120"
+                    height="120"
                   />
                 </div>
-                <p class="text-center text-text-dark dark:text-text-light font-medium">Logo mit Farbverlauf</p>
-                <p class="text-center text-text-muted text-sm mt-2">Elegante Version mit Gold-Gradient und Kontur</p>
+                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Logo mit Farbverlauf</h3>
+                <p class="text-center text-text-muted text-sm mt-2">
+                  Elegante Version mit Gold-Gradient und Kontur für <strong>Premium-Anwendungen</strong> und hochwertige Drucksachen
+                </p>
               </div>
               
               <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
                 <div class="flex justify-center items-center h-40 mb-4">
                   <img 
                     src="/logo/logo-circle.svg" 
-                    alt="Logo im Kreis" 
+                    alt="Dominik Maier Logo in kreisförmiger Variante für Social Media Profile optimiert" 
                     class="max-w-full h-auto max-h-full"
                     onError="this.src='/logo/logo-full-color.svg'; this.alt='Standard Logo'"
+                    loading="lazy"
+                    width="120"
+                    height="120"
                   />
                 </div>
-                <p class="text-center text-text-dark dark:text-text-light font-medium">Logo im Kreis</p>
-                <p class="text-center text-text-muted text-sm mt-2">Für Social Media Profile und App-Icons optimiert</p>
+                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Logo im Kreis</h3>
+                <p class="text-center text-text-muted text-sm mt-2">
+                  Für <strong>Social Media Profile</strong> und App-Icons optimiert. Perfekt für LinkedIn, Facebook, Instagram
+                </p>
               </div>
             </div>
-          </div>
+          </article>
           
           <!-- Usage Guidelines -->
-          <div>
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Verwendungsrichtlinien</h2>
+          <article id="brand-guidelines" data-aos="fade-up">
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Brand Guidelines & Verwendungsrichtlinien</h2>
             <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4">Empfohlene Verwendung</h3>
-                  <ul class="space-y-2 text-text-muted">
+                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4 text-green-600">
+                    ✅ Empfohlene Verwendung
+                  </h3>
+                  <ul class="space-y-3 text-text-muted">
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                       </svg>
-                      Verwenden Sie die farbige Version auf hellen oder dunklen Hintergründen
+                      <span><strong>Farbige Version</strong> auf hellen oder dunklen Hintergründen mit ausreichend Kontrast verwenden</span>
                     </li>
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                       </svg>
-                      Halten Sie einen Mindestabstand um das Logo herum ein
+                      <span><strong>Mindestabstand</strong> um das Logo herum einhalten (mindestens halbe Logo-Höhe)</span>
                     </li>
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                       </svg>
-                      Monochrome Version für einfarbigen Druck verwenden
+                      <span><strong>Monochrome Version</strong> für einfarbigen Druck, Gravuren oder Stempel</span>
+                    </li>
+                    <li class="flex items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                      <span><strong>Hochauflösende Formate</strong> für Druckanwendungen (300 DPI oder höher)</span>
                     </li>
                   </ul>
                 </div>
                 
                 <div>
-                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4">Zu vermeiden</h3>
-                  <ul class="space-y-2 text-text-muted">
+                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4 text-red-600">
+                    ❌ Zu vermeiden
+                  </h3>
+                  <ul class="space-y-3 text-text-muted">
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                       </svg>
-                      Verzerrung der Proportionen
+                      <span><strong>Verzerrung der Proportionen</strong> durch ungleichmäßige Skalierung</span>
                     </li>
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                       </svg>
-                      Änderung der Originalfarben
+                      <span><strong>Änderung der Originalfarben</strong> oder Anwendung unpassender Farbfilter</span>
                     </li>
                     <li class="flex items-start">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                       </svg>
-                      Verwendung auf unruhigen Hintergründen mit wenig Kontrast
+                      <span><strong>Unruhige Hintergründe</strong> mit wenig Kontrast oder störenden Elementen</span>
+                    </li>
+                    <li class="flex items-start">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                      </svg>
+                      <span><strong>Zu kleine Darstellung</strong> unter 24px Höhe (Mindestgröße beachten)</span>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
-          </div>
+          </article>
+
+          <!-- Technical Specifications -->
+          <article id="technical-specs" data-aos="fade-up">
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Technische Spezifikationen</h2>
+            <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Farbwerte</h3>
+                  <ul class="space-y-2 text-text-muted text-sm">
+                    <li><strong>Primärfarbe:</strong> #D2AE6C</li>
+                    <li><strong>RGB:</strong> 210, 174, 108</li>
+                    <li><strong>CMYK:</strong> 16, 26, 66, 2</li>
+                    <li><strong>Pantone:</strong> 466 C</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Dateigrößen</h3>
+                  <ul class="space-y-2 text-text-muted text-sm">
+                    <li><strong>SVG:</strong> Vektorbasiert, skalierbar</li>
+                    <li><strong>PNG:</strong> Transparent, 300-2400px</li>
+                    <li><strong>JPG:</strong> Web-optimiert, 72-300 DPI</li>
+                    <li><strong>Mindestgröße:</strong> 24px Höhe</li>
+                  </ul>
+                </div>
+                <div>
+                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Anwendungsgebiete</h3>
+                  <ul class="space-y-2 text-text-muted text-sm">
+                    <li><strong>Digital:</strong> Website, Social Media</li>
+                    <li><strong>Print:</strong> Visitenkarten, Briefpapier</li>
+                    <li><strong>Merchandise:</strong> T-Shirts, Tassen</li>
+                    <li><strong>Präsentation:</strong> PowerPoint, PDF</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
         
         <!-- Download Section -->
-        <div class="mt-12 bg-primary-gold/10 dark:bg-primary-gold/5 rounded-lg p-8 text-center">
-          <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Download aller Logoversionen</h2>
-          <p class="text-text-muted mb-6">
-            Alle Logoversionen sind in verschiedenen Formaten verfügbar. Sie können die komplette Logosammlung herunterladen oder einzelne Dateien nach Bedarf verwenden.
+        <div class="mt-12 bg-gradient-to-r from-primary-gold/10 to-primary-gold/20 rounded-lg p-8 text-center" data-aos="fade-up">
+          <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-4">📦 Logo-Download Center</h2>
+          <p class="text-text-muted mb-6 max-w-2xl mx-auto">
+            Alle Logoversionen sind in verschiedenen Formaten verfügbar. Sie können die komplette Logosammlung herunterladen oder einzelne Dateien nach Bedarf verwenden. <strong>Alle Downloads sind kostenfrei!</strong>
           </p>
           <div class="flex flex-col sm:flex-row justify-center gap-4">
             <a 
-              href="#" 
+              href="/downloads/logo-package-complete.zip" 
               class="inline-flex items-center justify-center bg-primary-gold hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
+              aria-label="Komplette Logo-Sammlung als ZIP-Datei herunterladen"
+              download
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
               </svg>
-              Komplette Logosammlung
+              Komplette Logo-Sammlung (ZIP)
             </a>
             <a 
-              href="/logo-compare.html" 
-              class="inline-flex items-center justify-center bg-light-darkest dark:bg-dark-lightest text-text-dark dark:text-text-light font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
+              href="/brand-guidelines.pdf" 
+              class="inline-flex items-center justify-center bg-light-darkest dark:bg-dark-lightest text-text-dark dark:text-text-light font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md hover:bg-primary-gold hover:text-white"
+              aria-label="Brand Guidelines als PDF-Dokument herunterladen"
+              target="_blank"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
               </svg>
-              Logo-Dokumentation
+              Brand Guidelines (PDF)
             </a>
           </div>
+          
+          <!-- Individual Downloads -->
+          <div class="mt-8 pt-8 border-t border-primary-gold/20">
+            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-4">Einzelne Logo-Dateien</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
+              <a href="/logo/logo-color.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Farbiges Logo als SVG herunterladen">
+                📄 Color SVG
+              </a>
+              <a href="/logo/logo-color.png" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Farbiges Logo als PNG herunterladen">
+                🖼️ Color PNG
+              </a>
+              <a href="/logo/logo-mono.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Monochrome Logo als SVG herunterladen">
+                ⚫ Mono SVG
+              </a>
+              <a href="/logo/logo-white.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Weißes Logo als SVG herunterladen">
+                ⚪ White SVG
+              </a>
+            </div>
+          </div>
         </div>
+
+        <!-- Quick Navigation -->
+        <nav class="mt-8 bg-white dark:bg-dark rounded-lg shadow-md p-6" aria-label="Logo-Showcase Navigation">
+          <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-4">📍 Schnellnavigation</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+            <a href="#logo-evolution" class="text-primary-gold hover:underline">Logo-Evolution</a>
+            <a href="#logo-formats" class="text-primary-gold hover:underline">Verfügbare Formate</a>
+            <a href="#enhanced-logos" class="text-primary-gold hover:underline">Erweiterte Varianten</a>
+            <a href="#brand-guidelines" class="text-primary-gold hover:underline">Brand Guidelines</a>
+          </div>
+        </nav>
       </div>
     </div>
   </section>
+
+  <!-- Schema.org JSON-LD für Logo-Seite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "Dominik Maier Logo-Sammlung",
+    "description": "Komplette Logo-Sammlung und Brand Guidelines für Dominik Maier Coaching & Interim Management",
+    "creator": {
+      "@type": "Organization",
+      "name": "Dominik Maier Coaching & Interim Management",
+      "url": "https://maier-value.com"
+    },
+    "license": "https://maier-value.com/logo-license",
+    "usageInfo": "Brand Guidelines verfügbar",
+    "contentLocation": "https://maier-value.com/logo-showcase",
+    "keywords": ["Logo", "Brand Guidelines", "Corporate Design", "Monogramm", "Download"],
+    "inLanguage": "de-DE",
+    "dateCreated": "2025",
+    "copyrightHolder": {
+      "@type": "Person",
+      "name": "Dominik Maier"
+    }
+  }
+  </script>
 </Layout>
+
+<style>
+  /* Footer version info */
+  .footer-version::after {
+    content: "Logo Showcase v1.0 - Server-Mode & SEO optimiert";
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Enhanced hover effects for download buttons */
+  .download-button {
+    transition: all 0.3s ease;
+  }
+  
+  .download-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Logo showcase grid improvements */
+  .logo-grid-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .logo-grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Screen reader only content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
