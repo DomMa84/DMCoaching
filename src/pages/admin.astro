@@ -1,11 +1,14 @@
 ---
-// src/pages/admin.astro v24.2 (Full functionality)
-// Admin Dashboard - Vollständige funktionsfähige Version
+// src/pages/admin.astro v24.3 (Server-Mode kompatibel)
+// Admin Dashboard - Server-Mode ready mit ENV-Login
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite bleibt dynamisch (braucht Login-API)
+// export const prerender = false;
 
 const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.2 (Full functionality)";
+const version = "Admin Dashboard v24.3 (Server-Mode kompatibel)";
 
-console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
+console.log('📊 Admin Dashboard v24.3 loaded - Server-Mode ready');
 ---
 
 <html lang="de">
@@ -454,6 +457,8 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
         /* Grid utilities */
         .grid { display: grid; }
         .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .gap-4 { gap: 1rem; }
+
         /* Icons */
         .icon {
             width: 1.25rem;
@@ -476,7 +481,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
 <body data-theme="dark">
 
 <div class="container" x-data="{
-    version: 'Admin Dashboard v24.2 (Full functionality)',
+    version: 'Admin Dashboard v24.3 (Server-Mode kompatibel)',
     isLoggedIn: false,
     showLoginForm: true,
     loginData: {
@@ -534,7 +539,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
     },
     
     async login() {
-        console.log('🔐 Login attempt v24.2 - ENV credentials');
+        console.log('🔐 Login attempt v24.3 - ENV credentials');
         
         this.isLoading = true;
         this.loginError = '';
@@ -558,10 +563,10 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
                 this.isLoggedIn = true;
                 this.showLoginForm = false;
                 this.loginError = '';
-                console.log('✅ Login successful v24.2');
+                console.log('✅ Login successful v24.3');
             } else {
                 this.loginError = result.message || 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed v24.2');
+                console.log('❌ Login failed v24.3');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -572,7 +577,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
     },
     
     async logout() {
-        console.log('🚪 Logout v24.2');
+        console.log('🚪 Logout v24.3');
         this.isLoggedIn = false;
         this.showLoginForm = true;
         this.loginData.username = '';
@@ -582,7 +587,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
     
     // ✅ Alle Funktionen für Kontakt-Verwaltung
     async loadContacts() {
-        console.log('📋 Loading contacts v24.2');
+        console.log('📋 Loading contacts v24.3');
         // Demo-Daten sind bereits geladen
         console.log('✅ Demo contacts loaded:', this.contacts.length);
     },
@@ -617,7 +622,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
     },
     
     async updateContactStatus(contactId, newStatus) {
-        console.log('🔄 Updating status v24.2:', { contactId, newStatus });
+        console.log('🔄 Updating status v24.3:', { contactId, newStatus });
         
         const contact = this.contacts.find(c => c.id === contactId);
         if (contact) {
@@ -628,7 +633,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
     },
     
     async saveContactNotes(contactId, notes) {
-        console.log('📝 Saving notes v24.2:', { contactId, notesLength: notes.length });
+        console.log('📝 Saving notes v24.3:', { contactId, notesLength: notes.length });
         
         const contact = this.contacts.find(c => c.id === contactId);
         if (contact) {
@@ -648,7 +653,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
         return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
     }
 }" x-init="
-    console.log('🚀 Admin Dashboard v24.2 initialized - Full functionality');
+    console.log('🚀 Admin Dashboard v24.3 initialized - Server-Mode ready');
     
     const savedTheme = localStorage.getItem('theme') || 'dark';
     document.body.setAttribute('data-theme', savedTheme);
@@ -674,7 +679,7 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
                 </div>
                 
                 <form @submit.prevent="login()" class="space-y-6">
-                    <!-- ✅ FIXED: Username-Feld wieder hinzugefügt -->
+                    <!-- ✅ Username-Feld -->
                     <div>
                         <label for="username">Benutzername</label>
                         <input 
@@ -846,7 +851,6 @@ console.log('📊 Admin Dashboard v24.2 loaded - Full functionality');
                                         class="btn-link"
                                     >
                                         Details ansehen
-                                    </button>
                                 </td>
                             </tr>
                         </template>
