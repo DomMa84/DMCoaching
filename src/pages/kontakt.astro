@@ -1,37 +1,51 @@
 ---
+// src/pages/contact.astro v1.0 (Server-Mode & SEO optimiert)
+// Kontakt - Statische Seite mit prerender
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
+export const prerender = true;
+
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
+
+console.log('📞 Contact v1.0 loaded - Static prerendered with SEO optimization');
 ---
 
 <Layout 
-  title="Kontakt | Dominik Maier"
-  description="Nehmen Sie Kontakt mit Dominik Maier auf für Coaching, Interim Management oder Beratung zu Vertrieb, Marketing und Prozessoptimierung."
+  title="Kontakt - Dominik Maier | Unverbindliches Beratungsgespräch"
+  description="✅ Kostenloses Erstgespräch vereinbaren! Strategische Beratung für Unternehmensentwicklung & Vertrieb. ☎️ +497440 913367 📧 Sofortige Antwort garantiert."
 >
   <!-- Hero Section -->
   <section class="py-16 bg-light dark:bg-dark">
     <div class="container mx-auto px-4">
       <div class="text-center max-w-3xl mx-auto mb-12" data-aos="fade-up">
-        <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-6">Kontakt</h1>
+        <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-6">Kontakt aufnehmen</h1>
         <p class="text-text-muted text-lg">
-          Haben Sie Fragen oder möchten Sie mehr über unsere Leistungen erfahren? Nehmen Sie gerne Kontakt mit uns auf.
+          Haben Sie Fragen oder möchten Sie mehr über unsere Leistungen erfahren? Vereinbaren Sie jetzt Ihr <strong>kostenloses Erstgespräch</strong> und lassen Sie uns gemeinsam Ihre Herausforderungen besprechen.
         </p>
+        <div class="flex flex-wrap justify-center gap-2 mt-4" aria-label="Kontakt-Highlights">
+          <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">✅ Kostenlose Beratung</span>
+          <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">📞 Sofortige Antwort</span>
+          <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">🎯 Maßgeschneiderte Lösungen</span>
+        </div>
       </div>
       
       <div class="grid grid-cols-1 gap-12">
         <!-- Contact Form -->
         <div data-aos="fade-up">
           <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-8 mb-8">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Kontaktieren Sie uns</h2>
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Nachricht senden</h2>
             <ContactForm />
           </div>
           
           <!-- Contact Information -->
           <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-8">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Weitere Kontaktmöglichkeiten</h2>
+            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Direkte Kontaktmöglichkeiten</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="flex items-start">
-                <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
+              <!-- Telefon -->
+              <article class="flex items-start">
+                <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path fill-rule="evenodd" d="M19.5 9.75a.75.75 0 01-.75.75h-4.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 011.5 0v2.69l4.72-4.72a.75.75 0 111.06 1.06L16.06 9h2.69a.75.75 0 01.75.75z" clip-rule="evenodd" />
                     <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
@@ -39,12 +53,20 @@ import ContactForm from '../components/ContactForm.astro';
                 </div>
                 <div>
                   <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-1">Telefon</h3>
-                  <p class="text-text-muted">+497440 913367</p>
+                  <a 
+                    href="tel:+497440913367" 
+                    class="text-primary-gold hover:underline text-lg font-medium"
+                    aria-label="Telefonnummer +497440 913367 anrufen"
+                  >
+                    +497440 913367
+                  </a>
+                  <p class="text-text-muted text-sm mt-1">Mo-Fr 9:00-18:00 Uhr</p>
                 </div>
-              </div>
+              </article>
               
-              <div class="flex items-start">
-                <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
+              <!-- LinkedIn -->
+              <article class="flex items-start">
+                <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
                   <svg class="w-6 h-6 text-primary-gold" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
                   </svg>
@@ -56,14 +78,17 @@ import ContactForm from '../components/ContactForm.astro';
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="text-primary-gold hover:underline"
+                    aria-label="Dominik Maier LinkedIn-Profil öffnen"
                   >
                     Zum Profil
                   </a>
+                  <p class="text-text-muted text-sm mt-1">Professionelles Netzwerk</p>
                 </div>
-              </div>
+              </article>
               
-              <div class="flex items-start">
-                <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
+              <!-- E-Mail -->
+              <article class="flex items-start">
+                <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
                     <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
@@ -71,51 +96,183 @@ import ContactForm from '../components/ContactForm.astro';
                 </div>
                 <div>
                   <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-1">E-Mail</h3>
-                  <p class="text-text-muted">webmaster@maier-value.com</p>
+                  <a 
+                    href="mailto:webmaster@maier-value.com" 
+                    class="text-primary-gold hover:underline"
+                    aria-label="E-Mail an webmaster@maier-value.com senden"
+                  >
+                    webmaster@maier-value.com
+                  </a>
+                  <p class="text-text-muted text-sm mt-1">Antwort innerhalb 24h</p>
                 </div>
-              </div>
+              </article>
               
-              <div class="flex items-start">
-                <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
+              <!-- Adresse -->
+              <article class="flex items-start">
+                <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                   </svg>
                 </div>
                 <div>
                   <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-1">Adresse</h3>
-                  <p class="text-text-muted">
+                  <address class="text-text-muted not-italic">
+                    Dominik Maier Coaching<br>
                     Gaisbachweg 4<br>
                     77776 Bad Rippoldsau<br>
                     Deutschland
-                  </p>
+                  </address>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- CTA -->
-      <div class="mt-12 bg-white dark:bg-dark rounded-lg shadow-lg p-8" data-aos="fade-up">
+      <!-- FAQ -->
+      <article class="mt-12 bg-white dark:bg-dark rounded-lg shadow-lg p-8" data-aos="fade-up">
         <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Häufig gestellte Fragen</h2>
         
         <div class="space-y-6">
-          <div>
-            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">Wie läuft eine Zusammenarbeit ab?</h3>
-            <p class="text-text-muted">Nach der ersten Kontaktaufnahme folgt ein unverbindliches Erstgespräch, in dem wir Ihre Bedürfnisse analysieren. Anschließend entwickeln wir ein individuelles Konzept für unser weiteres Vorgehen.</p>
+          <div itemscope itemtype="https://schema.org/Question">
+            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2" itemprop="name">
+              Wie läuft eine Zusammenarbeit ab?
+            </h3>
+            <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
+              <p class="text-text-muted" itemprop="text">
+                Nach der ersten Kontaktaufnahme folgt ein <strong>unverbindliches Erstgespräch</strong>, in dem wir Ihre Bedürfnisse analysieren. Anschließend entwickeln wir ein individuelles Konzept für unser weiteres Vorgehen mit klaren Meilensteinen und messbaren Zielen.
+              </p>
+            </div>
           </div>
           
-          <div>
-            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">In welchem geografischen Bereich sind Sie tätig?</h3>
-            <p class="text-text-muted">Wir sind deutschlandweit und international tätig. Vor-Ort-Termine sind je nach Projekt und Absprache möglich, ebenso wie virtuelle Beratungen.</p>
+          <div itemscope itemtype="https://schema.org/Question">
+            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2" itemprop="name">
+              In welchem geografischen Bereich sind Sie tätig?
+            </h3>
+            <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
+              <p class="text-text-muted" itemprop="text">
+                Wir sind <strong>deutschlandweit und international</strong> tätig. Vor-Ort-Termine sind je nach Projekt und Absprache möglich, ebenso wie virtuelle Beratungen via Video-Call für maximale Flexibilität.
+              </p>
+            </div>
           </div>
           
-          <div>
-            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">Wie schnell können Sie mit einem Projekt beginnen?</h3>
-            <p class="text-text-muted">Die Verfügbarkeit hängt von unserer aktuellen Auslastung ab. Kontaktieren Sie uns gerne, um einen möglichen Startzeitpunkt zu besprechen.</p>
+          <div itemscope itemtype="https://schema.org/Question">
+            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2" itemprop="name">
+              Wie schnell können Sie mit einem Projekt beginnen?
+            </h3>
+            <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
+              <p class="text-text-muted" itemprop="text">
+                Die Verfügbarkeit hängt von unserer aktuellen Auslastung ab. In der Regel können wir <strong>binnen 1-2 Wochen</strong> mit neuen Projekten beginnen. Kontaktieren Sie uns gerne für einen konkreten Startzeitpunkt.
+              </p>
+            </div>
           </div>
+
+          <div itemscope itemtype="https://schema.org/Question">
+            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2" itemprop="name">
+              Was kostet eine Beratung?
+            </h3>
+            <div itemscope itemtype="https://schema.org/Answer" itemprop="acceptedAnswer">
+              <p class="text-text-muted" itemprop="text">
+                Das <strong>Erstgespräch ist kostenlos</strong>. Die weitere Beratung wird individuell nach Projektumfang und -dauer kalkuliert. Wir bieten transparente Festpreise oder Tagessätze je nach Ihren Präferenzen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Call-to-Action -->
+      <div class="mt-12 bg-gradient-to-r from-primary-gold/10 to-primary-gold/20 rounded-lg p-8 text-center" data-aos="fade-up">
+        <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-4">
+          Bereit für den nächsten Schritt?
+        </h2>
+        <p class="text-text-muted mb-6 max-w-2xl mx-auto">
+          Lassen Sie uns in einem unverbindlichen Gespräch besprechen, wie wir Ihr Unternehmen voranbringen können. 
+          <strong>Vereinbaren Sie jetzt Ihr kostenloses Erstgespräch!</strong>
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="tel:+497440913367" 
+            class="bg-primary-gold text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-gold/90 transition-colors inline-flex items-center justify-center"
+            aria-label="Jetzt anrufen +497440 913367"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+              <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
+            </svg>
+            Jetzt anrufen
+          </a>
+          <a 
+            href="#" 
+            class="bg-white dark:bg-dark-lighter text-text-dark dark:text-text-light px-6 py-3 rounded-lg font-semibold border-2 border-primary-gold hover:bg-primary-gold hover:text-white transition-colors inline-flex items-center justify-center"
+            onclick="document.querySelector('form').scrollIntoView({behavior: 'smooth'}); return false;"
+            aria-label="Zum Kontaktformular scrollen"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+              <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+              <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+            </svg>
+            Nachricht schreiben
+          </a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Schema.org JSON-LD für Kontaktseite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Dominik Maier Coaching & Interim Management",
+      "url": "https://maier-value.com",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+497440913367",
+          "contactType": "customer service",
+          "availableLanguage": ["German", "English"],
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
+        },
+        {
+          "@type": "ContactPoint",
+          "email": "webmaster@maier-value.com",
+          "contactType": "customer service",
+          "availableLanguage": ["German", "English"]
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gaisbachweg 4",
+        "addressLocality": "Bad Rippoldsau",
+        "postalCode": "77776",
+        "addressCountry": "DE"
+      },
+      "areaServed": "DE",
+      "serviceType": [
+        "Strategische Unternehmensentwicklung",
+        "Vertriebsoptimierung",
+        "Marketing-Strategien",
+        "Value Management"
+      ]
+    }
+  }
+  </script>
 </Layout>
+
+<style>
+  /* Footer version info */
+  .footer-version::after {
+    content: "Contact v1.0 - Server-Mode & SEO optimiert";
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    text-align: center;
+  }
+</style>
