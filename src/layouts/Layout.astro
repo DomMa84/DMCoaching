@@ -1,4 +1,7 @@
 ---
+// src/layouts/Layout.astro v1.0 (Server-Mode & SEO optimiert)
+// Main Layout - Enhanced für bessere Performance und SEO
+
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
@@ -6,85 +9,198 @@ import CookieConsent from '../components/CookieConsent.astro';
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
+  canonicalURL?: string;
+  structuredData?: object;
 }
 
 const { 
-  title = "Dominik Maier | Coaching & Interim Management",
-  description = "Dominik Maier hilft Ihnen, Ihren Vertrieb, Service und Marketing zu optimieren und weiterzuentwickeln – mit einem Fokus auf digitale Vertriebswege."
+  title = "Dominik Maier | Strategische Unternehmensentwicklung & Value Management",
+  description = "✅ Experte für Unternehmensentwicklung mit 15+ Jahren Erfahrung. Wertanalytiker VDI für nachhaltige Kostensenkung & Prozessoptimierung. Jetzt kostenlose Beratung anfragen!",
+  ogImage = "/images/dominik-maier-og-image.jpg",
+  canonicalURL,
+  structuredData
 } = Astro.props;
+
+// Generate canonical URL if not provided
+const url = canonicalURL || new URL(Astro.url.pathname, Astro.site);
+
+console.log('🎨 Layout v1.0 loaded - Enhanced SEO and performance optimizations');
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang="de" itemscope itemtype="https://schema.org/WebPage">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="generator" content={Astro.generator} />
     
-    <!-- Google tag (gtag.js) -->
-    <script is:inline>
-      // Only load GA if consent is given
-      if (localStorage.getItem('cookie-consent') === 'accept') {
-        const script = document.createElement('script');
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-08H9EG15DE';
-        script.async = true;
-        document.head.appendChild(script);
-
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-08H9EG15DE');
-      }
-    </script>
-    
+    <!-- Enhanced SEO Meta Tags -->
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={url} />
     
-    <!-- Google Fonts: Montserrat -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(ogImage, Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="Dominik Maier Coaching" />
     
-    <!-- AOS Animation - Load before initialization script -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={url} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site)} />
+    <meta name="twitter:creator" content="@dominikmaier" />
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="author" content="Dominik Maier" />
+    <meta name="publisher" content="Dominik Maier Coaching & Interim Management" />
+    <meta name="copyright" content="© 2025 Dominik Maier" />
+    <meta name="language" content="de" />
+    <meta name="geo.region" content="DE-BW" />
+    <meta name="geo.placename" content="Bad Rippoldsau, Deutschland" />
+    <meta name="geo.position" content="48.4331;8.3286" />
+    <meta name="ICBM" content="48.4331, 8.3286" />
+    
+    <!-- Business-specific keywords -->
+    <meta name="keywords" content="Unternehmensentwicklung, Vertriebsoptimierung, Value Management, Wertanalytiker VDI, Interim Management, Business Coaching, Prozessoptimierung, Marketing Strategien, KI Integration, Baden-Württemberg" />
     
     <!-- Theme Color for mobile browsers -->
     <meta name="theme-color" content="#D4AF37" />
+    <meta name="msapplication-TileColor" content="#D4AF37" />
     
-    <!-- Theme detection script, now based on time of day and stored preference -->
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+    
+    <!-- Google Fonts: Montserrat with display swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- AOS Animation - Load before initialization script -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Performance optimizations -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//www.google-analytics.com" />
+    
+    <!-- Structured Data (if provided) -->
+    {structuredData && (
+      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    )}
+    
+    <!-- Default Structured Data for Website -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Dominik Maier Coaching & Interim Management",
+      "url": "https://maier-value.com",
+      "description": "Strategische Unternehmensentwicklung und Value Management für nachhaltigen Unternehmenserfolg",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Dominik Maier Coaching & Interim Management",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://maier-value.com/logo.svg"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://maier-value.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/dominik-maier-22144710a/"
+      ]
+    }
+    </script>
+    
+    <!-- Enhanced Google Analytics with Privacy-First approach -->
     <script is:inline>
-      // Function to determine theme based on time of day
+      // Enhanced GA loading with consent management
+      function loadGoogleAnalytics() {
+        if (localStorage.getItem('cookie-consent') === 'accept') {
+          const script = document.createElement('script');
+          script.src = 'https://www.googletagmanager.com/gtag/js?id=G-08H9EG15DE';
+          script.async = true;
+          document.head.appendChild(script);
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-08H9EG15DE', {
+            'anonymize_ip': true,
+            'respect_dnt': true,
+            'allow_ad_personalization_signals': false
+          });
+          
+          console.log('📊 Google Analytics loaded with consent');
+        }
+      }
+      
+      // Load GA if consent already given
+      loadGoogleAnalytics();
+      
+      // Listen for consent changes
+      window.addEventListener('cookieConsentAccepted', loadGoogleAnalytics);
+    </script>
+    
+    <!-- Enhanced Theme detection script -->
+    <script is:inline>
+      // Enhanced theme management with time-based auto-switching
       function getTimeBasedTheme() {
         const hour = new Date().getHours();
         // Light mode from 6 AM to 6 PM (6-18), dark mode otherwise
         return (hour >= 6 && hour < 18) ? 'light' : 'dark';
       }
 
+      function applyTheme(theme) {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+        // Update theme-color meta tag
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeColorMeta) {
+          themeColorMeta.content = theme === 'dark' ? '#1a1a1a' : '#D4AF37';
+        }
+      }
+
       // Check for saved theme preference
       const userTheme = localStorage.getItem('theme');
-      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const userSetTheme = localStorage.getItem('userSetTheme') === 'true';
       
       // If user has manually set a theme, use that
-      if (userTheme) {
-        document.documentElement.classList.toggle('dark', userTheme === 'dark');
+      if (userSetTheme && userTheme) {
+        applyTheme(userTheme);
       } 
       // Otherwise, determine theme based on time of day
       else {
         const timeBasedTheme = getTimeBasedTheme();
-        document.documentElement.classList.toggle('dark', timeBasedTheme === 'dark');
-        localStorage.setItem('theme', timeBasedTheme); // Store the time-based theme
+        applyTheme(timeBasedTheme);
+        localStorage.setItem('theme', timeBasedTheme);
       }
       
-      // Recheck every hour to update theme if needed
+      // Recheck every hour to update theme if needed (only for auto-switching users)
       setInterval(() => {
-        // Only update if user hasn't manually set a preference
         if (!localStorage.getItem('userSetTheme')) {
           const timeBasedTheme = getTimeBasedTheme();
-          document.documentElement.classList.toggle('dark', timeBasedTheme === 'dark');
+          applyTheme(timeBasedTheme);
           localStorage.setItem('theme', timeBasedTheme);
         }
       }, 60 * 60 * 1000); // Check every hour
+      
+      console.log('🎨 Theme system v1.0 initialized');
     </script>
     
     <!-- Image fallback handler script -->
@@ -93,54 +209,138 @@ const {
     <!-- Dropdown behavior enhancement -->
     <script src="/js/dropdown-behavior.js" defer></script>
   </head>
-  <body class="font-sans bg-light dark:bg-dark text-text-dark dark:text-text-light min-h-screen flex flex-col">
+  <body class="font-sans bg-light dark:bg-dark text-text-dark dark:text-text-light min-h-screen flex flex-col antialiased">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary-gold text-white px-4 py-2 rounded-md z-50">
+      Zum Hauptinhalt springen
+    </a>
+    
     <Header />
-    <main class="flex-grow">
+    <main id="main-content" class="flex-grow" role="main">
       <slot />
     </main>
     <Footer />
     <CookieConsent />
     
-    <!-- AOS script and initialization -->
+    <!-- Enhanced AOS script and initialization -->
     <script>
-      // First load the AOS script
       document.addEventListener('DOMContentLoaded', () => {
+        // Check if AOS is already loaded
+        if (typeof window.AOS !== 'undefined') {
+          window.AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50,
+            delay: 100
+          });
+          console.log('🎬 AOS animations initialized');
+          return;
+        }
+        
+        // Load AOS script dynamically
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js';
+        script.integrity = 'sha512-A7AYk1fGKX6S2SsHywmPkrnzTZHrgiVT7GcQkLGDe2ev0aWb8zejytzS8wjo7PGEXKqJOrjQ4oORtnimIRZBtw==';
+        script.crossOrigin = 'anonymous';
+        script.referrerPolicy = 'no-referrer';
+        
         script.onload = () => {
-          // Only initialize after script is fully loaded
           if (typeof window.AOS !== 'undefined') {
             window.AOS.init({
               duration: 800,
               easing: 'ease-out-cubic',
-              once: true
+              once: true,
+              offset: 50,
+              delay: 100
             });
+            console.log('🎬 AOS loaded and initialized');
           } else {
-            console.error('AOS library not available after loading script');
+            console.warn('⚠️ AOS library not available after loading');
           }
         };
+        
         script.onerror = () => {
-          console.error('Failed to load AOS library');
+          console.error('❌ Failed to load AOS library');
         };
+        
         document.body.appendChild(script);
       });
     </script>
-  </head>
+    
+    <!-- Performance monitoring script -->
+    <script>
+      // Simple performance monitoring
+      window.addEventListener('load', () => {
+        if ('performance' in window) {
+          const perfData = performance.getEntriesByType('navigation')[0];
+          const loadTime = Math.round(perfData.loadEventEnd - perfData.loadEventStart);
+          console.log(`⚡ Page load time: ${loadTime}ms`);
+          
+          // Track Core Web Vitals if possible
+          if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+              for (const entry of list.getEntries()) {
+                if (entry.entryType === 'largest-contentful-paint') {
+                  console.log(`🎯 LCP: ${Math.round(entry.startTime)}ms`);
+                }
+              }
+            });
+            observer.observe({type: 'largest-contentful-paint', buffered: true});
+          }
+        }
+      });
+    </script>
+  </body>
 </html>
 
 <style is:global>
   :root {
     --swiper-theme-color: #D4AF37;
+    --primary-gold: #D2AE6C;
+    --primary-dark: #B8941A;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Account for fixed header */
   }
   
   body {
     min-height: 100vh;
-    scroll-behavior: smooth;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   
   /* Smoother transitions for theme switching */
   * {
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* Screen reader only class for accessibility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  .sr-only.focus\:not-sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: inherit;
+    margin: inherit;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
   }
   
   /* SVG icon fallbacks */
@@ -150,7 +350,7 @@ const {
     justify-content: center;
   }
   
-  /* Add a pulsing animation for SVG loading */
+  /* Enhanced loading animations */
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
@@ -160,11 +360,32 @@ const {
     }
   }
   
-  img.loading {
+  @keyframes shimmer {
+    0% {
+      background-position: -468px 0;
+    }
+    100% {
+      background-position: 468px 0;
+    }
+  }
+  
+  .loading {
     animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite;
   }
   
-  /* Enable hyphenation for better text wrapping */
+  .shimmer {
+    background: linear-gradient(
+      to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%
+    );
+    background-size: 800px 104px;
+    animation: shimmer 1.5s linear infinite;
+  }
+  
+  /* Typography improvements */
   .hyphens-auto {
     hyphens: auto;
     -webkit-hyphens: auto;
@@ -174,5 +395,53 @@ const {
   .break-words {
     word-break: break-word;
     overflow-wrap: break-word;
+  }
+  
+  /* Focus styles for better accessibility */
+  *:focus {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    * {
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+    
+    a,
+    a:visited {
+      text-decoration: underline;
+    }
+    
+    .no-print {
+      display: none !important;
+    }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --primary-gold: #000000;
+    }
+    
+    .dark {
+      --primary-gold: #ffffff;
+    }
   }
 </style>
