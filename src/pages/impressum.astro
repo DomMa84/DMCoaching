@@ -1,5 +1,13 @@
 ---
+// src/pages/impressum.astro v3.0 (Server-Mode kompatibel)
+// Impressum - Statische Seite mit prerender
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
+export const prerender = true;
+
 import Layout from '../layouts/Layout.astro';
+
+console.log('📄 Impressum v3.0 loaded - Static prerendered');
 ---
 
 <Layout 
@@ -13,11 +21,11 @@ import Layout from '../layouts/Layout.astro';
         
         <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-8 shadow-md">
           <div class="prose dark:prose-invert max-w-none">
-            <h2>Angaben gemäß § 5 TMG und § 18 MStV</h2>
+            <h2 class="text-2xl font-bold mb-4">Angaben gemäß § 5 TMG und § 18 MStV</h2>
             
             <div class="mt-6">
               <p class="font-semibold mb-1">Verantwortlich für den Inhalt:</p>
-              <p>Dominik Maier Coaching & Interim Management<br/>
+              <p class="mb-4">Dominik Maier Coaching & Interim Management<br/>
               Gaisbachweg 4<br/>
               77776 Bad Rippoldsau<br/>
               Deutschland</p>
@@ -25,31 +33,35 @@ import Layout from '../layouts/Layout.astro';
             
             <div class="mt-6">
               <p class="font-semibold mb-1">Kontakt:</p>
-              <p>Telefon: +497440 913367<br/>
+              <p class="mb-4">Telefon: +497440 913367<br/>
               E-Mail: webmaster@maier-value.com</p>
             </div>
 
             <div class="mt-6">
               <p class="font-semibold mb-1">Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:</p>
-              <p>DE453049508</p>
+              <p class="mb-4">DE453049508</p>
             </div>
             
             <hr class="my-8 border-light-darkest dark:border-dark-lightest"/>
             
-            <h2>Haftung für Inhalte</h2>
-            <p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
-            <p>Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
+            <h2 class="text-2xl font-bold mb-4">Haftung für Inhalte</h2>
+            <p class="mb-4">Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.</p>
+            <p class="mb-6">Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p>
             
-            <h2>Haftung für Links</h2>
-            <p>Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
-            <p>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
+            <h2 class="text-2xl font-bold mb-4">Haftung für Links</h2>
+            <p class="mb-4">Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.</p>
+            <p class="mb-6">Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p>
             
-            <h2>Urheberrecht</h2>
-            <p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
-            <p>Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
+            <h2 class="text-2xl font-bold mb-4">Urheberrecht</h2>
+            <p class="mb-4">Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet.</p>
+            <p class="mb-6">Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>
             
-            <h2>Alternative Streitbeilegung gemäß Art. 14 Abs. 1 ODR-VO und § 36 VSBG</h2>
-            <p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die Sie unter <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a> finden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+            <h2 class="text-2xl font-bold mb-4">Alternative Streitbeilegung gemäß Art. 14 Abs. 1 ODR-VO und § 36 VSBG</h2>
+            <p class="mb-4">Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit, die Sie unter <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="text-primary-gold hover:underline">https://ec.europa.eu/consumers/odr/</a> finden. Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+            
+            <div class="mt-8 pt-4 border-t border-light-darkest dark:border-dark-lightest">
+              <p class="text-sm text-text-muted">Impressum v3.0 - Server-Mode kompatibel</p>
+            </div>
           </div>
         </div>
       </div>
