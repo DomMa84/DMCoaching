@@ -1,11 +1,19 @@
 ---
+// src/pages/ueber-mich.astro v1.0 (Server-Mode & Content optimiert)
+// Über Mich - Statische Seite mit prerender
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
+export const prerender = true;
+
 import Layout from '../layouts/Layout.astro';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
+
+console.log('👤 Über Mich v1.0 loaded - Static prerendered with enhanced content');
 ---
 
 <Layout 
-  title="Über Mich | Dominik Maier"
-  description="Erfahren Sie mehr über Dominik Maier, einen erfahrenen Manager mit über 15 Jahren Berufserfahrung in Vertrieb und Business Development."
+  title="Über Dominik Maier | 15+ Jahre Führungserfahrung im Vertrieb & Business Development"
+  description="✅ Erfahren Sie mehr über Dominik Maier: 15+ Jahre Führungserfahrung, Wertanalytiker VDI, AI-Experte. Von Supfina bis Bürkle - Expertise in Vertrieb, Marketing & Prozessoptimierung."
 >
   <!-- Hero Section -->
   <section class="bg-light-darker dark:bg-dark-lighter py-16">
@@ -16,11 +24,13 @@ import ResponsiveImage from '../components/ResponsiveImage.astro';
           <div class="rounded-lg shadow-lg overflow-hidden">
             <img
               src="/images/dominik-maier-portrait-new.jpeg"
-              alt="Dominik Maier - Business Coach und Interim Manager"
+              alt="Dominik Maier - Erfahrener Business Coach, Interim Manager und Wertanalytiker VDI"
               class="w-full h-full object-cover"
               loading="eager"
               fetchpriority="high"
               onerror="this.src='/images/fallback.jpg'"
+              width="600"
+              height="800"
             />
           </div>
         </div>
@@ -28,184 +38,203 @@ import ResponsiveImage from '../components/ResponsiveImage.astro';
         <div data-aos="fade-left">
           <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-6">Über Mich</h1>
           <p class="text-text-muted mb-6 text-lg">
-            Ich bin Dominik Maier, ein erfahrener Manager mit einer Leidenschaft für die Entwicklung effektiver Marketing-, Verkaufs- und Servicestrategien. Mit über 15 Jahren Berufserfahrung in verschiedenen Führungspositionen im Vertrieb und Business Development bringe ich eine einzigartige Mischung aus technischem Verständnis und strategischem Marketing- und Vertriebs-Know-how mit. Ich bin davon überzeugt, dass die besten Lösungen entstehen, wenn man über Abteilungsgrenzen hinausblickt. Aus diesem Grund habe ich mich zum Wertanalytiker VDI weitergebildet. Diese Expertise erlaubt es mir, holistisch auf die Herausforderungen im Unternehmen einzugehen, indem ich Kosten, Funktionen und Kundenwert systematisch analysiere und optimiere, um nachhaltigen Erfolg sicherzustellen.
+            Ich bin <strong>Dominik Maier</strong>, ein erfahrener Manager mit einer Leidenschaft für die Entwicklung effektiver Marketing-, Verkaufs- und Servicestrategien. Mit über <strong>15 Jahren Berufserfahrung</strong> in verschiedenen Führungspositionen im Vertrieb und Business Development bringe ich eine einzigartige Mischung aus technischem Verständnis und strategischem Marketing- und Vertriebs-Know-how mit.
           </p>
+          <p class="text-text-muted mb-6">
+            Ich bin davon überzeugt, dass die besten Lösungen entstehen, wenn man über Abteilungsgrenzen hinausblickt. Aus diesem Grund habe ich mich zum <strong>Wertanalytiker VDI</strong> weitergebildet. Diese Expertise erlaubt es mir, holistisch auf die Herausforderungen im Unternehmen einzugehen, indem ich Kosten, Funktionen und Kundenwert systematisch analysiere und optimiere, um nachhaltigen Erfolg sicherzustellen.
+          </p>
+          <div class="flex flex-wrap gap-2" aria-label="Expertise-Keywords">
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">15+ Jahre Erfahrung</span>
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">Wertanalytiker VDI</span>
+            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">AI-Integration</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
   
   <!-- Career Path -->
-  <section class="py-16 bg-light dark:bg-dark">
+  <section class="py-16 bg-light dark:bg-dark" id="beruflicher-werdegang">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-center text-text-dark dark:text-text-light mb-12" data-aos="fade-up">Beruflicher Werdegang</h2>
       
       <div class="relative max-w-4xl mx-auto">
         <!-- Timeline line -->
-        <div class="absolute left-1/2 -ml-px h-full w-0.5 bg-primary-gold"></div>
+        <div class="absolute left-1/2 -ml-px h-full w-0.5 bg-primary-gold" aria-hidden="true"></div>
         
         <!-- Timeline items -->
         <div class="space-y-12">
           <!-- 2022 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1 text-right pr-8 md:pr-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Geschäftsfeldleiter, Leiter Vertriebsinnendienst, stv. Vertriebsleiter Global</h3>
                 <p class="text-text-muted">Supfina Grieshaber GmbH & Co. KG</p>
+                <p class="text-text-muted text-sm mt-1">Führung internationaler Teams, strategische Marktentwicklung</p>
               </div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2022</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2022">
+                <span class="text-white font-bold text-sm">2022</span>
               </div>
               <div class="flex-1"></div>
             </div>
-          </div>
+          </article>
           
           <!-- 2021 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1"></div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2021</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2021">
+                <span class="text-white font-bold text-sm">2021</span>
               </div>
               <div class="flex-1 pl-8 md:pl-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Verkaufsleiter</h3>
                 <p class="text-text-muted">Supfina Grieshaber GmbH & Co. KG</p>
+                <p class="text-text-muted text-sm mt-1">Aufbau und Optimierung der Vertriebsstrukturen</p>
               </div>
             </div>
-          </div>
+          </article>
           
           <!-- 2018 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1 text-right pr-8 md:pr-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Verkaufsleiter Oberflächentechnik / Business Development Manager</h3>
                 <p class="text-text-muted">Robert Bürkle GmbH / Burkle North America</p>
+                <p class="text-text-muted text-sm mt-1">Internationale Markterschließung, Produktstrategie</p>
               </div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2018</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2018">
+                <span class="text-white font-bold text-sm">2018</span>
               </div>
               <div class="flex-1"></div>
             </div>
-          </div>
+          </article>
           
           <!-- 2015 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1"></div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2015</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2015">
+                <span class="text-white font-bold text-sm">2015</span>
               </div>
               <div class="flex-1 pl-8 md:pl-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Verkaufsleiter Kaschieren</h3>
                 <p class="text-text-muted">Robert Bürkle GmbH</p>
+                <p class="text-text-muted text-sm mt-1">Spezialisierung auf Kaschiertechnologie und Kundenlösungen</p>
               </div>
             </div>
-          </div>
+          </article>
           
           <!-- 2013 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1 text-right pr-8 md:pr-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Projektleiter Vakuumgreifsysteme</h3>
                 <p class="text-text-muted">J. Schmalz GmbH</p>
+                <p class="text-text-muted text-sm mt-1">Entwicklung innovativer Automatisierungslösungen</p>
               </div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2013</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2013">
+                <span class="text-white font-bold text-sm">2013</span>
               </div>
               <div class="flex-1"></div>
             </div>
-          </div>
+          </article>
           
           <!-- 2010 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1"></div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2010</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2010">
+                <span class="text-white font-bold text-sm">2010</span>
               </div>
               <div class="flex-1 pl-8 md:pl-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Projekt Manager Service</h3>
                 <p class="text-text-muted">Robert Bürkle GmbH</p>
+                <p class="text-text-muted text-sm mt-1">Aufbau serviceorientierter Geschäftsmodelle</p>
               </div>
             </div>
-          </div>
+          </article>
           
           <!-- 2004 -->
-          <div class="relative" data-aos="fade-up">
+          <article class="relative" data-aos="fade-up">
             <div class="flex items-center">
               <div class="flex-1 text-right pr-8 md:pr-12">
                 <h3 class="text-xl font-semibold text-text-dark dark:text-text-light">Business Unit-Verantwortlicher für Remote-Service-System</h3>
                 <p class="text-text-muted">Robert Bürkle GmbH (e.a.sy-service)</p>
+                <p class="text-text-muted text-sm mt-1">Pionierarbeit in der digitalen Service-Transformation</p>
               </div>
-              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                <span class="text-white font-bold">2004</span>
+              <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg" aria-label="Jahr 2004">
+                <span class="text-white font-bold text-sm">2004</span>
               </div>
               <div class="flex-1"></div>
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </div>
   </section>
   
   <!-- Passions Section -->
-  <section class="py-16 bg-light-darker dark:bg-dark-lighter">
+  <section class="py-16 bg-light-darker dark:bg-dark-lighter" id="leidenschaften">
     <div class="container mx-auto px-4">
       <h2 class="text-3xl font-bold text-center text-text-dark dark:text-text-light mb-12" data-aos="fade-up">Leidenschaften & Interessen</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <!-- Left Column - Intro Text + Personal Interests -->
         <div class="rounded-lg bg-white dark:bg-dark p-8 shadow-lg" data-aos="fade-right">
           <p class="text-text-muted text-lg mb-6">
-            In meiner Freizeit beschäftige ich mich mit Sport, Reisen, Kochen und Unternehmertum. Ich liebe es, mich mit anderen Kreativen und Unternehmern auszutauschen.
+            In meiner Freizeit beschäftige ich mich mit <strong>Sport, Reisen, Kochen und Unternehmertum</strong>. Ich liebe es, mich mit anderen Kreativen und Unternehmern auszutauschen und dabei neue Perspektiven zu gewinnen.
           </p>
           
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <div class="grid grid-cols-1 gap-6 mt-8">
+            <!-- Fitness & Sport -->
             <div class="flex items-start">
-              <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold" aria-hidden="true">
-                  <path d="M15.75 8.25a.75.75 0 01.75.75c0 1.12-.492 2.126-1.27 2.812a.75.75 0 11-.992-1.124A2.243 2.243 0 0015 9a.75.75 0 01.75-.75z" />
-                  <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM4.575 15.6a8.25 8.25 0 009.348 4.425 1.966 1.966 0 00-1.84-1.275.983.983 0 01-.97-.822l-.073-.437c-.094-.565.25-1.11.8-1.267l.99-.282c.427-.123.783-.418.982-.816l.036-.073a1.453 1.453 0 012.328-.377L16.5 15.9l2.625.262a.75.75 0 01.648.744v.23c0 .515-.405.945-.923.982l-2.375.235c-.242.024-.48-.087-.65-.273l-.758-.829a1.453 1.453 0 00-2.327.377l-.073.148a.75.75 0 01-.65.274l-1.086-.107a.75.75 0 01-.67-.75V15.6h-5.25V9.466a1.345 1.345 0 01.836-1.256l.31-.124a1.31 1.31 0 011.041.047 1.051 1.051 0 01.448.366.945.945 0 01.192.73.973.973 0 01-.671.745l-.613.18a.751.751 0 00.218 1.467l2.105.315a.75.75 0 00.677-.416l.5-.833c.33-.55.489-1.186.463-1.828a1.875 1.875 0 00-1.45-1.726l-1.088-.181a1.872 1.872 0 01-1.576-1.544L8.54 3.75a.877.877 0 01.206-.052 8.25 8.25 0 0116.59 1.83c.17.18.022.36.024.54l-2.193 7.015a.75.75 0 01-.695.544H19.5a.75.75 0 01-.729-.595A8.226 8.226 0 0018 9.747a8.247 8.247 0 00-5.25-7.726V2.25a.75.75 0 01-.75.75h-5.25a.75.75 0 01-.75-.75v.128a8.23 8.23 0 00-5.214 7.75c0 1.847.606 3.55 1.63 4.923a.75.75 0 01-.189 1.05l-.013.01z" clip-rule="evenodd" />
+              <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                  <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">Fitness & Sport</h3>
+                <p class="text-text-muted">Regelmäßiges Training und gesunde Routinen sind für mich essentiell, um körperlich und mental leistungsfähig zu bleiben.</p>
+              </div>
+            </div>
+
+            <!-- Reisen -->
+            <div class="flex items-start">
+              <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                  <path fill-rule="evenodd" d="M8.161 2.58a1.875 1.875 0 011.678 0l4.993 2.498c.106.052.23.052.336 0l3.869-1.935A1.875 1.875 0 0121.75 4.82v12.485c0 .71-.401 1.36-1.037 1.677l-4.875 2.437a1.875 1.875 0 01-1.676 0l-4.994-2.497a.375.375 0 00-.336 0l-3.868 1.935A1.875 1.875 0 012.25 19.18V6.695c0-.71.401-1.36 1.036-1.677L8.161 2.58z" clip-rule="evenodd" />
                 </svg>
               </div>
               <div>
                 <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">Reisen</h3>
-                <p class="text-text-muted">Neue Kulturen entdecken und internationale Perspektiven sammeln.</p>
+                <p class="text-text-muted">Neue Kulturen entdecken und internationale Perspektiven sammeln erweitert meinen Horizont kontinuierlich.</p>
               </div>
             </div>
             
+            <!-- Kochen -->
             <div class="flex items-start">
-              <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold" aria-hidden="true">
-                  <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+              <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                  <path fill-rule="evenodd" d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" clip-rule="evenodd" />
                 </svg>
               </div>
               <div>
                 <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-2">Kochen</h3>
-                <p class="text-text-muted">Kulinarische Kreationen und internationale Küche entdecken.</p>
+                <p class="text-text-muted">Kulinarische Kreationen und internationale Küche entdecken - Kreativität in der Küche entspannt mich.</p>
               </div>
             </div>
           </div>
         </div>
         
+        <!-- Right Column - Professional Interests -->
         <div class="grid grid-cols-1 gap-6" data-aos="fade-left">
-          <!-- Passion 1 -->
-          <div class="bg-white dark:bg-dark rounded-lg shadow-md p-6">
-            <div class="flex items-center mb-4">
-              <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">Fitness & Sport</h3>
-            </div>
-            <p class="text-text-muted">Regelmäßiges Training und gesunde Routinen sind für mich essentiell, um körperlich und mental leistungsfähig zu bleiben und einen Ausgleich zum beruflichen Alltag zu schaffen.</p>
-          </div>
           
-          <!-- Passion 2 -->
-          <div class="bg-white dark:bg-dark rounded-lg shadow-md p-6">
+          <!-- Unternehmertum & Weiterbildung -->
+          <article class="bg-white dark:bg-dark rounded-lg shadow-md p-6">
             <div class="flex items-center mb-4">
-              <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold" aria-hidden="true">
+              <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                   <path d="M11.7 2.805a.75.75 0 01.6 0A60.65 60.65 0 0122.83 8.72a.75.75 0 01-.231 1.337 49.949 49.949 0 00-9.902 3.912l-.003.002-.34.18a.75.75 0 01-.707 0A50.009 50.009 0 007.5 12.174v-.224c0-.131.067-.248.172-.311a54.614 54.614 0 014.653-2.52.75.75 0 00-.65-1.352 56.129 56.129 0 00-4.78 2.589 1.858 1.858 0 00-.859 1.228 49.803 49.803 0 00-4.634-1.527.75.75 0 01-.231-1.337A60.653 60.653 0 0111.7 2.805z" />
                   <path d="M13.06 15.473a48.45 48.45 0 017.666-3.282c.134 1.414.22 2.843.255 4.285a.75.75 0 01-.46.71 47.878 47.878 0 00-8.105 4.342.75.75 0 01-.832 0 47.877 47.877 0 00-8.104-4.342.75.75 0 01-.461-.71c.035-1.442.121-2.87.255-4.286A48.4 48.4 0 016 13.18v1.27a1.5 1.5 0 00-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.661a6.729 6.729 0 00.551-1.608 1.5 1.5 0 00.14-2.67v-.645a48.549 48.549 0 013.44 1.668 2.25 2.25 0 002.12 0z" />
                   <path d="M4.462 19.462c.42-.419.753-.89 1-1.394.453.213.902.434 1.347.661a6.743 6.743 0 01-1.286 1.794.75.75 0 11-1.06-1.06z" />
@@ -214,48 +243,63 @@ import ResponsiveImage from '../components/ResponsiveImage.astro';
               <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">Unternehmertum & Weiterbildung</h3>
             </div>
             <p class="text-text-muted">Ständiges Lernen über Business, Technologie und Sport - die Welt verändert sich schnell, und ich liebe es, am Puls der Zeit zu bleiben und mein Wissen kontinuierlich zu erweitern.</p>
-          </div>
+          </article>
           
-          <!-- Passion 3 -->
-          <div class="bg-white dark:bg-dark rounded-lg shadow-md p-6">
+          <!-- Netzwerken & KI -->
+          <article class="bg-white dark:bg-dark rounded-lg shadow-md p-6">
             <div class="flex items-center mb-4">
-              <div class="bg-primary-gold/10 p-3 rounded-full mr-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold" aria-hidden="true">
+              <div class="bg-primary-gold/10 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                   <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
                 </svg>
               </div>
-              <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">Netzwerken</h3>
+              <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">Netzwerken & KI</h3>
             </div>
-            <p class="text-text-muted">Durch ein starkes Netzwerk, in dem man sich gegenseitig hilft zu wachsen und andere wachsen zu lassen, entstehen die besten Ideen und Chancen. Der Austausch mit Gleichgesinnten inspiriert mich.</p>
-          </div>
+            <p class="text-text-muted">Durch ein starkes Netzwerk, in dem man sich gegenseitig hilft zu wachsen, entstehen die besten Ideen. Der Austausch mit Gleichgesinnten inspiriert mich und öffnet neue Perspektiven für innovative Lösungen.</p>
+          </article>
+          
+          <!-- AI Integration -->
+          <article class="bg-gradient-to-br from-primary-gold/10 to-primary-gold/20 rounded-lg shadow-md p-6 border border-primary-gold/20">
+            <div class="flex items-center mb-4">
+              <div class="bg-primary-gold/20 p-3 rounded-full mr-4" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                  <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71L10.018 14.25H2.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">Künstliche Intelligenz & Automation</h3>
+            </div>
+            <p class="text-text-muted"><strong>KI entwickelt sich rasant weiter</strong> und sollte strategisch in den Arbeitsalltag integriert werden. Als Dozent und interessierter Praktiker versuche ich, <strong>Vertrieb und Marketing mit Hilfe von KI und intelligenten Agenten zu erleichtern</strong> und zu optimieren. Die Zukunft gehört der sinnvollen Mensch-Maschine-Kollaboration.</p>
+          </article>
         </div>
       </div>
     </div>
   </section>
   
   <!-- Call to Action -->
-  <section class="py-16 bg-primary-gold">
+  <section class="py-16 bg-primary-gold" id="zusammenarbeit">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
         <h2 class="text-3xl font-bold text-white mb-6">Lassen Sie uns gemeinsam arbeiten</h2>
         <p class="text-white/90 text-lg mb-8">
-          Interesse an einer Zusammenarbeit? Kontaktieren Sie uns für ein unverbindliches Erstgespräch.
+          Interesse an einer Zusammenarbeit? <strong>Kontaktieren Sie uns für ein unverbindliches Erstgespräch</strong> und lassen Sie uns besprechen, wie ich Ihr Unternehmen voranbringen kann.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
           <a 
             href="tel:+497440913367" 
             class="inline-flex items-center justify-center bg-white hover:bg-gray-100 text-primary-gold font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
+            aria-label="Telefonnummer +497440 913367 anrufen"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
             </svg>
             Anrufen
           </a>
           <a 
-            href="mailto:webmaster@maier-value.com?subject=Kostenloses%20Erstgespräch" 
+            href="mailto:webmaster@maier-value.com?subject=Kostenloses%20Erstgespräch&body=Hallo%20Herr%20Maier%2C%0A%0Aich%20interessiere%20mich%20für%20ein%20kostenloses%20Erstgespräch.%0A%0AMit%20freundlichen%20Grüßen" 
             class="inline-flex items-center justify-center bg-dark text-white hover:bg-dark-lighter font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
+            aria-label="E-Mail für kostenloses Erstgespräch senden"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
@@ -265,4 +309,133 @@ import ResponsiveImage from '../components/ResponsiveImage.astro';
       </div>
     </div>
   </section>
+
+  <!-- Schema.org JSON-LD für Person -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Dominik Maier",
+    "jobTitle": "Business Coach und Interim Manager",
+    "description": "Erfahrener Manager mit über 15 Jahren Berufserfahrung in Vertrieb und Business Development. Wertanalytiker VDI und Experte für KI-Integration im Business.",
+    "url": "https://maier-value.com/ueber-mich",
+    "image": "https://maier-value.com/images/dominik-maier-portrait-new.jpeg",
+    "email": "webmaster@maier-value.com",
+    "telephone": "+497440913367",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Gaisbachweg 4",
+      "addressLocality": "Bad Rippoldsau",
+      "postalCode": "77776",
+      "addressCountry": "DE"
+    },
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Dominik Maier Coaching & Interim Management"
+    },
+    "alumniOf": [
+      {
+        "@type": "Organization",
+        "name": "Supfina Grieshaber GmbH & Co. KG"
+      },
+      {
+        "@type": "Organization", 
+        "name": "Robert Bürkle GmbH"
+      },
+      {
+        "@type": "Organization",
+        "name": "J. Schmalz GmbH"
+      }
+    ],
+    "hasCredential": {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Wertanalytiker VDI",
+      "credentialCategory": "Professional Certification"
+    },
+    "knowsAbout": [
+      "Strategische Unternehmensentwicklung",
+      "Vertriebsoptimierung",
+      "Marketing-Strategien", 
+      "Value Management",
+      "Interim Management",
+      "Künstliche Intelligenz",
+      "Business Development"
+    ],
+    "award": "15+ Jahre Führungserfahrung",
+    "interestIn": [
+      "Unternehmertum",
+      "Künstliche Intelligenz",
+      "Fitness & Sport",
+      "Reisen",
+      "Kochen",
+      "Netzwerken"
+    ]
+  }
+  </script>
 </Layout>
+
+<style>
+  /* Footer version info */
+  .footer-version::after {
+    content: "Über Mich v1.0 - Server-Mode & Content optimiert";
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  /* Timeline enhancements */
+  .timeline-item:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+  }
+  
+  /* Enhanced CTA section */
+  .cta-gradient {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, #B8941A 100%);
+  }
+  
+  /* Passion cards hover effect */
+  .passion-card {
+    transition: all 0.3s ease;
+  }
+  
+  .passion-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* AI section special styling */
+  .ai-highlight {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ai-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(210, 174, 108, 0.1), transparent);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  /* Responsive timeline improvements */
+  @media (max-width: 768px) {
+    .timeline-line {
+      left: 2rem;
+    }
+    
+    .timeline-content {
+      margin-left: 4rem;
+    }
+  }
+</style>
