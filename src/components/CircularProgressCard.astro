@@ -1,90 +1,364 @@
 ---
+// src/components/CircularProgressCard.astro v1.0 (Server-Mode & Animation optimiert)
+// CircularProgressCard - Enhanced card component with circular progress
+
 interface Props {
   percentage: string;
   title: string;
   description: string;
   delay?: number;
+  variant?: 'default' | 'highlight' | 'compact';
+  theme?: 'gold' | 'green' | 'blue' | 'red';
+  className?: string;
+  href?: string;
 }
 
-const { percentage, title, description, delay = 100 } = Astro.props;
+const { 
+  percentage, 
+  title, 
+  description, 
+  delay = 100,
+  variant = 'default',
+  theme = 'gold',
+  className = "",
+  href
+} = Astro.props;
 
-// Convert percentage string to number for the progress circle
-const getPercentageValue = (percentageStr: string) => {
+// Enhanced percentage parsing with better handling
+const getPercentageValue = (percentageStr: string): number => {
+  // Handle ranges like "10-50%"
   if (percentageStr.includes('-')) {
-    // For ranges like "10-50%", take the higher value
-    const [, max] = percentageStr.replace('%', '').split('-').map(Number);
-    return max;
+    const [min, max] = percentageStr.replace('%', '').split('-').map(Number);
+    return Math.max(min, max); // Take higher value for visual impact
   }
+  
+  // Handle "less than" values like "< 2 Jahre"
   if (percentageStr.includes('<')) {
-    // For values like "< 2 Jahre", return 100 since it's meant to show "full" progress
-    return 100; 
+    return 100; // Show full progress for "less than" indicators
   }
-  // Remove '%' for direct parsing if it's a simple percentage like "75%"
-  return parseInt(percentageStr.replace('%', ''));
+  
+  // Handle "greater than" values like "> 90%"
+  if (percentageStr.includes('>')) {
+    const num = parseInt(percentageStr.replace(/[>%]/g, '').trim());
+    return Math.min(num + 10, 100); // Add 10% but cap at 100
+  }
+  
+  // Handle direct percentages like "75%"
+  const numValue = parseInt(percentageStr.replace(/[%]/g, '').trim());
+  return isNaN(numValue) ? 0 : Math.min(Math.max(numValue, 0), 100);
 };
 
 const percentageValue = getPercentageValue(percentage);
 
-// Konstanten für den SVG-Kreis, die fest in der viewBox von 0-100 liegen
-const SVG_RADIUS = 45; // Radius des Kreises
-const SVG_STROKE_WIDTH = 8; // Strichstärke des Kreises
-const SVG_CENTER = 50; // Mittelpunkt des Kreises in 100x100 viewBox
-const SVG_CIRCUMFERENCE = SVG_RADIUS * 2 * Math.PI; // Umfang des Kreises
-
+// SVG Constants (consistent sizing)
+const SVG_RADIUS = 45;
+const SVG_STROKE_WIDTH = 8;
+const SVG_CENTER = 50;
+const SVG_CIRCUMFERENCE = SVG_RADIUS * 2 * Math.PI;
 const strokeDashoffsetValue = SVG_CIRCUMFERENCE * (1 - percentageValue / 100);
+
+// Theme colors
+const themes = {
+  gold: 'text-primary-gold',
+  green: 'text-green-500',
+  blue: 'text-blue-500',
+  red: 'text-red-500'
+};
+
+// Variant styles
+const variants = {
+  default: 'bg-white dark:bg-dark rounded-lg shadow-md p-4 md:p-6',
+  highlight: 'bg-gradient-to-br from-primary-gold/10 to-primary-gold/20 rounded-lg shadow-lg p-4 md:p-6 border border-primary-gold/30',
+  compact: 'bg-white dark:bg-dark rounded-lg shadow-sm p-3 md:p-4'
+};
+
+// Circle sizes based on variant
+const circleSizes = {
+  default: 'w-24 h-24 md:w-32 md:h-32',
+  highlight: 'w-28 h-28 md:w-36 md:h-36',
+  compact: 'w-20 h-20 md:w-24 md:h-24'
+};
+
+// Text sizes based on variant
+const textSizes = {
+  default: {
+    percentage: 'text-xl md:text-2xl',
+    title: 'text-base md:text-lg',
+    description: 'text-xs md:text-sm'
+  },
+  highlight: {
+    percentage: 'text-2xl md:text-3xl',
+    title: 'text-lg md:text-xl',
+    description: 'text-sm md:text-base'
+  },
+  compact: {
+    percentage: 'text-lg md:text-xl',
+    title: 'text-sm md:text-base',
+    description: 'text-xs'
+  }
+};
+
+// Generate unique ID for accessibility
+const cardId = `progress-card-${Math.random().toString(36).substr(2, 9)}`;
+const progressId = `${cardId}-progress`;
+const titleId = `${cardId}-title`;
+const descId = `${cardId}-desc`;
+
+console.log(`📊 CircularProgressCard v1.0 rendered - ${title}: ${percentage} (${percentageValue}%)`);
 ---
 
-<div 
-  class="bg-white dark:bg-dark rounded-lg shadow-md p-4 md:p-6 text-center"
-  data-aos="zoom-in"
-  data-aos-delay={delay}
->
-  <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-4 md:mb-6">
-    <svg class="w-full h-full" viewBox="0 0 100 100" role="img" aria-label={`Fortschritt: ${percentage}`}>
-      <circle
-        cx={SVG_CENTER}
-        cy={SVG_CENTER}
-        r={SVG_RADIUS}
-        fill="none"
-        stroke="currentColor"
-        stroke-width={SVG_STROKE_WIDTH}
-        class="text-primary-gold/20"
-      />
-      <circle
-        cx={SVG_CENTER}
-        cy={SVG_CENTER}
-        r={SVG_RADIUS}
-        fill="none"
-        stroke="currentColor"
-        stroke-width={SVG_STROKE_WIDTH}
-        stroke-linecap="round"
-        class="text-primary-gold progress-circle"
-        style={`stroke-dasharray: ${SVG_CIRCUMFERENCE}; stroke-dashoffset: ${strokeDashoffsetValue};`}
-        transform="rotate(-90 50 50)"
-      />
-    </svg>
-    <div class="absolute inset-0 flex items-center justify-center">
-      <span class="text-xl md:text-2xl font-bold text-primary-gold" aria-hidden="true">{percentage}</span>
+{href ? (
+  <a 
+    href={href}
+    id={cardId}
+    class={`${variants[variant]} ${className} text-center transition-all duration-300 hover:transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 block group`}
+    data-aos="zoom-in"
+    data-aos-delay={delay}
+    aria-labelledby={titleId}
+    aria-describedby={descId}
+  >
+    <article class="h-full">
+      <div class={`relative ${circleSizes[variant]} mx-auto mb-4 md:mb-6`}>
+        <svg 
+          class="w-full h-full transform transition-transform group-hover:scale-110" 
+          viewBox="0 0 100 100" 
+          role="img" 
+          aria-labelledby={progressId}
+          aria-describedby={`${progressId}-desc`}
+        >
+          <!-- Background circle -->
+          <circle
+            cx={SVG_CENTER}
+            cy={SVG_CENTER}
+            r={SVG_RADIUS}
+            fill="none"
+            stroke="currentColor"
+            stroke-width={SVG_STROKE_WIDTH}
+            class={`${themes[theme]}/20`}
+          />
+          <!-- Progress circle -->
+          <circle
+            cx={SVG_CENTER}
+            cy={SVG_CENTER}
+            r={SVG_RADIUS}
+            fill="none"
+            stroke="currentColor"
+            stroke-width={SVG_STROKE_WIDTH}
+            stroke-linecap="round"
+            class={`${themes[theme]} progress-circle`}
+            style={`stroke-dasharray: ${SVG_CIRCUMFERENCE}; stroke-dashoffset: ${strokeDashoffsetValue};`}
+            transform="rotate(-90 50 50)"
+            data-final-offset={strokeDashoffsetValue}
+            data-circumference={SVG_CIRCUMFERENCE}
+          />
+          <!-- Screen reader description -->
+          <title id={progressId}>{percentage} Fortschritt</title>
+          <desc id={`${progressId}-desc`}>Circular progress showing {percentage} completion</desc>
+        </svg>
+        
+        <!-- Center label -->
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span 
+            class={`${textSizes[variant].percentage} font-bold ${themes[theme]} transition-colors`} 
+            aria-hidden="true"
+          >
+            {percentage}
+          </span>
+        </div>
       </div>
-  </div>
-  <h3 class="text-base md:text-lg font-semibold mb-2 md:mb-3 text-text-dark dark:text-text-light leading-tight">{title}</h3>
-  <p class="text-text-muted text-xs md:text-sm">{description}</p>
-</div>
+      
+      <h3 id={titleId} class={`${textSizes[variant].title} font-semibold mb-2 md:mb-3 text-text-dark dark:text-text-light leading-tight`}>
+        {title}
+      </h3>
+      <p id={descId} class={`text-text-muted ${textSizes[variant].description} leading-relaxed`}>
+        {description}
+      </p>
+      
+      <!-- Link indicator -->
+      <div class="mt-3 flex items-center justify-center text-primary-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+        Details anzeigen
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+        </svg>
+      </div>
+    </article>
+  </a>
+) : (
+  <article 
+    id={cardId}
+    class={`${variants[variant]} ${className} text-center transition-all duration-300 hover:transform hover:scale-102 hover:shadow-lg`}
+    data-aos="zoom-in"
+    data-aos-delay={delay}
+    aria-labelledby={titleId}
+    aria-describedby={descId}
+  >
+    <div class={`relative ${circleSizes[variant]} mx-auto mb-4 md:mb-6`}>
+      <svg 
+        class="w-full h-full" 
+        viewBox="0 0 100 100" 
+        role="img" 
+        aria-labelledby={progressId}
+        aria-describedby={`${progressId}-desc`}
+      >
+        <!-- Background circle -->
+        <circle
+          cx={SVG_CENTER}
+          cy={SVG_CENTER}
+          r={SVG_RADIUS}
+          fill="none"
+          stroke="currentColor"
+          stroke-width={SVG_STROKE_WIDTH}
+          class={`${themes[theme]}/20`}
+        />
+        <!-- Progress circle -->
+        <circle
+          cx={SVG_CENTER}
+          cy={SVG_CENTER}
+          r={SVG_RADIUS}
+          fill="none"
+          stroke="currentColor"
+          stroke-width={SVG_STROKE_WIDTH}
+          stroke-linecap="round"
+          class={`${themes[theme]} progress-circle`}
+          style={`stroke-dasharray: ${SVG_CIRCUMFERENCE}; stroke-dashoffset: ${strokeDashoffsetValue};`}
+          transform="rotate(-90 50 50)"
+          data-final-offset={strokeDashoffsetValue}
+          data-circumference={SVG_CIRCUMFERENCE}
+        />
+        <!-- Screen reader description -->
+        <title id={progressId}>{percentage} Fortschritt</title>
+        <desc id={`${progressId}-desc`}>Circular progress showing {percentage} completion</desc>
+      </svg>
+      
+      <!-- Center label -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span 
+          class={`${textSizes[variant].percentage} font-bold ${themes[theme]} transition-colors`} 
+          aria-hidden="true"
+        >
+          {percentage}
+        </span>
+      </div>
+    </div>
+    
+    <h3 id={titleId} class={`${textSizes[variant].title} font-semibold mb-2 md:mb-3 text-text-dark dark:text-text-light leading-tight`}>
+      {title}
+    </h3>
+    <p id={descId} class={`text-text-muted ${textSizes[variant].description} leading-relaxed`}>
+      {description}
+    </p>
+  </article>
+)}
 
 <style>
   .progress-circle {
-    /* WICHTIG: Die Transition bleibt hier, aber die Initialisierung des dashoffset
-       erfolgt NICHT mehr über eine AOS-spezifische CSS-Regel.
-       Der Wert im Style-Attribut ist der Endwert, von dem aus animiert wird,
-       sobald das Element im DOM ist und die Transition angewendet wird. */
-    transition: stroke-dashoffset 1.5s ease-in-out;
+    transition: stroke-dashoffset 1.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Diese Regel wird ENTFERNT, da sie mit dem Style-Attribut und AOS kollidiert.
-     Der Initialzustand sollte nicht auf diese Weise festverdrahtet sein, wenn AOS
-     und das Style-Attribut den Endzustand definieren. */
-  /* [data-aos="zoom-in"] .progress-circle {
-       stroke-dashoffset: 282.74; 
-     } 
-  */
+  /* Enhanced hover effects */
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Initial state for animation */
+  .progress-circle {
+    stroke-dashoffset: var(--circumference, 282.74);
+  }
+  
+  /* Trigger animation when AOS activates */
+  [data-aos="zoom-in"].aos-animate .progress-circle {
+    stroke-dashoffset: var(--final-offset, 0);
+  }
+  
+  /* Focus styles for accessibility */
+  a:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-gold), 0 0 0 4px rgba(210, 174, 108, 0.2);
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .progress-circle {
+      stroke: currentColor;
+    }
+    
+    .text-primary-gold\/20 {
+      opacity: 1;
+      color: #666;
+    }
+    
+    .dark .text-primary-gold\/20 {
+      color: #999;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .progress-circle {
+      transition: none;
+    }
+    
+    .hover\:transform:hover {
+      transform: none;
+    }
+    
+    .group-hover\:scale-110:hover {
+      transform: none;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    .progress-circle {
+      stroke: #000 !important;
+    }
+    
+    .text-primary-gold {
+      color: #000 !important;
+    }
+    
+    .text-primary-gold\/20 {
+      stroke: #ccc !important;
+    }
+  }
 </style>
+
+<script>
+  // Enhanced animation control
+  document.addEventListener('DOMContentLoaded', () => {
+    const progressCards = document.querySelectorAll('[data-aos="zoom-in"]');
+    
+    // Set up intersection observer for better animation control
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const progressCircle = entry.target.querySelector('.progress-circle');
+          if (progressCircle) {
+            const finalOffset = progressCircle.getAttribute('data-final-offset');
+            const circumference = progressCircle.getAttribute('data-circumference');
+            
+            // Set CSS custom properties for smoother animation
+            progressCircle.style.setProperty('--final-offset', finalOffset);
+            progressCircle.style.setProperty('--circumference', circumference);
+            
+            // Trigger animation
+            setTimeout(() => {
+              progressCircle.style.strokeDashoffset = finalOffset;
+            }, 100);
+          }
+        }
+      });
+    }, { 
+      threshold: 0.3,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    progressCards.forEach(card => observer.observe(card));
+    
+    console.log('📊 CircularProgressCard animations initialized');
+  });
+</script>

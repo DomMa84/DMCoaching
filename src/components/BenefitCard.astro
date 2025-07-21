@@ -1,4 +1,7 @@
 ---
+// src/components/ServiceCard.astro v1.0 (Server-Mode & Accessibility optimiert)
+// ServiceCard - Reusable component für Service-Darstellungen
+
 import IconSVG from './IconSVG.astro';
 
 interface Props {
@@ -8,21 +11,173 @@ interface Props {
   title: string;
   description: string;
   delay?: number;
+  href?: string;
+  className?: string;
+  iconColor?: string;
+  variant?: 'default' | 'highlight' | 'compact';
 }
 
-const { iconPath, fillRule = "", clipRule = "", title, description, delay = 100 } = Astro.props;
+const { 
+  iconPath, 
+  fillRule = "", 
+  clipRule = "", 
+  title, 
+  description, 
+  delay = 100,
+  href,
+  className = "",
+  iconColor = "text-primary-gold",
+  variant = "default"
+} = Astro.props;
+
+// Generate unique ID for accessibility
+const cardId = `service-card-${Math.random().toString(36).substr(2, 9)}`;
+const titleId = `${cardId}-title`;
+const descId = `${cardId}-desc`;
+
+// Variant classes
+const variantClasses = {
+  default: "bg-white dark:bg-dark rounded-lg shadow-md p-6",
+  highlight: "bg-gradient-to-br from-primary-gold/10 to-primary-gold/20 rounded-lg shadow-md p-6 border border-primary-gold/20",
+  compact: "bg-white dark:bg-dark rounded-lg shadow-sm p-4"
+};
+
+const iconSizes = {
+  default: "p-3",
+  highlight: "p-3",
+  compact: "p-2"
+};
+
+const titleSizes = {
+  default: "text-lg",
+  highlight: "text-xl",
+  compact: "text-base"
+};
+
+console.log(`🎴 ServiceCard v1.0 rendered - ${title} (${variant} variant)`);
 ---
 
-<div 
-  class="bg-white dark:bg-dark rounded-lg shadow-md p-6"
-  data-aos="fade-up"
-  data-aos-delay={delay}
->
-  <div class="flex items-center mb-4">
-    <div class="bg-primary-gold/20 p-2 rounded-full mr-4">
-      <IconSVG iconPath={iconPath} fillRule={fillRule} clipRule={clipRule} />
+{href ? (
+  <a 
+    href={href}
+    id={cardId}
+    class={`${variantClasses[variant]} ${className} transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 block`}
+    data-aos="fade-up"
+    data-aos-delay={delay}
+    aria-labelledby={titleId}
+    aria-describedby={descId}
+  >
+    <article class="h-full">
+      <div class="flex items-center mb-4">
+        <div class={`bg-primary-gold/20 rounded-full mr-4 ${iconSizes[variant]} flex-shrink-0`} aria-hidden="true">
+          <IconSVG 
+            iconPath={iconPath} 
+            fillRule={fillRule} 
+            clipRule={clipRule}
+            class={iconColor}
+            width="24"
+            height="24"
+          />
+        </div>
+        <h3 id={titleId} class={`${titleSizes[variant]} font-semibold text-text-dark dark:text-text-light leading-tight`}>
+          {title}
+        </h3>
+      </div>
+      <p id={descId} class="text-text-muted text-sm leading-relaxed">
+        {description}
+      </p>
+      
+      <!-- Link indicator -->
+      <div class="mt-4 flex items-center text-primary-gold text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+        Mehr erfahren
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1" aria-hidden="true">
+          <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+        </svg>
+      </div>
+    </article>
+  </a>
+) : (
+  <article 
+    id={cardId}
+    class={`${variantClasses[variant]} ${className} transition-all duration-300 hover:transform hover:scale-102 hover:shadow-lg`}
+    data-aos="fade-up"
+    data-aos-delay={delay}
+    aria-labelledby={titleId}
+    aria-describedby={descId}
+  >
+    <div class="flex items-start mb-4">
+      <div class={`bg-primary-gold/20 rounded-full mr-4 ${iconSizes[variant]} flex-shrink-0`} aria-hidden="true">
+        <IconSVG 
+          iconPath={iconPath} 
+          fillRule={fillRule} 
+          clipRule={clipRule}
+          class={iconColor}
+          width="24"
+          height="24"
+        />
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 id={titleId} class={`${titleSizes[variant]} font-semibold text-text-dark dark:text-text-light mb-2 leading-tight`}>
+          {title}
+        </h3>
+        <p id={descId} class="text-text-muted text-sm leading-relaxed">
+          {description}
+        </p>
+      </div>
     </div>
-    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light">{title}</h3>
-  </div>
-  <p class="text-text-muted">{description}</p>
-</div>
+  </article>
+)}
+
+<style>
+  /* Enhanced hover effects */
+  .hover\:scale-102:hover {
+    transform: scale(1.02);
+  }
+  
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Smooth transitions for all interactive elements */
+  article {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Focus styles for accessibility */
+  a:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-gold), 0 0 0 4px rgba(210, 174, 108, 0.2);
+  }
+  
+  /* Ensure proper contrast in high contrast mode */
+  @media (prefers-contrast: high) {
+    .bg-primary-gold\/20 {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .dark .bg-primary-gold\/20 {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    article {
+      transition: none;
+    }
+    
+    .hover\:transform:hover {
+      transform: none;
+    }
+  }
+  
+  /* Print styles */
+  @media print {
+    article {
+      background: white !important;
+      color: black !important;
+      box-shadow: none !important;
+      border: 1px solid #ccc;
+    }
+  }
+</style>

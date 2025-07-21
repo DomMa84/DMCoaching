@@ -1,12 +1,20 @@
 ---
+// src/components/CircularProgress.astro v1.0 (Server-Mode & Accessibility optimiert)
+// CircularProgress - Enhanced circular progress component
+
 interface Props {
   value: number;
-  max?: number; // Optional machen, da ein Default-Wert gesetzt wird
-  label: string; // Wenn label immer vorhanden ist, kann es auch ohne ? bleiben
+  max?: number;
+  label: string;
   size?: number;
   strokeWidth?: number;
   primaryColor?: string;
   secondaryColor?: string;
+  showPercentage?: boolean;
+  animate?: boolean;
+  duration?: number;
+  className?: string;
+  description?: string;
 }
 
 const { 
@@ -15,76 +23,292 @@ const {
   label, 
   size = 120, 
   strokeWidth = 8,
-  primaryColor = "#D4AF37", // Standardwert Gold
-  secondaryColor = "#D4AF3730" // Standardwert leicht transparentes Gold
+  primaryColor = "#D2AE6C", // Konsistent mit Theme
+  secondaryColor = "#D2AE6C30", // 30% opacity
+  showPercentage = false,
+  animate = true,
+  duration = 1500,
+  className = "",
+  description
 } = Astro.props;
 
+// Berechnungen für SVG
 const radius = (size - strokeWidth) / 2;
 const circumference = radius * 2 * Math.PI;
-const progress = value / max;
+const progress = Math.min(Math.max(value / max, 0), 1); // Clamp between 0 and 1
 const strokeDashoffset = circumference - progress * circumference;
-
 const viewBoxSize = size;
 const center = size / 2;
+
+// Percentage calculation
+const percentage = Math.round(progress * 100);
+
+// Generate unique ID for accessibility
+const progressId = `circular-progress-${Math.random().toString(36).substr(2, 9)}`;
+const labelId = `${progressId}-label`;
+const descId = description ? `${progressId}-desc` : undefined;
+
+// Animation delay based on value for staggered effect
+const animationDelay = animate ? Math.random() * 200 : 0;
+
+console.log(`📊 CircularProgress v1.0 rendered - ${label}: ${value}/${max} (${percentage}%)`);
 ---
 
 <div 
-  class="circular-progress"
-  style={`--primary-color: ${primaryColor}; --secondary-color: ${secondaryColor};`}
+  class={`circular-progress ${className}`}
+  style={`--primary-color: ${primaryColor}; --secondary-color: ${secondaryColor}; --size: ${size}px; --stroke-width: ${strokeWidth}px; --duration: ${duration}ms; --delay: ${animationDelay}ms;`}
+  role="img"
+  aria-labelledby={labelId}
+  aria-describedby={descId}
 >
   <svg 
     width={size} 
     height={size} 
     viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`}
-    class="transform -rotate-90"
-    role="progressbar"            aria-valuenow={value}        aria-valuemin="0"            aria-valuemax={max}          >
+    class={`progress-svg ${animate ? 'animate' : ''}`}
+    role="progressbar"
+    aria-valuenow={value}
+    aria-valuemin="0"
+    aria-valuemax={max}
+    aria-label={`${label}: ${showPercentage ? `${percentage}%` : `${value} von ${max}`}`}
+  >
+    <!-- Background circle -->
     <circle 
-      stroke="var(--secondary-color)" fill="none"
+      class="progress-bg"
+      stroke="var(--secondary-color)" 
+      fill="none"
       cx={center}
       cy={center}
       r={radius}
       stroke-width={strokeWidth}
     />
     
+    <!-- Progress circle -->
     <circle 
-      stroke="var(--primary-color)" fill="none"
+      class="progress-bar"
+      stroke="var(--primary-color)" 
+      fill="none"
       cx={center}
       cy={center}
       r={radius}
       stroke-width={strokeWidth}
       stroke-dasharray={circumference}
-      stroke-dashoffset={strokeDashoffset}
+      stroke-dashoffset={animate ? circumference : strokeDashoffset}
       stroke-linecap="round"
+      pathLength="100"
     />
   </svg>
-  <div class="progress-label">
-    <span class="progress-value">{label}</span>
+  
+  <!-- Content overlay -->
+  <div class="progress-content">
+    <div class="progress-label">
+      <span id={labelId} class="progress-value">
+        {showPercentage ? `${percentage}%` : label}
+      </span>
+      {!showPercentage && (
+        <span class="progress-sublabel" aria-hidden="true">
+          {value}/{max}
+        </span>
+      )}
+    </div>
   </div>
+  
+  {description && (
+    <div id={descId} class="sr-only">
+      {description}
+    </div>
+  )}
 </div>
 
 <style>
   .circular-progress {
     position: relative;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
+    width: var(--size);
+    height: var(--size);
   }
   
-  .progress-label {
+  .progress-svg {
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+  
+  .progress-bg {
+    transition: stroke 0.3s ease;
+  }
+  
+  .progress-bar {
+    transition: stroke-dashoffset var(--duration) cubic-bezier(0.4, 0, 0.2, 1),
+                stroke 0.3s ease;
+    transform-origin: center;
+  }
+  
+  /* Animation for progress bar */
+  .progress-svg.animate .progress-bar {
+    animation: progressAnimation var(--duration) cubic-bezier(0.4, 0, 0.2, 1) var(--delay) forwards;
+  }
+  
+  @keyframes progressAnimation {
+    from {
+      stroke-dashoffset: var(--circumference, 377);
+    }
+    to {
+      stroke-dashoffset: calc(var(--circumference, 377) - (var(--progress, 0) * var(--circumference, 377)));
+    }
+  }
+  
+  .progress-content {
     position: absolute;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    /* Stellt sicher, dass der Text die richtige Farbe hat */
-    color: var(--primary-color); 
+    pointer-events: none;
+  }
+  
+  .progress-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--primary-color);
+    max-width: calc(var(--size) - var(--stroke-width) * 4);
   }
   
   .progress-value {
-    font-size: 1.25rem;
+    font-size: clamp(0.875rem, calc(var(--size) * 0.12), 1.5rem);
     font-weight: 700;
-    /* Farbe kommt jetzt über .progress-label oder direkt von var(--primary-color) */
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+  }
+  
+  .progress-sublabel {
+    font-size: clamp(0.75rem, calc(var(--size) * 0.08), 1rem);
+    font-weight: 500;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+  
+  /* Screen reader only class */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Responsive sizing */
+  @media (max-width: 768px) {
+    .progress-value {
+      font-size: clamp(0.75rem, calc(var(--size) * 0.1), 1.25rem);
+    }
+    
+    .progress-sublabel {
+      font-size: clamp(0.625rem, calc(var(--size) * 0.07), 0.875rem);
+    }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .progress-bar {
+      stroke: currentColor;
+    }
+    
+    .progress-bg {
+      stroke: rgba(128, 128, 128, 0.5);
+    }
+    
+    .progress-label {
+      color: currentColor;
+    }
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .progress-bar,
+    .progress-bg {
+      transition: none;
+    }
+    
+    .progress-svg.animate .progress-bar {
+      animation: none;
+      stroke-dashoffset: calc(var(--circumference, 377) - (var(--progress, 0) * var(--circumference, 377)));
+    }
+  }
+  
+  /* Dark mode adjustments */
+  .dark .progress-label {
+    color: var(--primary-color);
+  }
+  
+  /* Print styles */
+  @media print {
+    .circular-progress {
+      break-inside: avoid;
+    }
+    
+    .progress-bar {
+      stroke: #000 !important;
+    }
+    
+    .progress-bg {
+      stroke: #ccc !important;
+    }
+    
+    .progress-label {
+      color: #000 !important;
+    }
+  }
+  
+  /* Hover effects for interactive contexts */
+  .circular-progress:hover .progress-bar {
+    filter: brightness(1.1);
+  }
+  
+  /* Focus styles for accessibility */
+  .circular-progress:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 50%;
   }
 </style>
+
+<script>
+  // Enhanced animation with CSS custom properties
+  document.addEventListener('DOMContentLoaded', () => {
+    const progressElements = document.querySelectorAll('.circular-progress');
+    
+    progressElements.forEach((element) => {
+      const svg = element.querySelector('.progress-svg.animate');
+      const progressBar = element.querySelector('.progress-bar');
+      
+      if (svg && progressBar) {
+        const circumference = 2 * Math.PI * parseFloat(progressBar.getAttribute('r'));
+        const value = parseFloat(svg.getAttribute('aria-valuenow'));
+        const max = parseFloat(svg.getAttribute('aria-valuemax'));
+        const progress = value / max;
+        
+        // Set CSS custom properties for animation
+        element.style.setProperty('--circumference', circumference);
+        element.style.setProperty('--progress', progress);
+        
+        // Trigger animation after setting properties
+        requestAnimationFrame(() => {
+          progressBar.style.strokeDashoffset = circumference - (progress * circumference);
+        });
+      }
+    });
+    
+    console.log('📊 CircularProgress animations initialized');
+  });
+</script>

@@ -1,77 +1,337 @@
 ---
+// src/components/Header.astro v1.0 (Server-Mode & Navigation optimiert)
+// Header - Enhanced navigation component with accessibility
+
 import ThemeToggle from './ThemeToggle.astro';
 import Logo from './Logo.astro';
+
+interface Props {
+  variant?: 'default' | 'transparent' | 'minimal';
+  showSocial?: boolean;
+  className?: string;
+  currentPath?: string;
+}
+
+const {
+  variant = 'default',
+  showSocial = true,
+  className = "",
+  currentPath = Astro.url.pathname
+} = Astro.props;
+
+// Navigation structure with enhanced metadata
+const navigation = [
+  {
+    name: 'Home',
+    href: '/',
+    description: 'Startseite - Überblick über unsere Services'
+  },
+  {
+    name: 'Leistungen',
+    href: '/leistungen',
+    description: 'Unsere Beratungsleistungen im Detail',
+    isDropdown: true,
+    items: [
+      {
+        name: 'Strategische Unternehmensentwicklung',
+        href: '/leistung/strategische-unternehmensentwicklung',
+        description: 'Nachhaltige Strategien für Wachstum und Wettbewerbsfähigkeit',
+        icon: 'M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z'
+      },
+      {
+        name: 'Vertriebsoptimierung',
+        href: '/leistung/vertriebsoptimierung',
+        description: 'Optimierung der Vertriebsprozesse und Erschließung neuer Märkte',
+        icon: 'M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z'
+      },
+      {
+        name: 'Marketing-Strategien',
+        href: '/leistung/marketing-strategien',
+        description: 'Zielgerichtete Marketingkonzepte für mehr Sichtbarkeit',
+        icon: 'M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z'
+      },
+      {
+        name: 'Value Management',
+        href: '/leistung/wertanalyse',
+        description: 'Prozess- und Produktoptimierung durch systematische Wertanalyse',
+        icon: 'M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z'
+      }
+    ]
+  },
+  {
+    name: 'Über Mich',
+    href: '/ueber-mich',
+    description: '15+ Jahre Erfahrung in Führungspositionen'
+  },
+  {
+    name: 'Kontakt',
+    href: '/kontakt',
+    description: 'Kostenloses Erstgespräch vereinbaren'
+  }
+];
+
+// Social media links
+const socialLinks = [
+  {
+    name: 'LinkedIn',
+    href: 'https://www.linkedin.com/in/dominik-maier-22144710a/',
+    icon: 'M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z',
+    ariaLabel: 'Dominik Maier LinkedIn Profil besuchen'
+  }
+];
+
+// Variant classes
+const variants = {
+  default: 'bg-light-darker/95 dark:bg-dark-lighter/95',
+  transparent: 'bg-transparent',
+  minimal: 'bg-white/90 dark:bg-dark/90'
+};
+
+// Helper function to check if path is active
+const isActiveLink = (href: string, currentPath: string) => {
+  if (href === '/') {
+    return currentPath === '/';
+  }
+  return currentPath.startsWith(href);
+};
+
+// Generate unique IDs for dropdowns
+const dropdownId = `services-dropdown-${Math.random().toString(36).substr(2, 9)}`;
+const mobileMenuId = `mobile-menu-${Math.random().toString(36).substr(2, 9)}`;
+
+console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${currentPath}`);
 ---
 
-<header class="sticky top-0 z-50 w-full bg-light-darker/90 dark:bg-dark-lighter/90 backdrop-blur-sm border-b border-light-darkest dark:border-dark-lightest shadow-sm">
-  <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-    <a href="/" class="flex items-center" aria-label="Home">
+<header 
+  class={`header-container sticky top-0 z-50 w-full ${variants[variant]} ${className} backdrop-blur-md border-b border-light-darkest/50 dark:border-dark-lightest/50 shadow-sm transition-all duration-300`}
+  role="banner"
+>
+  <div class="container mx-auto px-4 py-3">
+    <div class="flex items-center justify-between">
+      <!-- Logo/Brand -->
+      <a 
+        href="/" 
+        class="flex items-center group" 
+        aria-label="Dominik Maier Coaching - Zur Startseite"
+      >
+        <Logo height={40} class="transition-transform group-hover:scale-105" />
+        <span class="sr-only">Dominik Maier Coaching - Startseite</span>
+      </a>
+      
+      <!-- Mobile Menu Button -->
+      <button 
+        id="menu-toggle" 
+        class="lg:hidden flex items-center p-2 text-text-dark dark:text-text-light hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
+        aria-label="Hauptnavigation öffnen"
+        aria-expanded="false"
+        aria-controls={mobileMenuId}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+      
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Hauptnavigation">
+        {navigation.map((item) => (
+          item.isDropdown ? (
+            <!-- Services Dropdown -->
+            <div class="relative dropdown-menu group">
+              <button 
+                class={`nav-link flex items-center ${isActiveLink('/leistung', currentPath) ? 'active' : ''}`}
+                id={`${dropdownId}-button`}
+                aria-expanded="false" 
+                aria-haspopup="true"
+                aria-controls={dropdownId}
+              >
+                {item.name}
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              
+              <div 
+                id={dropdownId}
+                class="absolute left-0 mt-2 w-80 rounded-xl shadow-xl bg-white dark:bg-dark-lighter border border-light-darkest dark:border-dark-lightest hidden dropdown-content z-50 opacity-0 translate-y-[-10px] transition-all duration-200"
+                role="menu"
+                aria-labelledby={`${dropdownId}-button`}
+              >
+                <div class="rounded-xl py-2">
+                  {item.items?.map((subItem) => (
+                    <a 
+                      href={subItem.href}
+                      class={`flex items-start px-4 py-3 text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest transition-colors group ${isActiveLink(subItem.href, currentPath) ? 'bg-primary-gold/10' : ''}`}
+                      role="menuitem"
+                    >
+                      <div class="flex-shrink-0 mr-3 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold" aria-hidden="true">
+                          <path fill-rule="evenodd" d={subItem.icon} clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                      <div class="flex-1">
+                        <div class="text-sm font-medium group-hover:text-primary-gold transition-colors">
+                          {subItem.name}
+                        </div>
+                        <div class="text-xs text-text-muted mt-1 leading-relaxed">
+                          {subItem.description}
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                  
+                  <!-- CTA in dropdown -->
+                  <div class="px-4 py-3 border-t border-light-darkest dark:border-dark-lightest mt-2">
+                    <a 
+                      href="/kontakt"
+                      class="flex items-center justify-center w-full px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium"
+                    >
+                      Kostenloses Erstgespräch
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-2" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a 
+              href={item.href}
+              class={`nav-link ${isActiveLink(item.href, currentPath) ? 'active' : ''}`}
+              aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
+            >
+              {item.name}
+            </a>
+          )
+        ))}
+        
+        <!-- Actions -->
+        <div class="flex items-center space-x-4 ml-8 pl-8 border-l border-light-darkest/30 dark:border-dark-lightest/30">
+          <ThemeToggle />
+          
+          {showSocial && socialLinks.map((social) => (
+            <a 
+              href={social.href}
+              target="_blank" 
+              rel="noopener noreferrer"
+              aria-label={social.ariaLabel}
+              class="text-text-dark dark:text-text-light hover:text-primary-gold transition-colors p-2 rounded-md hover:bg-light-darker dark:hover:bg-dark-lightest"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d={social.icon}></path>
+              </svg>
+            </a>
+          ))}
+          
+          <!-- CTA Button -->
+          <a 
+            href="/kontakt"
+            class="hidden xl:inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
+          >
+            Beratung anfragen
+          </a>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Navigation (Fullscreen overlay) -->
+<div 
+  id={mobileMenuId}
+  class="mobile-menu fixed inset-0 bg-white dark:bg-dark z-[999] flex-col lg:hidden hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Mobile Navigation"
+>
+  <!-- Mobile Header -->
+  <div class="flex justify-between items-center p-4 border-b border-light-darkest dark:border-dark-lightest">
+    <a href="/" class="flex items-center" aria-label="Dominik Maier Coaching - Startseite">
       <Logo height={40} />
     </a>
-    
-    <!-- Mobile Menu Button -->
     <button 
-      id="menu-toggle" 
-      class="lg:hidden flex items-center p-2 text-text-dark dark:text-text-light"
-      aria-label="Toggle Menu"
+      id="close-menu" 
+      class="p-2 text-text-dark dark:text-text-light hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold" 
+      aria-label="Navigation schließen"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
       </svg>
     </button>
-    
-    <!-- Desktop Navigation -->
-    <nav class="hidden lg:flex items-center space-x-8">
-      <a href="/" class="nav-link">Home</a>
+  </div>
+  
+  <!-- Mobile Navigation Content -->
+  <div class="flex-1 overflow-y-auto py-6 px-4">
+    <nav class="flex flex-col space-y-6" role="navigation" aria-label="Mobile Navigation">
+      {navigation.map((item) => (
+        item.isDropdown ? (
+          <!-- Mobile Services Dropdown -->
+          <div class="services-mobile-dropdown">
+            <button 
+              id="mobile-services-button"
+              class="flex justify-between items-center w-full py-3 text-lg font-medium text-text-dark dark:text-text-light" 
+              aria-expanded="false"
+              aria-controls="mobile-services-content"
+            >
+              <span>{item.name}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mobile-dropdown-icon w-5 h-5 transition-transform duration-300" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            
+            <div id="mobile-services-content" class="pl-4 mt-3 space-y-4 border-l-2 border-primary-gold hidden overflow-hidden">
+              {item.items?.map((subItem) => (
+                <a 
+                  href={subItem.href}
+                  class={`block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold transition-colors ${isActiveLink(subItem.href, currentPath) ? 'text-primary-gold font-medium' : ''}`}
+                >
+                  <div class="font-medium">{subItem.name}</div>
+                  <div class="text-sm text-text-muted mt-1">{subItem.description}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <a 
+            href={item.href}
+            class={`py-3 text-lg font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'text-primary-gold' : 'text-text-dark dark:text-text-light hover:text-primary-gold'}`}
+            aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
+          >
+            {item.name}
+          </a>
+        )
+      ))}
       
-      <!-- Dropdown for services -->
-      <div class="relative dropdown-menu">
-        <button 
-          class="nav-link flex items-center" 
-          id="services-dropdown-button" 
-          aria-expanded="false" 
-          aria-haspopup="true"
-        >
-          Leistungen
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 ml-1 transition-transform" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        <div 
-          id="services-dropdown" 
-          class="absolute left-0 mt-2 w-64 rounded-md shadow-lg bg-white dark:bg-dark-lighter border border-light-darkest dark:border-dark-lightest hidden dropdown-content z-50"
-        >
-          <div class="rounded-md py-1">
-            <a href="/leistung/strategische-unternehmensentwicklung" class="block px-4 py-2 text-sm text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest dropdown-item">
-              Strategische Unternehmensentwicklung
-            </a>
-            <a href="/leistung/vertriebsoptimierung" class="block px-4 py-2 text-sm text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest dropdown-item">
-              Vertriebsoptimierung
-            </a>
-            <a href="/leistung/marketing-strategien" class="block px-4 py-2 text-sm text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest dropdown-item">
-              Marketing-Strategien
-            </a>
-            <a href="/leistung/wertanalyse" class="block px-4 py-2 text-sm text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest dropdown-item">
-              Optimierung von Prozessen & Produkten
-            </a>
+      <!-- Mobile Actions -->
+      <div class="pt-6 border-t border-light-darkest dark:border-dark-lightest mt-6">
+        <div class="flex items-center justify-between mb-6">
+          <span class="text-sm font-medium text-text-muted">Theme & Social</span>
+          <div class="flex items-center space-x-4">
+            <ThemeToggle />
+            {showSocial && socialLinks.map((social) => (
+              <a 
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={social.ariaLabel}
+                class="text-text-dark dark:text-text-light hover:text-primary-gold transition-colors p-2"
+              >
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d={social.icon}></path>
+                </svg>
+              </a>
+            ))}
           </div>
         </div>
-      </div>
-      
-      <a href="/ueber-mich" class="nav-link">Über Mich</a>
-      <a href="/kontakt" class="nav-link">Kontakt</a>
-      
-      <div class="flex items-center space-x-4">
-        <ThemeToggle />
+        
+        <!-- Mobile CTA -->
         <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          aria-label="LinkedIn Profil"
-          class="text-text-dark dark:text-text-light hover:text-primary-gold dark:hover:text-primary-gold"
+          href="/kontakt"
+          class="flex items-center justify-center w-full px-6 py-3 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-colors font-medium shadow-md"
         >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+          Kostenloses Erstgespräch
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
           </svg>
         </a>
       </div>
@@ -79,90 +339,52 @@ import Logo from './Logo.astro';
   </div>
 </header>
 
-<!-- Mobile Navigation (Fullscreen overlay) -->
-<div id="mobile-menu" class="fixed inset-0 bg-white dark:bg-dark z-[999] flex-col lg:hidden hidden">
-  <div class="flex justify-between items-center p-4 border-b border-light-darkest dark:border-dark-lightest">
-    <a href="/" class="flex items-center" aria-label="Home">
-      <Logo height={40} />
-    </a>
-    <button id="close-menu" class="p-2 text-text-dark dark:text-text-light" aria-label="Close Menu">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-  </div>
-  
-  <div class="flex-1 overflow-y-auto py-4 px-4">
-    <nav class="flex flex-col space-y-5">
-      <a href="/" class="py-2 text-lg text-text-dark dark:text-text-light">Home</a>
-      
-      <!-- Mobile dropdown for services -->
-      <div class="services-mobile-dropdown">
-        <button 
-          id="mobile-services-button"
-          class="flex justify-between items-center w-full py-2 text-lg text-text-dark dark:text-text-light" 
-          aria-expanded="false"
-        >
-          <span>Leistungen</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mobile-dropdown-icon w-5 h-5 transition-transform duration-300" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        <div id="mobile-services-content" class="pl-4 mt-2 space-y-3 border-l-2 border-primary-gold hidden">
-          <a href="/leistung/strategische-unternehmensentwicklung" class="block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold">
-            Strategische Unternehmensentwicklung
-          </a>
-          <a href="/leistung/vertriebsoptimierung" class="block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold">
-            Vertriebsoptimierung
-          </a>
-          <a href="/leistung/marketing-strategien" class="block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold">
-            Marketing-Strategien
-          </a>
-          <a href="/leistung/wertanalyse" class="block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold">
-            Optimierung von Prozessen & Produkten
-          </a>
-        </div>
-      </div>
-      
-      <a href="/ueber-mich" class="py-2 text-lg text-text-dark dark:text-text-light">Über Mich</a>
-      <a href="/kontakt" class="py-2 text-lg text-text-dark dark:text-text-light">Kontakt</a>
-      
-      <div class="flex items-center space-x-4 pt-4 border-t border-light-darkest dark:border-dark-lightest mt-2">
-        <ThemeToggle />
-        <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn Profil"
-          class="text-text-dark dark:text-text-light hover:text-primary-gold"
-        >
-          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
-          </svg>
-        </a>
-      </div>
-    </nav>
-  </div>
-</div>
-
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Mobile menu toggle
+    console.log('🧭 Header v1.0 navigation initialized');
+    
+    // Mobile menu functionality
     const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenu = document.querySelector('.mobile-menu');
     const closeMenu = document.getElementById('close-menu');
     
     if (menuToggle && mobileMenu && closeMenu) {
-      menuToggle.addEventListener('click', () => {
+      const openMobileMenu = () => {
         mobileMenu.classList.remove('hidden');
         mobileMenu.classList.add('flex');
-        document.body.style.overflow = 'hidden'; // Prevent scrolling
-      });
+        menuToggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+        
+        // Focus management
+        const firstFocusable = mobileMenu.querySelector('button, a');
+        firstFocusable?.focus();
+      };
       
-      closeMenu.addEventListener('click', () => {
+      const closeMobileMenu = () => {
         mobileMenu.classList.add('hidden');
         mobileMenu.classList.remove('flex');
-        document.body.style.overflow = ''; // Enable scrolling
+        menuToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+        menuToggle.focus();
+      };
+      
+      menuToggle.addEventListener('click', openMobileMenu);
+      closeMenu.addEventListener('click', closeMobileMenu);
+      
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+          closeMobileMenu();
+        }
+      });
+      
+      // Close mobile menu when clicking on links
+      const mobileLinks = mobileMenu.querySelectorAll('a[href]');
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          // Small delay to allow navigation
+          setTimeout(closeMobileMenu, 100);
+        });
       });
     }
     
@@ -172,140 +394,144 @@ import Logo from './Logo.astro';
     
     if (mobileServicesButton && mobileServicesContent) {
       mobileServicesButton.addEventListener('click', () => {
-        // Toggle dropdown visibility
-        const expanded = mobileServicesButton.getAttribute('aria-expanded') === 'true' || false;
-        mobileServicesButton.setAttribute('aria-expanded', (!expanded).toString());
+        const expanded = mobileServicesButton.getAttribute('aria-expanded') === 'true';
+        const newExpanded = !expanded;
         
+        mobileServicesButton.setAttribute('aria-expanded', newExpanded.toString());
         mobileServicesContent.classList.toggle('hidden');
         
-        // Toggle icon rotation
+        // Rotate icon
         const icon = mobileServicesButton.querySelector('.mobile-dropdown-icon');
-        if (icon) {
-          icon.classList.toggle('rotate-180');
-        }
-        
-        // Log for debugging
-        console.log('Mobile services dropdown clicked', {
-          expanded: !expanded,
-          isHidden: mobileServicesContent.classList.contains('hidden')
-        });
-      });
-      
-      // Make links clickable
-      const serviceLinks = mobileServicesContent.querySelectorAll('a');
-      serviceLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          mobileMenu.classList.remove('flex');
-          document.body.style.overflow = ''; // Enable scrolling
-        });
+        icon?.classList.toggle('rotate-180');
       });
     }
     
-    // Other mobile links
-    const mobileLinks = mobileMenu?.querySelectorAll('nav > a');
-    if (mobileLinks && mobileMenu) {
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          mobileMenu.classList.add('hidden');
-          mobileMenu.classList.remove('flex');
-          document.body.style.overflow = ''; // Enable scrolling
-        });
-      });
-    }
+    // Desktop dropdown functionality
+    const dropdownButton = document.querySelector('[id$="-button"]');
+    const dropdown = document.querySelector('[id$="dropdown"]:not([id*="mobile"])');
     
-    // Desktop dropdown for services
-    const servicesDropdownButton = document.getElementById('services-dropdown-button');
-    const servicesDropdown = document.getElementById('services-dropdown');
-    
-    if (servicesDropdownButton && servicesDropdown) {
-      let isDropdownOpen = false;
+    if (dropdownButton && dropdown) {
+      let isOpen = false;
+      let hoverTimeout;
       
-      // Function to open the dropdown
       const openDropdown = () => {
-        servicesDropdown.classList.remove('hidden');
-        servicesDropdownButton.setAttribute('aria-expanded', 'true');
-        servicesDropdownButton.querySelector('svg').classList.add('rotate-180');
-        isDropdownOpen = true;
+        dropdown.classList.remove('hidden');
+        dropdown.classList.remove('opacity-0', 'translate-y-[-10px]');
+        dropdown.classList.add('opacity-100', 'translate-y-0');
+        dropdownButton.setAttribute('aria-expanded', 'true');
+        isOpen = true;
       };
       
-      // Function to close the dropdown
       const closeDropdown = () => {
-        servicesDropdown.classList.add('hidden');
-        servicesDropdownButton.setAttribute('aria-expanded', 'false');
-        servicesDropdownButton.querySelector('svg').classList.remove('rotate-180');
-        isDropdownOpen = false;
+        dropdown.classList.add('opacity-0', 'translate-y-[-10px]');
+        setTimeout(() => {
+          dropdown.classList.add('hidden');
+        }, 200);
+        dropdownButton.setAttribute('aria-expanded', 'false');
+        isOpen = false;
       };
       
-      // Toggle dropdown on button click
-      servicesDropdownButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        if (isDropdownOpen) {
-          closeDropdown();
-        } else {
+      // Click to toggle
+      dropdownButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isOpen ? closeDropdown() : openDropdown();
+      });
+      
+      // Hover behavior for desktop
+      if (window.matchMedia('(min-width: 1024px)').matches) {
+        const dropdownContainer = dropdownButton.closest('.dropdown-menu');
+        
+        dropdownContainer.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
           openDropdown();
-        }
-      });
-      
-      // Add click event to all dropdown items to close when selected
-      const dropdownItems = servicesDropdown.querySelectorAll('a');
-      dropdownItems.forEach(item => {
-        item.addEventListener('click', () => {
-          closeDropdown();
         });
-      });
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', (event) => {
-        if (isDropdownOpen && 
-            !servicesDropdownButton.contains(event.target) && 
-            !servicesDropdown.contains(event.target)) {
-          closeDropdown();
-        }
-      });
-      
-      // Close dropdown when pressing escape key
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isDropdownOpen) {
-          closeDropdown();
-        }
-      });
-      
-      // Hover behavior (optional)
-      if (window.matchMedia("(min-width: 1024px)").matches) {
-        const handleHover = (enter) => {
-          if (enter && !isDropdownOpen) {
-            openDropdown();
-          }
-        };
         
-        servicesDropdownButton.addEventListener('mouseenter', () => handleHover(true));
+        dropdownContainer.addEventListener('mouseleave', () => {
+          hoverTimeout = setTimeout(closeDropdown, 150);
+        });
         
-        const handleMouseLeave = () => {
-          setTimeout(() => {
-            const isDropdownHovered = servicesDropdown.matches(':hover');
-            const isButtonHovered = servicesDropdownButton.matches(':hover');
-            
-            if (!isDropdownHovered && !isButtonHovered && !servicesDropdown.contains(document.activeElement)) {
-              closeDropdown();
-            }
-          }, 100);
-        };
+        dropdown.addEventListener('mouseenter', () => {
+          clearTimeout(hoverTimeout);
+        });
         
-        servicesDropdownButton.addEventListener('mouseleave', handleMouseLeave);
-        servicesDropdown.addEventListener('mouseleave', handleMouseLeave);
+        dropdown.addEventListener('mouseleave', () => {
+          hoverTimeout = setTimeout(closeDropdown, 150);
+        });
       }
+      
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        if (isOpen && !dropdownButton.contains(e.target) && !dropdown.contains(e.target)) {
+          closeDropdown();
+        }
+      });
+      
+      // Close on escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isOpen) {
+          closeDropdown();
+          dropdownButton.focus();
+        }
+      });
     }
+    
+    // Header scroll behavior
+    let lastScrollY = window.scrollY;
+    const header = document.querySelector('.header-container');
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > 100) {
+        header.classList.add('backdrop-blur-lg', 'bg-white/95', 'dark:bg-dark/95');
+        header.classList.remove('backdrop-blur-md');
+      } else {
+        header.classList.remove('backdrop-blur-lg', 'bg-white/95', 'dark:bg-dark/95');
+        header.classList.add('backdrop-blur-md');
+      }
+      
+      // Auto-hide header on scroll down (optional)
+      if (currentScrollY > lastScrollY && currentScrollY > 200) {
+        header.style.transform = 'translateY(-100%)';
+      } else {
+        header.style.transform = 'translateY(0)';
+      }
+      
+      lastScrollY = currentScrollY;
+    };
+    
+    // Throttled scroll listener
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      if (!scrollTimeout) {
+        scrollTimeout = setTimeout(() => {
+          handleScroll();
+          scrollTimeout = null;
+        }, 10);
+      }
+    });
   });
 </script>
 
 <style>
+  /* Header styling */
+  .header-container {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Navigation links */
   .nav-link {
     position: relative;
     font-weight: 500;
-    padding: 0.5rem 0;
+    padding: 0.75rem 0;
+    color: var(--text-dark);
+    transition: color 0.3s ease;
   }
-  
+
+  .dark .nav-link {
+    color: var(--text-light);
+  }
+
   .nav-link::after {
     content: '';
     position: absolute;
@@ -313,56 +539,170 @@ import Logo from './Logo.astro';
     height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #D4AF37;
-    transition: width 0.3s;
+    background: linear-gradient(90deg, var(--primary-gold), #B8941A);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  .nav-link:hover::after {
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
     width: 100%;
   }
-  
-  /* Animation for dropdown */
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: var(--primary-gold);
+  }
+
+  /* Dropdown animations */
   .dropdown-content {
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transform-origin: top;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
-  .dropdown-content:not(.hidden) {
-    opacity: 1;
-    transform: translateY(0);
+
+  /* Mobile menu animations */
+  .mobile-menu {
+    transition: opacity 0.3s ease;
   }
-  
-  /* Mobile dropdown animation */
+
+  .mobile-menu.flex {
+    animation: slideInFromTop 0.3s ease-out forwards;
+  }
+
+  /* Mobile dropdown styling */
   .mobile-dropdown-icon {
     transition: transform 0.3s ease;
   }
-  
+
   .rotate-180 {
     transform: rotate(180deg);
   }
-  
-  #mobile-menu {
-    transition: opacity 0.3s ease;
-  }
-  
-  #mobile-menu.flex {
-    animation: fadeIn 0.3s forwards;
-  }
-  
-  /* Services mobile dropdown */
+
   #mobile-services-content {
+    transition: all 0.3s ease-in-out;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease-in-out;
   }
-  
+
   #mobile-services-content:not(.hidden) {
     max-height: 500px;
   }
-  
+
+  /* Animations */
+  @keyframes slideInFromTop {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .nav-link::after {
+      background: currentColor;
+      height: 3px;
+    }
+
+    .dropdown-content {
+      border: 2px solid currentColor;
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link::after,
+    .dropdown-content,
+    .mobile-menu,
+    .header-container {
+      transition: none;
+    }
+
+    .mobile-dropdown-icon {
+      transition: none;
+    }
+
+    @keyframes slideInFromTop {
+      from, to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    .header-container {
+      position: static;
+      background: white !important;
+      border-bottom: 1px solid #ccc;
+      box-shadow: none;
+    }
+
+    .mobile-menu,
+    .dropdown-content {
+      display: none !important;
+    }
+
+    .nav-link {
+      color: black !important;
+    }
+  }
+
+  /* Focus styles for accessibility */
+  button:focus,
+  a:focus {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 1023px) {
+    .mobile-menu {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+  }
+
+  /* Enhanced dropdown styling */
+  .dropdown-content {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  .dark .dropdown-content {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Logo hover effect */
+  .header-container a:hover .logo {
+    transform: scale(1.05);
+  }
+
+  /* Smooth backdrop blur transition */
+  .header-container {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 </style>
