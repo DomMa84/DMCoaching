@@ -1,4 +1,4 @@
-// astro.config.mjs
+// astro.config.mjs v2.0 (Netlify Server Mode)
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import alpinejs from '@astrojs/alpinejs';
@@ -10,6 +10,8 @@ export default defineConfig({
     tailwind(),
     alpinejs()
   ],
-  output: 'hybrid',  // ✅ Hybrid-Modus: Statisch + Server-Rendering
-  adapter: netlify()  // ✅ Netlify-Adapter für API-Routes
+  output: 'server',  // ✅ Server-Modus für Netlify (unterstützt kein hybrid)
+  adapter: netlify({
+    functionPerRoute: false  // ✅ Alle API-Routes in einer Function für bessere Performance
+  })
 });
