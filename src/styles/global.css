@@ -1,412 +1,27 @@
 /* 
- * src/styles/global.css v2.3.1 - EMERGENCY TEXT VISIBILITY FIX
+ * src/styles/global.css v2.4.0 - OPTIMIERT für Clean Index
  * =================================================================
  * CHANGELOG:
- * v2.3.1 - EMERGENCY FIX für index.astro Textsichtbarkeit
- * v2.3.0 - CRITICAL TEXT VISIBILITY FIX
- * v2.2.0 - Enhanced Tailwind Integration
- * v2.1.0 - Dark Mode Support
- * v2.0.0 - Initial Professional Version
+ * v2.4.0 - Optimiert für clean index.astro ohne Inline CSS
+ * v2.3.1 - Emergency Fix für Textsichtbarkeit
  * =================================================================
  */
-
-/* ✅ EMERGENCY FIX - Macht alle Texte SOFORT sichtbar */
-h1, h2, h3, h4, h5, h6 {
-  color: #111827 !important;
-  font-weight: 600 !important;
-  margin-bottom: 1rem !important;
-  line-height: 1.2 !important;
-}
-
-.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-  color: #f9fafb !important;
-}
-
-p, span, div, article, section {
-  color: #374151 !important;
-}
-
-.dark p, .dark span, .dark div, .dark article, .dark section {
-  color: #d1d5db !important;
-}
-
-/* ✅ EMERGENCY: Spezifische Klassen aus index.astro */
-.text-text-dark {
-  color: #111827 !important;
-}
-
-.dark .text-text-light {
-  color: #f9fafb !important;
-}
-
-.text-text-muted {
-  color: #6b7280 !important;
-}
-
-.dark .text-text-muted {
-  color: #9ca3af !important;
-}
-
-.text-primary-gold {
-  color: #D2AE6C !important;
-}
-
-.bg-primary-gold {
-  background-color: #D2AE6C !important;
-}
-
-.bg-light {
-  background-color: #ffffff !important;
-}
-
-.dark .bg-dark {
-  background-color: #111827 !important;
-}
-
-.bg-light-darker {
-  background-color: #f3f4f6 !important;
-}
-
-.dark .bg-dark-lighter {
-  background-color: #374151 !important;
-}
-
-/* ✅ EMERGENCY: Container und Layout Klassen */
-.container {
-  max-width: 1200px !important;
-  margin: 0 auto !important;
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-}
-
-/* ✅ EMERGENCY: Alle fehlenden Tailwind-Klassen */
-.min-h-\[70vh\] {
-  min-height: 70vh !important;
-}
-
-.text-3xl {
-  font-size: 1.875rem !important;
-  line-height: 2.25rem !important;
-}
-
-.text-2xl {
-  font-size: 1.5rem !important;
-  line-height: 2rem !important;
-}
-
-.text-xl {
-  font-size: 1.25rem !important;
-  line-height: 1.75rem !important;
-}
-
-.text-lg {
-  font-size: 1.125rem !important;
-  line-height: 1.75rem !important;
-}
-
-.text-base {
-  font-size: 1rem !important;
-  line-height: 1.5rem !important;
-}
-
-.text-sm {
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
-}
-
-.font-bold {
-  font-weight: 700 !important;
-}
-
-.font-semibold {
-  font-weight: 600 !important;
-}
-
-.font-medium {
-  font-weight: 500 !important;
-}
-
-.mb-4 {
-  margin-bottom: 1rem !important;
-}
-
-.mb-6 {
-  margin-bottom: 1.5rem !important;
-}
-
-.mb-8 {
-  margin-bottom: 2rem !important;
-}
-
-.mb-2 {
-  margin-bottom: 0.5rem !important;
-}
-
-.mb-3 {
-  margin-bottom: 0.75rem !important;
-}
-
-.mb-5 {
-  margin-bottom: 1.25rem !important;
-}
-
-.py-12 {
-  padding-top: 3rem !important;
-  padding-bottom: 3rem !important;
-}
-
-.py-16 {
-  padding-top: 4rem !important;
-  padding-bottom: 4rem !important;
-}
-
-.py-8 {
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important;
-}
-
-.px-4 {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-}
-
-.px-3 {
-  padding-left: 0.75rem !important;
-  padding-right: 0.75rem !important;
-}
-
-.py-1 {
-  padding-top: 0.25rem !important;
-  padding-bottom: 0.25rem !important;
-}
-
-.p-5 {
-  padding: 1.25rem !important;
-}
-
-.p-6 {
-  padding: 1.5rem !important;
-}
-
-.p-8 {
-  padding: 2rem !important;
-}
-
-.rounded-lg {
-  border-radius: 0.5rem !important;
-}
-
-.rounded-full {
-  border-radius: 9999px !important;
-}
-
-.shadow-xl {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
-}
-
-.shadow-md {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-/* ✅ GRID System */
-.grid {
-  display: grid !important;
-}
-
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-}
-
-.grid-cols-2 {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-}
-
-.grid-cols-4 {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-}
-
-.gap-4 {
-  gap: 1rem !important;
-}
-
-.gap-5 {
-  gap: 1.25rem !important;
-}
-
-.gap-8 {
-  gap: 2rem !important;
-}
-
-/* ✅ FLEXBOX */
-.flex {
-  display: flex !important;
-}
-
-.flex-col {
-  flex-direction: column !important;
-}
-
-.flex-wrap {
-  flex-wrap: wrap !important;
-}
-
-.items-center {
-  align-items: center !important;
-}
-
-.justify-center {
-  justify-content: center !important;
-}
-
-.text-center {
-  text-align: center !important;
-}
-
-/* ✅ OPACITY & BACKGROUNDS */
-.bg-primary-gold\/20 {
-  background-color: rgba(210, 174, 108, 0.2) !important;
-}
-
-.bg-primary-gold\/10 {
-  background-color: rgba(210, 174, 108, 0.1) !important;
-}
-
-.bg-primary-gold\/5 {
-  background-color: rgba(210, 174, 108, 0.05) !important;
-}
-
-.bg-white {
-  background-color: #ffffff !important;
-}
-
-/* ✅ HOVER STATES */
-.hover\:underline:hover {
-  text-decoration: underline !important;
-}
-
-.hover\:transform:hover {
-  transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1) !important;
-}
-
-.hover\:scale-105:hover {
-  transform: scale(1.05) !important;
-}
-
-/* ✅ TRANSITIONS */
-.transition-transform {
-  transition-property: transform !important;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
-  transition-duration: 150ms !important;
-}
-
-/* ✅ RESPONSIVE - Mobile First */
-@media (min-width: 640px) {
-  .sm\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .md\:text-4xl {
-    font-size: 2.25rem !important;
-    line-height: 2.5rem !important;
-  }
-  
-  .md\:text-3xl {
-    font-size: 1.875rem !important;
-    line-height: 2.25rem !important;
-  }
-  
-  .md\:text-2xl {
-    font-size: 1.5rem !important;
-    line-height: 2rem !important;
-  }
-  
-  .md\:text-xl {
-    font-size: 1.25rem !important;
-    line-height: 1.75rem !important;
-  }
-  
-  .md\:text-lg {
-    font-size: 1.125rem !important;
-    line-height: 1.75rem !important;
-  }
-  
-  .md\:text-base {
-    font-size: 1rem !important;
-    line-height: 1.5rem !important;
-  }
-  
-  .md\:py-16 {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
-  }
-  
-  .md\:mb-6 {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .md\:mb-8 {
-    margin-bottom: 2rem !important;
-  }
-  
-  .md\:mb-12 {
-    margin-bottom: 3rem !important;
-  }
-  
-  .md\:gap-8 {
-    gap: 2rem !important;
-  }
-  
-  .md\:gap-10 {
-    gap: 2.5rem !important;
-  }
-  
-  .md\:p-6 {
-    padding: 1.5rem !important;
-  }
-  
-  .md\:p-8 {
-    padding: 2rem !important;
-  }
-  
-  .md\:grid-cols-3 {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  }
-  
-  .md\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .lg\:text-5xl {
-    font-size: 3rem !important;
-    line-height: 1 !important;
-  }
-  
-  .lg\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-  
-  .lg\:grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ✅ CRITICAL: Basis-Textfarben IMMER sichtbar */
+/* ✅ CRITICAL: Basis-Textsichtbarkeit */
 @layer base {
   * {
     box-sizing: border-box;
   }
   
-  /* ✅ EMERGENCY: Basis Textsichtbarkeit */
   html {
     color-scheme: light dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
   
   body {
@@ -418,12 +33,25 @@ p, span, div, article, section {
     font-size: 16px !important;
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
+    text-rendering: optimizeLegibility;
   }
   
   /* Dark Mode - Kontrastfarben */
   .dark body {
     color: #f9fafb !important; /* Sehr heller Text für Dark Mode */
     background-color: #111827 !important; /* Sehr dunkler Hintergrund */
+  }
+  
+  /* ✅ Überschriften - IMMER sichtbar */
+  h1, h2, h3, h4, h5, h6 {
+    color: #111827 !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #f9fafb !important;
   }
   
   /* ✅ Paragraphs - IMMER sichtbar */
@@ -523,119 +151,10 @@ p, span, div, article, section {
   .dark label {
     color: #d1d5db !important;
   }
-  
-  /* ✅ Navigation - Sichtbar */
-  nav {
-    background-color: #ffffff !important;
-    border-bottom: 1px solid #e5e7eb !important;
-    color: #111827 !important;
-  }
-  
-  .dark nav {
-    background-color: #1f2937 !important;
-    border-bottom-color: #374151 !important;
-    color: #f9fafb !important;
-  }
-  
-  /* ✅ Cards & Containers - Sichtbar */
-  .card,
-  [class*="card"],
-  [class*="bg-white"],
-  [class*="bg-light"] {
-    background-color: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 0.75rem !important;
-    padding: 1.5rem !important;
-    color: #111827 !important;
-  }
-  
-  .dark .card,
-  .dark [class*="card"],
-  .dark [class*="bg-white"],
-  .dark [class*="bg-light"] {
-    background-color: #1f2937 !important;
-    border-color: #374151 !important;
-    color: #f9fafb !important;
-  }
-  
-  /* ✅ Lists - Sichtbar */
-  ul, ol {
-    color: inherit !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  li {
-    color: inherit !important;
-    margin-bottom: 0.5rem !important;
-  }
-  
-  /* ✅ Tables - Sichtbar */
-  table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    color: inherit !important;
-  }
-  
-  th, td {
-    padding: 0.75rem !important;
-    border: 1px solid #e5e7eb !important;
-    color: inherit !important;
-  }
-  
-  .dark th, .dark td {
-    border-color: #374151 !important;
-  }
-  
-  th {
-    background-color: #f9fafb !important;
-    font-weight: 600 !important;
-  }
-  
-  .dark th {
-    background-color: #374151 !important;
-  }
 }
 
-/* ✅ Utility Classes für Emergency Fixes */
+/* ✅ Gold Color System */
 @layer utilities {
-  /* Text Visibility Utilities */
-  .text-visible {
-    color: #111827 !important;
-  }
-  
-  .dark .text-visible {
-    color: #f9fafb !important;
-  }
-  
-  .text-muted {
-    color: #6b7280 !important;
-  }
-  
-  .dark .text-muted {
-    color: #9ca3af !important;
-  }
-  
-  /* Background Visibility Utilities */
-  .bg-visible {
-    background-color: #ffffff !important;
-  }
-  
-  .dark .bg-visible {
-    background-color: #111827 !important;
-  }
-  
-  .bg-card {
-    background-color: #ffffff !important;
-    border: 1px solid #e5e7eb !important;
-    border-radius: 0.75rem !important;
-  }
-  
-  .dark .bg-card {
-    background-color: #1f2937 !important;
-    border-color: #374151 !important;
-  }
-  
-  /* Gold Color Utilities */
   .text-gold {
     color: #D2AE6C !important;
   }
@@ -656,15 +175,63 @@ p, span, div, article, section {
     background-color: #D2AE6C !important;
   }
   
-  /* Emergency High Contrast */
-  .force-contrast {
-    color: #000000 !important;
+  .hover\:bg-gold-dark:hover {
+    background-color: #B8941A !important;
+  }
+  
+  .bg-gold-dark {
+    background-color: #B8941A !important;
+  }
+  
+  .focus\:ring-gold:focus {
+    box-shadow: 0 0 0 3px rgba(210, 174, 108, 0.2) !important;
+  }
+  
+  .focus\:border-gold:focus {
+    border-color: #D2AE6C !important;
+  }
+  
+  /* ✅ Background Opacity Utilities */
+  .bg-opacity-10 {
+    background-color: rgba(210, 174, 108, 0.1) !important;
+  }
+  
+  .bg-opacity-20 {
+    background-color: rgba(210, 174, 108, 0.2) !important;
+  }
+  
+  .bg-opacity-30 {
+    background-color: rgba(210, 174, 108, 0.3) !important;
+  }
+  
+  .bg-opacity-40 {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+  }
+  
+  /* ✅ Text Visibility Utilities */
+  .text-visible {
+    color: #111827 !important;
+  }
+  
+  .dark .text-visible {
+    color: #f9fafb !important;
+  }
+  
+  .text-muted {
+    color: #6b7280 !important;
+  }
+  
+  .dark .text-muted {
+    color: #9ca3af !important;
+  }
+  
+  /* ✅ Background Visibility Utilities */
+  .bg-visible {
     background-color: #ffffff !important;
   }
   
-  .dark .force-contrast {
-    color: #ffffff !important;
-    background-color: #000000 !important;
+  .dark .bg-visible {
+    background-color: #111827 !important;
   }
 }
 
@@ -672,14 +239,7 @@ p, span, div, article, section {
 @layer components {
   /* Primary Button */
   .btn-primary {
-    @apply bg-gold text-white px-6 py-3 rounded-lg font-medium hover:bg-gold/90 transition-all duration-200;
-    background-color: #D2AE6C !important;
-    color: #ffffff !important;
-  }
-  
-  .btn-primary:hover {
-    background-color: #B8941A !important;
-    transform: translateY(-1px);
+    @apply bg-gold text-white px-6 py-3 rounded-lg font-medium hover:bg-gold-dark transition-all duration-200;
   }
   
   /* Secondary Button */
@@ -691,26 +251,19 @@ p, span, div, article, section {
     @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
   }
   
-  /* Text Styles */
-  .text-primary {
-    color: #D2AE6C !important;
+  /* Container */
+  .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
   
-  .text-heading {
-    color: #111827 !important;
-    font-weight: 600 !important;
-  }
-  
-  .dark .text-heading {
-    color: #f9fafb !important;
-  }
-  
-  .text-body {
-    color: #374151 !important;
-  }
-  
-  .dark .text-body {
-    color: #d1d5db !important;
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 2rem !important;
+      padding-right: 2rem !important;
+    }
   }
   
   /* Card Component */
@@ -736,31 +289,9 @@ p, span, div, article, section {
   .dark .card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
   }
-  
-  /* Section Spacing */
-  .section {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
-  }
-  
-  .section-title {
-    font-size: 2.5rem !important;
-    font-weight: 700 !important;
-    text-align: center !important;
-    margin-bottom: 3rem !important;
-    color: #111827 !important;
-  }
-  
-  .dark .section-title {
-    color: #f9fafb !important;
-  }
 }
 
 /* ✅ Global Enhancements */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-}
 
 /* Selection Colors */
 ::selection {
@@ -900,9 +431,79 @@ html {
   }
 }
 
+/* ✅ SPEZIELLE FIXES für die neue index.astro */
+
+/* Hero Section Text - Garantierte Sichtbarkeit */
+.hero-section h1,
+.hero-section p,
+.hero-section span {
+  color: #ffffff !important;
+}
+
+/* Service Cards - Garantierte Sichtbarkeit */
+.service-card h3 {
+  color: #ffffff !important;
+}
+
+.service-card p {
+  color: #d1d5db !important;
+}
+
+.service-card a {
+  color: #D2AE6C !important;
+}
+
+/* Trust Indicators */
+.trust-indicator .text-gold {
+  color: #D2AE6C !important;
+}
+
+.trust-indicator .text-gray-600 {
+  color: #6b7280 !important;
+}
+
+/* CTA Section */
+.cta-section h2 {
+  color: #111827 !important;
+}
+
+.cta-section p {
+  color: #6b7280 !important;
+}
+
+/* Responsive Text Fixes */
+@media (min-width: 768px) {
+  .text-md\:text-4xl {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+  }
+  
+  .text-md\:text-3xl {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+  
+  .text-md\:text-2xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  
+  .text-md\:text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .text-lg\:text-5xl {
+    font-size: 3rem !important;
+    line-height: 1.1 !important;
+  }
+}
+
 /* Version Footer */
 .version-info::after {
-  content: "global.css v2.3.1 - Emergency Text Visibility Fix";
+  content: "global.css v2.4.0 - Optimiert für Clean Index";
   display: block;
   font-size: 0.75rem;
   color: #9ca3af;
@@ -913,7 +514,7 @@ html {
 
 /* 
  * =================================================================
- * END global.css v2.3.1 - Emergency Fix für Textsichtbarkeit
+ * END global.css v2.4.0 - Optimiert für Clean Index
  * Build Date: 2025-01-22
  * =================================================================
  */
