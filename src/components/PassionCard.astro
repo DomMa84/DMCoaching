@@ -1,4 +1,9 @@
 ---
+// src/components/FeatureCard.astro v1.0 (Server-Mode & SEO optimiert)
+// Feature/Service Card Component - Accessibility & Performance optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 import IconSVG from './IconSVG.astro';
 
 interface Props {
@@ -6,19 +11,255 @@ interface Props {
   title: string;
   description: string;
   delay?: number;
+  variant?: "default" | "compact" | "highlight";
+  link?: string;
+  linkText?: string;
+  iconSize?: "sm" | "md" | "lg";
+  priority?: "high" | "normal" | "low"; // SEO Priority
+  schema?: boolean; // Schema.org markup
 }
 
-const { iconPath, title, description, delay = 100 } = Astro.props;
+const { 
+  iconPath, 
+  title, 
+  description, 
+  delay = 100,
+  variant = "default",
+  link,
+  linkText = "Mehr erfahren",
+  iconSize = "lg",
+  priority = "normal",
+  schema = false
+} = Astro.props;
+
+// Variant-spezifische Klassen
+const variantClasses = {
+  default: "bg-white dark:bg-dark rounded-lg shadow-md p-6",
+  compact: "bg-white dark:bg-dark rounded-lg shadow-sm p-4",
+  highlight: "bg-gradient-to-br from-primary-gold/5 to-primary-gold/10 dark:from-primary-gold/10 dark:to-primary-gold/5 rounded-lg shadow-lg p-6 border border-primary-gold/20"
+};
+
+// Icon-Container Größen
+const iconContainerSizes = {
+  sm: "w-12 h-12",
+  md: "w-16 h-16", 
+  lg: "w-20 h-20"
+};
+
+// Icon Größen
+const iconSizes = {
+  sm: "w-6 h-6",
+  md: "w-8 h-8",
+  lg: "w-10 h-10"
+};
+
+const cardClasses = variantClasses[variant];
+const iconContainerClass = iconContainerSizes[iconSize];
+const iconClass = iconSizes[iconSize];
+
+// SEO-optimierte Card-ID für bessere Indexierung
+const cardId = `feature-${title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+
+console.log(`📋 FeatureCard v1.0 loaded - Title: ${title}, Variant: ${variant}, Priority: ${priority}`);
 ---
 
-<div 
-  class="bg-white dark:bg-dark rounded-lg shadow-md p-6"
+<article 
+  class={`${cardClasses} transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105 group`}
   data-aos="flip-left"
   data-aos-delay={delay}
+  id={cardId}
+  itemscope={schema ? true : undefined}
+  itemtype={schema ? "https://schema.org/Service" : undefined}
 >
-  <div class="bg-primary-gold/10 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
-    <IconSVG iconPath={iconPath} className="w-8 h-8 text-primary-gold" />
+  <!-- Icon Container -->
+  <div class={`bg-primary-gold/10 ${iconContainerClass} rounded-full flex items-center justify-center mb-4 md:mb-6 mx-auto group-hover:bg-primary-gold/20 transition-colors duration-300`}>
+    <IconSVG 
+      iconPath={iconPath} 
+      className={`${iconClass} text-primary-gold group-hover:text-primary-gold/90 transition-colors duration-300`}
+      ariaLabel={`${title} Icon`}
+    />
   </div>
-  <h3 class="text-xl font-semibold mb-4 text-center text-text-dark dark:text-text-light">{title}</h3>
-  <p class="text-text-muted text-center">{description}</p>
-</div>
+  
+  <!-- Content -->
+  <div class="text-center">
+    <h3 
+      class={`font-semibold mb-3 md:mb-4 text-text-dark dark:text-text-light group-hover:text-primary-gold transition-colors duration-300 ${
+        variant === "compact" ? "text-lg" : "text-xl"
+      }`}
+      itemprop={schema ? "name" : undefined}
+    >
+      {title}
+    </h3>
+    
+    <p 
+      class={`text-text-muted leading-relaxed ${variant === "compact" ? "text-sm" : "text-base"}`}
+      itemprop={schema ? "description" : undefined}
+    >
+      {description}
+    </p>
+    
+    <!-- Optional Link -->
+    {link && (
+      <div class="mt-4 md:mt-6">
+        <a 
+          href={link}
+          class="inline-flex items-center text-primary-gold font-medium hover:text-primary-gold/80 transition-colors duration-300 group-hover:underline"
+          aria-label={`${linkText} über ${title}`}
+          itemprop={schema ? "url" : undefined}
+        >
+          {linkText}
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 20 20" 
+            fill="currentColor" 
+            class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform duration-300"
+            aria-hidden="true"
+          >
+            <path 
+              fill-rule="evenodd" 
+              d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" 
+              clip-rule="evenodd" 
+            />
+          </svg>
+        </a>
+      </div>
+    )}
+    
+    <!-- Schema.org zusätzliche Daten (versteckt) -->
+    {schema && (
+      <div class="sr-only">
+        <span itemprop="serviceType">Unternehmensberatung</span>
+        <span itemprop="provider" itemscope itemtype="https://schema.org/Organization">
+          <span itemprop="name">Dominik Maier Coaching & Interim Management</span>
+        </span>
+        <span itemprop="areaServed">Baden-Württemberg, Deutschland</span>
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  /* Base Card Styles */
+  article {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Hover-Effekt für bessere Interaktion */
+  article::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.05), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  article:hover::before {
+    left: 100%;
+  }
+  
+  /* Highlight Variant Spezialeffekte */
+  .group:hover.bg-gradient-to-br {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.15));
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    article {
+      padding: 1rem;
+    }
+    
+    .w-20 {
+      width: 4rem !important;
+      height: 4rem !important;
+    }
+    
+    .w-10 {
+      width: 2rem !important;
+      height: 2rem !important;
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    article {
+      transition: none;
+    }
+    
+    article:hover {
+      transform: none;
+      scale: 1;
+    }
+    
+    article::before {
+      display: none;
+    }
+    
+    .group-hover\\:translate-x-1 {
+      transform: none !important;
+    }
+  }
+  
+  /* Focus States für Accessibility */
+  article:focus-within {
+    outline: 2px solid #D2AE6C;
+    outline-offset: 2px;
+  }
+  
+  /* Dark Mode Optimierungen */
+  @media (prefers-color-scheme: dark) {
+    article {
+      border: 1px solid rgba(212, 175, 55, 0.1);
+    }
+    
+    article:hover {
+      border-color: rgba(212, 175, 55, 0.2);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    article {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+    
+    article::before {
+      display: none;
+    }
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    article {
+      border: 2px solid currentColor;
+    }
+    
+    .bg-primary-gold\\/10 {
+      background-color: rgba(212, 175, 55, 0.2);
+    }
+  }
+  
+  /* Screen Reader Only Content */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "FeatureCard v1.0 - Server-Mode & SEO optimiert";
+  }
+</style>
