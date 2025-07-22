@@ -1,0 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any custom global styles here that ARE NOT Tailwind classes
+   and are NOT already defined in your Layout.astro's <style is:global> block. */
