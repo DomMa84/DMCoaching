@@ -1,22 +1,459 @@
 ---
+// src/components/StatCard.astro v1.0 (Server-Mode & Analytics optimiert)
+// Statistics Card Component - Business KPI & Performance optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 interface Props {
   value: string;
   title: string;
   description: string;
   delay?: number;
+  icon?: string; // Icon statt/zusätzlich zum Value
+  trend?: "up" | "down" | "neutral"; // Trend-Indikator
+  trendValue?: string; // z.B. "+15%" oder "-5%"
+  unit?: string; // Einheit für den Wert
+  variant?: "default" | "featured" | "minimal" | "large";
+  colorScheme?: "default" | "success" | "warning" | "error" | "info";
+  animated?: boolean; // Counter-Animation
+  link?: string; // Verlinkung zu Details
+  badge?: string; // Status-Badge
+  sparkline?: number[]; // Mini-Chart Data
 }
 
-const { value, title, description, delay = 100 } = Astro.props;
+const { 
+  value, 
+  title, 
+  description, 
+  delay = 100,
+  icon,
+  trend,
+  trendValue,
+  unit = "",
+  variant = "default",
+  colorScheme = "default",
+  animated = true,
+  link,
+  badge,
+  sparkline = []
+} = Astro.props;
+
+// Variant-spezifische Klassen
+const variantClasses = {
+  default: "bg-white dark:bg-dark rounded-lg shadow-md p-6",
+  featured: "bg-gradient-to-br from-primary-gold/5 to-primary-gold/10 dark:from-primary-gold/10 dark:to-primary-gold/5 rounded-lg shadow-lg p-6 md:p-8 border border-primary-gold/20",
+  minimal: "bg-transparent rounded-lg p-4 border border-gray-200 dark:border-gray-700",
+  large: "bg-white dark:bg-dark rounded-xl shadow-xl p-8 md:p-10"
+};
+
+// Color-Scheme Konfiguration
+const colorSchemes = {
+  default: { 
+    bg: "bg-primary-gold/20", 
+    text: "text-primary-gold", 
+    trend: "text-gray-600 dark:text-gray-400" 
+  },
+  success: { 
+    bg: "bg-green-500/20", 
+    text: "text-green-600 dark:text-green-400", 
+    trend: "text-green-600 dark:text-green-400" 
+  },
+  warning: { 
+    bg: "bg-yellow-500/20", 
+    text: "text-yellow-600 dark:text-yellow-400", 
+    trend: "text-yellow-600 dark:text-yellow-400" 
+  },
+  error: { 
+    bg: "bg-red-500/20", 
+    text: "text-red-600 dark:text-red-400", 
+    trend: "text-red-600 dark:text-red-400" 
+  },
+  info: { 
+    bg: "bg-blue-500/20", 
+    text: "text-blue-600 dark:text-blue-400", 
+    trend: "text-blue-600 dark:text-blue-400" 
+  }
+};
+
+// Trend-Ikonen und Farben
+const trendConfig = {
+  up: { 
+    icon: "M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941", 
+    color: "text-green-500" 
+  },
+  down: { 
+    icon: "M2.25 6L9 12.75l4.306-4.307a11.95 11.95 0 015.814 5.519l2.74 1.22m0 0l-5.94 2.28m5.94-2.28l-2.28-5.941", 
+    color: "text-red-500" 
+  },
+  neutral: { 
+    icon: "M5 12h14", 
+    color: "text-gray-500" 
+  }
+};
+
+const cardClasses = variantClasses[variant];
+const colors = colorSchemes[colorScheme];
+const trendData = trend ? trendConfig[trend] : null;
+
+// Value Parsing für Animation
+const numericValue = parseFloat(value.replace(/[^\d.-]/g, '')) || 0;
+const hasNumericValue = !isNaN(numericValue) && animated;
+
+// SEO-optimierte Card-ID
+const cardId = `stat-${title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`;
+
+console.log(`📊 StatCard v1.0 loaded - Value: ${value}, Title: ${title}, Trend: ${trend || 'none'}, Variant: ${variant}`);
 ---
 
-<div 
-  class="bg-white dark:bg-dark rounded-lg shadow-md p-6 text-center"
+<article
+  class={`${cardClasses} text-center transition-all duration-300 hover:shadow-lg hover:transform hover:scale-105 group relative`}
   data-aos="zoom-in"
   data-aos-delay={delay}
+  id={cardId}
+  itemscope
+  itemtype="https://schema.org/Statistic"
 >
-  <div class="inline-flex items-center justify-center p-3 bg-primary-gold/20 rounded-full mb-4">
-    <span class="text-3xl font-bold text-primary-gold">{value}</span>
+  <!-- Badge -->
+  {badge && (
+    <div class="absolute top-3 right-3">
+      <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${colors.bg} ${colors.text}`}>
+        {badge}
+      </span>
+    </div>
+  )}
+  
+  <!-- Value Container -->
+  <div class={`inline-flex items-center justify-center ${variant === 'large' ? 'p-4' : 'p-3'} ${colors.bg} rounded-full mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300`}>
+    {icon ? (
+      <!-- Custom Icon -->
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 24 24" 
+        fill="currentColor" 
+        class={`${variant === 'large' ? 'w-8 h-8' : 'w-6 h-6'} ${colors.text}`}
+      >
+        <path d={icon} />
+      </svg>
+    ) : (
+      <!-- Value Display -->
+      <span 
+        class={`font-bold ${colors.text} ${
+          variant === 'large' ? 'text-4xl md:text-5xl' : 
+          variant === 'minimal' ? 'text-2xl' : 'text-3xl'
+        } tabular-nums`}
+        itemprop="value"
+      >
+        <span 
+          class="stat-value" 
+          data-target={hasNumericValue ? numericValue : value}
+          data-unit={unit}
+        >
+          {hasNumericValue ? '0' : value}
+        </span>
+        {unit && <span class="unit-suffix">{unit}</span>}
+      </span>
+    )}
   </div>
-  <h3 class="text-lg font-semibold mb-3 text-text-dark dark:text-text-light">{title}</h3>
-  <p class="text-text-muted">{description}</p>
-</div>
+  
+  <!-- Title -->
+  <h3 
+    class={`font-semibold mb-2 md:mb-3 text-text-dark dark:text-text-light group-hover:text-primary-gold transition-colors duration-300 ${
+      variant === 'large' ? 'text-xl md:text-2xl' : 
+      variant === 'minimal' ? 'text-base' : 'text-lg'
+    }`}
+    itemprop="name"
+  >
+    {title}
+  </h3>
+  
+  <!-- Trend Indicator -->
+  {trend && trendValue && (
+    <div class="flex items-center justify-center mb-3">
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        stroke-width="2" 
+        class={`w-4 h-4 mr-1 ${trendData?.color}`}
+      >
+        <path d={trendData?.icon} />
+      </svg>
+      <span class={`text-sm font-medium ${trendData?.color}`}>
+        {trendValue}
+      </span>
+    </div>
+  )}
+  
+  <!-- Sparkline Mini-Chart -->
+  {sparkline.length > 0 && (
+    <div class="mb-3 flex justify-center">
+      <svg width="60" height="20" viewBox="0 0 60 20" class="opacity-60">
+        <polyline
+          fill="none"
+          stroke={colorScheme === 'default' ? '#D4AF37' : 'currentColor'}
+          stroke-width="1.5"
+          points={sparkline.map((value, index) => 
+            `${(index / (sparkline.length - 1)) * 60},${20 - ((value / Math.max(...sparkline)) * 15)}`
+          ).join(' ')}
+        />
+        {sparkline.map((value, index) => (
+          <circle
+            cx={(index / (sparkline.length - 1)) * 60}
+            cy={20 - ((value / Math.max(...sparkline)) * 15)}
+            r="1"
+            fill={colorScheme === 'default' ? '#D4AF37' : 'currentColor'}
+            opacity="0.7"
+          />
+        ))}
+      </svg>
+    </div>
+  )}
+  
+  <!-- Description -->
+  <p 
+    class={`text-text-muted leading-relaxed ${
+      variant === 'large' ? 'text-base' : 
+      variant === 'minimal' ? 'text-sm' : 'text-sm md:text-base'
+    }`}
+    itemprop="description"
+  >
+    {description}
+  </p>
+  
+  <!-- Optional Link -->
+  {link && (
+    <div class="mt-4">
+      <a 
+        href={link}
+        class={`inline-flex items-center ${colors.text} hover:underline text-sm font-medium`}
+        aria-label={`Details zu ${title} anzeigen`}
+      >
+        Details anzeigen
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-1">
+          <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  )}
+  
+  <!-- Schema.org Zusätzliche Daten -->
+  <div class="sr-only">
+    <span itemprop="statisticType">Business Metric</span>
+    <span itemprop="unitCode">{unit}</span>
+  </div>
+</article>
+
+<style>
+  /* Counter Animation */
+  .stat-value {
+    display: inline-block;
+    transition: transform 0.2s ease;
+  }
+  
+  /* Hover Effekte */
+  .group:hover .stat-value {
+    transform: scale(1.05);
+  }
+  
+  /* Sparkline Animation */
+  svg polyline {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: drawLine 1.5s ease-out forwards;
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes drawLine {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  
+  svg circle {
+    opacity: 0;
+    animation: fadeInCircle 0.3s ease-out forwards;
+  }
+  
+  svg circle:nth-child(2) { animation-delay: 0.7s; }
+  svg circle:nth-child(3) { animation-delay: 0.8s; }
+  svg circle:nth-child(4) { animation-delay: 0.9s; }
+  svg circle:nth-child(5) { animation-delay: 1.0s; }
+  
+  @keyframes fadeInCircle {
+    to {
+      opacity: 0.7;
+    }
+  }
+  
+  /* Featured Card Glow Effect */
+  .group:hover.bg-gradient-to-br {
+    box-shadow: 0 20px 25px -5px rgba(212, 175, 55, 0.1), 
+                0 10px 10px -5px rgba(212, 175, 55, 0.04);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    article {
+      padding: 1rem;
+    }
+    
+    .text-4xl,
+    .text-5xl {
+      font-size: 2rem;
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    article {
+      transition: none;
+    }
+    
+    article:hover {
+      transform: none;
+      scale: 1;
+    }
+    
+    svg polyline,
+    svg circle {
+      animation: none;
+      stroke-dashoffset: 0;
+      opacity: 0.7;
+    }
+    
+    .group-hover\\:scale-110 {
+      transform: none !important;
+    }
+  }
+  
+  /* Dark Mode Optimierungen */
+  @media (prefers-color-scheme: dark) {
+    article {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    article:hover {
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    article {
+      break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+    
+    svg {
+      display: none;
+    }
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    article {
+      border: 2px solid currentColor;
+    }
+  }
+  
+  /* Screen Reader Only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "StatCard v1.0 - Server-Mode & Analytics optimiert";
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Counter Animation für Zahlen
+    const animateCounter = (element: Element, target: string, hasUnit: boolean) => {
+      const numericTarget = parseFloat(target.toString().replace(/[^\d.-]/g, ''));
+      
+      if (isNaN(numericTarget)) {
+        element.textContent = target;
+        return;
+      }
+      
+      let start = 0;
+      const duration = 2000;
+      const startTime = performance.now();
+      const unit = element.getAttribute('data-unit') || '';
+      
+      // Formatierung basierend auf Zahl
+      const formatNumber = (num: number) => {
+        if (num >= 1000000) {
+          return (num / 1000000).toFixed(1) + 'M';
+        } else if (num >= 1000) {
+          return (num / 1000).toFixed(1) + 'K';
+        } else if (num % 1 === 0) {
+          return num.toString();
+        } else {
+          return num.toFixed(1);
+        }
+      };
+      
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = start + (numericTarget - start) * easeOutQuart;
+        
+        element.textContent = formatNumber(currentValue);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          element.textContent = formatNumber(numericTarget);
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    };
+    
+    // Intersection Observer für Animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const card = entry.target as HTMLElement;
+          const valueElement = card.querySelector('.stat-value');
+          
+          if (valueElement) {
+            const target = valueElement.getAttribute('data-target');
+            const unit = valueElement.getAttribute('data-unit') || '';
+            const hasUnit = Boolean(unit);
+            
+            if (target) {
+              setTimeout(() => {
+                animateCounter(valueElement, target, hasUnit);
+              }, 200);
+            }
+          }
+        }
+      });
+    }, {
+      threshold: 0.3,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Observe alle Stat Cards
+    document.querySelectorAll('[itemtype="https://schema.org/Statistic"]').forEach(card => {
+      observer.observe(card);
+    });
+  });
+</script>
