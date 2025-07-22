@@ -1,4 +1,9 @@
 ---
+// src/components/ProgressRing.astro v1.0 (Server-Mode & Performance optimiert)
+// Animierter Progress Ring - Accessibility & Business Analytics optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 interface Props {
   value: number;
   maxValue?: number;
@@ -7,30 +12,130 @@ interface Props {
   color?: string;
   backgroundColor?: string;
   animated?: boolean;
+  label?: string; // Für Accessibility
+  unit?: string; // z.B. "%", "€", "Tage"
+  format?: "percentage" | "currency" | "number" | "custom";
+  theme?: "default" | "success" | "warning" | "error";
+  showValue?: boolean;
+  gradient?: boolean;
+  glowEffect?: boolean;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 const { 
   value, 
   maxValue = 100, 
-  ringSize = 100, 
-  strokeWidth = 8, 
-  color = "#D4AF37", 
-  backgroundColor = "rgba(212,175,55,0.2)",
-  animated = true 
+  ringSize: customRingSize,
+  strokeWidth: customStrokeWidth,
+  color: customColor,
+  backgroundColor: customBgColor,
+  animated = true,
+  label = "Progress",
+  unit = "%",
+  format = "percentage",
+  theme = "default",
+  showValue = true,
+  gradient = false,
+  glowEffect = false,
+  size = "md"
 } = Astro.props;
 
-// Calculate SVG parameters
+// Size-basierte Standardwerte
+const sizeConfig = {
+  sm: { ringSize: 60, strokeWidth: 4, fontSize: "text-sm" },
+  md: { ringSize: 100, strokeWidth: 8, fontSize: "text-lg" },
+  lg: { ringSize: 140, strokeWidth: 10, fontSize: "text-xl" },
+  xl: { ringSize: 180, strokeWidth: 12, fontSize: "text-2xl" }
+};
+
+const config = sizeConfig[size];
+const ringSize = customRingSize || config.ringSize;
+const strokeWidth = customStrokeWidth || config.strokeWidth;
+
+// Theme-basierte Farben
+const themeColors = {
+  default: { color: "#D4AF37", bg: "rgba(212,175,55,0.2)" },
+  success: { color: "#10B981", bg: "rgba(16,185,129,0.2)" },
+  warning: { color: "#F59E0B", bg: "rgba(245,158,11,0.2)" },
+  error: { color: "#EF4444", bg: "rgba(239,68,68,0.2)" }
+};
+
+const themeConfig = themeColors[theme];
+const color = customColor || themeConfig.color;
+const backgroundColor = customBgColor || themeConfig.bg;
+
+// Berechnungen
 const normalizedValue = Math.min(Math.max(value, 0), maxValue);
 const percentage = (normalizedValue / maxValue) * 100;
 const radius = (ringSize - strokeWidth) / 2;
 const circumference = 2 * Math.PI * radius;
 const offset = circumference - (percentage / 100) * circumference;
 const halfSize = ringSize / 2;
+
+// Formatierung des angezeigten Wertes
+const formatValue = (val: number) => {
+  switch (format) {
+    case "percentage":
+      return `${Math.round((val / maxValue) * 100)}${unit}`;
+    case "currency":
+      return `${val.toLocaleString('de-DE')}${unit}`;
+    case "number":
+      return `${val.toLocaleString('de-DE')}${unit}`;
+    case "custom":
+      return `${val}${unit}`;
+    default:
+      return `${Math.round((val / maxValue) * 100)}%`;
+  }
+};
+
+const displayValue = formatValue(normalizedValue);
+
+// Eindeutige IDs für Gradients
+const gradientId = `gradient-${Math.random().toString(36).substr(2, 9)}`;
+const glowFilterId = `glow-${Math.random().toString(36).substr(2, 9)}`;
+
+console.log(`📊 ProgressRing v1.0 loaded - Value: ${normalizedValue}/${maxValue} (${percentage.toFixed(1)}%), Theme: ${theme}`);
 ---
 
-<div class="progress-ring-container flex items-center justify-center">
-  <div class="relative inline-flex" style={`width: ${ringSize}px; height: ${ringSize}px;`}>
-    <svg class="w-full h-full transform -rotate-90" viewBox={`0 0 ${ringSize} ${ringSize}`}>
+<div 
+  class="progress-ring-container flex items-center justify-center"
+  role="img"
+  aria-label={`${label}: ${displayValue} von ${formatValue(maxValue)}`}
+  data-value={normalizedValue}
+  data-max={maxValue}
+  data-percentage={percentage.toFixed(1)}
+>
+  <div 
+    class="relative inline-flex" 
+    style={`width: ${ringSize}px; height: ${ringSize}px;`}
+  >
+    <svg 
+      class="w-full h-full transform -rotate-90" 
+      viewBox={`0 0 ${ringSize} ${ringSize}`}
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!-- Definitionen für Effekte -->
+      <defs>
+        <!-- Gradient Definition -->
+        {gradient && (
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={`stop-color: ${color}; stop-opacity: 1`} />
+            <stop offset="100%" style={`stop-color: ${color}; stop-opacity: 0.6`} />
+          </linearGradient>
+        )}
+        
+        <!-- Glow Filter -->
+        {glowEffect && (
+          <filter id={glowFilterId} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+            <feMerge> 
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        )}
+      </defs>
+      
       <!-- Background circle -->
       <circle
         cx={halfSize}
@@ -39,6 +144,7 @@ const halfSize = ringSize / 2;
         stroke={backgroundColor}
         stroke-width={strokeWidth}
         fill="none"
+        opacity="0.3"
       />
       
       <!-- Progress circle -->
@@ -47,7 +153,7 @@ const halfSize = ringSize / 2;
         cx={halfSize}
         cy={halfSize}
         r={radius}
-        stroke={color}
+        stroke={gradient ? `url(#${gradientId})` : color}
         stroke-width={strokeWidth}
         stroke-linecap="round"
         fill="none"
@@ -55,56 +161,227 @@ const halfSize = ringSize / 2;
         stroke-dashoffset={animated ? circumference : offset}
         data-final-offset={offset}
         data-circumference={circumference}
+        filter={glowEffect ? `url(#${glowFilterId})` : "none"}
       />
+      
+      <!-- Optional: Tick marks for scale -->
+      {maxValue === 100 && ringSize >= 100 && (
+        <g stroke={backgroundColor} stroke-width="1" opacity="0.5">
+          {[0, 25, 50, 75].map(tick => {
+            const angle = (tick / 100) * 2 * Math.PI - Math.PI / 2;
+            const x1 = halfSize + (radius - 5) * Math.cos(angle);
+            const y1 = halfSize + (radius - 5) * Math.sin(angle);
+            const x2 = halfSize + (radius + 5) * Math.cos(angle);
+            const y2 = halfSize + (radius + 5) * Math.sin(angle);
+            return (
+              <line x1={x1} y1={y1} x2={x2} y2={y2} />
+            );
+          })}
+        </g>
+      )}
     </svg>
     
     <!-- Centered content -->
-    <div class="absolute inset-0 flex items-center justify-center">
-      <slot />
+    <div class="absolute inset-0 flex flex-col items-center justify-center">
+      {showValue && (
+        <div class={`font-bold text-text-dark dark:text-text-light ${config.fontSize} tabular-nums`}>
+          <span class="progress-value" data-target={normalizedValue}>
+            {animated ? "0" : displayValue}
+          </span>
+        </div>
+      )}
+      
+      <!-- Custom slot content -->
+      <div class="text-center">
+        <slot />
+      </div>
+      
+      <!-- Optional Label -->
+      {label && !showValue && (
+        <div class="text-xs text-text-muted mt-1 text-center">
+          {label}
+        </div>
+      )}
     </div>
+    
+    <!-- Performance indicator dot -->
+    <div 
+      class={`absolute top-2 right-2 w-3 h-3 rounded-full ${
+        percentage >= 75 ? 'bg-green-500' : 
+        percentage >= 50 ? 'bg-yellow-500' : 
+        percentage >= 25 ? 'bg-orange-500' : 'bg-red-500'
+      } opacity-75`}
+      title={`Performance: ${percentage.toFixed(1)}%`}
+      aria-hidden="true"
+    ></div>
   </div>
 </div>
 
 <style>
   .progress-ring-circle {
-    transition: stroke-dashoffset 1.5s ease-out;
+    transition: stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+  
+  .progress-value {
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Hover-Effekte */
+  .progress-ring-container:hover .progress-ring-circle {
+    filter: brightness(1.1) drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .progress-ring-container {
+      transform: scale(0.8);
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .progress-ring-circle {
+      transition: none !important;
+    }
+    
+    .progress-value {
+      transition: none !important;
+    }
+  }
+  
+  /* Dark Mode Optimierungen */
+  @media (prefers-color-scheme: dark) {
+    .progress-ring-container:hover .progress-ring-circle {
+      filter: brightness(1.2) drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+    }
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    .progress-ring-circle {
+      stroke-width: calc(var(--stroke-width) + 2px);
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    .progress-ring-container {
+      filter: grayscale(1);
+    }
+  }
+  
+  /* Animation States */
+  .progress-ring-container.animating .progress-ring-circle {
+    animation: progress-pulse 0.5s ease-out;
+  }
+  
+  @keyframes progress-pulse {
+    0% { 
+      stroke-width: var(--stroke-width);
+    }
+    50% { 
+      stroke-width: calc(var(--stroke-width) * 1.2);
+    }
+    100% { 
+      stroke-width: var(--stroke-width);
+    }
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "ProgressRing v1.0 - Server-Mode & Performance optimiert";
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Setup IntersectionObserver to animate progress rings when they come into view
+    // Counter Animation für Zahlen
+    const animateCounter = (element: Element, target: number, format: string, unit: string, maxValue: number) => {
+      let start = 0;
+      const duration = 2000; // 2 seconds
+      const startTime = performance.now();
+      
+      const formatValue = (val: number) => {
+        switch (format) {
+          case "percentage":
+            return `${Math.round((val / maxValue) * 100)}${unit}`;
+          case "currency":
+            return `${Math.round(val).toLocaleString('de-DE')}${unit}`;
+          case "number":
+            return `${Math.round(val).toLocaleString('de-DE')}${unit}`;
+          case "custom":
+            return `${Math.round(val)}${unit}`;
+          default:
+            return `${Math.round((val / maxValue) * 100)}%`;
+        }
+      };
+      
+      const animate = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = start + (target - start) * easeOutQuart;
+        
+        element.textContent = formatValue(currentValue);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          element.textContent = formatValue(target);
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    };
+    
+    // Setup IntersectionObserver für Ring-Animation
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Find the progress ring circle
-          const circle = entry.target.querySelector('.progress-ring-circle');
-          if (circle) {
-            // Get the final offset and circumference
+          const container = entry.target as HTMLElement;
+          const circle = container.querySelector('.progress-ring-circle') as SVGCircleElement;
+          const valueElement = container.querySelector('.progress-value');
+          
+          if (circle && valueElement) {
+            // Ring Animation
             const finalOffset = parseFloat(circle.getAttribute('data-final-offset') || '0');
             
-            // Animate to the final value
+            // Add pulse class
+            container.classList.add('animating');
+            setTimeout(() => container.classList.remove('animating'), 500);
+            
             requestAnimationFrame(() => {
               circle.style.strokeDashoffset = finalOffset + 'px';
             });
+            
+            // Counter Animation
+            const targetValue = parseFloat(container.dataset.value || '0');
+            const maxValue = parseFloat(container.dataset.max || '100');
+            const format = container.closest('[data-format]')?.getAttribute('data-format') || 'percentage';
+            const unit = container.closest('[data-unit]')?.getAttribute('data-unit') || '%';
+            
+            setTimeout(() => {
+              animateCounter(valueElement, targetValue, format, unit, maxValue);
+            }, 200);
           }
         }
       });
     }, {
-      threshold: 0.3, // Trigger when at least 30% of the element is visible
-      rootMargin: '0px 0px -100px 0px' // Slightly before element enters viewport
+      threshold: 0.3,
+      rootMargin: '0px 0px -50px 0px'
     });
     
-    // Observe all progress ring containers
-    document.querySelectorAll('.progress-ring-container').forEach(container => {
-      observer.observe(container);
-    });
-    
-    // Reset animation when leaving view
+    // Reset Animation beim Verlassen der Ansicht
     const resetObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) {
-          const circle = entry.target.querySelector('.progress-ring-circle');
+          const container = entry.target as HTMLElement;
+          const circle = container.querySelector('.progress-ring-circle') as SVGCircleElement;
+          const valueElement = container.querySelector('.progress-value');
+          
           if (circle) {
             const circumference = parseFloat(circle.getAttribute('data-circumference') || '0');
             circle.style.transition = 'none';
@@ -113,17 +390,23 @@ const halfSize = ringSize / 2;
             // Force reflow
             void circle.offsetWidth;
             
-            // Re-enable transition for next animation
-            circle.style.transition = 'stroke-dashoffset 1.5s ease-out';
+            // Re-enable transition
+            circle.style.transition = 'stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1)';
+          }
+          
+          if (valueElement) {
+            valueElement.textContent = '0%';
           }
         }
       });
     }, {
       threshold: 0,
-      rootMargin: '0px 0px 0px 0px'
+      rootMargin: '100px 0px 100px 0px'
     });
     
+    // Observe alle Progress Rings
     document.querySelectorAll('.progress-ring-container').forEach(container => {
+      observer.observe(container);
       resetObserver.observe(container);
     });
   });
