@@ -1,4 +1,9 @@
 ---
+// src/components/ResponsiveImage.astro v1.0 (Server-Mode & Performance optimiert)
+// Professional Responsive Image Component - SEO & Accessibility optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 export interface Props {
   src: string;
   alt: string;
@@ -12,6 +17,14 @@ export interface Props {
   quality?: number;
   baseUrl?: string;
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
+  caption?: string; // SEO & Accessibility
+  credits?: string; // Bildquelle
+  blurHash?: string; // BlurHash für bessere Placeholders
+  priority?: "high" | "normal" | "low"; // SEO Priority
+  lightbox?: boolean; // Lightbox-Integration
+  lazy?: boolean; // Explizite Lazy Loading Kontrolle
+  webpFallback?: boolean; // JPEG Fallback für alte Browser
+  errorImage?: string; // Custom Error Image
 }
 
 const {
@@ -27,33 +40,52 @@ const {
   quality = 80,
   baseUrl = "",
   objectFit = "cover",
+  caption,
+  credits,
+  blurHash,
+  priority = "normal",
+  lightbox = false,
+  lazy = true,
+  webpFallback = true,
+  errorImage = "/images/fallback.jpg"
 } = Astro.props;
 
-// Ensure src is a complete URL if it's a relative path and baseUrl is provided
-const fullSrc = src.startsWith("http") ? src : `${baseUrl}${src}`;
+// Priority-basierte Optimierungen
+const priorityConfig = {
+  high: { loading: "eager", fetchpriority: "high", quality: 90 },
+  normal: { loading: "lazy", fetchpriority: "auto", quality: 80 },
+  low: { loading: "lazy", fetchpriority: "low", quality: 70 }
+};
 
-// Clean up URL parameters if already present in the source
+const config = priorityConfig[priority];
+const finalLoading = loading || config.loading;
+const finalFetchpriority = fetchpriority || config.fetchpriority;
+const finalQuality = quality || config.quality;
+
+// URL Handling mit besserer Error-Behandlung
+const fullSrc = src.startsWith("http") ? src : `${baseUrl}${src}`;
 const baseImgUrl = fullSrc.split("?")[0];
 
-// Build srcset URLs with width parameters
-function generateSrcset(imageUrl: string, format: string, quality: number) {
+// Enhanced Srcset Generation mit Format-Fallbacks
+function generateSrcset(imageUrl: string, format: string, quality: number, fallback = false) {
   try {
     return widths
       .map(width => {
         try {
-          // Create URL object to validate the URL
           const url = new URL(imageUrl, Astro.site || 'http://localhost:3000');
-          
-          // Keep original URL parameters if present
           const params = new URLSearchParams(url.search);
           
-          // Append or update parameters
           params.set("w", width.toString());
           params.set("q", quality.toString());
           params.set("auto", "format");
-          if (format) params.set("fm", format);
           
-          // For CDN services that don't use query parameters
+          // Format handling mit Fallback
+          if (format && !fallback) {
+            params.set("fm", format);
+          } else if (fallback) {
+            params.set("fm", "jpg"); // JPEG Fallback
+          }
+          
           let finalUrl = `${url.origin}${url.pathname}`;
           if (params.toString()) {
             finalUrl += `?${params.toString()}`;
@@ -65,7 +97,7 @@ function generateSrcset(imageUrl: string, format: string, quality: number) {
           return '';
         }
       })
-      .filter(Boolean) // Remove any empty strings from failed URL generations
+      .filter(Boolean)
       .join(", ");
   } catch (err) {
     console.error("Error generating srcset:", err);
@@ -73,51 +105,156 @@ function generateSrcset(imageUrl: string, format: string, quality: number) {
   }
 }
 
-// Generate srcset with error handling
-const srcset = generateSrcset(baseImgUrl, format, quality);
+// Generate multiple srcsets
+const webpSrcset = generateSrcset(baseImgUrl, "webp", finalQuality);
+const jpegSrcset = webpFallback ? generateSrcset(baseImgUrl, "jpg", finalQuality, true) : "";
 
-// Generate placeholder for blur-up technique (tiny image URL) with error handling
-let placeholderUrl = '/images/fallback.jpg';
-try {
-  const url = new URL(baseImgUrl, Astro.site || 'http://localhost:3000');
-  placeholderUrl = `${url.origin}${url.pathname}?w=20&q=20&blur=10&auto=format`;
-} catch (err) {
-  console.error("Error generating placeholder URL:", err);
+// Enhanced Placeholder Generation
+let placeholderUrl = errorImage;
+let placeholderStyle = "";
+
+if (blurHash) {
+  // BlurHash integration (würde externe Library benötigen)
+  placeholderStyle = `background-image: url('data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><rect width="100%" height="100%" fill="#f3f4f6"/></svg>`)}');`;
+} else {
+  try {
+    const url = new URL(baseImgUrl, Astro.site || 'http://localhost:3000');
+    placeholderUrl = `${url.origin}${url.pathname}?w=20&q=20&blur=15&auto=format`;
+  } catch (err) {
+    console.error("Error generating placeholder URL:", err);
+  }
 }
 
-// Combine classes
-const combinedClasses = `responsive-image ${className}`.trim();
+// Classes und Styles
+const combinedClasses = `responsive-image ${className} ${priority === 'high' ? 'priority-high' : ''}`.trim();
+const containerClasses = `responsive-image-container ${lightbox ? 'lightbox-enabled' : ''}`.trim();
 
-// Fallback image URL
-const fallbackImageUrl = '/images/fallback.jpg';
+// SEO-optimierte Image ID
+const imageId = `image-${Math.random().toString(36).substr(2, 9)}`;
+
+console.log(`🖼️ ResponsiveImage v1.0 loaded - Src: ${src}, Priority: ${priority}, Format: ${format}, Alt: ${alt.substring(0, 50)}...`);
 ---
 
-<div class="responsive-image-container" style={`aspect-ratio: ${aspectRatio};`}>
-  <!-- Low-resolution placeholder for blur-up effect -->
-  <img
-    src={placeholderUrl}
-    alt=""
-    aria-hidden="true"
-    class="img-placeholder"
-    width="20"
-    height="20"
-    onerror={`this.onerror=null; this.src='${fallbackImageUrl}';`}
-  />
+<figure 
+  class={containerClasses}
+  style={`aspect-ratio: ${aspectRatio};`}
+  itemscope
+  itemtype="https://schema.org/ImageObject"
+  id={imageId}
+>
+  <!-- Modern Browser Support mit WebP -->
+  {webpFallback ? (
+    <picture>
+      <!-- WebP Version für moderne Browser -->
+      <source 
+        srcset={webpSrcset}
+        sizes={sizes}
+        type="image/webp"
+      />
+      
+      <!-- JPEG Fallback für ältere Browser -->
+      <source 
+        srcset={jpegSrcset}
+        sizes={sizes}
+        type="image/jpeg"
+      />
+      
+      <!-- Fallback img element -->
+      <img
+        src={baseImgUrl || errorImage}
+        alt={alt}
+        loading={finalLoading}
+        fetchpriority={finalFetchpriority}
+        class={combinedClasses}
+        style={`object-fit: ${objectFit};`}
+        itemprop="contentUrl"
+        onload="this.classList.add('loaded'); const placeholder = this.parentElement.querySelector('.img-placeholder'); if (placeholder) placeholder.classList.add('hidden');"
+        onerror={`this.onerror=null; this.src='${errorImage}'; this.alt='Image could not be loaded: ${alt}';`}
+      />
+    </picture>
+  ) : (
+    <!-- Single format image -->
+    <img
+      src={baseImgUrl || errorImage}
+      srcset={webpSrcset}
+      sizes={sizes}
+      alt={alt}
+      loading={finalLoading}
+      fetchpriority={finalFetchpriority}
+      class={combinedClasses}
+      style={`object-fit: ${objectFit};`}
+      itemprop="contentUrl"
+      onload="this.classList.add('loaded'); const placeholder = this.parentElement.querySelector('.img-placeholder'); if (placeholder) placeholder.classList.add('hidden');"
+      onerror={`this.onerror=null; this.src='${errorImage}'; this.alt='Image could not be loaded: ${alt}';`}
+    />
+  )}
   
-  <!-- Main image with srcset for responsive loading -->
-  <img
-    src={baseImgUrl || fallbackImageUrl}
-    srcset={srcset}
-    sizes={sizes}
-    alt={alt}
-    loading={loading}
-    fetchpriority={fetchpriority}
-    class={combinedClasses}
-    style={`object-fit: ${objectFit};`}
-    onload="this.classList.add('loaded'); this.previousElementSibling.classList.add('hidden')"
-    onerror={`this.onerror=null; this.src='${fallbackImageUrl}'; this.alt='Image could not be loaded';`}
-  />
-</div>
+  <!-- Enhanced Blur-up Placeholder -->
+  <div
+    class="img-placeholder"
+    style={`${placeholderStyle} background-size: cover; background-position: center;`}
+    aria-hidden="true"
+  >
+    {!blurHash && (
+      <img
+        src={placeholderUrl}
+        alt=""
+        aria-hidden="true"
+        width="20"
+        height="20"
+        style="filter: blur(15px) saturate(1.2); transform: scale(1.1);"
+        onerror={`this.onerror=null; this.src='${errorImage}';`}
+      />
+    )}
+  </div>
+  
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" aria-hidden="true">
+    <svg class="animate-spin h-8 w-8 text-primary-gold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg>
+  </div>
+  
+  <!-- Caption und Credits -->
+  {(caption || credits) && (
+    <figcaption class="image-caption">
+      {caption && (
+        <p class="caption-text" itemprop="caption">
+          {caption}
+        </p>
+      )}
+      {credits && (
+        <p class="credits-text">
+          <small>
+            <span class="sr-only">Bildquelle: </span>
+            <span itemprop="creator">{credits}</span>
+          </small>
+        </p>
+      )}
+    </figcaption>
+  )}
+  
+  <!-- Lightbox Trigger -->
+  {lightbox && (
+    <button 
+      class="lightbox-trigger"
+      aria-label={`Vergrößere Bild: ${alt}`}
+      data-src={baseImgUrl}
+      data-alt={alt}
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+        <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+        <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A11.8 11.8 0 0110 2c4.257 0 7.893 2.66 9.336 6.41.147.381.147.804 0 1.186A11.8 11.8 0 0110 18c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  )}
+  
+  <!-- Schema.org zusätzliche Metadaten -->
+  <meta itemprop="name" content={alt} />
+  <meta itemprop="description" content={caption || alt} />
+  <meta itemprop="url" content={baseImgUrl} />
+</figure>
 
 <style>
   .responsive-image-container {
@@ -125,9 +262,13 @@ const fallbackImageUrl = '/images/fallback.jpg';
     width: 100%;
     height: 100%;
     overflow: hidden;
+    background-color: #f3f4f6;
+    border-radius: 0.375rem; /* 6px */
   }
   
-  .responsive-image-container img {
+  .responsive-image-container img,
+  .responsive-image-container picture,
+  .responsive-image-container source {
     position: absolute;
     top: 0;
     left: 0;
@@ -135,22 +276,292 @@ const fallbackImageUrl = '/images/fallback.jpg';
     height: 100%;
   }
   
+  /* Placeholder Styles */
   .img-placeholder {
-    filter: blur(8px);
-    transform: scale(1.05);
-    transition: opacity 0.3s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f3f4f6;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
   }
   
+  .img-placeholder img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* Main Image Styles */
   .responsive-image {
     opacity: 0;
-    transition: opacity 0.5s ease;
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
   }
   
   .responsive-image.loaded {
     opacity: 1;
   }
   
+  .responsive-image.priority-high {
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Loading States */
+  .loading-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    transition: opacity 0.3s ease;
+  }
+  
+  .responsive-image.loaded ~ .loading-spinner {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
   .hidden {
     opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* Caption Styles */
+  .image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    color: white;
+    padding: 1rem;
+    z-index: 4;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .responsive-image-container:hover .image-caption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .caption-text {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+  
+  .credits-text {
+    margin: 0;
+    opacity: 0.8;
+  }
+  
+  /* Lightbox Trigger */
+  .lightbox-trigger {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .lightbox-enabled:hover .lightbox-trigger {
+    opacity: 1;
+  }
+  
+  .lightbox-trigger:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: scale(1.1);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 640px) {
+    .image-caption {
+      padding: 0.75rem;
+    }
+    
+    .caption-text {
+      font-size: 0.8125rem;
+    }
+    
+    .lightbox-trigger {
+      width: 2rem;
+      height: 2rem;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .responsive-image,
+    .img-placeholder,
+    .image-caption,
+    .lightbox-trigger {
+      transition: none;
+    }
+    
+    .loading-spinner .animate-spin {
+      animation: none;
+    }
+  }
+  
+  /* Dark Mode Support */
+  @media (prefers-color-scheme: dark) {
+    .responsive-image-container {
+      background-color: #374151;
+    }
+    
+    .img-placeholder {
+      background-color: #374151;
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    .loading-spinner,
+    .lightbox-trigger {
+      display: none;
+    }
+    
+    .image-caption {
+      position: static;
+      opacity: 1;
+      transform: none;
+      background: none;
+      color: black;
+      border-top: 1px solid #ccc;
+      margin-top: 0.5rem;
+    }
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    .responsive-image-container {
+      border: 2px solid currentColor;
+    }
+    
+    .lightbox-trigger {
+      background: black;
+      border: 1px solid white;
+    }
+  }
+  
+  /* Screen Reader Only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "ResponsiveImage v1.0 - Server-Mode & Performance optimiert";
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Enhanced Intersection Observer für bessere Performance
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const container = entry.target as HTMLElement;
+          const img = container.querySelector('.responsive-image') as HTMLImageElement;
+          
+          if (img && !img.complete) {
+            // Preload für bessere UX
+            const preloadLink = document.createElement('link');
+            preloadLink.rel = 'preload';
+            preloadLink.as = 'image';
+            preloadLink.href = img.src;
+            document.head.appendChild(preloadLink);
+          }
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '50px 0px'
+    });
+    
+    // Error Handling Enhancement
+    const handleImageError = (img: HTMLImageElement) => {
+      console.warn(`Failed to load image: ${img.src}`);
+      
+      // Versuche alternative Formate
+      const fallbacks = ['/images/fallback.jpg', '/images/placeholder.svg', 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiBzdHJva2U9IiNjY2MiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K'];
+      
+      const tryFallback = (index = 0) => {
+        if (index < fallbacks.length) {
+          const tempImg = new Image();
+          tempImg.onload = () => {
+            img.src = fallbacks[index];
+            img.alt = `Fallback image (${index + 1})`;
+          };
+          tempImg.onerror = () => tryFallback(index + 1);
+          tempImg.src = fallbacks[index];
+        }
+      };
+      
+      tryFallback();
+    };
+    
+    // Setup observers for all images
+    document.querySelectorAll('.responsive-image-container').forEach(container => {
+      imageObserver.observe(container);
+      
+      const img = container.querySelector('.responsive-image') as HTMLImageElement;
+      if (img) {
+        img.addEventListener('error', () => handleImageError(img));
+      }
+    });
+    
+    // Lightbox Integration
+    document.querySelectorAll('.lightbox-trigger').forEach(trigger => {
+      trigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const src = trigger.getAttribute('data-src');
+        const alt = trigger.getAttribute('data-alt');
+        
+        // Hier würde die Lightbox-Logik stehen
+        console.log('Lightbox triggered:', { src, alt });
+        
+        // Beispiel: Einfaches Modal
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+        modal.innerHTML = `
+          <div class="max-w-4xl max-h-full p-4">
+            <img src="${src}" alt="${alt}" class="max-w-full max-h-full object-contain">
+            <button class="absolute top-4 right-4 text-white text-2xl" onclick="this.parentElement.parentElement.remove()">×</button>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) modal.remove();
+        });
+      });
+    });
+  });
+</script>
