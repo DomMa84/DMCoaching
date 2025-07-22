@@ -1,14 +1,149 @@
-<path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
+---
+// src/pages/index.astro v2.2 (BUILD-FIX - Ohne Inline CSS)
+// Homepage - Statische Seite mit prerender + Advanced SEO
+
+// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import ContactForm from '../components/ContactForm.astro';
+import CircularProgressCard from '../components/CircularProgressCard.astro';
+
+console.log('🏠 Index v2.2 loaded - BUILD-FIX ohne Inline CSS');
+---
+
+<Layout 
+  title="Dominik Maier | Strategische Unternehmensentwicklung & Coaching Baden-Württemberg"
+  description="✅ Professionelle Unternehmensentwicklung & Vertriebsoptimierung in Baden-Württemberg. 10-50% Kostenreduzierung durch bewährte Value Management Strategien. Kostenloses Erstgespräch vereinbaren!"
+  keywords="Unternehmensentwicklung Baden-Württemberg, Vertriebsoptimierung, Value Management, Interim Management, Coaching Schwarzwald, Prozessoptimierung"
+  canonical="https://maier-value.com/"
+>
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center py-12 md:py-16 overflow-hidden" style="background: linear-gradient(rgba(52, 73, 94, 0.8), rgba(52, 73, 94, 0.8)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2940&auto=format&fit=crop'); background-size: cover; background-position: center;">
+    
+    <div class="container mx-auto px-4 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center">
+        <div class="text-white" data-aos="fade-right">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight" style="color: #ffffff !important; font-size: 2.5rem !important;">
+            Erfolg beginnt mit strategischer Unternehmensentwicklung
+          </h1>
+          <p class="text-lg md:text-xl mb-6 md:mb-8" style="color: #e5e7eb !important; font-size: 1.125rem !important;">
+            Wir helfen Ihnen Ihre Prozesse und Produkte im Unternehmen weiterzuentwickeln und nachhaltiges Wachstum zu erreichen – mit einem klaren Fokus auf Ihren Kunden und messbare Ergebnisse!
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6" aria-label="Erfolgs-Keywords und Vorteile">
+            <span class="px-3 py-1 rounded-full text-sm" style="background-color: rgba(210, 174, 108, 0.3) !important; color: #ffffff !important;" data-keyword="kostenreduzierung">10-50% Kostenreduzierung</span>
+            <span class="px-3 py-1 rounded-full text-sm" style="background-color: rgba(210, 174, 108, 0.3) !important; color: #ffffff !important;" data-keyword="strategische-beratung">Strategische Beratung</span>
+            <span class="px-3 py-1 rounded-full text-sm" style="background-color: rgba(210, 174, 108, 0.3) !important; color: #ffffff !important;" data-keyword="value-management">Value Management</span>
+            <span class="px-3 py-1 rounded-full text-sm" style="background-color: rgba(210, 174, 108, 0.3) !important; color: #ffffff !important;" data-keyword="baden-wuerttemberg">Baden-Württemberg</span>
+          </div>
+        </div>
+        
+        <div data-aos="fade-left" data-aos-delay="100">
+          <div class="rounded-lg shadow-xl p-5 md:p-8" style="background-color: #374151 !important; border: 1px solid #6b7280 !important;">
+            <h2 class="text-xl md:text-2xl font-semibold mb-5 md:mb-6" style="color: #ffffff !important;">
+              🎯 Kostenloses Erstgespräch vereinbaren
+            </h2>
+            <p class="text-sm mb-4" style="color: #d1d5db !important;">
+              Erfahren Sie in 30 Minuten, wie Sie Ihr Unternehmen mit bewährten Strategien optimieren können.
+            </p>
+            <ContactForm leadForm={true} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Trust Indicators -->
+  <section class="py-8 border-y" style="background-color: rgba(210, 174, 108, 0.1) !important; border-color: rgba(210, 174, 108, 0.2) !important;">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="flex flex-col items-center" data-aos="fade-up">
+          <div class="text-2xl font-bold mb-1" style="color: #D2AE6C !important;">15+</div>
+          <div class="text-sm" style="color: #6b7280 !important;">Jahre Erfahrung</div>
+        </div>
+        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
+          <div class="text-2xl font-bold mb-1" style="color: #D2AE6C !important;">50+</div>
+          <div class="text-sm" style="color: #6b7280 !important;">Erfolgreiche Projekte</div>
+        </div>
+        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="text-2xl font-bold mb-1" style="color: #D2AE6C !important;">10-50%</div>
+          <div class="text-sm" style="color: #6b7280 !important;">Kostenreduzierung</div>
+        </div>
+        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="300">
+          <div class="text-2xl font-bold mb-1" style="color: #D2AE6C !important;">100%</div>
+          <div class="text-sm" style="color: #6b7280 !important;">Kundenzufriedenheit</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Services Section -->
+  <section class="py-12 md:py-16" style="background-color: #1f2937 !important;" id="leistungen">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4" style="color: #ffffff !important;">
+          Unser Fokus: Strategische Unternehmensentwicklung
+        </h2>
+        <p class="max-w-3xl mx-auto text-sm md:text-base" style="color: #9ca3af !important;">
+          Spezialisiert auf Unternehmensentwicklung in Baden-Württemberg mit Schwerpunkten in Vertriebsoptimierung, Marketing-Strategien und systematischer Prozessoptimierung für nachhaltiges Wachstum.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
+        <!-- Service 1 -->
+        <article 
+          class="rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
+          style="background-color: #374151 !important; border: 1px solid #6b7280 !important;"
+          data-aos="fade-up"
+          data-aos-delay="100"
+          itemscope 
+          itemtype="https://schema.org/Service"
+        >
+          <div class="p-4 rounded-full mb-4 md:mb-6" style="background-color: rgba(210, 174, 108, 0.2) !important;" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10" style="color: #D2AE6C !important;">
+              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark dark:text-text-light leading-tight" itemprop="name">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 leading-tight" style="color: #ffffff !important;" itemprop="name">
+            Strategische Unternehmens&shy;entwicklung
+          </h3>
+          <p class="mb-4 md:mb-6 text-sm md:text-base" style="color: #d1d5db !important;" itemprop="description">
+            Entwicklung nachhaltiger Strategien für Wachstum, Wettbewerbsfähigkeit und langfristige Marktführerschaft in Baden-Württemberg.
+          </p>
+          <a href="/leistung/strategische-unternehmensentwicklung" 
+             class="font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             style="color: #D2AE6C !important;"
+             aria-label="Mehr über strategische Unternehmensentwicklung erfahren">
+            Mehr erfahren
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </article>
+        
+        <!-- Service 2 -->
+        <article 
+          class="rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
+          style="background-color: #374151 !important; border: 1px solid #6b7280 !important;"
+          data-aos="fade-up"
+          data-aos-delay="200"
+          itemscope 
+          itemtype="https://schema.org/Service"
+        >
+          <div class="p-4 rounded-full mb-4 md:mb-6" style="background-color: rgba(210, 174, 108, 0.2) !important;" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10" style="color: #D2AE6C !important;">
+              <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
+            </svg>
+          </div>
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 leading-tight" style="color: #ffffff !important;" itemprop="name">
             Vertriebs&shy;optimierung
           </h3>
-          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base" itemprop="description">
+          <p class="mb-4 md:mb-6 text-sm md:text-base" style="color: #d1d5db !important;" itemprop="description">
             Systematische Optimierung Ihrer Vertriebsprozesse und erfolgreiche Erschließung neuer Märkte und Kundensegmente.
           </p>
           <a href="/leistung/vertriebsoptimierung" 
-             class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             class="font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             style="color: #D2AE6C !important;"
              aria-label="Mehr über Vertriebsoptimierung erfahren">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1" aria-hidden="true">
@@ -19,25 +154,27 @@
         
         <!-- Service 3 -->
         <article 
-          class="bg-light-darker dark:bg-dark-lighter rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 service-card"
+          class="rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
+          style="background-color: #374151 !important; border: 1px solid #6b7280 !important;"
           data-aos="fade-up"
           data-aos-delay="300"
           itemscope 
           itemtype="https://schema.org/Service"
         >
-          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
+          <div class="p-4 rounded-full mb-4 md:mb-6" style="background-color: rgba(210, 174, 108, 0.2) !important;" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10" style="color: #D2AE6C !important;">
               <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark dark:text-text-light leading-tight" itemprop="name">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 leading-tight" style="color: #ffffff !important;" itemprop="name">
             Marketing-Strategien
           </h3>
-          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base" itemprop="description">
+          <p class="mb-4 md:mb-6 text-sm md:text-base" style="color: #d1d5db !important;" itemprop="description">
             Entwicklung zielgerichteter Marketingkonzepte für erhöhte Sichtbarkeit, Kundenbindung und nachhaltiges Wachstum.
           </p>
           <a href="/leistung/marketing-strategien" 
-             class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             class="font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             style="color: #D2AE6C !important;"
              aria-label="Mehr über Marketing-Strategien erfahren">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1" aria-hidden="true">
@@ -48,25 +185,27 @@
         
         <!-- Service 4 -->
         <article 
-          class="bg-light-darker dark:bg-dark-lighter rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 service-card"
+          class="rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
+          style="background-color: #374151 !important; border: 1px solid #6b7280 !important;"
           data-aos="fade-up"
           data-aos-delay="400"
           itemscope 
           itemtype="https://schema.org/Service"
         >
-          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
+          <div class="p-4 rounded-full mb-4 md:mb-6" style="background-color: rgba(210, 174, 108, 0.2) !important;" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10" style="color: #D2AE6C !important;">
               <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark dark:text-text-light leading-tight" itemprop="name">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 leading-tight" style="color: #ffffff !important;" itemprop="name">
             Optimierung von Prozessen & Produkten
           </h3>
-          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base" itemprop="description">
+          <p class="mb-4 md:mb-6 text-sm md:text-base" style="color: #d1d5db !important;" itemprop="description">
             Effiziente Prozessgestaltung und systematische Produktoptimierung durch bewährte Value Management Methoden.
           </p>
           <a href="/leistung/wertanalyse" 
-             class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             class="font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
+             style="color: #D2AE6C !important;"
              aria-label="Mehr über Wertanalyse und Prozessoptimierung erfahren">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1" aria-hidden="true">
@@ -79,13 +218,13 @@
   </section>
   
   <!-- Value Analysis Section -->
-  <section class="py-12 md:py-16 bg-light-darker dark:bg-dark-lighter" id="value-management">
+  <section class="py-12 md:py-16" style="background-color: #374151 !important;" id="value-management">
     <div class="container mx-auto px-4">
       <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-text-dark dark:text-text-light mb-4">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4" style="color: #ffffff !important;">
           Value Management: Messbare Ergebnisse für Ihr Unternehmen
         </h2>
-        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
+        <p class="max-w-3xl mx-auto text-sm md:text-base" style="color: #9ca3af !important;">
           Mit systematischem Value Management helfen wir Ihnen dabei, Ihre Produkte und Prozesse im gesamten Unternehmen messbar zu verbessern. Unsere bewährten Methoden führen zu konkreten, nachhaltigen Ergebnissen.
         </p>
       </div>
@@ -119,145 +258,21 @@
           delay={400}
         />
       </div>
-      
-      <div class="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-        <!-- Additional Benefits -->
-        <article 
-          class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <div class="flex flex-col items-center">
-            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Qualität des Produkts gesteigert</h3>
-            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Höhere Produkt&shy;qualität und Kunden&shy;zufriedenheit durch systematische, kundenorientierte Optimierung.</p>
-          </div>
-        </article>
-        
-        <article 
-          class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <div class="flex flex-col items-center">
-            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Funktionalität für den Kunden gesteigert</h3>
-            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Verbesserte Produkt&shy;funktionen und optimierte Nutzer&shy;erfahrung durch bedarfs&shy;orientierte Entwicklung.</p>
-          </div>
-        </article>
-        
-        <article 
-          class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 text-center"
-          data-aos="fade-up"
-          data-aos-delay="300"
-        >
-          <div class="flex flex-col items-center">
-            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center" aria-hidden="true">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-base md:text-lg font-semibold text-text-dark dark:text-text-light mb-2">Verbesserung der Kommunikation</h3>
-            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Optimierte Kommunikations&shy;strukturen im Unternehmen für effektivere Zusammenarbeit und bessere Ergebnisse.</p>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Approach Section -->
-  <section class="py-12 md:py-16 bg-light dark:bg-dark" id="vorgehensweise">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-10 md:mb-16" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-text-dark dark:text-text-light mb-4">
-          In 4 bewährten Schritten zum nachhaltigen Erfolg
-        </h2>
-        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
-          Unser systematischer und bewährter Ansatz führt Ihr Unternehmen zielgerichtet zu messbaren, nachhaltigen Erfolgen. Von der tiefgehenden Analyse bis zur erfolgreichen Implementierung effizienter Lösungen begleiten wir Sie professionell auf jedem Schritt.
-        </p>
-      </div>
-      
-      <!-- Process Steps -->
-      <div class="relative">
-        <!-- Process Line (desktop only) -->
-        <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-primary-gold/30 -translate-y-1/2 z-0" aria-hidden="true"></div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          <!-- Step 1 -->
-          <article class="relative z-10" data-aos="fade-up" data-aos-delay="100">
-            <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10" aria-label="Schritt 1">
-                1
-              </div>
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 md:mb-3 text-center">Detaillierte Analyse</h3>
-              <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
-                <p class="text-text-muted text-sm md:text-base">Umfassende Bestandsaufnahme und systematische Identifikation von Optimierungspotenzialen und strategischen Herausforderungen.</p>
-              </div>
-            </div>
-          </article>
-          
-          <!-- Step 2 -->
-          <article class="relative z-10" data-aos="fade-up" data-aos-delay="200">
-            <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10" aria-label="Schritt 2">
-                2
-              </div>
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 md:mb-3 text-center">Maßgeschneiderte Strategie</h3>
-              <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
-                <p class="text-text-muted text-sm md:text-base">Entwicklung individueller, nachhaltiger Strategien und praxisorientierter Lösungsansätze für Ihre spezifischen Unternehmensbedürfnisse.</p>
-              </div>
-            </div>
-          </article>
-          
-          <!-- Step 3 -->
-          <article class="relative z-10" data-aos="fade-up" data-aos-delay="300">
-            <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10" aria-label="Schritt 3">
-                3
-              </div>
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 md:mb-3 text-center">Professionelle Umsetzung</h3>
-              <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
-                <p class="text-text-muted text-sm md:text-base">Systematische und begleitete Implementation der erarbeiteten Strategien in Ihrem Unternehmen mit kontinuierlicher Erfolgskontrolle.</p>
-              </div>
-            </div>
-          </article>
-          
-          <!-- Step 4 -->
-          <article class="relative z-10" data-aos="fade-up" data-aos-delay="400">
-            <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10" aria-label="Schritt 4">
-                4
-              </div>
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 md:mb-3 text-center">Nachhaltige Ergebnisse</h3>
-              <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
-                <p class="text-text-muted text-sm md:text-base">Messbare, langfristige Verbesserungen und nachhaltige Optimierung Ihrer Unternehmensprozesse mit kontinuierlicher Betreuung.</p>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="py-12 md:py-16 bg-primary-gold/10 dark:bg-primary-gold/5">
+  <section class="py-12 md:py-16" style="background-color: rgba(210, 174, 108, 0.1) !important;">
     <div class="container mx-auto px-4 text-center" data-aos="fade-up">
-      <h2 class="text-2xl md:text-3xl font-bold text-text-dark dark:text-text-light mb-4">
+      <h2 class="text-2xl md:text-3xl font-bold mb-4" style="color: #111827 !important;">
         Bereit für nachhaltiges Wachstum?
       </h2>
-      <p class="text-text-muted max-w-2xl mx-auto mb-8 text-base md:text-lg">
+      <p class="max-w-2xl mx-auto mb-8 text-base md:text-lg" style="color: #6b7280 !important;">
         Vereinbaren Sie jetzt Ihr kostenloses Erstgespräch und erfahren Sie, wie Sie Ihr Unternehmen mit bewährten Strategien zum Erfolg führen können.
       </p>
       <a href="/kontakt" 
-         class="inline-flex items-center bg-primary-gold text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-gold/90 transition-colors text-lg cta-button"
+         class="inline-flex items-center px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
+         style="background-color: #D2AE6C !important; color: #ffffff !important; text-decoration: none !important;"
          aria-label="Kostenloses Erstgespräch vereinbaren">
         Kostenloses Erstgespräch vereinbaren
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2" aria-hidden="true">
@@ -267,7 +282,7 @@
     </div>
   </section>
 
-  <!-- Enhanced Schema.org JSON-LD für SEO Pro -->
+  <!-- Schema.org JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -284,11 +299,6 @@
       "addressRegion": "Baden-Württemberg",
       "addressCountry": "DE"
     },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "48.3333",
-      "longitude": "8.3167"
-    },
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+497440913367",
@@ -301,502 +311,7 @@
       "name": "Dominik Maier",
       "jobTitle": "Unternehmensberater & Interim Manager"
     },
-    "areaServed": {
-      "@type": "State",
-      "name": "Baden-Württemberg",
-      "containedInPlace": {
-        "@type": "Country",
-        "name": "Deutschland"
-      }
-    },
-    "serviceType": [
-      "Strategische Unternehmensentwicklung",
-      "Vertriebsoptimierung", 
-      "Marketing-Strategien",
-      "Value Management",
-      "Interim Management",
-      "Prozessoptimierung"
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "reviewCount": "50",
-      "bestRating": "5",
-      "worstRating": "1"
-    }
-  }
-  </script>
-
-  <!-- Service Schema -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    "name": "Strategische Unternehmensentwicklung Baden-Württemberg",
-    "description": "Professionelle Unternehmensentwicklung und Vertriebsoptimierung für nachhaltiges Wachstum",
-    "provider": {
-      "@type": "Organization",
-      "name": "Dominik Maier Coaching & Interim Management"
-    },
-    "areaServed": "Baden-Württemberg",
-    "serviceType": "Business Consulting",
-    "offers": {
-      "@type": "Offer",
-      "description": "Kostenloses Erstgespräch für Unternehmensentwicklung"
-    }
+    "areaServed": "Baden-Württemberg"
   }
   </script>
 </Layout>
-
-<style>
-  @keyframes subtle-zoom {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-  
-  .animate-subtle-zoom {
-    animation: subtle-zoom 20s infinite ease-in-out;
-  }
-  
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-20px);
-    }
-  }
-  
-  .animate-float {
-    animation: float 8s infinite ease-in-out;
-  }
-  
-  .hyphens-auto {
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-  }
-  
-  .break-words {
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  
-  /* Accessibility */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-subtle-zoom,
-    .animate-float {
-      animation: none;
-    }
-  }
-</style>---
-// src/pages/index.astro v2.1 (EMERGENCY TEXT VISIBILITY FIX)
-// Homepage - Statische Seite mit prerender + Advanced SEO
-
-// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
-export const prerender = true;
-
-import Layout from '../layouts/Layout.astro';
-import ContactForm from '../components/ContactForm.astro';
-import CircularProgressCard from '../components/CircularProgressCard.astro';
-
-console.log('🏠 Index v2.1 loaded - EMERGENCY TEXT VISIBILITY FIX');
----
-
-<!-- ✅ EMERGENCY CSS FIX - Macht alle Texte sofort sichtbar -->
-<style>
-  /* CRITICAL: Emergency Text Visibility Fix */
-  body {
-    color: #ffffff !important;
-    background-color: #1f2937 !important;
-    font-family: 'Montserrat', system-ui, sans-serif !important;
-  }
-  
-  /* Headlines - IMMER sichtbar */
-  h1, h2, h3, h4, h5, h6 {
-    color: #ffffff !important;
-    font-weight: 600 !important;
-    margin-bottom: 1rem !important;
-    line-height: 1.2 !important;
-  }
-  
-  h1 { font-size: 2.5rem !important; }
-  h2 { font-size: 2rem !important; }
-  h3 { font-size: 1.75rem !important; }
-  
-  /* Paragraphs - IMMER sichtbar */
-  p, span, div, article, section {
-    color: #e5e7eb !important;
-  }
-  
-  /* Links - Gold mit Kontrast */
-  a {
-    color: #D2AE6C !important;
-    text-decoration: none !important;
-  }
-  
-  a:hover {
-    color: #F3E5AB !important;
-    text-decoration: underline !important;
-  }
-  
-  /* Container */
-  .container {
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    padding: 0 1rem !important;
-  }
-  
-  /* Hero Section Fixes */
-  .hero {
-    min-height: 70vh !important;
-    padding: 4rem 0 !important;
-  }
-  
-  .hero-content h1 {
-    color: #ffffff !important;
-    font-size: 2.5rem !important;
-    font-weight: 700 !important;
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .hero-content p {
-    color: #e5e7eb !important;
-    font-size: 1.125rem !important;
-    margin-bottom: 2rem !important;
-  }
-  
-  /* Service Cards */
-  .service-card {
-    background-color: #374151 !important;
-    border: 1px solid #6b7280 !important;
-    border-radius: 0.75rem !important;
-    padding: 1.5rem !important;
-  }
-  
-  .service-card h3 {
-    color: #ffffff !important;
-    font-size: 1.25rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .service-card p {
-    color: #d1d5db !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  /* Trust Indicators */
-  .trust-indicators .text-2xl {
-    color: #D2AE6C !important;
-    font-size: 1.5rem !important;
-    font-weight: 700 !important;
-  }
-  
-  .trust-indicators .text-sm {
-    color: #9ca3af !important;
-    font-size: 0.875rem !important;
-  }
-  
-  /* Gold Badges */
-  .bg-primary-gold\/20 {
-    background-color: rgba(210, 174, 108, 0.3) !important;
-    color: #ffffff !important;
-    padding: 0.25rem 0.75rem !important;
-    border-radius: 9999px !important;
-    font-size: 0.875rem !important;
-  }
-  
-  /* Buttons */
-  .cta-button, .btn-primary {
-    background-color: #D2AE6C !important;
-    color: #ffffff !important;
-    padding: 0.75rem 1.5rem !important;
-    border-radius: 0.5rem !important;
-    font-weight: 600 !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-    transition: all 0.3s ease !important;
-  }
-  
-  .cta-button:hover, .btn-primary:hover {
-    background-color: #B8941A !important;
-    transform: translateY(-2px) !important;
-  }
-  
-  /* Form Elements */
-  input, textarea, select {
-    background-color: #374151 !important;
-    color: #ffffff !important;
-    border: 1px solid #6b7280 !important;
-    padding: 0.75rem !important;
-    border-radius: 0.5rem !important;
-  }
-  
-  /* Section Backgrounds */
-  .bg-light {
-    background-color: #1f2937 !important;
-  }
-  
-  .bg-light-darker {
-    background-color: #374151 !important;
-  }
-  
-  .bg-primary-gold\/5 {
-    background-color: rgba(210, 174, 108, 0.1) !important;
-  }
-  
-  .bg-primary-gold\/10 {
-    background-color: rgba(210, 174, 108, 0.15) !important;
-  }
-  
-  /* Grid System */
-  .grid {
-    display: grid !important;
-  }
-  
-  .grid-cols-1 {
-    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
-  }
-  
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-  
-  .grid-cols-4 {
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  }
-  
-  .gap-4 { gap: 1rem !important; }
-  .gap-5 { gap: 1.25rem !important; }
-  .gap-8 { gap: 2rem !important; }
-  
-  /* Flexbox */
-  .flex {
-    display: flex !important;
-  }
-  
-  .flex-col {
-    flex-direction: column !important;
-  }
-  
-  .flex-wrap {
-    flex-wrap: wrap !important;
-  }
-  
-  .items-center {
-    align-items: center !important;
-  }
-  
-  .justify-center {
-    justify-content: center !important;
-  }
-  
-  .text-center {
-    text-align: center !important;
-  }
-  
-  /* Spacing */
-  .py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
-  .py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
-  .py-8 { padding-top: 2rem !important; padding-bottom: 2rem !important; }
-  .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
-  .p-5 { padding: 1.25rem !important; }
-  .p-6 { padding: 1.5rem !important; }
-  .p-8 { padding: 2rem !important; }
-  
-  .mb-4 { margin-bottom: 1rem !important; }
-  .mb-6 { margin-bottom: 1.5rem !important; }
-  .mb-8 { margin-bottom: 2rem !important; }
-  .mb-2 { margin-bottom: 0.5rem !important; }
-  .mb-3 { margin-bottom: 0.75rem !important; }
-  .mb-5 { margin-bottom: 1.25rem !important; }
-  
-  /* Shadows */
-  .shadow-xl {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2) !important;
-  }
-  
-  .shadow-md {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1) !important;
-  }
-  
-  /* Rounded */
-  .rounded-lg { border-radius: 0.5rem !important; }
-  .rounded-full { border-radius: 9999px !important; }
-  
-  /* Responsive */
-  @media (min-width: 640px) {
-    .sm\:grid-cols-2 {
-      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    }
-  }
-  
-  @media (min-width: 768px) {
-    .md\:text-4xl { font-size: 2.25rem !important; }
-    .md\:text-3xl { font-size: 1.875rem !important; }
-    .md\:text-2xl { font-size: 1.5rem !important; }
-    .md\:text-xl { font-size: 1.25rem !important; }
-    .md\:text-lg { font-size: 1.125rem !important; }
-    .md\:py-16 { padding-top: 4rem !important; padding-bottom: 4rem !important; }
-    .md\:mb-12 { margin-bottom: 3rem !important; }
-    .md\:gap-8 { gap: 2rem !important; }
-    .md\:gap-10 { gap: 2.5rem !important; }
-    .md\:p-8 { padding: 2rem !important; }
-    .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
-    .md\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-  }
-  
-  @media (min-width: 1024px) {
-    .lg\:text-5xl { font-size: 3rem !important; }
-    .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-  }
-</style>
-
-<Layout 
-  title="Dominik Maier | Strategische Unternehmensentwicklung & Coaching Baden-Württemberg"
-  description="✅ Professionelle Unternehmensentwicklung & Vertriebsoptimierung in Baden-Württemberg. 10-50% Kostenreduzierung durch bewährte Value Management Strategien. Kostenloses Erstgespräch vereinbaren!"
-  keywords="Unternehmensentwicklung Baden-Württemberg, Vertriebsoptimierung, Value Management, Interim Management, Coaching Schwarzwald, Prozessoptimierung"
-  canonical="https://maier-value.com/"
->
-  <!-- Hero Section -->
-  <section class="relative min-h-[70vh] flex items-center py-12 md:py-16 overflow-hidden hero">
-    <!-- Animated Background -->
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/20 dark:from-black/80 dark:to-black/40 z-10"></div>
-      <!-- Main background image - SEO optimiert -->
-      <img 
-        src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2940&auto=format&fit=crop" 
-        alt="Strategische Unternehmensentwicklung und Coaching - Dominik Maier führt erfolgreiches Business Meeting in Baden-Württemberg" 
-        class="absolute inset-0 w-full h-full object-cover animate-subtle-zoom"
-        fetchpriority="high"
-        loading="eager"
-        width="2940"
-        height="1960"
-      />
-      
-      <!-- Logo Overlay -->
-      <div class="absolute inset-0 flex items-center justify-center z-5 opacity-20" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" 
-             class="w-1/2 max-w-2xl animate-float" 
-             viewBox="0 0 1778 1433"
-             role="img"
-             aria-label="Dominik Maier Unternehmensberatung Logo">
-          <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.948,1203.843,634.465C1164.791,595.267,1125.659,556.15,1086.512,517.048C1085.021,515.56,1083.236,514.366,1082.683,513.919C1147.624,448.977,1211.974,384.625,1276.126,320.471C1276.126,535.349,1276.126,750.942,1276.126,966.733C1299.839,966.733,1323.23,966.733,1346.536,966.733C1346.536,693.677,1346.536,420.888,1346.536,147.84ZM557.5,896C540.532,896,524.563,896,508.298,896C508.298,659.685,508.298,423.687,508.298,187.253C514.828,194.314,521.223,201.047,527.408,207.968C533.978,215.32,540.294,222.899,546.816,230.294C559.777,244.989,572.794,259.634,585.807,274.283C591.498,280.69,597.249,287.043,602.947,293.444C616.308,308.452,629.613,323.509,643.021,338.474C650.293,346.592,657.83,354.474,665.07,362.619C677.093,376.145,688.917,389.847,700.931,403.381C710.238,413.864,719.783,424.137,729.086,434.624C740.985,448.038,752.712,461.603,764.582,475.043C770.805,482.09,777.214,488.972,783.468,495.991C796.614,510.744,809.715,525.537,822.831,540.317C830.701,549.185,838.73,557.918,846.394,566.961C860.957,584.143,872.228,603.446,879.606,624.62C884.543,638.787,888.677,653.549,890.562,668.376C892.42,682.996,891.345,698.044,890.917,712.885C890.423,729.964,885.796,746.269,880.002,762.23C872.064,784.095,860.843,804.09,846.296,822.313C831.898,840.35,814.712,855.172,795.173,867.156C776.669,878.505,756.706,886.425,735.376,891.178C718.368,894.968,701.308,896.149,683.977,896.066C641.819,895.864,599.659,896,557.5,896Z" />
-        </svg>
-      </div>
-    </div>
-    
-    <div class="container mx-auto px-4 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center">
-        <div class="text-white hero-content" data-aos="fade-right">
-          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 leading-tight">
-            Erfolg beginnt mit strategischer Unternehmensentwicklung
-          </h1>
-          <p class="text-lg md:text-xl mb-6 md:mb-8">
-            Wir helfen Ihnen Ihre Prozesse und Produkte im Unternehmen weiterzuentwickeln und nachhaltiges Wachstum zu erreichen – mit einem klaren Fokus auf Ihren Kunden und messbare Ergebnisse!
-          </p>
-          <div class="flex flex-wrap gap-2 mb-6" aria-label="Erfolgs-Keywords und Vorteile">
-            <span class="bg-primary-gold/20 text-white px-3 py-1 rounded-full text-sm" data-keyword="kostenreduzierung">10-50% Kostenreduzierung</span>
-            <span class="bg-primary-gold/20 text-white px-3 py-1 rounded-full text-sm" data-keyword="strategische-beratung">Strategische Beratung</span>
-            <span class="bg-primary-gold/20 text-white px-3 py-1 rounded-full text-sm" data-keyword="value-management">Value Management</span>
-            <span class="bg-primary-gold/20 text-white px-3 py-1 rounded-full text-sm" data-keyword="baden-wuerttemberg">Baden-Württemberg</span>
-          </div>
-        </div>
-        
-        <div data-aos="fade-left" data-aos-delay="100">
-          <div class="bg-white dark:bg-dark rounded-lg shadow-xl p-5 md:p-8">
-            <h2 class="text-xl md:text-2xl font-semibold mb-5 md:mb-6 text-text-dark dark:text-text-light">
-              🎯 Kostenloses Erstgespräch vereinbaren
-            </h2>
-            <p class="text-sm text-text-muted mb-4">
-              Erfahren Sie in 30 Minuten, wie Sie Ihr Unternehmen mit bewährten Strategien optimieren können.
-            </p>
-            <ContactForm leadForm={true} />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Trust Indicators -->
-  <section class="py-8 bg-primary-gold/5 dark:bg-primary-gold/10 border-y border-primary-gold/20 trust-indicators">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-        <div class="flex flex-col items-center" data-aos="fade-up">
-          <div class="text-2xl font-bold text-primary-gold mb-1">15+</div>
-          <div class="text-sm text-text-muted">Jahre Erfahrung</div>
-        </div>
-        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="100">
-          <div class="text-2xl font-bold text-primary-gold mb-1">50+</div>
-          <div class="text-sm text-text-muted">Erfolgreiche Projekte</div>
-        </div>
-        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="200">
-          <div class="text-2xl font-bold text-primary-gold mb-1">10-50%</div>
-          <div class="text-sm text-text-muted">Kostenreduzierung</div>
-        </div>
-        <div class="flex flex-col items-center" data-aos="fade-up" data-aos-delay="300">
-          <div class="text-2xl font-bold text-primary-gold mb-1">100%</div>
-          <div class="text-sm text-text-muted">Kundenzufriedenheit</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Services Section (Mein Fokus) -->
-  <section class="py-12 md:py-16 bg-light dark:bg-dark" id="leistungen">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-text-dark dark:text-text-light mb-4">
-          Unser Fokus: Strategische Unternehmensentwicklung
-        </h2>
-        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
-          Spezialisiert auf Unternehmensentwicklung in Baden-Württemberg mit Schwerpunkten in Vertriebsoptimierung, Marketing-Strategien und systematischer Prozessoptimierung für nachhaltiges Wachstum.
-        </p>
-      </div>
-      
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
-        <!-- Service 1 -->
-        <article 
-          class="bg-light-darker dark:bg-dark-lighter rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 service-card"
-          data-aos="fade-up"
-          data-aos-delay="100"
-          itemscope 
-          itemtype="https://schema.org/Service"
-        >
-          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
-              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
-            </svg>
-          </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark dark:text-text-light leading-tight" itemprop="name">
-            Strategische Unternehmens&shy;entwicklung
-          </h3>
-          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base" itemprop="description">
-            Entwicklung nachhaltiger Strategien für Wachstum, Wettbewerbsfähigkeit und langfristige Marktführerschaft in Baden-Württemberg.
-          </p>
-          <a href="/leistung/strategische-unternehmensentwicklung" 
-             class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base" 
-             aria-label="Mehr über strategische Unternehmensentwicklung erfahren">
-            Mehr erfahren
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </article>
-        
-        <!-- Service 2 -->
-        <article 
-          class="bg-light-darker dark:bg-dark-lighter rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 service-card"
-          data-aos="fade-up"
-          data-aos-delay="200"
-          itemscope 
-          itemtype="https://schema.org/Service"
-        >
-          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
-              <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44
