@@ -1,72 +1,380 @@
 ---
+// src/components/ThemeToggle.astro v1.0 (Server-Mode & UX optimiert)
+// Theme Toggle Component - Accessibility & Performance optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
+interface Props {
+  size?: "sm" | "md" | "lg";
+  showLabel?: boolean;
+  position?: "header" | "footer" | "floating";
+  variant?: "button" | "switch" | "minimal";
+  animate?: boolean;
+}
+
+const {
+  size = "md",
+  showLabel = false,
+  position = "header",
+  variant = "button",
+  animate = true
+} = Astro.props;
+
+// Size-Mapping für Icons und Container
+const sizeConfig = {
+  sm: { icon: "w-4 h-4", container: "p-1.5", text: "text-xs" },
+  md: { icon: "w-5 h-5", container: "p-2", text: "text-sm" },
+  lg: { icon: "w-6 h-6", container: "p-2.5", text: "text-base" }
+};
+
+// Variant-spezifische Styles
+const variantClasses = {
+  button: "rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700",
+  switch: "rounded-full bg-gray-200 dark:bg-gray-700 relative overflow-hidden",
+  minimal: "rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+};
+
+// Position-spezifische Styles
+const positionClasses = {
+  header: "transition-colors duration-200",
+  footer: "transition-colors duration-200",
+  floating: "fixed bottom-4 right-4 z-50 shadow-lg backdrop-blur-sm bg-white/80 dark:bg-gray-900/80"
+};
+
+const config = sizeConfig[size];
+const containerClasses = `${config.container} ${variantClasses[variant]} ${positionClasses[position]}`.trim();
+
+console.log(`🌙 ThemeToggle v1.0 loaded - Size: ${size}, Variant: ${variant}, Position: ${position}`);
 ---
 
-<button
-  id="theme-toggle"
-  type="button"
-  class="text-text-dark dark:text-text-light hover:text-primary-gold dark:hover:text-primary-gold focus:outline-none"
-  aria-label="Toggle Dark Mode"
->
-  <!-- Sun icon -->
-  <svg
-    id="theme-toggle-light-icon"
-    class="hidden w-5 h-5"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <path
-      d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-      fill-rule="evenodd"
-      clip-rule="evenodd"
-    ></path>
-  </svg>
+<div class="theme-toggle-wrapper inline-flex items-center">
+  {showLabel && (
+    <label for="theme-toggle" class={`mr-2 ${config.text} font-medium text-text-dark dark:text-text-light`}>
+      Theme:
+    </label>
+  )}
   
-  <!-- Moon icon -->
-  <svg
-    id="theme-toggle-dark-icon"
-    class="hidden w-5 h-5"
-    fill="currentColor"
-    viewBox="0 0 20 20"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
+  <button
+    id="theme-toggle"
+    type="button"
+    class={`${containerClasses} text-text-dark dark:text-text-light hover:text-primary-gold dark:hover:text-primary-gold focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200`}
+    aria-label="Zwischen Hell- und Dunkelmodus wechseln"
+    aria-pressed="false"
+    title="Theme umschalten (Strg+Shift+L)"
   >
-    <path
-      d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"
-    ></path>
-  </svg>
-</button>
+    {variant === "switch" ? (
+      <!-- Switch Variant -->
+      <div class="relative flex items-center w-11 h-6">
+        <div class="theme-switch-track absolute inset-0 rounded-full bg-gray-300 dark:bg-gray-600 transition-colors duration-200"></div>
+        <div class="theme-switch-thumb absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-md transform transition-transform duration-200 dark:translate-x-5 flex items-center justify-center">
+          <!-- Sun icon (Light Mode) -->
+          <svg
+            id="theme-toggle-light-icon"
+            class={`${config.icon} text-yellow-500 transition-opacity duration-200`}
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+            />
+          </svg>
+          
+          <!-- Moon icon (Dark Mode) -->
+          <svg
+            id="theme-toggle-dark-icon"
+            class={`${config.icon} text-gray-600 transition-opacity duration-200`}
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+        </div>
+      </div>
+    ) : (
+      <!-- Button & Minimal Variants -->
+      <div class="relative">
+        <!-- Sun icon (Light Mode) -->
+        <svg
+          id="theme-toggle-light-icon"
+          class={`${config.icon} transition-all duration-300 ${animate ? 'rotate-0 scale-100' : ''}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path
+            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+          />
+        </svg>
+        
+        <!-- Moon icon (Dark Mode) -->
+        <svg
+          id="theme-toggle-dark-icon"
+          class={`${config.icon} absolute inset-0 transition-all duration-300 ${animate ? 'rotate-180 scale-0' : ''}`}
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      </div>
+    )}
+  </button>
+</div>
+
+<style>
+  /* Enhanced Animations */
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-toggle-wrapper svg {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    }
+    
+    /* Rotation Animation für Button Variant */
+    #theme-toggle:not(:disabled):hover svg {
+      transform: rotate(15deg) scale(1.1);
+    }
+    
+    /* Switch Animation */
+    .theme-switch-thumb {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Icon Fade Animation */
+    .theme-icon-fade-out {
+      opacity: 0;
+      transform: rotate(-90deg) scale(0.8);
+    }
+    
+    .theme-icon-fade-in {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+      animation: none !important;
+    }
+    
+    #theme-toggle:hover svg {
+      transform: none !important;
+    }
+  }
+  
+  /* Dark Mode Icon States */
+  .dark #theme-toggle-light-icon {
+    opacity: 0;
+    transform: rotate(180deg) scale(0);
+  }
+  
+  .dark #theme-toggle-dark-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  :not(.dark) #theme-toggle-light-icon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+  
+  :not(.dark) #theme-toggle-dark-icon {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0);
+  }
+  
+  /* Switch Specific Styles */
+  .dark .theme-switch-thumb {
+    transform: translateX(1.25rem);
+    background-color: #374151;
+  }
+  
+  .dark .theme-switch-track {
+    background-color: #D2AE6C;
+  }
+  
+  /* Focus Ring Enhancement */
+  #theme-toggle:focus-visible {
+    outline: 2px solid #D2AE6C;
+    outline-offset: 2px;
+  }
+  
+  /* Floating Position Specific */
+  .floating {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  /* High Contrast Mode */
+  @media (prefers-contrast: high) {
+    #theme-toggle {
+      border: 2px solid currentColor;
+    }
+    
+    #theme-toggle:hover {
+      background-color: currentColor;
+      color: white;
+    }
+  }
+  
+  /* Print Mode */
+  @media print {
+    .theme-toggle-wrapper {
+      display: none;
+    }
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "ThemeToggle v1.0 - Server-Mode & UX optimiert";
+  }
+</style>
 
 <script>
-  // On page load or when changing themes, set the correct icon visibility
   document.addEventListener('DOMContentLoaded', function() {
     const themeToggleBtn = document.getElementById('theme-toggle');
     const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
     const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
     
-    // Check current theme
-    if (document.documentElement.classList.contains('dark')) {
-      themeToggleLightIcon.classList.remove('hidden');
-      themeToggleDarkIcon.classList.add('hidden');
-    } else {
-      themeToggleLightIcon.classList.add('hidden');
-      themeToggleDarkIcon.classList.remove('hidden');
+    if (!themeToggleBtn || !themeToggleLightIcon || !themeToggleDarkIcon) {
+      console.error('Theme toggle elements not found');
+      return;
     }
     
-    // Toggle theme
-    themeToggleBtn.addEventListener('click', function() {
-      // Toggle dark class on html element
-      document.documentElement.classList.toggle('dark');
+    // Enhanced Theme Detection
+    const getStoredTheme = () => localStorage.getItem('theme');
+    const getSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const getCurrentTheme = () => document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    
+    // Update UI based on current theme
+    const updateUI = (theme: string) => {
+      const isDark = theme === 'dark';
       
-      // Toggle icons
-      themeToggleLightIcon.classList.toggle('hidden');
-      themeToggleDarkIcon.classList.toggle('hidden');
+      // Update ARIA pressed state
+      themeToggleBtn.setAttribute('aria-pressed', isDark.toString());
       
-      // Store user preference and mark that user explicitly set the theme
-      const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-      localStorage.setItem('theme', currentTheme);
-      localStorage.setItem('userSetTheme', 'true'); // Mark as explicitly set by user
+      // Update icons with animation classes
+      if (themeToggleLightIcon && themeToggleDarkIcon) {
+        if (isDark) {
+          themeToggleLightIcon.classList.add('theme-icon-fade-out');
+          themeToggleDarkIcon.classList.add('theme-icon-fade-in');
+          themeToggleLightIcon.classList.remove('theme-icon-fade-in');
+          themeToggleDarkIcon.classList.remove('theme-icon-fade-out');
+        } else {
+          themeToggleLightIcon.classList.add('theme-icon-fade-in');
+          themeToggleDarkIcon.classList.add('theme-icon-fade-out');
+          themeToggleLightIcon.classList.remove('theme-icon-fade-out');
+          themeToggleDarkIcon.classList.remove('theme-icon-fade-in');
+        }
+      }
+      
+      // Emit custom event for other components
+      window.dispatchEvent(new CustomEvent('themeChanged', { 
+        detail: { theme, userInitiated: true } 
+      }));
+    };
+    
+    // Initialize UI
+    const currentTheme = getCurrentTheme();
+    updateUI(currentTheme);
+    
+    // Toggle theme function
+    const toggleTheme = () => {
+      const currentTheme = getCurrentTheme();
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      // Apply new theme
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      
+      // Store preference
+      localStorage.setItem('theme', newTheme);
+      localStorage.setItem('userSetTheme', 'true');
+      
+      // Update UI
+      updateUI(newTheme);
+      
+      // Analytics tracking (optional)
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'theme_toggle', {
+          'custom_map': {'theme': newTheme}
+        });
+      }
+    };
+    
+    // Event Listeners
+    themeToggleBtn.addEventListener('click', toggleTheme);
+    
+    // Keyboard shortcut: Ctrl+Shift+L
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'L') {
+        e.preventDefault();
+        toggleTheme();
+      }
+    });
+    
+    // System theme change listener
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't explicitly set theme
+      if (!localStorage.getItem('userSetTheme')) {
+        const newTheme = e.matches ? 'dark' : 'light';
+        
+        if (newTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        
+        updateUI(newTheme);
+      }
+    });
+    
+    // Enhanced error handling
+    window.addEventListener('error', (e) => {
+      if (e.message.includes('theme')) {
+        console.warn('Theme toggle error:', e.message);
+        // Fallback to system theme
+        const systemTheme = getSystemTheme();
+        if (systemTheme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+    });
+    
+    // Announce theme change to screen readers
+    const announceThemeChange = (theme: string) => {
+      const announcement = document.createElement('div');
+      announcement.setAttribute('aria-live', 'polite');
+      announcement.setAttribute('aria-atomic', 'true');
+      announcement.className = 'sr-only';
+      announcement.textContent = `Theme geändert zu ${theme === 'dark' ? 'Dunkelmodus' : 'Hellmodus'}`;
+      
+      document.body.appendChild(announcement);
+      
+      setTimeout(() => {
+        document.body.removeChild(announcement);
+      }, 1000);
+    };
+    
+    // Listen for theme changes and announce them
+    window.addEventListener('themeChanged', (e) => {
+      announceThemeChange(e.detail.theme);
     });
   });
 </script>
