@@ -1,87 +1,177 @@
 ---
+// src/components/NetworkGraph.astro v1.0 (Server-Mode & Performance optimiert)
+// Animiertes Netzwerk-Graph für Unternehmensprozesse - Accessibility & SEO optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 interface Props {
-  complexity?: number; // 1-5
-  size?: "sm" | "md" | "lg" | "xl";
+  complexity?: number; // 1-5 - Anzahl der Netzwerkknoten
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  title?: string; // Für Accessibility
+  description?: string; // SEO & Screen Reader
+  colorScheme?: "gold" | "primary" | "accent";
+  animationSpeed?: "slow" | "normal" | "fast";
+  reducedMotion?: boolean; // Accessibility Override
 }
 
-const { complexity = 3, size = "lg" } = Astro.props;
+const { 
+  complexity = 3, 
+  size = "lg",
+  title = "Netzwerk Visualisierung",
+  description = "Interaktives Diagramm zeigt vernetzte Unternehmensprozesse und Datenflüsse",
+  colorScheme = "gold",
+  animationSpeed = "normal",
+  reducedMotion = false
+} = Astro.props;
 
-// Size mapping
+// Erweiterte Size-Mapping für bessere Flexibilität
 const sizeMap = {
-  sm: "w-16 h-16",
-  md: "w-20 h-20",
-  lg: "w-24 h-24",
-  xl: "w-28 h-28"
+  xs: "w-12 h-12",   // 48px - Für kleine Icons
+  sm: "w-16 h-16",   // 64px - Für Cards
+  md: "w-20 h-20",   // 80px - Standard
+  lg: "w-24 h-24",   // 96px - Für Sections
+  xl: "w-28 h-28",   // 112px - Hero-Bereiche
+  "2xl": "w-32 h-32" // 128px - Featured Content
+};
+
+// Farbschemas für verschiedene Kontexte
+const colorSchemes = {
+  gold: "#D4AF37",
+  primary: "#D2AE6C", 
+  accent: "#B8943A"
+};
+
+// Animationsgeschwindigkeiten
+const speedMap = {
+  slow: { base: 3, variance: 2 },
+  normal: { base: 2, variance: 1 },
+  fast: { base: 1, variance: 0.5 }
 };
 
 const graphSize = sizeMap[size];
+const primaryColor = colorSchemes[colorScheme];
+const speedConfig = speedMap[animationSpeed];
+
+// Eindeutige ID für multiple Instanzen
+const graphId = `network-graph-${Math.random().toString(36).substr(2, 9)}`;
+
+console.log(`🔗 NetworkGraph v1.0 loaded - Complexity: ${complexity}, Size: ${size}, Color: ${colorScheme}`);
 ---
 
-<div class="network-graph" style={`--complexity: ${complexity};`}>
-  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" class={graphSize} aria-hidden="true">
-    <!-- Central node -->
-    <circle cx="50" cy="50" r="6" class="node central-node" />
+<div 
+  class="network-graph" 
+  style={`--complexity: ${complexity}; --primary-color: ${primaryColor};`}
+  id={graphId}
+  data-reduced-motion={reducedMotion}
+>
+  <svg 
+    viewBox="0 0 100 100" 
+    xmlns="http://www.w3.org/2000/svg" 
+    class={graphSize}
+    role="img"
+    aria-labelledby={`${graphId}-title`}
+    aria-describedby={`${graphId}-desc`}
+  >
+    <!-- Accessibility Titles -->
+    <title id={`${graphId}-title`}>{title}</title>
+    <desc id={`${graphId}-desc`}>{description}</desc>
     
-    <!-- Connections and other nodes based on complexity -->
+    <!-- Gradient Definition für bessere Optik -->
+    <defs>
+      <radialGradient id={`${graphId}-node-gradient`} cx="50%" cy="30%">
+        <stop offset="0%" style={`stop-color: ${primaryColor}; stop-opacity: 1`} />
+        <stop offset="100%" style={`stop-color: ${primaryColor}; stop-opacity: 0.8`} />
+      </radialGradient>
+      <linearGradient id={`${graphId}-line-gradient`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" style={`stop-color: ${primaryColor}; stop-opacity: 0.8`} />
+        <stop offset="100%" style={`stop-color: ${primaryColor}; stop-opacity: 0.4`} />
+      </linearGradient>
+    </defs>
+    
+    <!-- Central Hub Node -->
+    <circle 
+      cx="50" 
+      cy="50" 
+      r="6" 
+      class="node central-node"
+      fill={`url(#${graphId}-node-gradient)`}
+    />
+    
+    <!-- Level 2 Nodes - Basic Network -->
     {complexity >= 2 && (
       <>
-        <circle cx="25" cy="30" r="4" class="node" style="--index: 0;" />
-        <line x1="50" y1="50" x2="25" y2="30" class="connection" style="--index: 0;" />
+        <circle cx="25" cy="30" r="4" class="node secondary-node" style="--index: 0;" />
+        <line x1="50" y1="50" x2="25" y2="30" class="connection" style="--index: 0;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="75" cy="30" r="4" class="node" style="--index: 1;" />
-        <line x1="50" y1="50" x2="75" y2="30" class="connection" style="--index: 1;" />
+        <circle cx="75" cy="30" r="4" class="node secondary-node" style="--index: 1;" />
+        <line x1="50" y1="50" x2="75" y2="30" class="connection" style="--index: 1;" stroke={`url(#${graphId}-line-gradient)`} />
       </>
     )}
     
+    <!-- Level 3 Nodes - Extended Network -->
     {complexity >= 3 && (
       <>
-        <circle cx="30" cy="70" r="4" class="node" style="--index: 2;" />
-        <line x1="50" y1="50" x2="30" y2="70" class="connection" style="--index: 2;" />
+        <circle cx="30" cy="70" r="4" class="node secondary-node" style="--index: 2;" />
+        <line x1="50" y1="50" x2="30" y2="70" class="connection" style="--index: 2;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="70" cy="70" r="4" class="node" style="--index: 3;" />
-        <line x1="50" y1="50" x2="70" y2="70" class="connection" style="--index: 3;" />
+        <circle cx="70" cy="70" r="4" class="node secondary-node" style="--index: 3;" />
+        <line x1="50" y1="50" x2="70" y2="70" class="connection" style="--index: 3;" stroke={`url(#${graphId}-line-gradient)`} />
       </>
     )}
     
+    <!-- Level 4 Nodes - Complex Network -->
     {complexity >= 4 && (
       <>
-        <circle cx="15" cy="50" r="3" class="node" style="--index: 4;" />
-        <line x1="50" y1="50" x2="15" y2="50" class="connection" style="--index: 4;" />
+        <circle cx="15" cy="50" r="3" class="node tertiary-node" style="--index: 4;" />
+        <line x1="50" y1="50" x2="15" y2="50" class="connection" style="--index: 4;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="85" cy="50" r="3" class="node" style="--index: 5;" />
-        <line x1="50" y1="50" x2="85" y2="50" class="connection" style="--index: 5;" />
+        <circle cx="85" cy="50" r="3" class="node tertiary-node" style="--index: 5;" />
+        <line x1="50" y1="50" x2="85" y2="50" class="connection" style="--index: 5;" stroke={`url(#${graphId}-line-gradient)`} />
+        
+        <!-- Inter-node connections for complexity -->
+        <line x1="25" y1="30" x2="15" y2="50" class="connection secondary" style="--index: 6;" stroke={`url(#${graphId}-line-gradient)`} />
+        <line x1="75" y1="30" x2="85" y2="50" class="connection secondary" style="--index: 7;" stroke={`url(#${graphId}-line-gradient)`} />
       </>
     )}
     
+    <!-- Level 5 Nodes - Full Mesh Network -->
     {complexity >= 5 && (
       <>
-        <circle cx="40" cy="15" r="3" class="node" style="--index: 6;" />
-        <line x1="50" y1="50" x2="40" y2="15" class="connection" style="--index: 6;" />
+        <circle cx="40" cy="15" r="3" class="node tertiary-node" style="--index: 8;" />
+        <line x1="50" y1="50" x2="40" y2="15" class="connection" style="--index: 8;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="60" cy="15" r="3" class="node" style="--index: 7;" />
-        <line x1="50" y1="50" x2="60" y2="15" class="connection" style="--index: 7;" />
+        <circle cx="60" cy="15" r="3" class="node tertiary-node" style="--index: 9;" />
+        <line x1="50" y1="50" x2="60" y2="15" class="connection" style="--index: 9;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="40" cy="85" r="3" class="node" style="--index: 8;" />
-        <line x1="50" y1="50" x2="40" y2="85" class="connection" style="--index: 8;" />
+        <circle cx="40" cy="85" r="3" class="node tertiary-node" style="--index: 10;" />
+        <line x1="50" y1="50" x2="40" y2="85" class="connection" style="--index: 10;" stroke={`url(#${graphId}-line-gradient)`} />
         
-        <circle cx="60" cy="85" r="3" class="node" style="--index: 9;" />
-        <line x1="50" y1="50" x2="60" y2="85" class="connection" style="--index: 9;" />
+        <circle cx="60" cy="85" r="3" class="node tertiary-node" style="--index: 11;" />
+        <line x1="50" y1="50" x2="60" y2="85" class="connection" style="--index: 11;" stroke={`url(#${graphId}-line-gradient)`} />
+        
+        <!-- Additional mesh connections -->
+        <line x1="40" y1="15" x2="25" y2="30" class="connection tertiary" style="--index: 12;" stroke={`url(#${graphId}-line-gradient)`} />
+        <line x1="60" y1="15" x2="75" y2="30" class="connection tertiary" style="--index: 13;" stroke={`url(#${graphId}-line-gradient)`} />
+        <line x1="40" y1="85" x2="30" y2="70" class="connection tertiary" style="--index: 14;" stroke={`url(#${graphId}-line-gradient)`} />
+        <line x1="60" y1="85" x2="70" y2="70" class="connection tertiary" style="--index: 15;" stroke={`url(#${graphId}-line-gradient)`} />
       </>
     )}
     
-    <!-- Data flow animations -->
-    <g class="data-flows">
-      {Array.from({ length: complexity * 2 }).map((_, i) => (
-        <circle class="data-packet" r="1.5">
-          <animateMotion
-            dur={`${2 + (i % 3)}s`}
-            repeatCount="indefinite"
-            path="M50,50 Q25,30 50,10 T50,50 T75,30 T50,50 T30,70 T50,50 T70,70 T50,50"
-            begin={`${i * 0.5}s`}
-          />
-        </circle>
-      ))}
-    </g>
+    <!-- Data Flow Animations - Conditional rendering based on motion preference -->
+    {!reducedMotion && (
+      <g class="data-flows">
+        {Array.from({ length: Math.min(complexity * 2, 8) }).map((_, i) => (
+          <circle class="data-packet" r="1.5" fill={primaryColor}>
+            <animateMotion
+              dur={`${speedConfig.base + (i % 3) * speedConfig.variance}s`}
+              repeatCount="indefinite"
+              path="M50,50 Q25,30 50,10 T50,50 T75,30 T50,50 T30,70 T50,50 T70,70 T50,50"
+              begin={`${i * 0.5}s`}
+            />
+          </circle>
+        ))}
+      </g>
+    )}
   </svg>
 </div>
 
@@ -90,104 +180,208 @@ const graphSize = sizeMap[size];
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
   }
   
+  /* Node Styles mit CSS Custom Properties */
   .node {
-    fill: #D4AF37;
     opacity: 0;
-    animation: appear 0.5s forwards;
-    animation-delay: calc(var(--index) * 0.1s);
+    animation: appear 0.6s ease-out forwards;
+    animation-delay: calc(var(--index) * 0.15s);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+  
+  .secondary-node {
+    fill: var(--primary-color, #D4AF37);
+  }
+  
+  .tertiary-node {
+    fill: var(--primary-color, #D4AF37);
+    opacity: 0.9;
   }
   
   .central-node {
-    fill: #D4AF37;
     opacity: 1;
-    animation: pulse 2s infinite;
+    animation: pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
   }
   
   @keyframes pulse {
-    0% {
+    0%, 100% {
       r: 6;
       opacity: 1;
+      filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.3));
     }
     50% {
-      r: 6.5;
-      opacity: 0.8;
-    }
-    100% {
-      r: 6;
-      opacity: 1;
+      r: 7;
+      opacity: 0.9;
+      filter: drop-shadow(0 6px 12px rgba(212, 175, 55, 0.5));
     }
   }
   
+  /* Connection Styles */
   .connection {
-    stroke: #D4AF37;
-    stroke-width: 1;
+    stroke-width: 1.5;
     opacity: 0;
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
-    animation: draw-line 1s forwards;
-    animation-delay: calc(var(--index) * 0.1s + 0.2s);
+    animation: draw-line 1.2s ease-out forwards;
+    animation-delay: calc(var(--index) * 0.15s + 0.3s);
+  }
+  
+  .connection.secondary {
+    stroke-width: 1;
+    opacity: 0;
+    animation-delay: calc(var(--index) * 0.1s + 0.8s);
+  }
+  
+  .connection.tertiary {
+    stroke-width: 0.8;
+    opacity: 0;
+    animation-delay: calc(var(--index) * 0.1s + 1.2s);
   }
   
   .data-packet {
-    fill: #D4AF37;
-    opacity: 0.8;
+    opacity: 0.7;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
   }
   
   @keyframes appear {
-    to {
+    0% {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    100% {
       opacity: 1;
+      transform: scale(1);
     }
   }
   
   @keyframes draw-line {
-    to {
+    0% {
+      opacity: 0;
+      stroke-dashoffset: 100;
+    }
+    20% {
+      opacity: 0.8;
+    }
+    100% {
       opacity: 0.6;
       stroke-dashoffset: 0;
     }
   }
   
-  /* Restart animations when element comes into view */
-  .network-graph.restart-animation .node:not(.central-node) {
-    animation: appear 0.5s forwards;
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .network-graph svg {
+      max-width: 80px;
+      max-height: 80px;
+    }
   }
   
-  .network-graph.restart-animation .connection {
-    animation: draw-line 1s forwards;
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .node,
+    .connection {
+      animation: none !important;
+      opacity: 1 !important;
+      stroke-dasharray: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+    
+    .central-node {
+      animation: none !important;
+    }
+    
+    .data-flows {
+      display: none;
+    }
+  }
+  
+  /* Reduced Motion Override */
+  [data-reduced-motion="true"] .node,
+  [data-reduced-motion="true"] .connection {
+    animation: none !important;
+    opacity: 1 !important;
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+  
+  [data-reduced-motion="true"] .central-node {
+    animation: none !important;
+  }
+  
+  [data-reduced-motion="true"] .data-flows {
+    display: none;
+  }
+  
+  /* Dark Mode Optimization */
+  @media (prefers-color-scheme: dark) {
+    .node {
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) brightness(1.1);
+    }
+    
+    .central-node {
+      filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.4)) brightness(1.2);
+    }
+  }
+  
+  /* Print Styles */
+  @media print {
+    .network-graph {
+      filter: grayscale(1);
+    }
+    
+    .data-flows {
+      display: none;
+    }
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "NetworkGraph v1.0 - Server-Mode & Performance optimiert";
   }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Handle animation restart when scrolling into view
+    // Intersection Observer für bessere Performance
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // Reset and restart animations
           const graph = entry.target;
+          const isReducedMotion = graph.dataset.reducedMotion === 'true';
           
-          // Reset node animations
+          // Skip animation restart if reduced motion is enabled
+          if (isReducedMotion) return;
+          
+          // Restart animations when scrolling into view
+          const restartAnimation = (elements, animationName, baseDelay = 0) => {
+            elements.forEach(element => {
+              const index = parseInt(element.style.getPropertyValue('--index')) || 0;
+              element.style.animation = 'none';
+              void element.offsetWidth; // Force reflow
+              element.style.animation = `${animationName} 0.6s ease-out forwards`;
+              element.style.animationDelay = `${index * 0.15 + baseDelay}s`;
+            });
+          };
+          
+          // Restart node animations
           const nodes = graph.querySelectorAll('.node:not(.central-node)');
-          nodes.forEach(node => {
-            node.style.animation = 'none';
-            void node.offsetWidth;
-            node.style.animation = 'appear 0.5s forwards';
-            node.style.animationDelay = `calc(${node.style.getPropertyValue('--index')} * 0.1s)`;
-          });
+          restartAnimation(nodes, 'appear', 0);
           
-          // Reset connection animations
+          // Restart connection animations  
           const connections = graph.querySelectorAll('.connection');
-          connections.forEach(connection => {
-            connection.style.animation = 'none';
-            void connection.offsetWidth;
-            connection.style.animation = 'draw-line 1s forwards';
-            connection.style.animationDelay = `calc(${connection.style.getPropertyValue('--index')} * 0.1s + 0.2s)`;
-          });
+          restartAnimation(connections, 'draw-line', 0.3);
+          
         }
       });
     }, {
-      threshold: 0.3
+      threshold: 0.2,
+      rootMargin: '50px'
     });
     
     // Observe all network graphs
