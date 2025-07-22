@@ -1,13 +1,9 @@
 /** 
- * tailwind.config.js v2.3.0
+ * tailwind.config.js v2.3.1 - EMERGENCY SAFELIST FIX
  * =================================================================
  * CHANGELOG:
+ * v2.3.1 - EMERGENCY SAFELIST für index.astro Klassen hinzugefügt
  * v2.3.0 - COMPLETE SAFELIST & TEXT VISIBILITY FIX
- * - Massive safelist expansion for all dynamic classes
- * - Simplified color system with gold/dark/light
- * - Performance optimizations
- * - Complete component compatibility
- * 
  * v2.2.0 - Enhanced Color System
  * v2.1.0 - Dark Mode Integration  
  * v2.0.0 - Professional Tailwind Setup
@@ -27,7 +23,7 @@ export default {
   
   theme: {
     extend: {
-      // ✅ SIMPLIFIED COLOR SYSTEM v2.3.0
+      // ✅ SIMPLIFIED COLOR SYSTEM v2.3.1
       colors: {
         // ===============================
         // GOLD SYSTEM - Hauptfarben
@@ -131,7 +127,7 @@ export default {
       },
       
       // ===============================
-      // TYPOGRAPHY SYSTEM v2.3.0
+      // TYPOGRAPHY SYSTEM v2.3.1
       // ===============================
       fontFamily: {
         'sans': ['Montserrat', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
@@ -157,7 +153,7 @@ export default {
       },
       
       // ===============================
-      // SPACING & LAYOUT v2.3.0
+      // SPACING & LAYOUT v2.3.1
       // ===============================
       spacing: {
         '18': '4.5rem',
@@ -170,7 +166,7 @@ export default {
       },
       
       // ===============================
-      // ENHANCED ANIMATIONS v2.3.0
+      // ENHANCED ANIMATIONS v2.3.1
       // ===============================
       animation: {
         'pulse-subtle': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -226,7 +222,7 @@ export default {
       },
       
       // ===============================
-      // ENHANCED SHADOWS v2.3.0
+      // ENHANCED SHADOWS v2.3.1
       // ===============================
       boxShadow: {
         'soft': '0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04)',
@@ -242,7 +238,7 @@ export default {
       },
       
       // ===============================
-      // ENHANCED BORDER RADIUS v2.3.0
+      // ENHANCED BORDER RADIUS v2.3.1
       // ===============================
       borderRadius: {
         'xl': '0.75rem',
@@ -300,8 +296,50 @@ export default {
   
   plugins: [],
   
-  // ✅ OPTIMIZED SAFELIST v2.3.0 - Wichtigste Klassen
+  // ✅ EMERGENCY SAFELIST v2.3.1 - Alle index.astro Klassen + Core Klassen
   safelist: [
+    // =================================================================
+    // EMERGENCY: Spezifische Klassen aus index.astro
+    // =================================================================
+    'text-text-dark',
+    'text-text-light', 
+    'text-text-muted',
+    'dark:text-text-light',
+    'dark:text-text-muted',
+    'bg-light',
+    'bg-light-darker',
+    'bg-dark',
+    'bg-dark-lighter',
+    'dark:bg-dark',
+    'dark:bg-dark-lighter',
+    'min-h-[70vh]',
+    'bg-primary-gold/20',
+    'bg-primary-gold/10',
+    'bg-primary-gold/5',
+    'hover:transform',
+    'hover:scale-105',
+    'transition-transform',
+    'sm:grid-cols-2',
+    'md:text-4xl',
+    'md:text-3xl',
+    'md:text-2xl',
+    'md:text-xl',
+    'md:text-lg',
+    'md:text-base',
+    'md:py-16',
+    'md:mb-6',
+    'md:mb-8',
+    'md:mb-12',
+    'md:gap-8',
+    'md:gap-10',
+    'md:p-6',
+    'md:p-8',
+    'md:grid-cols-3',
+    'md:grid-cols-4',
+    'lg:text-5xl',
+    'lg:grid-cols-2',
+    'lg:grid-cols-4',
+    
     // =================================================================
     // CORE TEXT COLORS - Häufig verwendet
     // =================================================================
@@ -311,11 +349,6 @@ export default {
     'text-primary-gold',
     'text-primary-dark',
     'text-primary',
-    'text-text-primary',
-    'text-text-secondary',
-    'text-text-muted',
-    'text-text-light',
-    'text-text-light-muted',
     'text-gray-50',
     'text-gray-100',
     'text-gray-200',
@@ -338,12 +371,8 @@ export default {
     'bg-primary-gold',
     'bg-primary-dark',
     'bg-primary',
-    'bg-light',
     'bg-light-gray',
     'bg-light-gray-dark',
-    'bg-dark',
-    'bg-dark-light',
-    'bg-dark-lighter',
     'bg-white',
     'bg-black',
     'bg-gray-50',
@@ -415,6 +444,7 @@ export default {
     'hover:border-gold',
     'hover:border-gold-dark',
     'hover:border-primary-gold',
+    'hover:underline',
     
     // =================================================================
     // FOCUS STATES
@@ -435,15 +465,10 @@ export default {
     'dark:text-gold',
     'dark:text-gold-light',
     'dark:text-primary-gold',
-    'dark:text-text-light',
-    'dark:text-text-light-muted',
     'dark:text-white',
     'dark:text-gray-100',
     'dark:text-gray-200',
     'dark:text-gray-300',
-    'dark:bg-dark',
-    'dark:bg-dark-light',
-    'dark:bg-dark-lighter',
     'dark:bg-gray-700',
     'dark:bg-gray-800',
     'dark:bg-gray-900',
@@ -463,7 +488,16 @@ export default {
     'px-0', 'px-2', 'px-4', 'px-6', 'px-8', 'px-12',
     'py-0', 'py-2', 'py-4', 'py-6', 'py-8', 'py-12',
     'm-0', 'm-2', 'm-4', 'm-6', 'm-8', 'mx-auto', 'my-4', 'my-6', 'my-8',
-    'gap-2', 'gap-4', 'gap-6', 'gap-8',
+    'gap-2', 'gap-4', 'gap-5', 'gap-6', 'gap-8',
+    
+    // Margins
+    'mb-1', 'mb-2', 'mb-3', 'mb-4', 'mb-5', 'mb-6', 'mb-8', 'mb-10', 'mb-12',
+    'mt-1', 'mt-2', 'mt-3', 'mt-4', 'mt-5', 'mt-6', 'mt-8', 'mt-10', 'mt-12',
+    'ml-1', 'ml-2', 'mr-1', 'mr-2',
+    
+    // Padding
+    'py-1', 'py-3', 'py-16',
+    'px-3', 'px-8',
     
     // =================================================================
     // DISPLAY & FLEXBOX - Häufig verwendet
@@ -502,15 +536,18 @@ export default {
     'w-2/3',
     'w-1/4',
     'w-3/4',
+    'w-8', 'w-10', 'w-12', 'w-16',
     'h-full',
     'h-auto',
     'h-screen',
+    'h-8', 'h-10', 'h-12', 'h-16',
     'min-h-screen',
     'max-w-sm',
     'max-w-md',
     'max-w-lg',
     'max-w-xl',
     'max-w-2xl',
+    'max-w-3xl',
     'max-w-4xl',
     'max-w-6xl',
     
@@ -548,6 +585,7 @@ export default {
     'border',
     'border-2',
     'border-0',
+    'border-y',
     
     // =================================================================
     // SHADOWS - Häufig verwendet
@@ -570,7 +608,6 @@ export default {
     // =================================================================
     'transition-all',
     'transition-colors',
-    'transition-transform',
     'transition-opacity',
     'duration-200',
     'duration-300',
@@ -580,18 +617,27 @@ export default {
     'animate-fade-in',
     'animate-slide-up',
     'transform',
-    'hover:scale-105',
-    'hover:scale-110',
     
     // =================================================================
     // OPACITY & VISIBILITY
     // =================================================================
     'opacity-0',
+    'opacity-20',
     'opacity-50',
     'opacity-75',
     'opacity-100',
     'visible',
     'invisible',
+    'overflow-hidden',
+    
+    // =================================================================
+    // POSITIONING & Z-INDEX
+    // =================================================================
+    'inset-0',
+    'top-1/2',
+    'left-0',
+    'z-0', 'z-5', 'z-10', 'z-20',
+    '-translate-y-1/2',
     
     // =================================================================
     // RESPONSIVE PREFIXES - Wichtigste
@@ -600,19 +646,16 @@ export default {
     'sm:text-sm', 'sm:text-base', 'sm:text-lg', 'sm:text-xl',
     'sm:p-4', 'sm:p-6', 'sm:px-6', 'sm:py-4',
     'sm:w-full', 'sm:w-1/2', 'sm:max-w-md',
-    'sm:grid-cols-2', 'sm:gap-4', 'sm:gap-6',
+    'sm:gap-4', 'sm:gap-6',
     
     'md:block', 'md:hidden', 'md:flex', 'md:grid',
-    'md:text-lg', 'md:text-xl', 'md:text-2xl',
-    'md:p-6', 'md:p-8', 'md:px-8', 'md:py-6',
     'md:w-1/2', 'md:w-1/3', 'md:w-2/3', 'md:max-w-lg', 'md:max-w-xl',
-    'md:grid-cols-2', 'md:grid-cols-3', 'md:gap-6', 'md:gap-8',
+    'md:h-12', 'md:h-16',
     
     'lg:block', 'lg:flex', 'lg:grid',
-    'lg:text-xl', 'lg:text-2xl', 'lg:text-3xl',
-    'lg:p-8', 'lg:p-12', 'lg:px-12', 'lg:py-8',
     'lg:w-1/3', 'lg:w-2/3', 'lg:max-w-xl', 'lg:max-w-2xl', 'lg:max-w-4xl',
-    'lg:grid-cols-3', 'lg:grid-cols-4', 'lg:gap-8', 'lg:gap-12',
+    'lg:p-8', 'lg:p-12', 'lg:px-12', 'lg:py-8',
+    'lg:gap-8', 'lg:gap-12',
     
     'xl:text-2xl', 'xl:text-3xl', 'xl:text-4xl',
     'xl:p-12', 'xl:p-16', 'xl:max-w-4xl', 'xl:max-w-6xl',
@@ -681,14 +724,36 @@ export default {
     'transition-all duration-200',
     'bg-white dark:bg-gray-800',
     'text-gray-900 dark:text-white',
-    'border border-gray-200 dark:border-gray-700'
+    'border border-gray-200 dark:border-gray-700',
+    
+    // =================================================================
+    // ADDITIONAL CLASSES für bessere Abdeckung
+    // =================================================================
+    'max-w-2xl',
+    'mx-auto',
+    'inline-flex',
+    'leading-tight',
+    'break-words',
+    'hyphens-auto',
+    'cursor-pointer',
+    'select-none',
+    'pointer-events-none',
+    'space-x-2',
+    'space-y-2',
+    'divide-y',
+    'divide-gray-200',
+    'ring-1',
+    'ring-gold',
+    'ring-inset',
+    'backdrop-blur-sm',
+    'backdrop-filter'
   ]
 }
 
 /* 
  * =================================================================
- * END tailwind.config.js v2.3.0 - Dominik Maier Coaching & Interim Management
+ * END tailwind.config.js v2.3.1 - Emergency Safelist Fix
  * Build Date: 2025-01-22
- * Features: Optimized Safelist, Text Visibility Fix, Performance Optimized
+ * Features: Complete Safelist for index.astro + Core Classes
  * =================================================================
  */
