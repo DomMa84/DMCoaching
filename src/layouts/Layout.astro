@@ -1,5 +1,5 @@
 ---
-// src/layouts/Layout.astro v2.2 (FIXED: Textsichtbarkeit-Problem behoben)
+// src/layouts/Layout.astro v2.2.1 (EMERGENCY TEXT VISIBILITY FIX)
 // Main Layout - Premium Performance & Accessibility
 
 import Header from '../components/Header.astro';
@@ -52,7 +52,7 @@ const robotsContent = noIndex ?
     "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" :
     "index, follow";
 
-console.log(`🎨 Layout v2.2 loaded - Text Visibility FIXED, Title: ${title.substring(0, 50)}..., Priority: ${priority}`);
+console.log(`🎨 Layout v2.2.1 loaded - EMERGENCY TEXT VISIBILITY FIX, Title: ${title.substring(0, 50)}..., Priority: ${priority}`);
 ---
 
 <!doctype html>
@@ -285,8 +285,8 @@ console.log(`🎨 Layout v2.2 loaded - Text Visibility FIXED, Title: ${title.sub
     </script>
   </head>
 
-  <!-- ✅ FIXED: Korrigierte Tailwind-Klassen für Textsichtbarkeit -->
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased">
+  <!-- ✅ FIXED: Korrigierte Body-Klassen für garantierte Textsichtbarkeit -->
+  <body class="min-h-screen font-sans antialiased text-gray-900 bg-white dark:text-gray-100 dark:bg-gray-900">
     <!-- Enhanced Skip Links -->
     <div class="sr-only">
       <a href="#main-content" class="fixed top-4 left-4 bg-gold text-white px-4 py-2 rounded-md z-50 font-medium focus:not-sr-only">
@@ -390,7 +390,7 @@ console.log(`🎨 Layout v2.2 loaded - Text Visibility FIXED, Title: ${title.sub
     -moz-osx-font-smoothing: grayscale;
   }
   
-  /* ✅ EMERGENCY TEXT VISIBILITY - Falls Tailwind versagt */
+  /* ✅ EMERGENCY TEXT VISIBILITY - Falls global.css versagt */
   body {
     color: #1f2937 !important;
     background-color: #ffffff !important;
