@@ -1,11 +1,20 @@
 ---
+// src/components/Icon.astro v1.0 (Server-Mode & TypeScript optimiert)
+// Universal Icon Component - Wiederverwendbar & Performance optimiert
+
+// ✅ WICHTIG: Komponenten brauchen kein prerender - automatisch statisch im Server-Mode
+
 interface Props {
   iconPath: string;
   fillRule?: string;
   clipRule?: string;
   className?: string;
   viewBox?: string;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  ariaLabel?: string; // SEO & Accessibility
+  role?: "img" | "presentation";
+  strokeWidth?: string;
+  fill?: "currentColor" | "none";
 }
 
 const { 
@@ -14,30 +23,83 @@ const {
   clipRule = "", 
   className = "", 
   viewBox = "0 0 24 24",
-  size = "md"
+  size = "md",
+  ariaLabel,
+  role = ariaLabel ? "img" : "presentation",
+  strokeWidth,
+  fill = "currentColor"
 } = Astro.props;
 
-// Standardized sizes
+// Erweiterte Größenklassen für bessere Flexibilität
 const sizeClasses = {
-  sm: "w-4 h-4",
-  md: "w-6 h-6",
-  lg: "w-8 h-8",
-  xl: "w-10 h-10"
+  xs: "w-3 h-3",    // 12px - Für kleine Buttons/Badges
+  sm: "w-4 h-4",    // 16px - Für Text-Inline Icons
+  md: "w-6 h-6",    // 24px - Standard für UI
+  lg: "w-8 h-8",    // 32px - Für Cards/Sections
+  xl: "w-10 h-10",  // 40px - Für Hero-Bereiche
+  "2xl": "w-12 h-12" // 48px - Für große Feature-Icons
 };
 
 const combinedClasses = `${sizeClasses[size]} text-primary-gold ${className}`.trim();
+
+console.log(`🎨 Icon v1.0 loaded - Size: ${size}, Role: ${role}`);
 ---
 
 <svg 
   xmlns="http://www.w3.org/2000/svg" 
   viewBox={viewBox} 
-  fill="currentColor" 
+  fill={fill}
   class={combinedClasses}
-  aria-hidden="true"
+  aria-hidden={role === "presentation" ? "true" : "false"}
+  role={role}
+  aria-label={ariaLabel}
+  stroke-width={strokeWidth}
 >
   <path 
     d={iconPath} 
-    fill-rule={fillRule} 
-    clip-rule={clipRule}
+    fill-rule={fillRule || undefined}
+    clip-rule={clipRule || undefined}
   />
 </svg>
+
+<style>
+  /* Performance-Optimierung für Icons */
+  svg {
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  
+  /* Hover-Effekte für interaktive Icons */
+  .icon-interactive {
+    transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+  }
+  
+  .icon-interactive:hover {
+    transform: scale(1.1);
+    color: var(--primary-gold-hover, #B8943A);
+  }
+  
+  /* Dark Mode Unterstützung */
+  @media (prefers-color-scheme: dark) {
+    svg {
+      filter: brightness(1.1);
+    }
+  }
+  
+  /* Accessibility - Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    .icon-interactive {
+      transition: none;
+    }
+    
+    .icon-interactive:hover {
+      transform: none;
+    }
+  }
+  
+  /* Footer version info */
+  .footer-version::after {
+    content: "Icon Component v1.0 - Server-Mode & TypeScript optimiert";
+  }
+</style>
