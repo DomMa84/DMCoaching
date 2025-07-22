@@ -1,4 +1,4 @@
-// astro.config.mjs v2.0 (Netlify Server Mode - VOLLSTÄNDIG)
+// astro.config.mjs v2.1 (Netlify Server Mode - Balanced & Error-Free)
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import alpinejs from '@astrojs/alpinejs';
@@ -9,121 +9,89 @@ export default defineConfig({
   // ✅ Site URL für SEO und Canonical URLs
   site: 'https://maier-value.com', // WICHTIG: Deine echte Domain hier eintragen!
   
-  // ✅ Base für Subfolder-Deployments (falls nötig)
-  base: '/',
-  
   // ✅ Integrations
   integrations: [
     tailwind({
-      // Tailwind Config
       config: {
-        applyBaseStyles: false, // Verwende eigene Base Styles
+        applyBaseStyles: false // Verwende eigene Base Styles
       }
     }),
-    alpinejs({
-      // Alpine.js Config für bessere Performance
-      entrypoint: '/src/entrypoint'
-    })
+    alpinejs()
   ],
   
-  // ✅ Server-Modus für Netlify (unterstützt kein hybrid)
+  // ✅ Server-Modus für Netlify
   output: 'server',
   
   // ✅ Netlify Adapter mit optimierten Einstellungen
   adapter: netlify({
-    functionPerRoute: false, // Bessere Performance - alle Routes in einer Function
-    dist: new URL('./dist/', import.meta.url), // Output-Verzeichnis
+    functionPerRoute: false, // Bessere Performance
     binaryMediaTypes: [
-      // Binäre Dateitypen die korrekt verarbeitet werden sollen
       'image/jpeg',
       'image/png', 
       'image/webp',
       'image/svg+xml',
       'image/gif',
-      'application/pdf',
-      'application/zip'
+      'application/pdf'
     ]
   }),
   
   // ✅ Build-Optimierungen
   build: {
-    // Minify für Production
     assets: '_astro',
-    // Server-side rendering
-    serverEntry: 'entry.mjs',
-    // Client-side hydration
-    client: './dist/client/',
-    server: './dist/server/'
+    inlineStylesheets: 'auto' // Automatisches CSS Inlining
   },
   
-  // ✅ Vite-Konfiguration für bessere Performance
+  // ✅ Vite-Konfiguration für Performance
   vite: {
-    // Build-Optimierungen
     build: {
-      cssMinify: 'lightningcss', // Schnellere CSS-Minifizierung
+      cssMinify: true,
+      minify: 'esbuild', // Schnellere Minifizierung
       rollupOptions: {
         output: {
-          // Asset-Namen für besseres Caching
+          // Besseres Caching durch Hashes
           assetFileNames: 'assets/[name]-[hash][extname]',
           chunkFileNames: 'assets/[name]-[hash].js',
           entryFileNames: 'assets/[name]-[hash].js'
         }
       }
     },
-    // Optimiere Dependencies
-    optimizeDeps: {
-      include: [
-        '@astrojs/alpinejs > alpinejs',
-        'aos'
-      ]
-    },
-    // CSS-Verarbeitung
+    // CSS-Optimierung
     css: {
-      transformer: 'lightningcss'
+      devSourcemap: true // Nur für Development
+    },
+    // Dependency-Optimierung
+    optimizeDeps: {
+      include: ['alpinejs']
     }
   },
   
-  // ✅ Markdown-Konfiguration (falls du Blog hinzufügst)
-  markdown: {
-    // Syntax Highlighting
-    syntaxHighlight: 'prism',
-    // Markdown-Plugins
-    remarkPlugins: [],
-    rehypePlugins: []
-  },
-  
-  // ✅ Image-Optimierung
+  // ✅ Image-Service für bessere Bildqualität
   image: {
-    // Unterstützte Formate
-    formats: ['webp', 'avif', 'jpeg', 'png', 'svg'],
-    // Service für Image-Processing
+    formats: ['webp', 'avif', 'jpeg', 'png'],
     service: {
-      entrypoint: 'astro/assets/services/sharp' // Für bessere Bildqualität
+      entrypoint: 'astro/assets/services/sharp'
     }
   },
   
   // ✅ Prefetch-Strategie
   prefetch: {
-    prefetchAll: false, // Nur bei Hover/Focus
+    prefetchAll: false,
     defaultStrategy: 'hover'
   },
   
-  // ✅ Security Headers
+  // ✅ Markdown-Konfiguration (für eventuelle Blog-Posts)
+  markdown: {
+    syntaxHighlight: 'prism',
+    shikiConfig: {
+      theme: 'github-light',
+      wrap: true
+    }
+  },
+  
+  // ✅ Sicherheit
   security: {
-    checkOrigin: true // CSRF-Schutz für Server-Mode
-  },
-  
-  // ✅ Experimentelle Features
-  experimental: {
-    contentCollectionCache: true, // Bessere Performance
-    serverIslands: true // Für partielle Hydration
-  },
-  
-  // ✅ Legacy Browser Support (optional)
-  legacy: {
-    astroFlavoredMarkdown: false // Verwende Standard Markdown
+    checkOrigin: true
   }
 });
 
-// ✅ Console Output für Debugging
-console.log('🚀 Astro Config v2.0 loaded - Server Mode with Netlify optimization enabled');
+console.log('🚀 Astro Config v2.1 loaded - Balanced performance & error-free!');
