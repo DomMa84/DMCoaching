@@ -1,125 +1,452 @@
 /* 
- * src/styles/global.css v2.3.0
+ * src/styles/global.css v2.3.1 - EMERGENCY TEXT VISIBILITY FIX
  * =================================================================
  * CHANGELOG:
+ * v2.3.1 - EMERGENCY FIX für index.astro Textsichtbarkeit
  * v2.3.0 - CRITICAL TEXT VISIBILITY FIX
- * - Emergency text visibility fixes with !important
- * - High contrast colors for Light/Dark mode
- * - Complete component styles (Cards, Buttons, Forms)
- * - Enhanced accessibility features
- * - Performance optimizations
- * 
  * v2.2.0 - Enhanced Tailwind Integration
  * v2.1.0 - Dark Mode Support
  * v2.0.0 - Initial Professional Version
  * =================================================================
  */
 
+/* ✅ EMERGENCY FIX - Macht alle Texte SOFORT sichtbar */
+h1, h2, h3, h4, h5, h6 {
+  color: #111827 !important;
+  font-weight: 600 !important;
+  margin-bottom: 1rem !important;
+  line-height: 1.2 !important;
+}
+
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+  color: #f9fafb !important;
+}
+
+p, span, div, article, section {
+  color: #374151 !important;
+}
+
+.dark p, .dark span, .dark div, .dark article, .dark section {
+  color: #d1d5db !important;
+}
+
+/* ✅ EMERGENCY: Spezifische Klassen aus index.astro */
+.text-text-dark {
+  color: #111827 !important;
+}
+
+.dark .text-text-light {
+  color: #f9fafb !important;
+}
+
+.text-text-muted {
+  color: #6b7280 !important;
+}
+
+.dark .text-text-muted {
+  color: #9ca3af !important;
+}
+
+.text-primary-gold {
+  color: #D2AE6C !important;
+}
+
+.bg-primary-gold {
+  background-color: #D2AE6C !important;
+}
+
+.bg-light {
+  background-color: #ffffff !important;
+}
+
+.dark .bg-dark {
+  background-color: #111827 !important;
+}
+
+.bg-light-darker {
+  background-color: #f3f4f6 !important;
+}
+
+.dark .bg-dark-lighter {
+  background-color: #374151 !important;
+}
+
+/* ✅ EMERGENCY: Container und Layout Klassen */
+.container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* ✅ EMERGENCY: Alle fehlenden Tailwind-Klassen */
+.min-h-\[70vh\] {
+  min-height: 70vh !important;
+}
+
+.text-3xl {
+  font-size: 1.875rem !important;
+  line-height: 2.25rem !important;
+}
+
+.text-2xl {
+  font-size: 1.5rem !important;
+  line-height: 2rem !important;
+}
+
+.text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-lg {
+  font-size: 1.125rem !important;
+  line-height: 1.75rem !important;
+}
+
+.text-base {
+  font-size: 1rem !important;
+  line-height: 1.5rem !important;
+}
+
+.text-sm {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
+.font-medium {
+  font-weight: 500 !important;
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem !important;
+}
+
+.mb-8 {
+  margin-bottom: 2rem !important;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem !important;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem !important;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem !important;
+}
+
+.py-12 {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+}
+
+.py-16 {
+  padding-top: 4rem !important;
+  padding-bottom: 4rem !important;
+}
+
+.py-8 {
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
+}
+
+.px-4 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.px-3 {
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.py-1 {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+}
+
+.p-5 {
+  padding: 1.25rem !important;
+}
+
+.p-6 {
+  padding: 1.5rem !important;
+}
+
+.p-8 {
+  padding: 2rem !important;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem !important;
+}
+
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+.shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ✅ GRID System */
+.grid {
+  display: grid !important;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+.gap-4 {
+  gap: 1rem !important;
+}
+
+.gap-5 {
+  gap: 1.25rem !important;
+}
+
+.gap-8 {
+  gap: 2rem !important;
+}
+
+/* ✅ FLEXBOX */
+.flex {
+  display: flex !important;
+}
+
+.flex-col {
+  flex-direction: column !important;
+}
+
+.flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.items-center {
+  align-items: center !important;
+}
+
+.justify-center {
+  justify-content: center !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+/* ✅ OPACITY & BACKGROUNDS */
+.bg-primary-gold\/20 {
+  background-color: rgba(210, 174, 108, 0.2) !important;
+}
+
+.bg-primary-gold\/10 {
+  background-color: rgba(210, 174, 108, 0.1) !important;
+}
+
+.bg-primary-gold\/5 {
+  background-color: rgba(210, 174, 108, 0.05) !important;
+}
+
+.bg-white {
+  background-color: #ffffff !important;
+}
+
+/* ✅ HOVER STATES */
+.hover\:underline:hover {
+  text-decoration: underline !important;
+}
+
+.hover\:transform:hover {
+  transform: translateX(0) translateY(0) rotate(0) skewX(0) skewY(0) scaleX(1) scaleY(1) !important;
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05) !important;
+}
+
+/* ✅ TRANSITIONS */
+.transition-transform {
+  transition-property: transform !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+  transition-duration: 150ms !important;
+}
+
+/* ✅ RESPONSIVE - Mobile First */
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:text-4xl {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+  }
+  
+  .md\:text-3xl {
+    font-size: 1.875rem !important;
+    line-height: 2.25rem !important;
+  }
+  
+  .md\:text-2xl {
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+  }
+  
+  .md\:text-xl {
+    font-size: 1.25rem !important;
+    line-height: 1.75rem !important;
+  }
+  
+  .md\:text-lg {
+    font-size: 1.125rem !important;
+    line-height: 1.75rem !important;
+  }
+  
+  .md\:text-base {
+    font-size: 1rem !important;
+    line-height: 1.5rem !important;
+  }
+  
+  .md\:py-16 {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+  }
+  
+  .md\:mb-6 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .md\:mb-8 {
+    margin-bottom: 2rem !important;
+  }
+  
+  .md\:mb-12 {
+    margin-bottom: 3rem !important;
+  }
+  
+  .md\:gap-8 {
+    gap: 2rem !important;
+  }
+  
+  .md\:gap-10 {
+    gap: 2.5rem !important;
+  }
+  
+  .md\:p-6 {
+    padding: 1.5rem !important;
+  }
+  
+  .md\:p-8 {
+    padding: 2rem !important;
+  }
+  
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lg\:text-5xl {
+    font-size: 3rem !important;
+    line-height: 1 !important;
+  }
+  
+  .lg\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ✅ CRITICAL: Emergency Text Visibility Base Layer */
+/* ✅ CRITICAL: Basis-Textfarben IMMER sichtbar */
 @layer base {
-  /* =================================================================
-   * EMERGENCY TEXT VISIBILITY - Version 2.3.0
-   * Diese Styles gewährleisten IMMER sichtbare Texte
-   * ================================================================= */
-  
   * {
     box-sizing: border-box;
   }
   
+  /* ✅ EMERGENCY: Basis Textsichtbarkeit */
   html {
     color-scheme: light dark;
-    scroll-behavior: smooth;
-    scroll-padding-top: 80px;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   }
   
-  /* ✅ BODY - Basis Textsichtbarkeit */
   body {
     color: #111827 !important; /* Sehr dunkler Text für Light Mode */
     background-color: #ffffff !important; /* Weißer Hintergrund */
-    font-family: 'Montserrat', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
     line-height: 1.6 !important;
     min-height: 100vh !important;
     font-size: 16px !important;
     -webkit-font-smoothing: antialiased !important;
     -moz-osx-font-smoothing: grayscale !important;
-    text-rendering: optimizeLegibility !important;
   }
   
-  /* ✅ DARK MODE - Kontrastfarben */
+  /* Dark Mode - Kontrastfarben */
   .dark body {
     color: #f9fafb !important; /* Sehr heller Text für Dark Mode */
     background-color: #111827 !important; /* Sehr dunkler Hintergrund */
   }
   
-  /* ✅ HEADLINES - IMMER sichtbar mit Hierarchie */
-  h1, h2, h3, h4, h5, h6 {
-    color: #111827 !important; /* Dunkler Text Light Mode */
-    font-weight: 600 !important;
-    margin-bottom: 1rem !important;
-    line-height: 1.2 !important;
-    font-family: 'Montserrat', sans-serif !important;
-  }
-  
-  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    color: #f9fafb !important; /* Heller Text Dark Mode */
-  }
-  
-  h1 { 
-    font-size: 2.5rem !important; 
-    font-weight: 700 !important;
-    margin-bottom: 1.5rem !important;
-  }
-  h2 { 
-    font-size: 2rem !important; 
-    font-weight: 650 !important;
-    margin-bottom: 1.25rem !important;
-  }
-  h3 { 
-    font-size: 1.75rem !important; 
-    margin-bottom: 1.125rem !important;
-  }
-  h4 { 
-    font-size: 1.5rem !important; 
-    margin-bottom: 1rem !important;
-  }
-  h5 { 
-    font-size: 1.25rem !important; 
-    margin-bottom: 0.875rem !important;
-  }
-  h6 { 
-    font-size: 1.125rem !important; 
-    margin-bottom: 0.75rem !important;
-  }
-  
-  /* ✅ PARAGRAPHS - IMMER sichtbar mit perfektem Kontrast */
+  /* ✅ Paragraphs - IMMER sichtbar */
   p {
     margin-bottom: 1rem !important;
-    color: #374151 !important; /* Mittlerer Grauton Light Mode - perfekt lesbar */
+    color: #374151 !important; /* Mittlerer Grauton Light Mode */
     line-height: 1.6 !important;
-    font-size: 1rem !important;
   }
   
   .dark p {
-    color: #d1d5db !important; /* Heller Grauton Dark Mode - perfekt lesbar */
+    color: #d1d5db !important; /* Heller Grauton Dark Mode */
   }
   
-  /* ✅ LINKS - Gold mit hohem Kontrast */
+  /* ✅ Links - Gold mit Kontrast */
   a {
     color: #D2AE6C !important; /* Gold Farbe */
     text-decoration: none !important;
     transition: color 0.2s ease !important;
-    font-weight: 500 !important;
   }
   
   a:hover {
     color: #B8941A !important; /* Dunkleres Gold beim Hover */
     text-decoration: underline !important;
-    text-underline-offset: 2px !important;
   }
   
   .dark a {
@@ -130,7 +457,7 @@
     color: #D2AE6C !important;
   }
   
-  /* ✅ BUTTONS - Professionell und sichtbar */
+  /* ✅ Buttons - Sichtbar mit Kontrast */
   button {
     background-color: #D2AE6C !important;
     color: #ffffff !important;
@@ -140,31 +467,20 @@
     cursor: pointer !important;
     font-weight: 500 !important;
     font-size: 1rem !important;
-    font-family: inherit !important;
     transition: all 0.2s ease !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    min-height: 44px !important; /* Touch-friendly */
   }
   
   button:hover {
     background-color: #B8941A !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  }
-  
-  button:active {
-    transform: translateY(0) !important;
   }
   
   button:disabled {
     opacity: 0.6 !important;
     cursor: not-allowed !important;
-    transform: none !important;
   }
   
-  /* ✅ FORM ELEMENTS - Hoher Kontrast und Accessibility */
+  /* ✅ Form Elements - Hoher Kontrast */
   input, 
   textarea, 
   select {
@@ -176,9 +492,7 @@
     width: 100% !important;
     font-size: 1rem !important;
     line-height: 1.5 !important;
-    font-family: inherit !important;
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-    min-height: 44px !important; /* Touch-friendly */
   }
   
   .dark input, 
@@ -197,17 +511,7 @@
     outline: none !important;
   }
   
-  input::placeholder,
-  textarea::placeholder {
-    color: #9ca3af !important;
-  }
-  
-  .dark input::placeholder,
-  .dark textarea::placeholder {
-    color: #6b7280 !important;
-  }
-  
-  /* ✅ LABELS - Sichtbar und accessibility-ready */
+  /* ✅ Labels - Sichtbar */
   label {
     color: #374151 !important;
     font-weight: 500 !important;
@@ -220,22 +524,20 @@
     color: #d1d5db !important;
   }
   
-  /* ✅ NAVIGATION - Professionell und sichtbar */
+  /* ✅ Navigation - Sichtbar */
   nav {
     background-color: #ffffff !important;
     border-bottom: 1px solid #e5e7eb !important;
     color: #111827 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   }
   
   .dark nav {
     background-color: #1f2937 !important;
     border-bottom-color: #374151 !important;
     color: #f9fafb !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
   }
   
-  /* ✅ CARDS & CONTAINERS - Modern und sichtbar */
+  /* ✅ Cards & Containers - Sichtbar */
   .card,
   [class*="card"],
   [class*="bg-white"],
@@ -245,13 +547,6 @@
     border-radius: 0.75rem !important;
     padding: 1.5rem !important;
     color: #111827 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    transition: box-shadow 0.2s ease !important;
-  }
-  
-  .card:hover,
-  [class*="card"]:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   }
   
   .dark .card,
@@ -261,40 +556,30 @@
     background-color: #1f2937 !important;
     border-color: #374151 !important;
     color: #f9fafb !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
   }
   
-  .dark .card:hover,
-  .dark [class*="card"]:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
-  }
-  
-  /* ✅ LISTS - Strukturiert und sichtbar */
+  /* ✅ Lists - Sichtbar */
   ul, ol {
     color: inherit !important;
     margin-bottom: 1rem !important;
-    padding-left: 1.5rem !important;
   }
   
   li {
     color: inherit !important;
     margin-bottom: 0.5rem !important;
-    line-height: 1.6 !important;
   }
   
-  /* ✅ TABLES - Professionell und accessible */
+  /* ✅ Tables - Sichtbar */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
     color: inherit !important;
-    margin-bottom: 1rem !important;
   }
   
   th, td {
     padding: 0.75rem !important;
     border: 1px solid #e5e7eb !important;
     color: inherit !important;
-    text-align: left !important;
   }
   
   .dark th, .dark td {
@@ -309,45 +594,11 @@
   .dark th {
     background-color: #374151 !important;
   }
-  
-  /* ✅ BLOCKQUOTES - Styled und sichtbar */
-  blockquote {
-    border-left: 4px solid #D2AE6C !important;
-    padding-left: 1rem !important;
-    margin: 1rem 0 !important;
-    font-style: italic !important;
-    color: #6b7280 !important;
-  }
-  
-  .dark blockquote {
-    color: #9ca3af !important;
-  }
-  
-  /* ✅ CODE - Monospace und sichtbar */
-  code, pre {
-    font-family: 'Monaco', 'Menlo', monospace !important;
-    background-color: #f3f4f6 !important;
-    color: #1f2937 !important;
-    padding: 0.25rem 0.5rem !important;
-    border-radius: 0.25rem !important;
-    font-size: 0.875rem !important;
-  }
-  
-  .dark code, .dark pre {
-    background-color: #374151 !important;
-    color: #e5e7eb !important;
-  }
-  
-  pre {
-    padding: 1rem !important;
-    overflow-x: auto !important;
-    margin-bottom: 1rem !important;
-  }
 }
 
-/* ✅ UTILITY CLASSES - Version 2.3.0 */
+/* ✅ Utility Classes für Emergency Fixes */
 @layer utilities {
-  /* Text Visibility Emergency Classes */
+  /* Text Visibility Utilities */
   .text-visible {
     color: #111827 !important;
   }
@@ -364,7 +615,7 @@
     color: #9ca3af !important;
   }
   
-  /* Background Visibility Classes */
+  /* Background Visibility Utilities */
   .bg-visible {
     background-color: #ffffff !important;
   }
@@ -384,7 +635,7 @@
     border-color: #374151 !important;
   }
   
-  /* Gold Color System */
+  /* Gold Color Utilities */
   .text-gold {
     color: #D2AE6C !important;
   }
@@ -415,62 +666,32 @@
     color: #ffffff !important;
     background-color: #000000 !important;
   }
-  
-  /* Loading States */
-  .loading {
-    animation: pulse 2s cubic-bezier(.4,0,.6,1) infinite;
-  }
-  
-  .fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-  }
-  
-  /* Responsive Text Sizes */
-  .text-responsive {
-    font-size: clamp(1rem, 2.5vw, 1.25rem) !important;
-  }
-  
-  .heading-responsive {
-    font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
-  }
 }
 
-/* ✅ COMPONENT CLASSES - Version 2.3.0 */
+/* ✅ Custom Tailwind Components */
 @layer components {
-  /* Primary Button System */
+  /* Primary Button */
   .btn-primary {
-    @apply bg-gold text-white px-6 py-3 rounded-lg font-medium transition-all duration-200;
+    @apply bg-gold text-white px-6 py-3 rounded-lg font-medium hover:bg-gold/90 transition-all duration-200;
     background-color: #D2AE6C !important;
     color: #ffffff !important;
-    min-height: 44px !important;
   }
   
   .btn-primary:hover {
     background-color: #B8941A !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   /* Secondary Button */
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition-all duration-200;
-    min-height: 44px !important;
+    @apply bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-all duration-200;
   }
   
   .dark .btn-secondary {
-    @apply bg-gray-700 text-gray-200;
+    @apply bg-gray-700 text-gray-200 hover:bg-gray-600;
   }
   
-  .btn-secondary:hover {
-    @apply bg-gray-300;
-    transform: translateY(-1px);
-  }
-  
-  .dark .btn-secondary:hover {
-    @apply bg-gray-600;
-  }
-  
-  /* Text Style Classes */
+  /* Text Styles */
   .text-primary {
     color: #D2AE6C !important;
   }
@@ -492,19 +713,18 @@
     color: #d1d5db !important;
   }
   
-  /* Card Component System */
+  /* Card Component */
   .card {
     background-color: #ffffff !important;
     border: 1px solid #e5e7eb !important;
     border-radius: 0.75rem !important;
     padding: 1.5rem !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
-    transition: all 0.2s ease !important;
+    transition: box-shadow 0.2s ease !important;
   }
   
   .card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-    transform: translateY(-2px);
   }
   
   .dark .card {
@@ -517,7 +737,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
   }
   
-  /* Section Layouts */
+  /* Section Spacing */
   .section {
     padding-top: 4rem !important;
     padding-bottom: 4rem !important;
@@ -529,71 +749,14 @@
     text-align: center !important;
     margin-bottom: 3rem !important;
     color: #111827 !important;
-    line-height: 1.2 !important;
   }
   
   .dark .section-title {
     color: #f9fafb !important;
   }
-  
-  /* Container System */
-  .container {
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-  
-  @media (min-width: 768px) {
-    .container {
-      padding-left: 2rem !important;
-      padding-right: 2rem !important;
-    }
-  }
-  
-  /* Form Components */
-  .form-group {
-    margin-bottom: 1.5rem !important;
-  }
-  
-  .form-input {
-    width: 100% !important;
-    padding: 0.75rem !important;
-    border: 2px solid #d1d5db !important;
-    border-radius: 0.5rem !important;
-    background-color: #ffffff !important;
-    color: #111827 !important;
-    font-size: 1rem !important;
-    transition: border-color 0.2s ease !important;
-  }
-  
-  .dark .form-input {
-    background-color: #374151 !important;
-    border-color: #6b7280 !important;
-    color: #f9fafb !important;
-  }
-  
-  .form-input:focus {
-    border-color: #D2AE6C !important;
-    box-shadow: 0 0 0 3px rgba(210, 174, 108, 0.2) !important;
-    outline: none !important;
-  }
-  
-  .form-label {
-    display: block !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: 500 !important;
-    color: #374151 !important;
-  }
-  
-  .dark .form-label {
-    color: #d1d5db !important;
-  }
 }
 
-/* ✅ GLOBAL ENHANCEMENTS - Version 2.3.0 */
-
-/* Smooth Scrolling */
+/* ✅ Global Enhancements */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
@@ -610,7 +773,7 @@ html {
   color: inherit;
 }
 
-/* Enhanced Scrollbar */
+/* Scrollbar Styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -645,7 +808,7 @@ html {
   scrollbar-color: #D2AE6C #374151;
 }
 
-/* Enhanced Focus Management */
+/* Focus Styles */
 *:focus {
   outline: 2px solid #D2AE6C !important;
   outline-offset: 2px !important;
@@ -661,7 +824,7 @@ html {
   outline-offset: 2px !important;
 }
 
-/* Skip Links for Accessibility */
+/* Accessibility */
 .sr-only {
   position: absolute !important;
   width: 1px !important;
@@ -674,37 +837,7 @@ html {
   border: 0 !important;
 }
 
-.focus\:not-sr-only:focus {
-  position: static !important;
-  width: auto !important;
-  height: auto !important;
-  padding: 0.5rem 1rem !important;
-  margin: 0 !important;
-  overflow: visible !important;
-  clip: auto !important;
-  white-space: normal !important;
-  background-color: #D2AE6C !important;
-  color: #ffffff !important;
-  z-index: 50 !important;
-}
-
-/* Animation Keyframes */
-@keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideUp {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* Reduced Motion Support */
+/* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -714,17 +847,9 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  
-  .card:hover {
-    transform: none !important;
-  }
-  
-  button:hover {
-    transform: none !important;
-  }
 }
 
-/* High Contrast Mode Support */
+/* High Contrast Mode */
 @media (prefers-contrast: high) {
   * {
     border-width: 2px !important;
@@ -737,13 +862,9 @@ html {
   a {
     text-decoration: underline !important;
   }
-  
-  .card {
-    border-width: 2px !important;
-  }
 }
 
-/* Print Optimization */
+/* Print Styles */
 @media print {
   * {
     background: white !important;
@@ -760,9 +881,7 @@ html {
   .no-print,
   nav,
   header,
-  footer,
-  .cookie-consent,
-  button {
+  footer {
     display: none !important;
   }
   
@@ -779,36 +898,11 @@ html {
     max-width: 100% !important;
     page-break-inside: avoid !important;
   }
-  
-  .section {
-    padding: 1rem 0 !important;
-  }
-}
-
-/* Touch Device Optimization */
-@media (pointer: coarse) {
-  button,
-  input,
-  select,
-  textarea,
-  a {
-    min-height: 44px !important;
-    min-width: 44px !important;
-  }
-}
-
-/* ✅ DEBUG HELPER (nur für Development) */
-.debug * {
-  outline: 1px solid red !important;
-}
-
-.debug *:hover {
-  background: rgba(255, 0, 0, 0.1) !important;
 }
 
 /* Version Footer */
 .version-info::after {
-  content: "global.css v2.3.0 - Text Visibility & Performance optimiert";
+  content: "global.css v2.3.1 - Emergency Text Visibility Fix";
   display: block;
   font-size: 0.75rem;
   color: #9ca3af;
@@ -819,7 +913,7 @@ html {
 
 /* 
  * =================================================================
- * END global.css v2.3.0 - Dominik Maier Coaching & Interim Management
+ * END global.css v2.3.1 - Emergency Fix für Textsichtbarkeit
  * Build Date: 2025-01-22
  * =================================================================
  */
