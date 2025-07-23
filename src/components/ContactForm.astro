@@ -1,6 +1,6 @@
 ---
-// src/components/ContactForm.astro v18.2 (Simple JavaScript Fix)
-// ContactForm - EINFACHE Version die garantiert funktioniert
+// src/components/ContactForm.astro v18.3 (FINAL FIX)
+// ContactForm - Alpine.js Variable richtig eingesetzt
 
 interface Props {
   leadForm?: boolean;
@@ -19,21 +19,18 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-// Convert boolean to string for Alpine.js
-const isLeadFormValue = leadForm ? 'true' : 'false';
-
-console.log(`📝 ContactForm v18.2 rendered - ${variant} variant, leadForm: ${leadForm} - SIMPLE FIX`);
+console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${leadForm} - FINAL FIX`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
   <form
     id={formId}
-    x-data="{
+    x-data={`{
         showSuccess: false,
         showError: false,
         errorMessage: '',
         isSubmitting: false,
-        leadForm: isLeadFormValue,
+        leadForm: ${leadForm},
         
         formData: {
             name: '',
@@ -52,7 +49,7 @@ console.log(`📝 ContactForm v18.2 rendered - ${variant} variant, leadForm: ${l
         },
 
         async submitForm() {
-            console.log('=== FORM SUBMISSION v18.2 ===');
+            console.log('=== FORM SUBMISSION v18.3 ===');
             
             if (this.isSubmitting) return;
             
@@ -173,7 +170,7 @@ console.log(`📝 ContactForm v18.2 rendered - ${variant} variant, leadForm: ${l
             this.formData.honeypot = '';
             this.resetValidation();
         }
-    }"
+    }`}
     x-on:submit.prevent="submitForm"
     class="space-y-4 md:space-y-6"
     novalidate
