@@ -273,7 +273,7 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
     </div>
 
     <!-- GDPR Consent - KORRIGIERTES ALIGNMENT -->
-    <div>
+    <div class="space-y-2">
       <div class="flex items-start space-x-3">
         <input
           type="checkbox"
@@ -281,10 +281,10 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
           name="gdprConsent"
           x-model="formData.gdprConsent"
           :class="!validation.gdprConsent ? 'border-red-500' : 'focus:ring-primary-gold'"
-          class="mt-1 h-4 w-4 text-primary-gold border-gray-300 dark:border-gray-600 rounded focus:ring-2 bg-gray-50 dark:bg-gray-700"
+          class="mt-0.5 h-4 w-4 text-primary-gold border-gray-300 dark:border-gray-600 rounded focus:ring-2 bg-gray-50 dark:bg-gray-700"
           required
         />
-        <label for={`${formId}-gdpr`} class="text-sm text-gray-900 dark:text-white">
+        <label for={`${formId}-gdpr`} class="text-sm text-gray-900 dark:text-white leading-relaxed">
           Ich stimme der 
           <a href="/datenschutz" class="text-primary-gold hover:underline" target="_blank">
             Datenschutzerklärung
@@ -293,7 +293,7 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
         </label>
       </div>
       <template x-if="!validation.gdprConsent">
-        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+        <p class="text-sm text-red-600 dark:text-red-400 ml-7">
           Bitte stimmen Sie der Datenschutzerklärung zu.
         </p>
       </template>
