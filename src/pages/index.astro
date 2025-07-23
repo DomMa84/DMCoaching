@@ -1,14 +1,20 @@
 ---
-// src/pages/index.astro - URSPRÜNGLICHES DESIGN WIEDERHERGESTELLT
-// Homepage - Wie Sie es ursprünglich hatten
-
-export const prerender = true;
+// src/pages/index.astro v1.1.0 - FUNKTIONSFÄHIGE STARTSEITE
+// Basiert auf ursprünglicher Version 1, repariert für Layout v1.1.0
+//
+// Version 1.1.0 - 23.07.2025
+// - Alle Text-Klassen an Layout v1.1.0 angepasst
+// - Hero-Section funktionsfähig
+// - Services-Section mit korrekten Farben
+// - Value Management Sektion repariert
+// - 4-Schritte Prozess funktional
+// - Alle AOS Animationen beibehalten
 
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 import CircularProgressCard from '../components/CircularProgressCard.astro';
 
-console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
+console.log('🏠 Index v1.1.0 loaded - Funktionsfähig mit Layout v1.1.0');
 ---
 
 <Layout 
@@ -48,8 +54,8 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
         </div>
         
         <div data-aos="fade-left" data-aos-delay="100">
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-5 md:p-8">
-            <h2 class="text-xl md:text-2xl font-semibold mb-5 md:mb-6 text-gray-900 dark:text-white">Kontaktieren Sie uns</h2>
+          <div class="bg-white rounded-lg shadow-xl p-5 md:p-8">
+            <h2 class="text-xl md:text-2xl font-semibold mb-5 md:mb-6 text-text-dark">Kontaktieren Sie uns</h2>
             <ContactForm leadForm={true} />
           </div>
         </div>
@@ -58,11 +64,11 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
   </section>
   
   <!-- Services Section (Mein Fokus) -->
-  <section class="py-12 md:py-16 bg-gray-50 dark:bg-gray-900">
+  <section class="py-12 md:py-16 bg-light">
     <div class="container mx-auto px-4">
       <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Unser Fokus</h2>
-        <p class="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-sm md:text-base">
+        <h2 class="text-2xl md:text-3xl font-bold text-text-dark mb-4">Unser Fokus</h2>
+        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
           Experten für Unternehmensentwicklung in den Bereichen Vertrieb, Marketing, und Prozessoptimierung.
         </p>
       </div>
@@ -70,18 +76,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
         <!-- Service 1 -->
         <div 
-          class="bg-white dark:bg-gray-800 rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 shadow-md"
+          class="bg-light-darker rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
           data-aos="fade-up"
           data-aos-delay="100"
         >
-          <div class="bg-gold bg-opacity-10 p-4 rounded-full mb-4 md:mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-gold">
+          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
               <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-gray-900 dark:text-white leading-tight">Strategische Unternehmens&shy;entwicklung</h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">Entwicklung nachhaltiger Strategien für Wachstum und Wettbewerbsfähigkeit.</p>
-          <a href="/leistung/strategische-unternehmensentwicklung" class="text-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark leading-tight">Strategische Unternehmens&shy;entwicklung</h3>
+          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base">Entwicklung nachhaltiger Strategien für Wachstum und Wettbewerbsfähigkeit.</p>
+          <a href="/leistung/strategische-unternehmensentwicklung" class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1">
               <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
@@ -91,18 +97,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
         
         <!-- Service 2 -->
         <div 
-          class="bg-white dark:bg-gray-800 rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 shadow-md"
+          class="bg-light-darker rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
           data-aos="fade-up"
           data-aos-delay="200"
         >
-          <div class="bg-gold bg-opacity-10 p-4 rounded-full mb-4 md:mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-gold">
+          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
               <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-gray-900 dark:text-white leading-tight">Vertriebs&shy;optimierung</h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">Optimierung Ihrer Vertriebsprozesse und Erschließung neuer Märkte und Kunden.</p>
-          <a href="/leistung/vertriebsoptimierung" class="text-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark leading-tight">Vertriebs&shy;optimierung</h3>
+          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base">Optimierung Ihrer Vertriebsprozesse und Erschließung neuer Märkte und Kunden.</p>
+          <a href="/leistung/vertriebsoptimierung" class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1">
               <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
@@ -112,18 +118,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
         
         <!-- Service 3 -->
         <div 
-          class="bg-white dark:bg-gray-800 rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 shadow-md"
+          class="bg-light-darker rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
           data-aos="fade-up"
           data-aos-delay="300"
         >
-          <div class="bg-gold bg-opacity-10 p-4 rounded-full mb-4 md:mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-gold">
+          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
               <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-gray-900 dark:text-white leading-tight">Marketing-Strategien</h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">Entwicklung zielgerichteter Marketingkonzepte für mehr Sichtbarkeit und Kundenbindung.</p>
-          <a href="/leistung/marketing-strategien" class="text-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark leading-tight">Marketing-Strategien</h3>
+          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base">Entwicklung zielgerichteter Marketingkonzepte für mehr Sichtbarkeit und Kundenbindung.</p>
+          <a href="/leistung/marketing-strategien" class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1">
               <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
@@ -133,18 +139,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
         
         <!-- Service 4 -->
         <div 
-          class="bg-white dark:bg-gray-800 rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105 shadow-md"
+          class="bg-light-darker rounded-lg p-5 md:p-6 flex flex-col items-center text-center transition-transform hover:transform hover:scale-105"
           data-aos="fade-up"
           data-aos-delay="400"
         >
-          <div class="bg-gold bg-opacity-10 p-4 rounded-full mb-4 md:mb-6">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-gold">
+          <div class="bg-primary-gold/10 p-4 rounded-full mb-4 md:mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 md:w-10 md:h-10 text-primary-gold">
               <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
             </svg>
           </div>
-          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-gray-900 dark:text-white leading-tight">Optimierung von Prozessen & Produkten</h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-4 md:mb-6 text-sm md:text-base">Effiziente Prozessgestaltung und Produktoptimierung durch Value Management.</p>
-          <a href="/leistung/wertanalyse" class="text-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
+          <h3 class="text-lg md:text-xl font-semibold mb-2 md:mb-4 text-text-dark leading-tight">Optimierung von Prozessen & Produkten</h3>
+          <p class="text-text-muted mb-4 md:mb-6 text-sm md:text-base">Effiziente Prozessgestaltung und Produktoptimierung durch Value Management.</p>
+          <a href="/leistung/wertanalyse" class="text-primary-gold font-medium hover:underline mt-auto inline-flex items-center text-sm md:text-base">
             Mehr erfahren
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 md:w-5 md:h-5 ml-1">
               <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
@@ -156,11 +162,11 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
   </section>
   
   <!-- Value Analysis Section -->
-  <section class="py-12 md:py-16 bg-gray-100 dark:bg-gray-800">
+  <section class="py-12 md:py-16 bg-light-darker">
     <div class="container mx-auto px-4">
       <div class="text-center mb-8 md:mb-12" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">Value Management</h2>
-        <p class="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-sm md:text-base">
+        <h2 class="text-2xl md:text-3xl font-bold text-text-dark mb-4">Value Management</h2>
+        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
           Des Weiteren helfen wir Ihnen mit Hilfe des Value Management Ihre Produkte und Prozesse im gesamten Unternehmen zu verbessern. Mit dem Value Management kann folgendes erreicht werden:
         </p>
       </div>
@@ -198,50 +204,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
       <div class="mt-8 md:mt-12 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
         <!-- Additional Benefits -->
         <div 
-          class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 md:p-6 text-center"
+          class="bg-white rounded-lg shadow-md p-5 md:p-6 text-center"
           data-aos="fade-up"
           data-aos-delay="100"
         >
           <div class="flex flex-col items-center">
-            <div class="bg-gold bg-opacity-20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gold">
+            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                 <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
               </svg>
             </div>
-            <h3 class="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2">Qualität des Produkts gesteigert</h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base break-words hyphens-auto">Höhere Produkt&shy;qualität und Kunden&shy;zufriedenheit durch systematische Optimierung.</p>
-          </div>
-        </div>
-        
-        <div 
-          class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 md:p-6 text-center"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <div class="flex flex-col items-center">
-            <div class="bg-gold bg-opacity-20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gold">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2">Funktionalität für den Kunden gesteigert</h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base break-words hyphens-auto">Verbesserte Produkt&shy;funktionen und Nutzer&shy;erfahrung durch bedarfs&shy;orientierte Entwicklung.</p>
-          </div>
-        </div>
-        
-        <div 
-          class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-5 md:p-6 text-center"
-          data-aos="fade-up"
-          data-aos-delay="300"
-        >
-          <div class="flex flex-col items-center">
-            <div class="bg-gold bg-opacity-20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gold">
-                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <h3 class="text-base md:text-lg font-semibold text-gray-900 dark:text-white mb-2">Verbesserung der Kommunikation</h3>
-            <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base break-words hyphens-auto">Optimierte Kommunikations&shy;strukturen im Unternehmen für eine bessere Zusammenarbeit.</p>
+            <h3 class="text-base md:text-lg font-semibold text-text-dark mb-2">Verbesserung der Kommunikation</h3>
+            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Optimierte Kommunikations&shy;strukturen im Unternehmen für eine bessere Zusammenarbeit.</p>
           </div>
         </div>
       </div>
@@ -249,11 +223,11 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
   </section>
   
   <!-- Approach Section -->
-  <section class="py-12 md:py-16 bg-gray-50 dark:bg-gray-900">
+  <section class="py-12 md:py-16 bg-light">
     <div class="container mx-auto px-4">
       <div class="text-center mb-10 md:mb-16" data-aos="fade-up">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">In 4 Schritten zum Erfolg</h2>
-        <p class="text-gray-600 dark:text-gray-300 max-w-3xl mx-auto text-sm md:text-base">
+        <h2 class="text-2xl md:text-3xl font-bold text-text-dark mb-4">In 4 Schritten zum Erfolg</h2>
+        <p class="text-text-muted max-w-3xl mx-auto text-sm md:text-base">
           Unser strukturierter Ansatz führt Ihr Unternehmen zielgerichtet zu messbaren Erfolgen. Von der tiefgehenden Analyse bis zur Implementierung effizienter Lösungen begleiten wir Sie auf jedem Schritt.
         </p>
       </div>
@@ -261,18 +235,18 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
       <!-- Process Steps -->
       <div class="relative">
         <!-- Process Line (desktop only) -->
-        <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-gold bg-opacity-30 -translate-y-1/2 z-0"></div>
+        <div class="hidden md:block absolute top-1/2 left-0 w-full h-0.5 bg-primary-gold/30 -translate-y-1/2 z-0"></div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           <!-- Step 1 -->
           <div class="relative z-10" data-aos="fade-up" data-aos-delay="100">
             <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
+              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
                 1
               </div>
-              <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 text-center">Analyse</h3>
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-5 text-center relative z-10 h-full shadow-md">
-                <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark mb-2 md:mb-3 text-center">Analyse</h3>
+              <div class="bg-light-darker rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
+                <p class="text-text-muted text-sm md:text-base">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
               </div>
             </div>
           </div>
@@ -280,12 +254,12 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
           <!-- Step 2 -->
           <div class="relative z-10" data-aos="fade-up" data-aos-delay="200">
             <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
+              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
                 2
               </div>
-              <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 text-center">Strategie</h3>
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-5 text-center relative z-10 h-full shadow-md">
-                <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Entwicklung maßgeschneiderter Strategien und Lösungsansätze für Ihre spezifischen Bedürfnisse.</p>
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark mb-2 md:mb-3 text-center">Strategie</h3>
+              <div class="bg-light-darker rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
+                <p class="text-text-muted text-sm md:text-base">Entwicklung maßgeschneiderter Strategien und Lösungsansätze für Ihre spezifischen Bedürfnisse.</p>
               </div>
             </div>
           </div>
@@ -293,12 +267,12 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
           <!-- Step 3 -->
           <div class="relative z-10" data-aos="fade-up" data-aos-delay="300">
             <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
+              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
                 3
               </div>
-              <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 text-center">Umsetzung</h3>
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-5 text-center relative z-10 h-full shadow-md">
-                <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark mb-2 md:mb-3 text-center">Umsetzung</h3>
+              <div class="bg-light-darker rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
+                <p class="text-text-muted text-sm md:text-base">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
               </div>
             </div>
           </div>
@@ -306,12 +280,12 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
           <!-- Step 4 -->
           <div class="relative z-10" data-aos="fade-up" data-aos-delay="400">
             <div class="flex flex-col items-center">
-              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
+              <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary-gold flex items-center justify-center text-white text-xl font-bold mb-3 md:mb-4 relative z-10">
                 4
               </div>
-              <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 md:mb-3 text-center">Ergebnisse</h3>
-              <div class="bg-white dark:bg-gray-800 rounded-lg p-4 md:p-5 text-center relative z-10 h-full shadow-md">
-                <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Messbare Verbesserungen und nachhaltige Optimierung Ihrer Unternehmensprozesse.</p>
+              <h3 class="text-lg md:text-xl font-semibold text-text-dark mb-2 md:mb-3 text-center">Ergebnisse</h3>
+              <div class="bg-light-darker rounded-lg p-4 md:p-5 text-center relative z-10 h-full">
+                <p class="text-text-muted text-sm md:text-base">Messbare Verbesserungen und nachhaltige Optimierung Ihrer Unternehmensprozesse.</p>
               </div>
             </div>
           </div>
@@ -359,24 +333,44 @@ console.log('🏠 Index ORIGINAL DESIGN loaded - Wiederhergestellt');
     overflow-wrap: break-word;
   }
   
-  /* Gold color utilities */
-  .text-gold {
-    color: #D2AE6C !important;
+  /* Transform Utilities */
+  .-translate-y-1\/2 {
+    transform: translateY(-50%);
   }
   
-  .bg-gold {
-    background-color: #D2AE6C !important;
+  .h-0\.5 {
+    height: 0.125rem;
   }
-  
-  .bg-opacity-10 {
-    background-color: rgba(210, 174, 108, 0.1) !important;
-  }
-  
-  .bg-opacity-20 {
-    background-color: rgba(210, 174, 108, 0.2) !important;
-  }
-  
-  .bg-opacity-30 {
-    background-color: rgba(210, 174, 108, 0.3) !important;
-  }
-</style>06 1.
+</style>-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <h3 class="text-base md:text-lg font-semibold text-text-dark mb-2">Qualität des Produkts gesteigert</h3>
+            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Höhere Produkt&shy;qualität und Kunden&shy;zufriedenheit durch systematische Optimierung.</p>
+          </div>
+        </div>
+        
+        <div 
+          class="bg-white rounded-lg shadow-md p-5 md:p-6 text-center"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <div class="flex flex-col items-center">
+            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <h3 class="text-base md:text-lg font-semibold text-text-dark mb-2">Funktionalität für den Kunden gesteigert</h3>
+            <p class="text-text-muted text-sm md:text-base break-words hyphens-auto">Verbesserte Produkt&shy;funktionen und Nutzer&shy;erfahrung durch bedarfs&shy;orientierte Entwicklung.</p>
+          </div>
+        </div>
+        
+        <div 
+          class="bg-white rounded-lg shadow-md p-5 md:p-6 text-center"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <div class="flex flex-col items-center">
+            <div class="bg-primary-gold/20 p-3 rounded-full mb-3 inline-flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                <path fill
