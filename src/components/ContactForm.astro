@@ -1,6 +1,6 @@
 ---
-// src/components/ContactForm.astro v18.3 (FINAL FIX)
-// ContactForm - Alpine.js Variable richtig eingesetzt
+// src/components/ContactForm.astro v18.4 - CHECKBOX ALIGNMENT FIX
+// ContactForm - Checkbox ordentlich aligned mit Input-Feldern
 
 interface Props {
   leadForm?: boolean;
@@ -19,7 +19,7 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${leadForm} - FINAL FIX`);
+console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${leadForm} - CHECKBOX FIX`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
@@ -49,7 +49,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
         },
 
         async submitForm() {
-            console.log('=== FORM SUBMISSION v18.3 ===');
+            console.log('=== FORM SUBMISSION v18.4 ===');
             
             if (this.isSubmitting) return;
             
@@ -177,7 +177,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
   >
     <!-- Name Field -->
     <div>
-      <label for={`${formId}-name`} class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+      <label for={`${formId}-name`} class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
         Name *
       </label>
       <input
@@ -185,8 +185,8 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
         id={`${formId}-name`}
         name="name"
         x-model="formData.name"
-        :class="!validation.name ? 'border-red-500' : 'border-light-darkest dark:border-dark-lightest'"
-        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
+        :class="!validation.name ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
         required
         placeholder="Ihr vollständiger Name"
         maxlength="50"
@@ -200,7 +200,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
 
     <!-- Email Field -->
     <div>
-      <label for={`${formId}-email`} class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+      <label for={`${formId}-email`} class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
         E-Mail *
       </label>
       <input
@@ -208,8 +208,8 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
         id={`${formId}-email`}
         name="email"
         x-model="formData.email"
-        :class="!validation.email ? 'border-red-500' : 'border-light-darkest dark:border-dark-lightest'"
-        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
+        :class="!validation.email ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
         required
         placeholder="ihre.email@beispiel.de"
         maxlength="100"
@@ -223,7 +223,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
 
     <!-- Phone Field -->
     <div>
-      <label for={`${formId}-phone`} class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+      <label for={`${formId}-phone`} class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
         Telefon *
       </label>
       <input
@@ -231,8 +231,8 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
         id={`${formId}-phone`}
         name="phone"
         x-model="formData.phone"
-        :class="!validation.phone ? 'border-red-500' : 'border-light-darkest dark:border-dark-lightest'"
-        class="w-full px-4 py-3 rounded-md shadow-sm bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
+        :class="!validation.phone ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'"
+        class="w-full px-4 py-3 rounded-md shadow-sm bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
         required
         placeholder="+49 123 456789"
         maxlength="20"
@@ -247,7 +247,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
     <!-- Message Field -->
     {showMessage && (
       <div>
-        <label for={`${formId}-message`} class="block text-sm font-medium text-text-dark dark:text-text-light mb-2">
+        <label for={`${formId}-message`} class="block text-sm font-medium text-gray-900 dark:text-white mb-2">
           Ihre Nachricht
         </label>
         <textarea
@@ -255,7 +255,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
           name="message"
           x-model="formData.message"
           rows="4"
-          class="w-full px-4 py-3 rounded-md shadow-sm border border-light-darkest dark:border-dark-lightest bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light placeholder-text-muted focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
+          class="w-full px-4 py-3 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:border-primary-gold focus:ring-primary-gold transition-colors duration-300"
           placeholder="Beschreiben Sie kurz Ihr Anliegen..."
           maxlength="1000"
         />
@@ -272,37 +272,39 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
       />
     </div>
 
-    <!-- GDPR Consent -->
-    <div class="flex items-start space-x-3">
-      <input
-        type="checkbox"
-        id={`${formId}-gdpr`}
-        name="gdprConsent"
-        x-model="formData.gdprConsent"
-        :class="!validation.gdprConsent ? 'border-red-500' : 'focus:ring-primary-gold'"
-        class="mt-1 h-4 w-4 text-primary-gold border-light-darkest dark:border-dark-lightest rounded focus:ring-2 bg-light-darker dark:bg-dark-lighter"
-        required
-      />
-      <label for={`${formId}-gdpr`} class="text-sm text-text-dark dark:text-text-light">
-        Ich stimme der 
-        <a href="/datenschutz" class="text-primary-gold hover:underline" target="_blank">
-          Datenschutzerklärung
-        </a> 
-        zu. *
-      </label>
+    <!-- GDPR Consent - KORRIGIERTES ALIGNMENT -->
+    <div>
+      <div class="flex items-start space-x-3">
+        <input
+          type="checkbox"
+          id={`${formId}-gdpr`}
+          name="gdprConsent"
+          x-model="formData.gdprConsent"
+          :class="!validation.gdprConsent ? 'border-red-500' : 'focus:ring-primary-gold'"
+          class="mt-1 h-4 w-4 text-primary-gold border-gray-300 dark:border-gray-600 rounded focus:ring-2 bg-gray-50 dark:bg-gray-700"
+          required
+        />
+        <label for={`${formId}-gdpr`} class="text-sm text-gray-900 dark:text-white">
+          Ich stimme der 
+          <a href="/datenschutz" class="text-primary-gold hover:underline" target="_blank">
+            Datenschutzerklärung
+          </a> 
+          zu. *
+        </label>
+      </div>
+      <template x-if="!validation.gdprConsent">
+        <p class="mt-2 text-sm text-red-600 dark:text-red-400">
+          Bitte stimmen Sie der Datenschutzerklärung zu.
+        </p>
+      </template>
     </div>
-    <template x-if="!validation.gdprConsent">
-      <p class="text-sm text-red-600 dark:text-red-400">
-        Bitte stimmen Sie der Datenschutzerklärung zu.
-      </p>
-    </template>
 
     <!-- Submit Button -->
     <div class="pt-2">
       <button
         type="submit"
         :disabled="isSubmitting"
-        :class="isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark'"
+        :class="isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-gold/90'"
         class="w-full bg-primary-gold text-white font-medium py-3 px-6 rounded-md transition-all duration-300 shadow-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
       >
         <span x-show="!isSubmitting" class="flex items-center justify-center">
@@ -360,7 +362,7 @@ console.log(`📝 ContactForm v18.3 rendered - ${variant} variant, leadForm: ${l
     </template>
     
     <!-- Required Fields Note -->
-    <p class="text-xs text-text-muted mt-4">
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
       * Pflichtfelder - Alle Daten werden DSGVO-konform verarbeitet.
     </p>
   </form>
