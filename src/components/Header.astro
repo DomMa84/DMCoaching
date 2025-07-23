@@ -1,605 +1,382 @@
 ---
-// src/components/Header.astro v1.1 - CSS-KLASSEN VEREINHEITLICHT
-// Header - Navigation component mit korrigierten CSS-Klassen
+// src/components/Footer.astro v1.1 - CSS-KLASSEN VEREINHEITLICHT
+// Footer - Enhanced footer component mit korrigierten CSS-Klassen
 
-import ThemeToggle from './ThemeToggle.astro';
 import Logo from './Logo.astro';
 
 interface Props {
-  variant?: 'default' | 'transparent' | 'minimal';
+  variant?: 'default' | 'minimal' | 'extended';
   showSocial?: boolean;
+  showNewsletter?: boolean;
   className?: string;
-  currentPath?: string;
 }
 
 const {
   variant = 'default',
   showSocial = true,
-  className = "",
-  currentPath = Astro.url.pathname
+  showNewsletter = false,
+  className = ""
 } = Astro.props;
 
-// Navigation structure with enhanced metadata
-const navigation = [
-  {
-    name: 'Home',
-    href: '/',
-    description: 'Startseite - Überblick über unsere Services'
+// Generate current year server-side for better SEO
+const currentYear = new Date().getFullYear();
+
+// Company information for structured data
+const companyInfo = {
+  name: "Dominik Maier Coaching & Interim Management",
+  description: "Experte für strategische Unternehmensentwicklung und Value Management",
+  address: {
+    street: "Gaisbachweg 4",
+    city: "Bad Rippoldsau", 
+    postalCode: "77776",
+    country: "Deutschland"
   },
+  contact: {
+    phone: "+497440913367",
+    email: "webmaster@maier-value.com"
+  },
+  social: {
+    linkedin: "https://www.linkedin.com/in/dominik-maier-22144710a/"
+  }
+};
+
+// Navigation items with enhanced structure
+const footerNavigation = [
   {
-    name: 'Leistungen',
-    href: '/leistungen',
-    description: 'Unsere Beratungsleistungen im Detail',
-    isDropdown: true,
+    label: "Rechtliches",
     items: [
-      {
-        name: 'Strategische Unternehmensentwicklung',
-        href: '/leistung/strategische-unternehmensentwicklung',
-        description: 'Nachhaltige Strategien für Wachstum und Wettbewerbsfähigkeit',
-        icon: 'M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z'
-      },
-      {
-        name: 'Vertriebsoptimierung',
-        href: '/leistung/vertriebsoptimierung',
-        description: 'Optimierung der Vertriebsprozesse und Erschließung neuer Märkte',
-        icon: 'M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z'
-      },
-      {
-        name: 'Marketing-Strategien',
-        href: '/leistung/marketing-strategien',
-        description: 'Zielgerichtete Marketingkonzepte für mehr Sichtbarkeit',
-        icon: 'M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z'
-      },
-      {
-        name: 'Value Management',
-        href: '/leistung/wertanalyse',
-        description: 'Prozess- und Produktoptimierung durch systematische Wertanalyse',
-        icon: 'M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z'
-      }
+      { name: "Impressum", href: "/impressum", rel: "nofollow" },
+      { name: "Datenschutz", href: "/datenschutz", rel: "nofollow" },
+      { name: "AGB", href: "/agb", rel: "nofollow" }
     ]
   },
   {
-    name: 'Über Mich',
-    href: '/ueber-mich',
-    description: '15+ Jahre Erfahrung in Führungspositionen'
+    label: "Services",
+    items: [
+      { name: "Strategische Beratung", href: "/leistung/strategische-unternehmensentwicklung" },
+      { name: "Vertriebsoptimierung", href: "/leistung/vertriebsoptimierung" },
+      { name: "Value Management", href: "/leistung/wertanalyse" }
+    ]
   },
   {
-    name: 'Kontakt',
-    href: '/kontakt',
-    description: 'Kostenloses Erstgespräch vereinbaren'
+    label: "Unternehmen", 
+    items: [
+      { name: "Über uns", href: "/ueber-mich" },
+      { name: "Kontakt", href: "/kontakt" },
+      { name: "Karriere", href: "/karriere" }
+    ]
   }
 ];
 
-// Social media links
-const socialLinks = [
-  {
-    name: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/dominik-maier-22144710a/',
-    icon: 'M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z',
-    ariaLabel: 'Dominik Maier LinkedIn Profil besuchen'
-  }
-];
-
-// Variant classes - KORRIGIERTE CSS-KLASSEN
-const variants = {
-  default: 'bg-gray-100/95 dark:bg-gray-800/95',
-  transparent: 'bg-transparent',
-  minimal: 'bg-white/90 dark:bg-gray-900/90'
-};
-
-// Helper function to check if path is active
-const isActiveLink = (href: string, currentPath: string) => {
-  if (href === '/') {
-    return currentPath === '/';
-  }
-  return currentPath.startsWith(href);
-};
-
-// Generate unique IDs for dropdowns
-const dropdownId = `services-dropdown-${Math.random().toString(36).substr(2, 9)}`;
-const mobileMenuId = `mobile-menu-${Math.random().toString(36).substr(2, 9)}`;
-
-console.log(`🧭 Header v1.1 rendered - ${variant} variant, current path: ${currentPath}`);
+console.log(`🦶 Footer v1.1 rendered - ${variant} variant, year: ${currentYear}`);
 ---
 
-<header 
-  class={`header-container sticky top-0 z-50 w-full ${variants[variant]} ${className} backdrop-blur-md border-b border-gray-300/50 dark:border-gray-600/50 shadow-sm transition-all duration-300`}
-  role="banner"
+<footer 
+  class={`footer-container bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-600 ${className}`}
+  role="contentinfo"
+  aria-label="Website-Footer mit Kontaktinformationen und Links"
 >
-  <div class="container mx-auto px-4 py-3">
-    <div class="flex items-center justify-between">
-      <!-- Logo/Brand -->
-      <a 
-        href="/" 
-        class="flex items-center group" 
-        aria-label="Dominik Maier Coaching - Zur Startseite"
-      >
-        <Logo height={40} class="transition-transform group-hover:scale-105" />
-        <span class="sr-only">Dominik Maier Coaching - Startseite</span>
-      </a>
-      
-      <!-- Mobile Menu Button -->
-      <button 
-        id="menu-toggle" 
-        class="lg:hidden flex items-center p-2 text-gray-900 dark:text-white hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
-        aria-label="Hauptnavigation öffnen"
-        aria-expanded="false"
-        aria-controls={mobileMenuId}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-        </svg>
-      </button>
-      
-      <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center space-x-6" role="navigation" aria-label="Hauptnavigation">
-        {navigation.map((item) => (
-          item.isDropdown ? (
-            <!-- Services als separate Buttons -->
-            <div class="flex items-center space-x-4">
-              {item.items?.map((subItem) => (
-                <a 
-                  href={subItem.href}
-                  class={`nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActiveLink(subItem.href, currentPath) ? 'active bg-primary-gold/10 text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-                  aria-current={isActiveLink(subItem.href, currentPath) ? 'page' : undefined}
-                >
-                  {subItem.name.replace('Strategische Unternehmensentwicklung', 'Strategie').replace('Vertriebsoptimierung', 'Vertrieb').replace('Marketing-Strategien', 'Marketing').replace('Value Management', 'Value Mgmt')}
+  <div class="container mx-auto px-4 py-10">
+    
+    {variant === 'extended' ? (
+      <!-- Extended Footer Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <!-- Company Info -->
+        <div class="lg:col-span-2">
+          <div class="flex flex-col items-start">
+            <Logo height={48} class="mb-4" />
+            <h2 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
+              {companyInfo.name}
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+              {companyInfo.description}. Wir helfen Unternehmen dabei, ihre Prozesse zu optimieren, 
+              Kosten zu reduzieren und nachhaltiges Wachstum zu erreichen.
+            </p>
+            
+            <!-- Contact Info -->
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                </svg>
+                <address class="not-italic text-gray-600 dark:text-gray-300">
+                  {companyInfo.address.street}, {companyInfo.address.postalCode} {companyInfo.address.city}
+                </address>
+              </div>
+              
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
+                </svg>
+                <a href={`tel:${companyInfo.contact.phone}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
+                  {companyInfo.contact.phone}
                 </a>
-              ))}
+              </div>
+              
+              <div class="flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
+                  <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+                  <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+                </svg>
+                <a href={`mailto:${companyInfo.contact.email}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
+                  {companyInfo.contact.email}
+                </a>
+              </div>
             </div>
-          ) : (
-            <a 
-              href={item.href}
-              class={`nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'active bg-primary-gold/10 text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-              aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
-            >
-              {item.name}
-            </a>
-          )
-        ))}
-        
-        <!-- Actions -->
-        <div class="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-300/30 dark:border-gray-600/30">
-          <ThemeToggle />
-          
-          {showSocial && socialLinks.map((social) => (
-            <a 
-              href={social.href}
-              target="_blank" 
-              rel="noopener noreferrer"
-              aria-label={social.ariaLabel}
-              class="text-gray-900 dark:text-white hover:text-primary-gold transition-colors p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d={social.icon}></path>
-              </svg>
-            </a>
-          ))}
-          
-          <!-- CTA Button -->
-          <a 
-            href="/kontakt"
-            class="inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
-          >
-            Beratung anfragen
-          </a>
+          </div>
         </div>
-      </nav>
+        
+        <!-- Navigation Columns -->
+        {footerNavigation.map((section) => (
+          <div>
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wider">
+              {section.label}
+            </h3>
+            <nav aria-label={`${section.label} Navigation`}>
+              <ul class="space-y-2">
+                {section.items.map((item) => (
+                  <li>
+                    <a 
+                      href={item.href}
+                      rel={item.rel}
+                      class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors"
+                    >
+                      {item.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        ))}
+      </div>
+    ) : variant === 'minimal' ? (
+      <!-- Minimal Footer Layout -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center">
+          <Logo height={32} class="mr-3" />
+          <span class="text-sm text-gray-600 dark:text-gray-300">
+            &copy; {currentYear} Dominik Maier
+          </span>
+        </div>
+        
+        <nav class="flex space-x-6" aria-label="Footer Navigation">
+          <a href="/impressum" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
+            Impressum
+          </a>
+          <a href="/datenschutz" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
+            Datenschutz
+          </a>
+        </nav>
+      </div>
+    ) : (
+      <!-- Default Footer Layout -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <!-- Logo & Branding -->
+        <div class="flex flex-col items-center md:items-start">
+          <Logo height={40} class="mb-4" />
+          <p class="text-center md:text-left text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+            Coaching und Interim Management<br>
+            Experte für Unternehmensentwicklung<br>
+            <strong>15+ Jahre Erfahrung</strong>
+          </p>
+        </div>
+        
+        <!-- Footer Navigation -->
+        <nav class="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-8 h-full" aria-label="Footer Navigation">
+          <a href="/impressum" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors font-medium" rel="nofollow">
+            Impressum
+          </a>
+          <a href="/datenschutz" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors font-medium" rel="nofollow">
+            Datenschutz
+          </a>
+          <a href="/agb" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors font-medium" rel="nofollow">
+            AGB
+          </a>
+        </nav>
+        
+        <!-- Social Media & Contact -->
+        <div class="flex flex-col items-center md:items-end space-y-3">
+          {showSocial && (
+            <div class="flex space-x-4">
+              <a 
+                href={companyInfo.social.linkedin}
+                target="_blank" 
+                rel="noopener noreferrer"
+                aria-label="Dominik Maier LinkedIn Profil besuchen"
+                class="flex items-center text-sm hover:text-primary-gold transition-colors group"
+              >
+                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+                </svg>
+                LinkedIn
+              </a>
+            </div>
+          )}
+          
+          <!-- Quick Contact -->
+          <div class="text-center md:text-right">
+            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Kostenlose Beratung:</p>
+            <a 
+              href={`tel:${companyInfo.contact.phone}`}
+              class="text-sm font-medium text-primary-gold hover:text-primary-gold/80 transition-colors"
+              aria-label={`Anrufen unter ${companyInfo.contact.phone}`}
+            >
+              {companyInfo.contact.phone}
+            </a>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {showNewsletter && (
+      <!-- Newsletter Signup -->
+      <div class="mt-8 pt-8 border-t border-gray-300 dark:border-gray-600">
+        <div class="max-w-md mx-auto text-center">
+          <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
+            Business Newsletter
+          </h3>
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            Erhalten Sie monatlich Insights zu Unternehmensentwicklung und Value Management.
+          </p>
+          <form class="flex gap-2">
+            <input 
+              type="email" 
+              placeholder="ihre.email@beispiel.de"
+              class="flex-1 px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
+              aria-label="E-Mail-Adresse für Newsletter"
+            />
+            <button 
+              type="submit"
+              class="px-4 py-2 bg-primary-gold text-white text-sm font-medium rounded-md hover:bg-primary-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+            >
+              Anmelden
+            </button>
+          </form>
+        </div>
+      </div>
+    )}
+    
+    <!-- Copyright & Legal -->
+    <div class="mt-8 pt-6 border-t border-gray-300 dark:border-gray-600">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
+          &copy; {currentYear} {companyInfo.name}. Alle Rechte vorbehalten.
+        </p>
+        
+        <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+          <span>Made with ❤️ in Baden-Württemberg</span>
+          <span>•</span>
+          <span>DSGVO konform</span>
+          <span>•</span>
+          <span>CO₂ neutral</span>
+        </div>
+      </div>
     </div>
   </div>
-</header>
 
-<!-- Mobile Navigation (Fullscreen overlay) -->
-<div 
-  id={mobileMenuId}
-  class="mobile-menu fixed inset-0 bg-white dark:bg-gray-900 z-[999] flex-col lg:hidden hidden"
-  role="dialog"
-  aria-modal="true"
-  aria-label="Mobile Navigation"
->
-  <!-- Mobile Header -->
-  <div class="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-600">
-    <a href="/" class="flex items-center" aria-label="Dominik Maier Coaching - Startseite">
-      <Logo height={40} />
-    </a>
-    <button 
-      id="close-menu" 
-      class="p-2 text-gray-900 dark:text-white hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold" 
-      aria-label="Navigation schließen"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-  </div>
-  
-  <!-- Mobile Navigation Content -->
-  <div class="flex-1 overflow-y-auto py-6 px-4">
-    <nav class="flex flex-col space-y-6" role="navigation" aria-label="Mobile Navigation">
-      {navigation.map((item) => (
-        item.isDropdown ? (
-          <!-- Mobile Services Dropdown -->
-          <div class="services-mobile-dropdown">
-            <button 
-              id="mobile-services-button"
-              class="flex justify-between items-center w-full py-3 text-lg font-medium text-gray-900 dark:text-white" 
-              aria-expanded="false"
-              aria-controls="mobile-services-content"
-            >
-              <span>{item.name}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="mobile-dropdown-icon w-5 h-5 transition-transform duration-300" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            
-            <div id="mobile-services-content" class="pl-4 mt-3 space-y-4 border-l-2 border-primary-gold hidden overflow-hidden">
-              {item.items?.map((subItem) => (
-                <a 
-                  href={subItem.href}
-                  class={`block py-2 text-base text-gray-900 dark:text-white hover:text-primary-gold transition-colors ${isActiveLink(subItem.href, currentPath) ? 'text-primary-gold font-medium' : ''}`}
-                >
-                  <div class="font-medium">{subItem.name}</div>
-                  <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">{subItem.description}</div>
-                </a>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <a 
-            href={item.href}
-            class={`py-3 text-lg font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold'}`}
-            aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
-          >
-            {item.name}
-          </a>
-        )
-      ))}
-      
-      <!-- Mobile Actions -->
-      <div class="pt-6 border-t border-gray-300 dark:border-gray-600 mt-6">
-        <div class="flex items-center justify-between mb-6">
-          <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Theme & Social</span>
-          <div class="flex items-center space-x-4">
-            <ThemeToggle />
-            {showSocial && socialLinks.map((social) => (
-              <a 
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={social.ariaLabel}
-                class="text-gray-900 dark:text-white hover:text-primary-gold transition-colors p-2"
-              >
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d={social.icon}></path>
-                </svg>
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <!-- Mobile CTA -->
-        <a 
-          href="/kontakt"
-          class="flex items-center justify-center w-full px-6 py-3 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-colors font-medium shadow-md"
-        >
-          Kostenloses Erstgespräch
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-          </svg>
-        </a>
-      </div>
-    </nav>
-  </div>
-</header>
-
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log('🧭 Header v1.1 navigation initialized');
-    
-    // Mobile menu functionality
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const closeMenu = document.getElementById('close-menu');
-    
-    if (menuToggle && mobileMenu && closeMenu) {
-      const openMobileMenu = () => {
-        mobileMenu.classList.remove('hidden');
-        mobileMenu.classList.add('flex');
-        menuToggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
-        
-        // Focus management
-        const firstFocusable = mobileMenu.querySelector('button, a');
-        firstFocusable?.focus();
-      };
-      
-      const closeMobileMenu = () => {
-        mobileMenu.classList.add('hidden');
-        mobileMenu.classList.remove('flex');
-        menuToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-        menuToggle.focus();
-      };
-      
-      menuToggle.addEventListener('click', openMobileMenu);
-      closeMenu.addEventListener('click', closeMobileMenu);
-      
-      // Close on escape key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-          closeMobileMenu();
-        }
-      });
-      
-      // Close mobile menu when clicking on links
-      const mobileLinks = mobileMenu.querySelectorAll('a[href]');
-      mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-          // Small delay to allow navigation
-          setTimeout(closeMobileMenu, 100);
-        });
-      });
-    }
-    
-    // Mobile services dropdown
-    const mobileServicesButton = document.getElementById('mobile-services-button');
-    const mobileServicesContent = document.getElementById('mobile-services-content');
-    
-    if (mobileServicesButton && mobileServicesContent) {
-      mobileServicesButton.addEventListener('click', () => {
-        const expanded = mobileServicesButton.getAttribute('aria-expanded') === 'true';
-        const newExpanded = !expanded;
-        
-        mobileServicesButton.setAttribute('aria-expanded', newExpanded.toString());
-        mobileServicesContent.classList.toggle('hidden');
-        
-        // Rotate icon
-        const icon = mobileServicesButton.querySelector('.mobile-dropdown-icon');
-        icon?.classList.toggle('rotate-180');
-      });
-    }
-    
-    // Desktop dropdown functionality
-    const dropdownButton = document.querySelector('[id$="-button"]');
-    const dropdown = document.querySelector('[id$="dropdown"]:not([id*="mobile"])');
-    
-    if (dropdownButton && dropdown) {
-      let isOpen = false;
-      let hoverTimeout;
-      
-      const openDropdown = () => {
-        dropdown.classList.remove('hidden');
-        dropdown.classList.remove('opacity-0', 'translate-y-[-10px]');
-        dropdown.classList.add('opacity-100', 'translate-y-0');
-        dropdownButton.setAttribute('aria-expanded', 'true');
-        isOpen = true;
-      };
-      
-      const closeDropdown = () => {
-        dropdown.classList.add('opacity-0', 'translate-y-[-10px]');
-        setTimeout(() => {
-          dropdown.classList.add('hidden');
-        }, 200);
-        dropdownButton.setAttribute('aria-expanded', 'false');
-        isOpen = false;
-      };
-      
-      // Click to toggle
-      dropdownButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        isOpen ? closeDropdown() : openDropdown();
-      });
-      
-      // Hover behavior for desktop
-      if (window.matchMedia('(min-width: 1024px)').matches) {
-        const dropdownContainer = dropdownButton.closest('.dropdown-menu');
-        
-        dropdownContainer.addEventListener('mouseenter', () => {
-          clearTimeout(hoverTimeout);
-          openDropdown();
-        });
-        
-        dropdownContainer.addEventListener('mouseleave', () => {
-          hoverTimeout = setTimeout(closeDropdown, 150);
-        });
-        
-        dropdown.addEventListener('mouseenter', () => {
-          clearTimeout(hoverTimeout);
-        });
-        
-        dropdown.addEventListener('mouseleave', () => {
-          hoverTimeout = setTimeout(closeDropdown, 150);
-        });
-      }
-      
-      // Close on outside click
-      document.addEventListener('click', (e) => {
-        if (isOpen && !dropdownButton.contains(e.target) && !dropdown.contains(e.target)) {
-          closeDropdown();
-        }
-      });
-      
-      // Close on escape
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && isOpen) {
-          closeDropdown();
-          dropdownButton.focus();
-        }
-      });
-    }
-    
-    // Header scroll behavior
-    let lastScrollY = window.scrollY;
-    const header = document.querySelector('.header-container');
-    
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > 100) {
-        header.classList.add('backdrop-blur-lg', 'bg-white/95', 'dark:bg-gray-900/95');
-        header.classList.remove('backdrop-blur-md');
-      } else {
-        header.classList.remove('backdrop-blur-lg', 'bg-white/95', 'dark:bg-gray-900/95');
-        header.classList.add('backdrop-blur-md');
-      }
-      
-      // Auto-hide header on scroll down (optional)
-      if (currentScrollY > lastScrollY && currentScrollY > 200) {
-        header.style.transform = 'translateY(-100%)';
-      } else {
-        header.style.transform = 'translateY(0)';
-      }
-      
-      lastScrollY = currentScrollY;
-    };
-    
-    // Throttled scroll listener
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      if (!scrollTimeout) {
-        scrollTimeout = setTimeout(() => {
-          handleScroll();
-          scrollTimeout = null;
-        }, 10);
-      }
-    });
-  });
-</script>
+  <!-- Structured Data for Organization -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": companyInfo.name,
+    "description": companyInfo.description,
+    "url": "https://maier-value.com",
+    "logo": "https://maier-value.com/logo.svg",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": companyInfo.contact.phone,
+      "email": companyInfo.contact.email,
+      "contactType": "customer service",
+      "availableLanguage": ["German", "English"]
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": companyInfo.address.street,
+      "addressLocality": companyInfo.address.city,
+      "postalCode": companyInfo.address.postalCode,
+      "addressCountry": "DE"
+    },
+    "sameAs": [
+      companyInfo.social.linkedin
+    ],
+    "founder": {
+      "@type": "Person",
+      "name": "Dominik Maier"
+    },
+    "areaServed": "DE",
+    "serviceType": [
+      "Strategische Unternehmensentwicklung",
+      "Vertriebsoptimierung", 
+      "Marketing-Strategien",
+      "Value Management",
+      "Interim Management"
+    ]
+  })} />
+</footer>
 
 <style>
-  /* Header styling */
-  .header-container {
+  /* Enhanced footer styling */
+  .footer-container {
+    background: linear-gradient(180deg, 
+      rgba(243, 244, 246, 0.8) 0%, 
+      rgba(243, 244, 246, 1) 100%);
+    backdrop-filter: blur(10px);
+  }
+
+  .dark .footer-container {
+    background: linear-gradient(180deg, 
+      rgba(31, 41, 55, 0.8) 0%, 
+      rgba(31, 41, 55, 1) 100%);
+  }
+
+  /* Link hover effects */
+  .footer-container a {
+    position: relative;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  /* Navigation links */
-  .nav-link {
-    position: relative;
-    font-weight: 500;
-    padding: 0.75rem 0;
-    color: rgb(17 24 39);
-    transition: color 0.3s ease;
-  }
-
-  .dark .nav-link {
-    color: rgb(255 255 255);
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(90deg, #D2AE6C, #B8941A);
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    width: 100%;
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    color: #D2AE6C;
-  }
-
-  /* Dropdown animations */
-  .dropdown-content {
-    transform-origin: top;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Mobile menu animations */
-  .mobile-menu {
-    transition: opacity 0.3s ease;
-  }
-
-  .mobile-menu.flex {
-    animation: slideInFromTop 0.3s ease-out forwards;
-  }
-
-  /* Mobile dropdown styling */
-  .mobile-dropdown-icon {
-    transition: transform 0.3s ease;
-  }
-
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
-
-  #mobile-services-content {
-    transition: all 0.3s ease-in-out;
-    max-height: 0;
-    overflow: hidden;
-  }
-
-  #mobile-services-content:not(.hidden) {
-    max-height: 500px;
-  }
-
-  /* Animations */
-  @keyframes slideInFromTop {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  /* Enhanced dropdown styling */
-  .dropdown-content {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .dark .dropdown-content {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  .footer-container a:hover {
+    transform: translateY(-1px);
   }
 
   /* Logo hover effect */
-  .header-container a:hover .logo {
+  .footer-container .logo:hover {
     transform: scale(1.05);
+    transition: transform 0.3s ease;
   }
 
-  /* Smooth backdrop blur transition */
-  .header-container {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  /* Social icon effects */
+  .footer-container .group:hover svg {
+    animation: pulse 1s infinite;
   }
 
-  /* Focus styles for accessibility */
-  button:focus,
-  a:focus {
-    outline: 2px solid #D2AE6C;
-    outline-offset: 2px;
-    border-radius: 4px;
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Newsletter form styling */
+  .footer-container input:focus {
+    box-shadow: 0 0 0 2px #D2AE6C;
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .footer-container {
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
   }
 
   /* Reduced motion support */
   @media (prefers-reduced-motion: reduce) {
-    .nav-link::after,
-    .dropdown-content,
-    .mobile-menu,
-    .header-container {
+    .footer-container a,
+    .footer-container .logo {
       transition: none;
     }
 
-    .mobile-dropdown-icon {
-      transition: none;
-    }
-
-    @keyframes slideInFromTop {
-      from, to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .footer-container .group:hover svg {
+      animation: none;
     }
   }
 </style>
