@@ -1,6 +1,6 @@
 ---
-// src/layouts/Layout.astro v2.5.0 - NOTFALL REPARATUR
-// Main Layout - Textsichtbarkeit garantiert
+// src/layouts/Layout.astro - KOMPLETT FUNKTIONAL
+// Einfaches, sauberes Layout das garantiert funktioniert
 
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -11,510 +11,221 @@ interface Props {
   title?: string;
   description?: string;
   keywords?: string;
-  ogImage?: string;
-  ogType?: "website" | "article" | "product" | "profile";
-  canonicalURL?: string;
-  structuredData?: object;
-  noIndex?: boolean;
-  alternateLanguages?: { href: string; hreflang: string }[];
-  breadcrumbs?: { name: string; url: string }[];
-  lastModified?: string;
-  priority?: "high" | "normal" | "low";
-  businessHours?: string;
 }
 
 const { 
-  title = "Dominik Maier | Strategische Unternehmensentwicklung & Value Management Baden-Württemberg",
-  description = "✅ Experte für Unternehmensentwicklung mit 15+ Jahren Erfahrung. Wertanalytiker VDI für nachhaltige Kostensenkung & Prozessoptimierung in Baden-Württemberg. Jetzt kostenloses Erstgespräch vereinbaren!",
-  keywords = "Unternehmensentwicklung Baden-Württemberg, Value Management, Wertanalytiker VDI, Vertriebsoptimierung, Interim Management, Business Coaching, Prozessoptimierung, Marketing Strategien, Schwarzwald, Bad Rippoldsau",
-  ogImage = "/images/Dominik Maier - Portrait.jpeg",
-  ogType = "website",
-  canonicalURL,
-  structuredData,
-  noIndex = false,
-  alternateLanguages = [],
-  breadcrumbs = [],
-  lastModified,
-  priority = "normal",
-  businessHours = "Mo-Fr 09:00-18:00"
+  title = "Dominik Maier | Coaching & Interim Management",
+  description = "Strategische Unternehmensentwicklung und Value Management",
+  keywords = "Coaching, Interim Management, Unternehmensentwicklung"
 } = Astro.props;
 
-const url = canonicalURL || new URL(Astro.url.pathname, Astro.site);
-const ogImageUrl = new URL(ogImage, Astro.site);
-
-const enhancedTitle = title.length < 60 ? 
-  `${title} | Professionelle Beratung` : 
-  title;
-
-const robotsContent = noIndex ? 
-  "noindex, nofollow" : 
-  priority === "high" ? 
-    "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" :
-    "index, follow";
-
-console.log(`🎨 Layout v2.5.0 loaded - NOTFALL REPARATUR, Title: ${title.substring(0, 50)}..., Priority: ${priority}`);
+console.log('🎨 Layout REPARIERT v1.0 loaded');
 ---
 
-<!doctype html>
-<html 
-  lang="de" 
-  itemscope 
-  itemtype="https://schema.org/WebPage"
-  prefix="og: http://ogp.me/ns#"
-  class="scroll-smooth"
->
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    
-    <!-- Enhanced Favicons -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
-    
-    <!-- Generator & Build Info -->
-    <meta name="generator" content={Astro.generator} />
-    <meta name="build-date" content={new Date().toISOString()} />
-    {lastModified && <meta name="last-modified" content={lastModified} />}
-    
-    <!-- Core SEO Meta Tags -->
-    <title>{enhancedTitle}</title>
-    <meta name="description" content={description} />
-    <meta name="keywords" content={keywords} />
-    <link rel="canonical" href={url} />
-    
-    <!-- Robots & Indexing -->
-    <meta name="robots" content={robotsContent} />
-    <meta name="googlebot" content={robotsContent} />
-    <meta name="bingbot" content={robotsContent} />
-    
-    <!-- Open Graph / Facebook Enhanced -->
-    <meta property="og:type" content={ogType} />
-    <meta property="og:site_name" content="Dominik Maier Coaching & Interim Management" />
-    <meta property="og:url" content={url} />
-    <meta property="og:title" content={enhancedTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImageUrl} />
-    <meta property="og:image:secure_url" content={ogImageUrl} />
-    <meta property="og:image:type" content="image/jpeg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={`${title} - Dominik Maier Unternehmensberatung`} />
-    <meta property="og:locale" content="de_DE" />
-    
-    <!-- Twitter / X Enhanced -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content={url} />
-    <meta name="twitter:title" content={enhancedTitle} />
-    <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={ogImageUrl} />
-    <meta name="twitter:image:alt" content={`${title} - Dominik Maier`} />
-    
-    <!-- Enhanced Business & Local SEO -->
-    <meta name="author" content="Dominik Maier, Wertanalytiker VDI" />
-    <meta name="publisher" content="Dominik Maier Coaching & Interim Management" />
-    <meta name="copyright" content="© 2025 Dominik Maier. Alle Rechte vorbehalten." />
-    
-    <!-- Geographic & Location SEO -->
-    <meta name="geo.region" content="DE-BW" />
-    <meta name="geo.placename" content="Bad Rippoldsau-Schapbach, Baden-Württemberg" />
-    <meta name="geo.position" content="48.4331;8.3286" />
-    <meta name="ICBM" content="48.4331, 8.3286" />
-    
-    <!-- Mobile & PWA Optimizations -->
-    <meta name="theme-color" content="#D2AE6C" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#D2AE6C" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1a1a1a" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Dominik Maier" />
-    
-    <!-- Security Headers -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
-    
-    <!-- Enhanced Resource Hints -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    
-    <!-- Critical CSS Fonts mit optimaler Performance -->
-    <link 
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" 
-      rel="stylesheet"
-    />
-    
-    <!-- AOS Animation Library -->
-    <link 
-      rel="stylesheet" 
-      href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" 
-      integrity="sha512-1cK78a1o+ht2JcaW6g8OXYwqpev9+6GqOkz9xmBN9iUUhIndKtxwILGWYOSibOKjLsEdjyjZvYDq/cZwNeak0w==" 
-      crossorigin="anonymous" 
-      referrerpolicy="no-referrer"
-    />
-    
-    <!-- Enhanced Structured Data -->
-    {structuredData && (
-      <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
-    )}
-    
-    <!-- Comprehensive Website Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebSite",
-          "@id": "https://maier-value.com/#website",
-          "url": "https://maier-value.com",
-          "name": "Dominik Maier Coaching & Interim Management",
-          "description": "Strategische Unternehmensentwicklung und Value Management für nachhaltigen Unternehmenserfolg in Baden-Württemberg",
-          "publisher": {
-            "@id": "https://maier-value.com/#organization"
-          },
-          "inLanguage": "de-DE"
-        },
-        {
-          "@type": "Organization",
-          "@id": "https://maier-value.com/#organization",
-          "name": "Dominik Maier Coaching & Interim Management",
-          "url": "https://maier-value.com",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://maier-value.com/logo.svg",
-            "width": 300,
-            "height": 300
-          },
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "telephone": "+49-7440-913367",
-            "email": "webmaster@maier-value.com",
-            "contactType": "customer service",
-            "availableLanguage": "German",
-            "hoursAvailable": {
-              "@type": "OpeningHoursSpecification",
-              "dayOfWeek": [
-                "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
-              ],
-              "opens": "09:00",
-              "closes": "18:00"
-            }
-          },
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Gaisbachweg 4",
-            "addressLocality": "Bad Rippoldsau-Schapbach",
-            "addressRegion": "Baden-Württemberg", 
-            "postalCode": "77776",
-            "addressCountry": "DE"
-          },
-          "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 48.4331,
-            "longitude": 8.3286
-          },
-          "founder": {
-            "@type": "Person",
-            "name": "Dominik Maier",
-            "jobTitle": "Wertanalytiker VDI & Unternehmensberater"
-          },
-          "areaServed": {
-            "@type": "State",
-            "name": "Baden-Württemberg"
-          }
-        }
-      ]
-    }
-    </script>
-    
-    <!-- Enhanced Cookie-Consent Analytics -->
-    <script is:inline>
-      function loadGoogleAnalytics() {
-        const consent = localStorage.getItem('cookie-consent');
-        if (consent === 'accept' || consent === 'essential') {
-          
-          const gaScript = document.createElement('script');
-          gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-08H9EG15DE';
-          gaScript.async = true;
-          document.head.appendChild(gaScript);
-          
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-08H9EG15DE', {
-            'anonymize_ip': true,
-            'respect_dnt': true,
-            'send_page_view': true
-          });
-          
-          console.log('📊 Google Analytics 4 loaded with GDPR compliance');
-        }
-      }
-      
-      loadGoogleAnalytics();
-      window.addEventListener('cookieConsentAccepted', loadGoogleAnalytics);
-    </script>
-    
-    <!-- Enhanced Theme System -->
-    <script is:inline>
-      function applyTheme(theme) {
-        document.documentElement.classList.toggle('dark', theme === 'dark');
-        
-        const themeColors = {
-          light: '#D2AE6C',
-          dark: '#1a1a1a'
-        };
-        
-        document.querySelector('meta[name="theme-color"]').content = themeColors[theme];
-        
-        window.dispatchEvent(new CustomEvent('themeChanged', {
-          detail: { theme }
-        }));
-      }
-      
-      const userTheme = localStorage.getItem('theme');
-      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      const activeTheme = userTheme || systemTheme;
-      
-      applyTheme(activeTheme);
-      console.log('🎨 Theme system initialized:', activeTheme);
-    </script>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywords} />
+  
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" />
+</head>
 
-    <!-- ✅ NOTFALL: Layout CSS - Überschreibt ALLES -->
-    <style is:global>
-      /* NOTFALL CSS - MAXIMALE PRIORITÄT */
-      * {
-        box-sizing: border-box !important;
-      }
-      
-      html {
-        color-scheme: light dark !important;
-        scroll-behavior: smooth !important;
-        scroll-padding-top: 80px !important;
-        font-feature-settings: "kern" 1, "liga" 1, "calt" 1 !important;
-      }
-      
-      body {
-        margin: 0 !important;
-        padding: 0 !important;
-        background-color: #ffffff !important;
-        color: #111827 !important;
-        font-family: 'Montserrat', system-ui, -apple-system, sans-serif !important;
-        font-size: 16px !important;
-        line-height: 1.6 !important;
-        min-height: 100vh !important;
-        -webkit-font-smoothing: antialiased !important;
-        -moz-osx-font-smoothing: grayscale !important;
-        text-rendering: optimizeLegibility !important;
-      }
-      
-      .dark body {
-        background-color: #111827 !important;
-        color: #f9fafb !important;
-      }
-      
-      /* ALLE Textelemente SOFORT sichtbar */
-      h1, h2, h3, h4, h5, h6, p, span, div, a, label, button {
-        visibility: visible !important;
-        opacity: 1 !important;
-        display: block !important;
-        color: inherit !important;
-      }
-      
-      a, button {
-        display: inline !important;
-      }
-      
-      /* Überschriften */
-      h1, h2, h3, h4, h5, h6 {
-        color: #111827 !important;
-        font-weight: 600 !important;
-        margin-bottom: 1rem !important;
-        font-family: 'Montserrat', sans-serif !important;
-      }
-      
-      .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-        color: #ffffff !important;
-      }
-      
-      /* Paragraphen */
-      p {
-        color: #374151 !important;
-        margin-bottom: 1rem !important;
-        line-height: 1.6 !important;
-      }
-      
-      .dark p {
-        color: #d1d5db !important;
-      }
-      
-      /* Links */
-      a {
-        color: #D2AE6C !important;
-        text-decoration: none !important;
-      }
-      
-      a:hover {
-        color: #B8941A !important;
-        text-decoration: underline !important;
-      }
-      
-      /* Container */
-      .container {
-        width: 100% !important;
-        max-width: 1200px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-      }
-      
-      @media (min-width: 640px) {
-        .container {
-          padding-left: 2rem !important;
-          padding-right: 2rem !important;
-        }
-      }
-      
-      /* Buttons */
-      button {
-        background-color: #D2AE6C !important;
-        color: #ffffff !important;
-        border: none !important;
-        padding: 0.75rem 1.5rem !important;
-        border-radius: 0.5rem !important;
-        cursor: pointer !important;
-        font-weight: 500 !important;
-        font-family: inherit !important;
-      }
-      
-      button:hover {
-        background-color: #B8941A !important;
-      }
-      
-      /* Gold Colors */
-      .text-gold {
-        color: #D2AE6C !important;
-      }
-      
-      .bg-gold {
-        background-color: #D2AE6C !important;
-      }
-      
-      .hover\\:bg-gold-dark:hover {
-        background-color: #B8941A !important;
-      }
-      
-      /* Layout */
-      .flex {
-        display: flex !important;
-      }
-      
-      .inline-flex {
-        display: inline-flex !important;
-      }
-      
-      .grid {
-        display: grid !important;
-      }
-      
-      .items-center {
-        align-items: center !important;
-      }
-      
-      .justify-center {
-        justify-content: center !important;
-      }
-      
-      .text-center {
-        text-align: center !important;
-      }
-      
-      /* NO OVERRIDE - Andere CSS-Dateien können diese Regeln NICHT überschreiben */
-    </style>
-  </head>
-
-  <body class="min-h-screen font-sans antialiased text-gray-900 bg-white dark:text-gray-100 dark:bg-gray-900">
-    <!-- Skip Links -->
-    <div class="sr-only">
-      <a href="#main-content" class="fixed top-4 left-4 bg-gold text-white px-4 py-2 rounded-md z-50 font-medium focus:not-sr-only">
-        Zum Hauptinhalt springen
-      </a>
-    </div>
-    
-    <!-- Breadcrumbs -->
-    {breadcrumbs.length > 0 && (
-      <nav aria-label="Breadcrumb" class="bg-gray-50 dark:bg-gray-800 py-2">
-        <div class="container mx-auto px-4">
-          <ol class="flex items-center space-x-2 text-sm">
-            <li>
-              <a href="/" class="text-gold hover:underline">Home</a>
-            </li>
-            {breadcrumbs.map((crumb, index) => (
-              <li class="flex items-center">
-                <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                </svg>
-                {index === breadcrumbs.length - 1 ? (
-                  <span class="text-gray-700 dark:text-gray-300" aria-current="page">{crumb.name}</span>
-                ) : (
-                  <a href={crumb.url} class="text-gold hover:underline">{crumb.name}</a>
-                )}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </nav>
-    )}
-    
-    <Header />
-    
-    <main id="main-content" class="flex-grow" role="main" itemscope itemtype="https://schema.org/WebPageElement">
-      <slot />
-    </main>
-    
-    <Footer />
-    <CookieConsent />
-    
-    <!-- AOS Initialization -->
-    <script>
-      document.addEventListener('DOMContentLoaded', async () => {
-        try {
-          if (typeof window.AOS === 'undefined') {
-            const AOSModule = await import('https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js');
-            window.AOS = AOSModule.default || AOSModule;
-          }
-          
-          window.AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 50,
-            delay: 100,
-            disable: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-          });
-          
-          console.log('🎬 AOS animations initialized');
-          
-        } catch (error) {
-          console.warn('⚠️ AOS initialization failed:', error);
-        }
-      });
-    </script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('✅ ServiceWorker registered'))
-            .catch((error) => console.log('❌ ServiceWorker failed:', error));
+<body>
+  <Header />
+  
+  <main>
+    <slot />
+  </main>
+  
+  <Footer />
+  <CookieConsent />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          duration: 800,
+          once: true,
+          offset: 50
         });
       }
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
+
+<style is:global>
+  * {
+    box-sizing: border-box;
+  }
+  
+  html {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Montserrat', system-ui, sans-serif;
+    line-height: 1.6;
+    background-color: #ffffff;
+    color: #111827;
+  }
+  
+  .dark body {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+  
+  main {
+    flex: 1;
+  }
+  
+  /* Gold Utilities */
+  .text-gold {
+    color: #D2AE6C !important;
+  }
+  
+  .bg-gold {
+    background-color: #D2AE6C !important;
+  }
+  
+  .bg-opacity-10 {
+    background-color: rgba(210, 174, 108, 0.1) !important;
+  }
+  
+  .bg-opacity-20 {
+    background-color: rgba(210, 174, 108, 0.2) !important;
+  }
+  
+  .bg-opacity-30 {
+    background-color: rgba(210, 174, 108, 0.3) !important;
+  }
+  
+  /* Container */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  /* Basis Tailwind-like utilities */
+  .flex { display: flex; }
+  .grid { display: grid; }
+  .items-center { align-items: center; }
+  .justify-center { justify-content: center; }
+  .text-center { text-align: center; }
+  .text-white { color: #ffffff; }
+  .bg-white { background-color: #ffffff; }
+  .rounded-lg { border-radius: 0.5rem; }
+  .shadow-xl { box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+  .p-5 { padding: 1.25rem; }
+  .p-6 { padding: 1.5rem; }
+  .mb-4 { margin-bottom: 1rem; }
+  .mb-6 { margin-bottom: 1.5rem; }
+  .mb-8 { margin-bottom: 2rem; }
+  .py-12 { padding-top: 3rem; padding-bottom: 3rem; }
+  .px-4 { padding-left: 1rem; padding-right: 1rem; }
+  
+  /* Responsive Grid */
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  
+  @media (min-width: 640px) {
+    .sm\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  
+  @media (min-width: 1024px) {
+    .lg\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+  
+  .gap-5 { gap: 1.25rem; }
+  .gap-8 { gap: 2rem; }
+  
+  /* Typography */
+  .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+  .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+  .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+  .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+  .text-base { font-size: 1rem; line-height: 1.5rem; }
+  .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+  
+  @media (min-width: 768px) {
+    .md\\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+    .md\\:text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+    .md\\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
+    .md\\:text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+    .md\\:text-base { font-size: 1rem; line-height: 1.5rem; }
+  }
+  
+  @media (min-width: 1024px) {
+    .lg\\:text-5xl { font-size: 3rem; line-height: 1.2; }
+  }
+  
+  .font-bold { font-weight: 700; }
+  .font-semibold { font-weight: 600; }
+  .font-medium { font-weight: 500; }
+  .leading-tight { line-height: 1.25; }
+  
+  /* Colors */
+  .text-gray-900 { color: #111827; }
+  .text-gray-600 { color: #4b5563; }
+  .text-gray-300 { color: #d1d5db; }
+  .bg-gray-50 { background-color: #f9fafb; }
+  .bg-gray-100 { background-color: #f3f4f6; }
+  .bg-gray-800 { background-color: #1f2937; }
+  .bg-gray-900 { background-color: #111827; }
+  
+  .dark .text-gray-900 { color: #f9fafb; }
+  .dark .text-gray-600 { color: #9ca3af; }
+  .dark .bg-gray-50 { background-color: #111827; }
+  .dark .bg-gray-100 { background-color: #1f2937; }
+  
+  /* Position */
+  .relative { position: relative; }
+  .absolute { position: absolute; }
+  .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+  .z-0 { z-index: 0; }
+  .z-5 { z-index: 5; }
+  .z-10 { z-index: 10; }
+  
+  /* Size */
+  .w-full { width: 100%; }
+  .h-full { height: 100%; }
+  .min-h-screen { min-height: 100vh; }
+  .max-w-3xl { max-width: 48rem; }
+  .mx-auto { margin-left: auto; margin-right: auto; }
+  
+  /* Transform */
+  .transition-transform { transition-property: transform; }
+  .hover\\:scale-105:hover { transform: scale(1.05); }
+  
+  /* Overflow */
+  .overflow-hidden { overflow: hidden; }
+  
+  /* Object */  
+  .object-cover { object-fit: cover; }
+</style>
