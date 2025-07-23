@@ -132,72 +132,25 @@ console.log(`🧭 Header v1.1 rendered - ${variant} variant, current path: ${cur
       </button>
       
       <!-- Desktop Navigation -->
-      <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Hauptnavigation">
+      <nav class="hidden lg:flex items-center space-x-6" role="navigation" aria-label="Hauptnavigation">
         {navigation.map((item) => (
           item.isDropdown ? (
-            <!-- Services Dropdown -->
-            <div class="relative dropdown-menu group">
-              <button 
-                class={`nav-link flex items-center ${isActiveLink('/leistung', currentPath) ? 'active' : ''}`}
-                id={`${dropdownId}-button`}
-                aria-expanded="false" 
-                aria-haspopup="true"
-                aria-controls={dropdownId}
-              >
-                {item.name}
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              
-              <div 
-                id={dropdownId}
-                class="absolute left-0 mt-2 w-80 rounded-xl shadow-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hidden dropdown-content z-50 opacity-0 translate-y-[-10px] transition-all duration-200"
-                role="menu"
-                aria-labelledby={`${dropdownId}-button`}
-              >
-                <div class="rounded-xl py-2">
-                  {item.items?.map((subItem) => (
-                    <a 
-                      href={subItem.href}
-                      class={`flex items-start px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group ${isActiveLink(subItem.href, currentPath) ? 'bg-primary-gold/10' : ''}`}
-                      role="menuitem"
-                    >
-                      <div class="flex-shrink-0 mr-3 mt-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold" aria-hidden="true">
-                          <path fill-rule="evenodd" d={subItem.icon} clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <div class="text-sm font-medium group-hover:text-primary-gold transition-colors">
-                          {subItem.name}
-                        </div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
-                          {subItem.description}
-                        </div>
-                      </div>
-                    </a>
-                  ))}
-                  
-                  <!-- CTA in dropdown -->
-                  <div class="px-4 py-3 border-t border-gray-300 dark:border-gray-600 mt-2">
-                    <a 
-                      href="/kontakt"
-                      class="flex items-center justify-center w-full px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-colors text-sm font-medium"
-                    >
-                      Kostenloses Erstgespräch
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-2" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
+            <!-- Services als separate Buttons -->
+            <div class="flex items-center space-x-4">
+              {item.items?.map((subItem) => (
+                <a 
+                  href={subItem.href}
+                  class={`nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActiveLink(subItem.href, currentPath) ? 'active bg-primary-gold/10 text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                  aria-current={isActiveLink(subItem.href, currentPath) ? 'page' : undefined}
+                >
+                  {subItem.name.replace('Strategische Unternehmensentwicklung', 'Strategie').replace('Vertriebsoptimierung', 'Vertrieb').replace('Marketing-Strategien', 'Marketing').replace('Value Management', 'Value Mgmt')}
+                </a>
+              ))}
             </div>
           ) : (
             <a 
               href={item.href}
-              class={`nav-link ${isActiveLink(item.href, currentPath) ? 'active' : ''}`}
+              class={`nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'active bg-primary-gold/10 text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold hover:bg-gray-100 dark:hover:bg-gray-700'}`}
               aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
             >
               {item.name}
@@ -206,7 +159,7 @@ console.log(`🧭 Header v1.1 rendered - ${variant} variant, current path: ${cur
         ))}
         
         <!-- Actions -->
-        <div class="flex items-center space-x-4 ml-8 pl-8 border-l border-gray-300/30 dark:border-gray-600/30">
+        <div class="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-300/30 dark:border-gray-600/30">
           <ThemeToggle />
           
           {showSocial && socialLinks.map((social) => (
@@ -226,7 +179,7 @@ console.log(`🧭 Header v1.1 rendered - ${variant} variant, current path: ${cur
           <!-- CTA Button -->
           <a 
             href="/kontakt"
-            class="hidden xl:inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
+            class="inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
           >
             Beratung anfragen
           </a>
