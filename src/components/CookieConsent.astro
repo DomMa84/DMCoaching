@@ -1,5 +1,5 @@
 ---
-// src/components/CookieConsent.astro v1.1.1 (SIMPLE FIX - feste Werte für Build-Stabilität)
+// src/components/CookieConsent.astro v1.2.0 (BUTTON-FIX - Vollständig funktional)
 // CookieConsent - Enhanced GDPR-compliant cookie banner
 
 interface Props {
@@ -47,12 +47,12 @@ const variants = {
   }
 };
 
-console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} position - FIXED`);
+console.log(`🍪 CookieConsent v1.2.0 loaded - ${variant} variant, ${position} position - BUTTON-FIX`);
 ---
 
 <div 
   id={bannerId}
-  class={`cookie-banner fixed ${positions[position]} max-w-4xl mx-auto p-4 md:p-6 bg-white dark:bg-dark-lighter shadow-2xl rounded-lg z-50 transform translate-y-full opacity-0 transition-all duration-500 ease-out`}
+  class={`cookie-banner fixed ${positions[position]} max-w-4xl mx-auto p-4 md:p-6 bg-white dark:bg-gray-800 shadow-2xl rounded-lg z-50 transform translate-y-full opacity-0 transition-all duration-500 ease-out`}
   role="dialog"
   aria-labelledby={titleId}
   aria-describedby={descId}
@@ -64,19 +64,19 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
     <div class="flex items-start justify-between mb-4">
       <div class="flex items-center space-x-3 flex-1">
         <!-- Cookie Icon -->
-        <div class="flex-shrink-0 w-8 h-8 bg-primary-gold/10 rounded-full flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold" aria-hidden="true">
+        <div class="flex-shrink-0 w-8 h-8 bg-gold bg-opacity-10 rounded-full flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gold" aria-hidden="true">
             <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM9 7.5A1.5 1.5 0 1010.5 9 1.5 1.5 0 009 7.5zm1.5 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM15 12a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" clip-rule="evenodd" />
           </svg>
         </div>
         
         <div class="flex-1">
-          <h3 id={titleId} class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">
+          <h3 id={titleId} class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {variants[variant].title}
           </h3>
-          <p id={descId} class="text-sm text-text-muted leading-relaxed">
+          <p id={descId} class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
             {variants[variant].description}
-            <a href="/datenschutz" class="text-primary-gold hover:underline ml-1" target="_blank" rel="noopener noreferrer">
+            <a href="/datenschutz" class="text-gold hover:underline ml-1" target="_blank" rel="noopener noreferrer">
               Datenschutzrichtlinie
             </a>
           </p>
@@ -86,7 +86,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       <!-- Close Button (Decline) -->
       <button 
         id={`${bannerId}-close`}
-        class="flex-shrink-0 ml-4 p-2 text-text-muted hover:text-text-dark dark:hover:text-text-light rounded-full hover:bg-light-darker dark:hover:bg-dark transition-colors"
+        class="flex-shrink-0 ml-4 p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         aria-label="Cookies ablehnen und Banner schließen"
         data-action="decline"
       >
@@ -100,7 +100,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
     <div class="cookie-buttons flex flex-wrap gap-3">
       <button 
         id={`${bannerId}-accept`}
-        class="btn-accept bg-primary-gold hover:bg-primary-dark text-white font-medium px-4 py-2 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+        class="btn-accept bg-gold hover:bg-gold-dark text-white font-medium px-4 py-2 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
         data-action="accept"
         aria-describedby={`${bannerId}-accept-desc`}
       >
@@ -109,7 +109,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       
       <button 
         id={`${bannerId}-necessary`}
-        class="btn-decline bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light font-medium px-4 py-2 rounded-md border border-light-darkest dark:border-dark-lightest hover:bg-light-darkest dark:hover:bg-dark transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+        class="btn-decline bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
         data-action="necessary"
         aria-describedby={`${bannerId}-necessary-desc`}
       >
@@ -119,7 +119,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       {showManageButton && (
         <button 
           id={`${bannerId}-manage`}
-          class="btn-manage text-primary-gold hover:text-primary-dark font-medium px-4 py-2 rounded-md hover:bg-primary-gold/10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+          class="btn-manage text-gold hover:text-gold-dark font-medium px-4 py-2 rounded-md hover:bg-gold hover:bg-opacity-10 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
           data-action="manage"
           aria-describedby={`${bannerId}-manage-desc`}
         >
@@ -143,20 +143,20 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
 {showManageButton && (
   <div 
     id={`${bannerId}-modal`}
-    class="cookie-modal fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300"
+    class="cookie-modal fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300"
     role="dialog"
     aria-labelledby={`${bannerId}-modal-title`}
     aria-modal="true"
   >
-    <div class="bg-white dark:bg-dark rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto">
       <div class="p-6">
         <div class="flex items-center justify-between mb-6">
-          <h2 id={`${bannerId}-modal-title`} class="text-xl font-bold text-text-dark dark:text-text-light">
+          <h2 id={`${bannerId}-modal-title`} class="text-xl font-bold text-gray-900 dark:text-white">
             Cookie-Einstellungen
           </h2>
           <button 
             id={`${bannerId}-modal-close`}
-            class="p-2 text-text-muted hover:text-text-dark dark:hover:text-text-light rounded-full hover:bg-light-darker dark:hover:bg-dark-lighter transition-colors"
+            class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label="Cookie-Einstellungen schließen"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6" aria-hidden="true">
@@ -168,25 +168,25 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
         <!-- Cookie Categories -->
         <div class="space-y-6">
           <!-- Essential Cookies -->
-          <div class="border-b border-light-darkest dark:border-dark-lightest pb-6">
+          <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
             <div class="flex items-center justify-between mb-3">
-              <h3 class="font-semibold text-text-dark dark:text-text-light">Notwendige Cookies</h3>
-              <span class="text-sm bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 px-2 py-1 rounded">
+              <h3 class="font-semibold text-gray-900 dark:text-white">Notwendige Cookies</h3>
+              <span class="text-sm bg-green-100 dark:bg-green-900 bg-opacity-30 text-green-800 dark:text-green-300 px-2 py-1 rounded">
                 Immer aktiv
               </span>
             </div>
-            <p class="text-sm text-text-muted mb-3">
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
               Diese Cookies sind für die Grundfunktionen der Website erforderlich und können nicht deaktiviert werden.
             </p>
-            <div class="text-xs text-text-muted">
+            <div class="text-xs text-gray-500 dark:text-gray-400">
               <strong>Beispiele:</strong> Session-Management, Sicherheitstoken, Spracheinstellungen
             </div>
           </div>
           
           <!-- Analytics Cookies -->
-          <div class="border-b border-light-darkest dark:border-dark-lightest pb-6">
+          <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
             <div class="flex items-center justify-between mb-3">
-              <h3 class="font-semibold text-text-dark dark:text-text-light">Analyse-Cookies</h3>
+              <h3 class="font-semibold text-gray-900 dark:text-white">Analyse-Cookies</h3>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input 
                   type="checkbox" 
@@ -194,14 +194,14 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
                   class="sr-only peer"
                   data-category="analytics"
                 />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-gold/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-gold"></div>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold peer-focus:ring-opacity-20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-gold"></div>
                 <span class="sr-only">Analyse-Cookies aktivieren/deaktivieren</span>
               </label>
             </div>
-            <p class="text-sm text-text-muted mb-3">
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
               Diese Cookies helfen uns zu verstehen, wie Besucher mit der Website interagieren, indem sie Informationen anonym sammeln und weiterleiten.
             </p>
-            <div class="text-xs text-text-muted">
+            <div class="text-xs text-gray-500 dark:text-gray-400">
               <strong>Provider:</strong> Google Analytics
             </div>
           </div>
@@ -209,7 +209,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
           <!-- Marketing Cookies -->
           <div class="pb-6">
             <div class="flex items-center justify-between mb-3">
-              <h3 class="font-semibold text-text-dark dark:text-text-light">Marketing-Cookies</h3>
+              <h3 class="font-semibold text-gray-900 dark:text-white">Marketing-Cookies</h3>
               <label class="relative inline-flex items-center cursor-pointer">
                 <input 
                   type="checkbox" 
@@ -217,30 +217,30 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
                   class="sr-only peer"
                   data-category="marketing"
                 />
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-gold/20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary-gold"></div>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gold peer-focus:ring-opacity-20 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-gold"></div>
                 <span class="sr-only">Marketing-Cookies aktivieren/deaktivieren</span>
               </label>
             </div>
-            <p class="text-sm text-text-muted mb-3">
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3">
               Diese Cookies werden verwendet, um Ihnen relevante Werbung und Inhalte zu zeigen. Sie können von unseren Werbepartnern gesetzt werden.
             </p>
-            <div class="text-xs text-text-muted">
+            <div class="text-xs text-gray-500 dark:text-gray-400">
               <strong>Provider:</strong> Google Ads, Facebook Pixel
             </div>
           </div>
         </div>
         
         <!-- Modal Actions -->
-        <div class="flex flex-wrap gap-3 pt-6 border-t border-light-darkest dark:border-dark-lightest">
+        <div class="flex flex-wrap gap-3 pt-6 border-t border-gray-200 dark:border-gray-700">
           <button 
             id={`${bannerId}-save-preferences`}
-            class="bg-primary-gold hover:bg-primary-dark text-white font-medium px-6 py-2 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+            class="bg-gold hover:bg-gold-dark text-white font-medium px-6 py-2 rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
           >
             Einstellungen speichern
           </button>
           <button 
             id={`${bannerId}-accept-all-modal`}
-            class="bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light font-medium px-6 py-2 rounded-md border border-light-darkest dark:border-dark-lightest hover:bg-light-darkest dark:hover:bg-dark transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+            class="bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-medium px-6 py-2 rounded-md border border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
           >
             Alle akzeptieren
           </button>
@@ -252,7 +252,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍪 CookieConsent v1.1 initialized - FIXED');
+    console.log('🍪 CookieConsent v1.2.0 initialized - BUTTON-FIX');
     
     const banner = document.querySelector('.cookie-banner');
     const modal = document.querySelector('.cookie-modal');
@@ -262,12 +262,14 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       return;
     }
     
-    // ✅ FIXED: Einfache feste Werte für Build-Stabilität
+    // ✅ FIXED: Dynamische Banner-ID Erkennung
     const config = {
       cookieLifetime: 180,
       autoShow: true,
-      bannerId: 'cookie-consent-banner'
+      bannerId: banner.id
     };
+    
+    console.log('🍪 Using banner ID:', config.bannerId);
     
     // Enhanced Cookie Manager
     class CookieManager {
@@ -284,11 +286,18 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       }
       
       setupEventListeners() {
-        // Banner buttons
-        const acceptBtn = document.getElementById(`${config.bannerId}-accept`);
-        const necessaryBtn = document.getElementById(`${config.bannerId}-necessary`);
-        const manageBtn = document.getElementById(`${config.bannerId}-manage`);
-        const closeBtn = document.getElementById(`${config.bannerId}-close`);
+        // ✅ FIXED: Robuste Button-Erkennung mit Fallbacks
+        const acceptBtn = document.querySelector(`#${config.bannerId}-accept`) || document.querySelector('[data-action="accept"]');
+        const necessaryBtn = document.querySelector(`#${config.bannerId}-necessary`) || document.querySelector('[data-action="necessary"]');
+        const manageBtn = document.querySelector(`#${config.bannerId}-manage`) || document.querySelector('[data-action="manage"]');
+        const closeBtn = document.querySelector(`#${config.bannerId}-close`) || document.querySelector('[data-action="decline"]');
+        
+        console.log('🍪 Found buttons:', { 
+          accept: !!acceptBtn, 
+          necessary: !!necessaryBtn, 
+          manage: !!manageBtn, 
+          close: !!closeBtn 
+        });
         
         acceptBtn?.addEventListener('click', () => this.acceptAll());
         necessaryBtn?.addEventListener('click', () => this.acceptNecessary());
@@ -297,9 +306,9 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
         
         // Modal buttons
         if (modal) {
-          const modalClose = document.getElementById(`${config.bannerId}-modal-close`);
-          const savePrefs = document.getElementById(`${config.bannerId}-save-preferences`);
-          const acceptAllModal = document.getElementById(`${config.bannerId}-accept-all-modal`);
+          const modalClose = document.querySelector(`#${config.bannerId}-modal-close`);
+          const savePrefs = document.querySelector(`#${config.bannerId}-save-preferences`);
+          const acceptAllModal = document.querySelector(`#${config.bannerId}-accept-all-modal`);
           
           modalClose?.addEventListener('click', () => this.closeModal());
           savePrefs?.addEventListener('click', () => this.savePreferences());
@@ -377,8 +386,8 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
         // Load current preferences
         const consent = this.getStoredConsent() || { analytics: false, marketing: false };
         
-        const analyticsToggle = document.getElementById(`${config.bannerId}-analytics`);
-        const marketingToggle = document.getElementById(`${config.bannerId}-marketing`);
+        const analyticsToggle = document.querySelector(`#${config.bannerId}-analytics`);
+        const marketingToggle = document.querySelector(`#${config.bannerId}-marketing`);
         
         if (analyticsToggle) analyticsToggle.checked = consent.analytics;
         if (marketingToggle) marketingToggle.checked = consent.marketing;
@@ -402,12 +411,12 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
         modal.classList.remove('opacity-100');
         
         // Return focus to manage button
-        document.getElementById(`${config.bannerId}-manage`)?.focus();
+        document.querySelector(`#${config.bannerId}-manage`)?.focus();
       }
       
       savePreferences() {
-        const analyticsToggle = document.getElementById(`${config.bannerId}-analytics`);
-        const marketingToggle = document.getElementById(`${config.bannerId}-marketing`);
+        const analyticsToggle = document.querySelector(`#${config.bannerId}-analytics`);
+        const marketingToggle = document.querySelector(`#${config.bannerId}-marketing`);
         
         const consent = {
           necessary: true,
@@ -431,8 +440,8 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       
       acceptAllFromModal() {
         // Set all toggles to true
-        const analyticsToggle = document.getElementById(`${config.bannerId}-analytics`);
-        const marketingToggle = document.getElementById(`${config.bannerId}-marketing`);
+        const analyticsToggle = document.querySelector(`#${config.bannerId}-analytics`);
+        const marketingToggle = document.querySelector(`#${config.bannerId}-marketing`);
         
         if (analyticsToggle) analyticsToggle.checked = true;
         if (marketingToggle) marketingToggle.checked = true;
@@ -601,6 +610,26 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
   });
 </script>
 
+<!-- ✅ BACKUP: Event Delegation für zusätzliche Sicherheit -->
+<script>
+document.addEventListener('click', function(e) {
+  const action = e.target.getAttribute('data-action');
+  
+  if (action === 'accept') {
+    console.log('🍪 Fallback: Accepting all cookies via event delegation');
+    localStorage.setItem('cookie-consent', 'accept');
+    document.cookie = 'cookie-consent=accept; path=/; max-age=' + (180 * 24 * 60 * 60);
+    
+    const banner = document.querySelector('.cookie-banner');
+    if (banner) {
+      banner.style.transform = 'translateY(100%)';
+      banner.style.opacity = '0';
+      setTimeout(() => banner.style.display = 'none', 500);
+    }
+  }
+});
+</script>
+
 <style is:global>
   /* Screen reader only */
   .sr-only {
@@ -630,7 +659,7 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
   .cookie-banner button:focus,
   .cookie-modal button:focus,
   .cookie-modal input:focus {
-    outline: 2px solid var(--primary-gold);
+    outline: 2px solid #D2AE6C !important;
     outline-offset: 2px;
   }
 
@@ -685,4 +714,44 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       width: 100%;
     }
   }
-</style>
+
+  /* Gold color utilities */
+  .text-gold {
+    color: #D2AE6C !important;
+  }
+  
+  .bg-gold {
+    background-color: #D2AE6C !important;
+  }
+  
+  .hover\:bg-gold-dark:hover {
+    background-color: #B8941A !important;
+  }
+  
+  .focus\:ring-gold:focus {
+    box-shadow: 0 0 0 3px rgba(210, 174, 108, 0.2) !important;
+  }
+  
+  .hover\:bg-gold:hover {
+    background-color: #D2AE6C !important;
+  }
+  
+  .hover\:bg-opacity-10:hover {
+    background-color: rgba(210, 174, 108, 0.1) !important;
+  }
+</style>0';
+      setTimeout(() => banner.style.display = 'none', 500);
+    }
+    
+    window.dispatchEvent(new CustomEvent('cookieConsentAccepted'));
+  }
+  
+  else if (action === 'necessary' || action === 'decline') {
+    console.log('🍪 Fallback: Accepting only necessary cookies via event delegation');
+    localStorage.setItem('cookie-consent', 'decline');
+    document.cookie = 'cookie-consent=decline; path=/; max-age=' + (180 * 24 * 60 * 60);
+    
+    const banner = document.querySelector('.cookie-banner');
+    if (banner) {
+      banner.style.transform = 'translateY(100%)';
+      banner.style.opacity = '
