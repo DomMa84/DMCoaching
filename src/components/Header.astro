@@ -1,6 +1,6 @@
 ---
-// src/components/Header.astro v1.0 (Server-Mode & Navigation optimiert)
-// Header - Enhanced navigation component with accessibility
+// src/components/Header.astro v1.1 - CSS-KLASSEN VEREINHEITLICHT
+// Header - Navigation component mit korrigierten CSS-Klassen
 
 import ThemeToggle from './ThemeToggle.astro';
 import Logo from './Logo.astro';
@@ -80,11 +80,11 @@ const socialLinks = [
   }
 ];
 
-// Variant classes
+// Variant classes - KORRIGIERTE CSS-KLASSEN
 const variants = {
-  default: 'bg-light-darker/95 dark:bg-dark-lighter/95',
+  default: 'bg-gray-100/95 dark:bg-gray-800/95',
   transparent: 'bg-transparent',
-  minimal: 'bg-white/90 dark:bg-dark/90'
+  minimal: 'bg-white/90 dark:bg-gray-900/90'
 };
 
 // Helper function to check if path is active
@@ -99,11 +99,11 @@ const isActiveLink = (href: string, currentPath: string) => {
 const dropdownId = `services-dropdown-${Math.random().toString(36).substr(2, 9)}`;
 const mobileMenuId = `mobile-menu-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${currentPath}`);
+console.log(`🧭 Header v1.1 rendered - ${variant} variant, current path: ${currentPath}`);
 ---
 
 <header 
-  class={`header-container sticky top-0 z-50 w-full ${variants[variant]} ${className} backdrop-blur-md border-b border-light-darkest/50 dark:border-dark-lightest/50 shadow-sm transition-all duration-300`}
+  class={`header-container sticky top-0 z-50 w-full ${variants[variant]} ${className} backdrop-blur-md border-b border-gray-300/50 dark:border-gray-600/50 shadow-sm transition-all duration-300`}
   role="banner"
 >
   <div class="container mx-auto px-4 py-3">
@@ -121,7 +121,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
       <!-- Mobile Menu Button -->
       <button 
         id="menu-toggle" 
-        class="lg:hidden flex items-center p-2 text-text-dark dark:text-text-light hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
+        class="lg:hidden flex items-center p-2 text-gray-900 dark:text-white hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
         aria-label="Hauptnavigation öffnen"
         aria-expanded="false"
         aria-controls={mobileMenuId}
@@ -152,7 +152,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
               
               <div 
                 id={dropdownId}
-                class="absolute left-0 mt-2 w-80 rounded-xl shadow-xl bg-white dark:bg-dark-lighter border border-light-darkest dark:border-dark-lightest hidden dropdown-content z-50 opacity-0 translate-y-[-10px] transition-all duration-200"
+                class="absolute left-0 mt-2 w-80 rounded-xl shadow-xl bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hidden dropdown-content z-50 opacity-0 translate-y-[-10px] transition-all duration-200"
                 role="menu"
                 aria-labelledby={`${dropdownId}-button`}
               >
@@ -160,7 +160,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
                   {item.items?.map((subItem) => (
                     <a 
                       href={subItem.href}
-                      class={`flex items-start px-4 py-3 text-text-dark dark:text-text-light hover:bg-light-darker dark:hover:bg-dark-lightest transition-colors group ${isActiveLink(subItem.href, currentPath) ? 'bg-primary-gold/10' : ''}`}
+                      class={`flex items-start px-4 py-3 text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors group ${isActiveLink(subItem.href, currentPath) ? 'bg-primary-gold/10' : ''}`}
                       role="menuitem"
                     >
                       <div class="flex-shrink-0 mr-3 mt-1">
@@ -172,7 +172,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
                         <div class="text-sm font-medium group-hover:text-primary-gold transition-colors">
                           {subItem.name}
                         </div>
-                        <div class="text-xs text-text-muted mt-1 leading-relaxed">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">
                           {subItem.description}
                         </div>
                       </div>
@@ -180,10 +180,10 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
                   ))}
                   
                   <!-- CTA in dropdown -->
-                  <div class="px-4 py-3 border-t border-light-darkest dark:border-dark-lightest mt-2">
+                  <div class="px-4 py-3 border-t border-gray-300 dark:border-gray-600 mt-2">
                     <a 
                       href="/kontakt"
-                      class="flex items-center justify-center w-full px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-colors text-sm font-medium"
+                      class="flex items-center justify-center w-full px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-colors text-sm font-medium"
                     >
                       Kostenloses Erstgespräch
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 ml-2" aria-hidden="true">
@@ -206,7 +206,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
         ))}
         
         <!-- Actions -->
-        <div class="flex items-center space-x-4 ml-8 pl-8 border-l border-light-darkest/30 dark:border-dark-lightest/30">
+        <div class="flex items-center space-x-4 ml-8 pl-8 border-l border-gray-300/30 dark:border-gray-600/30">
           <ThemeToggle />
           
           {showSocial && socialLinks.map((social) => (
@@ -215,7 +215,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
               target="_blank" 
               rel="noopener noreferrer"
               aria-label={social.ariaLabel}
-              class="text-text-dark dark:text-text-light hover:text-primary-gold transition-colors p-2 rounded-md hover:bg-light-darker dark:hover:bg-dark-lightest"
+              class="text-gray-900 dark:text-white hover:text-primary-gold transition-colors p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d={social.icon}></path>
@@ -226,7 +226,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
           <!-- CTA Button -->
           <a 
             href="/kontakt"
-            class="hidden xl:inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
+            class="hidden xl:inline-flex items-center px-4 py-2 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-all duration-300 text-sm font-medium shadow-md hover:shadow-lg transform hover:scale-105"
           >
             Beratung anfragen
           </a>
@@ -239,19 +239,19 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
 <!-- Mobile Navigation (Fullscreen overlay) -->
 <div 
   id={mobileMenuId}
-  class="mobile-menu fixed inset-0 bg-white dark:bg-dark z-[999] flex-col lg:hidden hidden"
+  class="mobile-menu fixed inset-0 bg-white dark:bg-gray-900 z-[999] flex-col lg:hidden hidden"
   role="dialog"
   aria-modal="true"
   aria-label="Mobile Navigation"
 >
   <!-- Mobile Header -->
-  <div class="flex justify-between items-center p-4 border-b border-light-darkest dark:border-dark-lightest">
+  <div class="flex justify-between items-center p-4 border-b border-gray-300 dark:border-gray-600">
     <a href="/" class="flex items-center" aria-label="Dominik Maier Coaching - Startseite">
       <Logo height={40} />
     </a>
     <button 
       id="close-menu" 
-      class="p-2 text-text-dark dark:text-text-light hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold" 
+      class="p-2 text-gray-900 dark:text-white hover:text-primary-gold transition-colors rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold" 
       aria-label="Navigation schließen"
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6" aria-hidden="true">
@@ -269,7 +269,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
           <div class="services-mobile-dropdown">
             <button 
               id="mobile-services-button"
-              class="flex justify-between items-center w-full py-3 text-lg font-medium text-text-dark dark:text-text-light" 
+              class="flex justify-between items-center w-full py-3 text-lg font-medium text-gray-900 dark:text-white" 
               aria-expanded="false"
               aria-controls="mobile-services-content"
             >
@@ -283,10 +283,10 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
               {item.items?.map((subItem) => (
                 <a 
                   href={subItem.href}
-                  class={`block py-2 text-base text-text-dark dark:text-text-light hover:text-primary-gold transition-colors ${isActiveLink(subItem.href, currentPath) ? 'text-primary-gold font-medium' : ''}`}
+                  class={`block py-2 text-base text-gray-900 dark:text-white hover:text-primary-gold transition-colors ${isActiveLink(subItem.href, currentPath) ? 'text-primary-gold font-medium' : ''}`}
                 >
                   <div class="font-medium">{subItem.name}</div>
-                  <div class="text-sm text-text-muted mt-1">{subItem.description}</div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">{subItem.description}</div>
                 </a>
               ))}
             </div>
@@ -294,7 +294,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
         ) : (
           <a 
             href={item.href}
-            class={`py-3 text-lg font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'text-primary-gold' : 'text-text-dark dark:text-text-light hover:text-primary-gold'}`}
+            class={`py-3 text-lg font-medium transition-colors ${isActiveLink(item.href, currentPath) ? 'text-primary-gold' : 'text-gray-900 dark:text-white hover:text-primary-gold'}`}
             aria-current={isActiveLink(item.href, currentPath) ? 'page' : undefined}
           >
             {item.name}
@@ -303,9 +303,9 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
       ))}
       
       <!-- Mobile Actions -->
-      <div class="pt-6 border-t border-light-darkest dark:border-dark-lightest mt-6">
+      <div class="pt-6 border-t border-gray-300 dark:border-gray-600 mt-6">
         <div class="flex items-center justify-between mb-6">
-          <span class="text-sm font-medium text-text-muted">Theme & Social</span>
+          <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Theme & Social</span>
           <div class="flex items-center space-x-4">
             <ThemeToggle />
             {showSocial && socialLinks.map((social) => (
@@ -314,7 +314,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={social.ariaLabel}
-                class="text-text-dark dark:text-text-light hover:text-primary-gold transition-colors p-2"
+                class="text-gray-900 dark:text-white hover:text-primary-gold transition-colors p-2"
               >
                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d={social.icon}></path>
@@ -327,7 +327,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
         <!-- Mobile CTA -->
         <a 
           href="/kontakt"
-          class="flex items-center justify-center w-full px-6 py-3 bg-primary-gold text-white rounded-lg hover:bg-primary-dark transition-colors font-medium shadow-md"
+          class="flex items-center justify-center w-full px-6 py-3 bg-primary-gold text-white rounded-lg hover:bg-primary-gold/90 transition-colors font-medium shadow-md"
         >
           Kostenloses Erstgespräch
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2" aria-hidden="true">
@@ -341,7 +341,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('🧭 Header v1.0 navigation initialized');
+    console.log('🧭 Header v1.1 navigation initialized');
     
     // Mobile menu functionality
     const menuToggle = document.getElementById('menu-toggle');
@@ -483,10 +483,10 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
       const currentScrollY = window.scrollY;
       
       if (currentScrollY > 100) {
-        header.classList.add('backdrop-blur-lg', 'bg-white/95', 'dark:bg-dark/95');
+        header.classList.add('backdrop-blur-lg', 'bg-white/95', 'dark:bg-gray-900/95');
         header.classList.remove('backdrop-blur-md');
       } else {
-        header.classList.remove('backdrop-blur-lg', 'bg-white/95', 'dark:bg-dark/95');
+        header.classList.remove('backdrop-blur-lg', 'bg-white/95', 'dark:bg-gray-900/95');
         header.classList.add('backdrop-blur-md');
       }
       
@@ -524,12 +524,12 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
     position: relative;
     font-weight: 500;
     padding: 0.75rem 0;
-    color: var(--text-dark);
+    color: rgb(17 24 39);
     transition: color 0.3s ease;
   }
 
   .dark .nav-link {
-    color: var(--text-light);
+    color: rgb(255 255 255);
   }
 
   .nav-link::after {
@@ -539,7 +539,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
     height: 2px;
     bottom: 0;
     left: 0;
-    background: linear-gradient(90deg, var(--primary-gold), #B8941A);
+    background: linear-gradient(90deg, #D2AE6C, #B8941A);
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
@@ -550,7 +550,7 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
 
   .nav-link:hover,
   .nav-link.active {
-    color: var(--primary-gold);
+    color: #D2AE6C;
   }
 
   /* Dropdown animations */
@@ -599,34 +599,34 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
     }
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  /* Enhanced dropdown styling */
+  .dropdown-content {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
-  /* Screen reader only */
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  .dark .dropdown-content {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
+                0 10px 10px -5px rgba(0, 0, 0, 0.2);
   }
 
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    .nav-link::after {
-      background: currentColor;
-      height: 3px;
-    }
+  /* Logo hover effect */
+  .header-container a:hover .logo {
+    transform: scale(1.05);
+  }
 
-    .dropdown-content {
-      border: 2px solid currentColor;
-    }
+  /* Smooth backdrop blur transition */
+  .header-container {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* Focus styles for accessibility */
+  button:focus,
+  a:focus {
+    outline: 2px solid #D2AE6C;
+    outline-offset: 2px;
+    border-radius: 4px;
   }
 
   /* Reduced motion support */
@@ -648,61 +648,5 @@ console.log(`🧭 Header v1.0 rendered - ${variant} variant, current path: ${cur
         transform: translateY(0);
       }
     }
-  }
-
-  /* Print styles */
-  @media print {
-    .header-container {
-      position: static;
-      background: white !important;
-      border-bottom: 1px solid #ccc;
-      box-shadow: none;
-    }
-
-    .mobile-menu,
-    .dropdown-content {
-      display: none !important;
-    }
-
-    .nav-link {
-      color: black !important;
-    }
-  }
-
-  /* Focus styles for accessibility */
-  button:focus,
-  a:focus {
-    outline: 2px solid var(--primary-gold);
-    outline-offset: 2px;
-    border-radius: 4px;
-  }
-
-  /* Mobile optimizations */
-  @media (max-width: 1023px) {
-    .mobile-menu {
-      padding-bottom: env(safe-area-inset-bottom, 0);
-    }
-  }
-
-  /* Enhanced dropdown styling */
-  .dropdown-content {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .dark .dropdown-content {
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.2);
-  }
-
-  /* Logo hover effect */
-  .header-container a:hover .logo {
-    transform: scale(1.05);
-  }
-
-  /* Smooth backdrop blur transition */
-  .header-container {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
 </style>
