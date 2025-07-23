@@ -1,0 +1,19 @@
+---
+// public/site.manifest v1.0 (Created)
+
+{
+  "name": "Dominik Maier Coaching & Interim Management",
+  "short_name": "Maier Value",
+  "description": "Strategische Unternehmensentwicklung & Value Management",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#D2AE6C",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}
