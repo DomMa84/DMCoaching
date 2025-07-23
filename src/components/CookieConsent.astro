@@ -262,11 +262,11 @@ console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} po
       return;
     }
     
-    // ✅ FIXED: Korrekte Template-Literal-Syntax für Astro-Variablen
+    // ✅ FIXED: Einfache feste Werte für Build-Stabilität
     const config = {
-      cookieLifetime: ${cookieLifetime},
-      autoShow: ${autoShow},
-      bannerId: '${bannerId}'
+      cookieLifetime: 180,
+      autoShow: true,
+      bannerId: 'cookie-consent-banner'
     };
     
     // Enhanced Cookie Manager
