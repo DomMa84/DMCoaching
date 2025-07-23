@@ -1,4 +1,126 @@
----
+<style>
+  /* VOLLSTÄNDIGES CSS DIREKT IN INDEX.ASTRO */
+  
+  /* DESKTOP GRID FORCE-FIX - GARANTIERT 4 SPALTEN */
+  @media (min-width: 1024px) {
+    .services-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .value-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .process-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 1.5rem !important;
+    }
+  }
+  
+  /* BASIC GRID CLASSES */
+  .grid { display: grid; }
+  .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+  .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  
+  @media (min-width: 640px) {
+    .sm\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  
+  @media (min-width: 768px) {
+    .md\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  
+  /* SPACING */
+  .gap-3 { gap: 0.75rem; }
+  .gap-4 { gap: 1rem; }
+  .gap-6 { gap: 1.5rem; }
+  .gap-8 { gap: 2rem; }
+  .gap-12 { gap: 3rem; }
+  
+  @media (min-width: 768px) {
+    .md\\:gap-8 { gap: 2rem; }
+    .md\\:gap-12 { gap: 3rem; }
+  }
+  
+  /* MARGINS */
+  .mb-12 { margin-bottom: 3rem; }
+  .mb-16 { margin-bottom: 4rem; }
+  .mx-auto { margin-left: auto; margin-right: auto; }
+  
+  @media (min-width: 768px) {
+    .md\\:mb-16 { margin-bottom: 4rem; }
+  }
+  
+  /* MAX-WIDTH */
+  .max-w-7xl { max-width: 80rem; }
+  
+  /* COLORS */
+  .text-primary-gold { color: #D2AE6C; }
+  .bg-primary-gold { background-color: #D2AE6C; }
+  .bg-primary-gold\/15 { background-color: rgba(210, 174, 108, 0.15); }
+  .bg-primary-gold\/20 { background-color: rgba(210, 174, 108, 0.20); }
+  .bg-primary-gold\/25 { background-color: rgba(210, 174, 108, 0.25); }
+  .bg-primary-gold\/30 { background-color: rgba(210, 174, 108, 0.30); }
+  
+  .text-gray-50 { color: #f9fafb; }
+  .text-gray-300 { color: #d1d5db; }
+  .text-gray-600 { color: #4b5563; }
+  .text-gray-900 { color: #111827; }
+  .bg-gray-50 { background-color: #f9fafb; }
+  .bg-gray-100 { background-color: #f3f4f6; }
+  .bg-gray-800 { background-color: #1f2937; }
+  .bg-gray-900 { background-color: #111827; }
+  .bg-white { background-color: #ffffff; }
+  
+  /* DARK MODE */
+  .dark .text-gray-900 { color: #f9fafb; }
+  .dark .text-gray-600 { color: #d1d5db; }
+  .dark .text-gray-300 { color: #9ca3af; }
+  .dark .bg-gray-50 { background-color: #111827; }
+  .dark .bg-gray-100 { background-color: #1f2937; }
+  .dark .bg-gray-800 { background-color: #374151; }
+  .dark .bg-white { background-color: #1f2937; }
+  
+  /* BASIC STYLING */
+  .rounded-xl { border-radius: 0.75rem; }
+  .rounded-2xl { border-radius: 1rem; }
+  .rounded-full { border-radius: 9999px; }
+  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1); }
+  .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+  
+  .p-4 { padding: 1rem; }
+  .p-6 { padding: 1.5rem; }
+  .p-8 { padding: 2rem; }
+  .px-4 { padding-left: 1rem; padding-right: 1rem; }
+  .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+  .py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+  
+  @media (min-width: 768px) {
+    .md\\:p-8 { padding: 2rem; }
+    .md\\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
+  }
+  
+  .text-center { text-align: center; }
+  .font-bold { font-weight: 700; }
+  .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+  .text-base { font-size: 1rem; line-height: 1.5rem; }
+  .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+  .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+  .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+  .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+  .text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+  
+  @media (min-width: 768px) {
+    .md\\:text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+    .md\\:text-xl { font-size: 1.25rem; line-height: 1.---
 // src/pages/index.astro v1.3.2 - KONTRAST-FIXES
 // Behebt schlechte Kontraste und fehlerhafte Darstellungen
 //
@@ -46,10 +168,10 @@ console.log('🎨 Index v1.3.2 - Kontrast-Fixes');
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center max-w-7xl mx-auto">
         <!-- Text Bereich mit STÄRKEREM Kontrast -->
         <div class="text-white hero-text-super-contrast" data-aos="fade-right">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight">
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight text-white">
             Erfolg beginnt mit uns
           </h1>
-          <p class="text-xl md:text-2xl mb-8 md:mb-10 leading-relaxed">
+          <p class="text-xl md:text-2xl mb-8 md:mb-10 leading-relaxed text-white">
             Wir helfen Ihnen ihre Prozesse und Produkte im Unternehmen weiterzuentwickeln und wachsen zu lassen – mit einem Fokus auf Ihren Kunden!
           </p>
           <!-- Highlight-Tags mit besserer Sichtbarkeit -->
