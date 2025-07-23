@@ -1,6 +1,6 @@
 ---
-// src/components/Footer.astro v1.0 (Server-Mode & SEO optimiert)
-// Footer - Enhanced footer component with structured data
+// src/components/Footer.astro v1.1 - CSS-KLASSEN VEREINHEITLICHT
+// Footer - Enhanced footer component mit korrigierten CSS-Klassen
 
 import Logo from './Logo.astro';
 
@@ -68,11 +68,11 @@ const footerNavigation = [
   }
 ];
 
-console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear}`);
+console.log(`🦶 Footer v1.1 rendered - ${variant} variant, year: ${currentYear}`);
 ---
 
 <footer 
-  class={`footer-container bg-light-darker dark:bg-dark-lighter text-text-dark dark:text-text-light border-t border-light-darkest dark:border-dark-lightest ${className}`}
+  class={`footer-container bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-600 ${className}`}
   role="contentinfo"
   aria-label="Website-Footer mit Kontaktinformationen und Links"
 >
@@ -85,10 +85,10 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
         <div class="lg:col-span-2">
           <div class="flex flex-col items-start">
             <Logo height={48} class="mb-4" />
-            <h2 class="text-lg font-semibold mb-3 text-text-dark dark:text-text-light">
+            <h2 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
               {companyInfo.name}
             </h2>
-            <p class="text-sm text-text-muted mb-4 leading-relaxed">
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
               {companyInfo.description}. Wir helfen Unternehmen dabei, ihre Prozesse zu optimieren, 
               Kosten zu reduzieren und nachhaltiges Wachstum zu erreichen.
             </p>
@@ -99,7 +99,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
                   <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                 </svg>
-                <address class="not-italic text-text-muted">
+                <address class="not-italic text-gray-600 dark:text-gray-300">
                   {companyInfo.address.street}, {companyInfo.address.postalCode} {companyInfo.address.city}
                 </address>
               </div>
@@ -108,7 +108,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
                   <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
                 </svg>
-                <a href={`tel:${companyInfo.contact.phone}`} class="text-text-muted hover:text-primary-gold transition-colors">
+                <a href={`tel:${companyInfo.contact.phone}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
                   {companyInfo.contact.phone}
                 </a>
               </div>
@@ -118,7 +118,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
                   <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
                   <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                 </svg>
-                <a href={`mailto:${companyInfo.contact.email}`} class="text-text-muted hover:text-primary-gold transition-colors">
+                <a href={`mailto:${companyInfo.contact.email}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
                   {companyInfo.contact.email}
                 </a>
               </div>
@@ -129,7 +129,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
         <!-- Navigation Columns -->
         {footerNavigation.map((section) => (
           <div>
-            <h3 class="text-sm font-semibold text-text-dark dark:text-text-light mb-3 uppercase tracking-wider">
+            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wider">
               {section.label}
             </h3>
             <nav aria-label={`${section.label} Navigation`}>
@@ -139,7 +139,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
                     <a 
                       href={item.href}
                       rel={item.rel}
-                      class="text-sm text-text-muted hover:text-primary-gold transition-colors"
+                      class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors"
                     >
                       {item.name}
                     </a>
@@ -155,16 +155,16 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="flex items-center">
           <Logo height={32} class="mr-3" />
-          <span class="text-sm text-text-muted">
+          <span class="text-sm text-gray-600 dark:text-gray-300">
             &copy; {currentYear} Dominik Maier
           </span>
         </div>
         
         <nav class="flex space-x-6" aria-label="Footer Navigation">
-          <a href="/impressum" class="text-sm text-text-muted hover:text-primary-gold transition-colors" rel="nofollow">
+          <a href="/impressum" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
             Impressum
           </a>
-          <a href="/datenschutz" class="text-sm text-text-muted hover:text-primary-gold transition-colors" rel="nofollow">
+          <a href="/datenschutz" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
             Datenschutz
           </a>
         </nav>
@@ -175,7 +175,7 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
         <!-- Logo & Branding -->
         <div class="flex flex-col items-center md:items-start">
           <Logo height={40} class="mb-4" />
-          <p class="text-center md:text-left text-sm text-text-muted leading-relaxed">
+          <p class="text-center md:text-left text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
             Coaching und Interim Management<br>
             Experte für Unternehmensentwicklung<br>
             <strong>15+ Jahre Erfahrung</strong>
@@ -216,10 +216,10 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
           
           <!-- Quick Contact -->
           <div class="text-center md:text-right">
-            <p class="text-xs text-text-muted mb-1">Kostenlose Beratung:</p>
+            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Kostenlose Beratung:</p>
             <a 
               href={`tel:${companyInfo.contact.phone}`}
-              class="text-sm font-medium text-primary-gold hover:text-primary-dark transition-colors"
+              class="text-sm font-medium text-primary-gold hover:text-primary-gold/80 transition-colors"
               aria-label={`Anrufen unter ${companyInfo.contact.phone}`}
             >
               {companyInfo.contact.phone}
@@ -231,24 +231,24 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
 
     {showNewsletter && (
       <!-- Newsletter Signup -->
-      <div class="mt-8 pt-8 border-t border-light-darkest dark:border-dark-lightest">
+      <div class="mt-8 pt-8 border-t border-gray-300 dark:border-gray-600">
         <div class="max-w-md mx-auto text-center">
-          <h3 class="text-lg font-semibold mb-2 text-text-dark dark:text-text-light">
+          <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
             Business Newsletter
           </h3>
-          <p class="text-sm text-text-muted mb-4">
+          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
             Erhalten Sie monatlich Insights zu Unternehmensentwicklung und Value Management.
           </p>
           <form class="flex gap-2">
             <input 
               type="email" 
               placeholder="ihre.email@beispiel.de"
-              class="flex-1 px-3 py-2 text-sm bg-light dark:bg-dark border border-light-darkest dark:border-dark-lightest rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
+              class="flex-1 px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
               aria-label="E-Mail-Adresse für Newsletter"
             />
             <button 
               type="submit"
-              class="px-4 py-2 bg-primary-gold text-white text-sm font-medium rounded-md hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
+              class="px-4 py-2 bg-primary-gold text-white text-sm font-medium rounded-md hover:bg-primary-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
             >
               Anmelden
             </button>
@@ -258,13 +258,13 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
     )}
     
     <!-- Copyright & Legal -->
-    <div class="mt-8 pt-6 border-t border-light-darkest dark:border-dark-lightest">
+    <div class="mt-8 pt-6 border-t border-gray-300 dark:border-gray-600">
       <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-text-muted text-center md:text-left">
+        <p class="text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
           &copy; {currentYear} {companyInfo.name}. Alle Rechte vorbehalten.
         </p>
         
-        <div class="flex items-center space-x-4 text-xs text-text-muted">
+        <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
           <span>Made with ❤️ in Baden-Württemberg</span>
           <span>•</span>
           <span>DSGVO konform</span>
@@ -319,15 +319,15 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
   /* Enhanced footer styling */
   .footer-container {
     background: linear-gradient(180deg, 
-      rgba(248, 250, 252, 0.8) 0%, 
-      rgba(248, 250, 252, 1) 100%);
+      rgba(243, 244, 246, 0.8) 0%, 
+      rgba(243, 244, 246, 1) 100%);
     backdrop-filter: blur(10px);
   }
 
   .dark .footer-container {
     background: linear-gradient(180deg, 
-      rgba(30, 30, 30, 0.8) 0%, 
-      rgba(30, 30, 30, 1) 100%);
+      rgba(31, 41, 55, 0.8) 0%, 
+      rgba(31, 41, 55, 1) 100%);
   }
 
   /* Link hover effects */
@@ -358,45 +358,25 @@ console.log(`🦶 Footer v1.0 rendered - ${variant} variant, year: ${currentYear
 
   /* Newsletter form styling */
   .footer-container input:focus {
-    box-shadow: 0 0 0 2px var(--primary-gold);
-  }
-
-  /* High contrast mode support */
-  @media (prefers-contrast: high) {
-    .footer-container {
-      background: white;
-      border-top: 3px solid black;
-    }
-
-    .dark .footer-container {
-      background: black;
-      border-top: 3px solid white;
-    }
-  }
-
-  /* Print styles */
-  @media print {
-    .footer-container {
-      background: white !important;
-      color: black !important;
-      border-top: 1px solid #ccc;
-    }
-
-    .footer-container a {
-      color: black !important;
-      text-decoration: underline;
-    }
-
-    /* Hide social icons in print */
-    .footer-container svg {
-      display: none;
-    }
+    box-shadow: 0 0 0 2px #D2AE6C;
   }
 
   /* Mobile optimizations */
   @media (max-width: 768px) {
     .footer-container {
       padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .footer-container a,
+    .footer-container .logo {
+      transition: none;
+    }
+
+    .footer-container .group:hover svg {
+      animation: none;
     }
   }
 </style>
