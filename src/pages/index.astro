@@ -90,7 +90,7 @@ console.log('🎨 Index v1.3.2 - Kontrast-Fixes');
       </div>
       
       <!-- 4 Service-Karten GARANTIERT nebeneinander -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto">
+      <div class="services-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto">
         <!-- Service 1 -->
         <article 
           class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
@@ -204,8 +204,8 @@ console.log('🎨 Index v1.3.2 - Kontrast-Fixes');
         </p>
       </div>
       
-      <!-- 4 Value-Karten GARANTIERT nebeneinander - KORRIGIERT -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto mb-12 md:mb-16">
+      <!-- 4 Value-Karten GARANTIERT nebeneinander -->
+      <div class="value-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto mb-12 md:mb-16">
         <!-- Value Card 1 - Kostenreduzierung -->
         <article 
           class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 text-center group hover:shadow-2xl hover:scale-105 transition-all duration-300"
@@ -389,7 +389,7 @@ console.log('🎨 Index v1.3.2 - Kontrast-Fixes');
           <div class="bg-gradient-to-r from-primary-gold/30 via-primary-gold to-primary-gold/30 h-full rounded-full animate-pulse-line"></div>
         </div>
         
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        <div class="process-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-8">
           <!-- Step 1 -->
           <article class="relative z-10" data-aos="fade-up" data-aos-delay="100">
             <div class="flex flex-col items-center text-center">
@@ -448,6 +448,27 @@ console.log('🎨 Index v1.3.2 - Kontrast-Fixes');
 </Layout>
 
 <style>
+  /* DESKTOP GRID FORCE-FIX - GARANTIERT 4 SPALTEN */
+  @media (min-width: 1024px) {
+    .services-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .value-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .process-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 1.5rem !important;
+    }
+  }
+  
   /* CSS-Klassen Definitionen für bessere Kontraste */
   .text-primary-gold {
     color: #D2AE6C;
