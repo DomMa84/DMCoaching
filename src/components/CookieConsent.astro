@@ -1,5 +1,5 @@
 ---
-// src/components/CookieConsent.astro v1.0 (Server-Mode & GDPR optimiert)
+// src/components/CookieConsent.astro v1.1 (FIXED - cookieLifetime error behoben)
 // CookieConsent - Enhanced GDPR-compliant cookie banner
 
 interface Props {
@@ -47,7 +47,7 @@ const variants = {
   }
 };
 
-console.log(`🍪 CookieConsent v1.0 loaded - ${variant} variant, ${position} position`);
+console.log(`🍪 CookieConsent v1.1 loaded - ${variant} variant, ${position} position - FIXED`);
 ---
 
 <div 
@@ -252,7 +252,7 @@ console.log(`🍪 CookieConsent v1.0 loaded - ${variant} variant, ${position} po
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍪 CookieConsent v1.0 initialized');
+    console.log('🍪 CookieConsent v1.1 initialized - FIXED');
     
     const banner = document.querySelector('.cookie-banner');
     const modal = document.querySelector('.cookie-modal');
@@ -262,10 +262,11 @@ console.log(`🍪 CookieConsent v1.0 loaded - ${variant} variant, ${position} po
       return;
     }
     
+    // ✅ FIXED: Korrekte Template-Literal-Syntax für Astro-Variablen
     const config = {
-      cookieLifetime: {cookieLifetime},
-      autoShow: {autoShow},
-      bannerId: '{bannerId}'
+      cookieLifetime: ${cookieLifetime},
+      autoShow: ${autoShow},
+      bannerId: '${bannerId}'
     };
     
     // Enhanced Cookie Manager
@@ -639,12 +640,12 @@ console.log(`🍪 CookieConsent v1.0 loaded - ${variant} variant, ${position} po
       border: 2px solid currentColor;
       background-color: white;
     }
-
+    
     .cookie-banner.dark-mode {
       background-color: black;
       color: white;
     }
-
+    
     .btn-accept {
       border: 2px solid currentColor;
     }
@@ -675,11 +676,11 @@ console.log(`🍪 CookieConsent v1.0 loaded - ${variant} variant, ${position} po
       border-radius: 1rem 1rem 0 0;
       max-width: none;
     }
-
+    
     .cookie-buttons {
       flex-direction: column;
     }
-
+    
     .cookie-buttons button {
       width: 100%;
     }
