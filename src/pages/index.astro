@@ -1,23 +1,28 @@
 ---
-// Index.astro v1.3.7 - Sauberes HTML ohne CSS + Value Tile Verbesserungen
-// CHANGELOG v1.3.7:
-// - ✅ CLEAN: Alle CSS-Definitionen nach Layout.astro verschoben
-// - ✅ FIX: Größere Kreise in Value Tiles (w-40 h-40 → md:w-48 md:h-48)
-// - ✅ FIX: Verbesserte Tile-Zentrierung mit value-tile-improved Klasse
-// - ✅ FIX: Einheitliche Tile-Höhen für bessere Darstellung
-// - ✅ KEEP: Alle anderen Bereiche unverändert
+// Index.astro v1.3.8 - Header/Footer Integration + Korrekte Reihenfolge
+// CHANGELOG v1.3.8:
+// - ✅ FIX: Header.astro v1.3 integriert
+// - ✅ FIX: Footer.astro v1.2 integriert  
+// - ✅ FIX: Korrekte Sektions-Reihenfolge: Hero → Services → Value → Process
+// - ✅ KEEP: ContactForm v18.7 im Hero-Bereich
+// - ✅ KEEP: Alle CSS-Klassen aus Layout.astro v1.2.7
 
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
 
-console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
+console.log('🎨 Index v1.3.8 - Header/Footer Integration + Korrekte Reihenfolge');
 ---
 
 <Layout 
   title="Dominik Maier | Coaching & Interim Management"
   description="Strategische Unternehmensentwicklung, Vertriebsoptimierung, Marketing-Strategien und Value Management - Dominik Maier hilft Ihrem Unternehmen zu wachsen."
 >
-  <!-- Hero Section - VEREINFACHTER WEIßER TEXT -->
+  <!-- Header Integration -->
+  <Header />
+
+  <!-- Hero Section mit ContactForm -->
   <section class="relative min-h-[80vh] flex items-center py-16 md:py-20 overflow-hidden">
     <!-- Animated Background mit STÄRKEREM Overlay -->
     <div class="absolute inset-0 z-0">
@@ -40,9 +45,9 @@ console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
     </div>
     
     <div class="container mx-auto px-4 relative z-10">
-      <!-- VERBESSERTES Layout: Text und Form sicher nebeneinander -->
+      <!-- Text und ContactForm nebeneinander -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center max-w-7xl mx-auto">
-        <!-- Text Bereich mit VEREINFACHTEM weißen Text -->
+        <!-- Text Bereich mit weißem Text -->
         <div class="text-white hero-text-simple-white" data-aos="fade-right">
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight">
             Erfolg beginnt mit uns
@@ -50,94 +55,59 @@ console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
           <p class="text-xl md:text-2xl mb-8 md:mb-10 leading-relaxed">
             Wir helfen Ihnen ihre Prozesse und Produkte im Unternehmen weiterzuentwickeln und wachsen zu lassen – mit einem Fokus auf Ihren Kunden!
           </p>
-          <!-- Highlight-Tags mit besserer Sichtbarkeit -->
+          <!-- Highlight-Tags -->
           <div class="flex flex-wrap gap-3 mb-6">
             <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
-            </svg>
+              ✓ 10-50% Kostenreduzierung
+            </span>
+            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
+              ✓ Strategische Beratung
+            </span>
+            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
+              ✓ Value Management
+            </span>
           </div>
-          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-            Marketing-Strategien
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
-            Entwicklung zielgerichteter Marketingkonzepte für mehr Sichtbarkeit und Kundenbindung.
-          </p>
-          <a href="/leistung/marketing-strategien" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
-            Mehr erfahren
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
-              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </article>
+        </div>
         
-        <!-- Service 4 -->
-        <article 
-          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
-          data-aos="fade-up"
-          data-aos-delay="400"
-        >
-          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
-              <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
-            </svg>
+        <!-- Kontaktformular Bereich -->
+        <div data-aos="fade-left" data-aos-delay="200">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 md:p-8 max-w-lg mx-auto">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              Kostenloses Erstgespräch
+            </h2>
+            <ContactForm leadForm={true} />
           </div>
-          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-            Optimierung von Prozessen & Produkten
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
-            Effiziente Prozessgestaltung und Produktoptimierung durch Value Management.
-          </p>
-          <a href="/leistung/wertanalyse" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
-            Mehr erfahren
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
-              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </article>
+        </div>
       </div>
     </div>
   </section>
   
-  <!-- Value Management Section - VERBESSERTE TILES mit größeren Kreisen -->
-  <section class="py-16 md:py-20 bg-gray-100 dark:bg-gray-800">
+  <!-- Services Section - ERSTE Position nach Hero -->
+  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto px-4">
       <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Value Management</h2>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Unser Fokus</h2>
         <p class="text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-lg md:text-xl leading-relaxed">
-          Des Weiteren helfen wir Ihnen mit Hilfe des Value Management Ihre Produkte und Prozesse im gesamten Unternehmen zu verbessern. Mit dem Value Management kann folgendes erreicht werden:
+          Experten für Unternehmensentwicklung in den Bereichen Vertrieb, Marketing, und Prozessoptimierung.
         </p>
       </div>
       
-      <!-- 4 Value-Karten GARANTIERT nebeneinander mit GRÖßEREN KREISEN -->
-      <div class="value-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto mb-12 md:mb-16">
-        <!-- Value Card 1 - Kostenreduzierung -->
+      <!-- 4 Service-Karten GARANTIERT nebeneinander -->
+      <div class="services-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto">
+        <!-- Service 1 -->
         <article 
-          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
           data-aos="fade-up"
           data-aos-delay="100"
         >
-          <div class="value-circle-large relative">
-            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-              <!-- Background circle -->
-              <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
-              <!-- Progress circle -->
-              <circle 
-                cx="50" cy="50" r="40" 
-                stroke="#D2AE6C" 
-                stroke-width="8" 
-                fill="none"
-                stroke-linecap="round"
-                stroke-dasharray="251.2"
-                stroke-dashoffset="125.6"
-                class="animate-draw-circle"
-                style="animation-delay: 0.5s;"
-              />
+          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
+              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
             </svg>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="value-circle-text">10-50%</span>
-            </div>
           </div>
-          <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Kostenreduzierung</h3>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Strategische Unternehmens&shy;entwicklung
+          </h3>
           <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg">Signifikante Einsparungen durch optimierte Prozesse und Produkte.</p>
         </article>
         
@@ -276,7 +246,7 @@ console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
     </div>
   </section>
   
-  <!-- 4-Schritte Prozess Section - SAUBERES HTML mit Grid -->
+  <!-- 4-Schritte Prozess Section - DRITTE Position -->
   <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900 relative overflow-hidden">
     <div class="container mx-auto px-4">
       <div class="text-center mb-12 md:mb-20" data-aos="fade-up">
@@ -349,59 +319,10 @@ console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
       </div>
     </div>
   </section>
-</Layout>
 
-<!-- KEIN CSS MEHR HIER - Alles in Layout.astro! -->✓ 10-50% Kostenreduzierung
-            </span>
-            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              ✓ Strategische Beratung
-            </span>
-            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              ✓ Value Management
-            </span>
-          </div>
-        </div>
-        
-        <!-- Kontaktformular Bereich - Service-Tile Design -->
-        <div data-aos="fade-left" data-aos-delay="200">
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 md:p-8 max-w-lg mx-auto">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-              Kostenloses Erstgespräch
-            </h2>
-            <ContactForm leadForm={true} />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Services Section - SAUBERES HTML statt Components -->
-  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Unser Fokus</h2>
-        <p class="text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-lg md:text-xl leading-relaxed">
-          Experten für Unternehmensentwicklung in den Bereichen Vertrieb, Marketing, und Prozessoptimierung.
-        </p>
-      </div>
-      
-      <!-- 4 Service-Karten GARANTIERT nebeneinander -->
-      <div class="services-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto">
-        <!-- Service 1 -->
-        <article 
-          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
-              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
-            </svg>
-          </div>
-          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-            Strategische Unternehmens&shy;entwicklung
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
+  <!-- Footer Integration -->
+  <Footer />
+</Layout>:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
             Entwicklung nachhaltiger Strategien für Wachstum und Wettbewerbsfähigkeit.
           </p>
           <a href="/leistung/strategische-unternehmensentwicklung" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
@@ -445,3 +366,89 @@ console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
         >
           <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
+              <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Marketing-Strategien
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
+            Entwicklung zielgerichteter Marketingkonzepte für mehr Sichtbarkeit und Kundenbindung.
+          </p>
+          <a href="/leistung/marketing-strategien" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
+            Mehr erfahren
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
+              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </article>
+        
+        <!-- Service 4 -->
+        <article 
+          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="fade-up"
+          data-aos-delay="400"
+        >
+          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
+              <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Optimierung von Prozessen & Produkten
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
+            Effiziente Prozessgestaltung und Produktoptimierung durch Value Management.
+          </p>
+          <a href="/leistung/wertanalyse" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
+            Mehr erfahren
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
+              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Value Management Section - ZWEITE Position -->
+  <section class="py-16 md:py-20 bg-gray-100 dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Value Management</h2>
+        <p class="text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-lg md:text-xl leading-relaxed">
+          Des Weiteren helfen wir Ihnen mit Hilfe des Value Management Ihre Produkte und Prozesse im gesamten Unternehmen zu verbessern. Mit dem Value Management kann folgendes erreicht werden:
+        </p>
+      </div>
+      
+      <!-- 4 Value-Karten GARANTIERT nebeneinander mit GRÖßEREN KREISEN -->
+      <div class="value-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto mb-12 md:mb-16">
+        <!-- Value Card 1 - Kostenreduzierung -->
+        <article 
+          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <div class="value-circle-large relative">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              <!-- Background circle -->
+              <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
+              <!-- Progress circle -->
+              <circle 
+                cx="50" cy="50" r="40" 
+                stroke="#D2AE6C" 
+                stroke-width="8" 
+                fill="none"
+                stroke-linecap="round"
+                stroke-dasharray="251.2"
+                stroke-dashoffset="125.6"
+                class="animate-draw-circle"
+                style="animation-delay: 0.5s;"
+              />
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <span class="value-circle-text">10-50%</span>
+            </div>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Kostenreduzierung</h3>
+          <p class="text-gray-600 dark
