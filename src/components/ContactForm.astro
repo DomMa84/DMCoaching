@@ -1,6 +1,11 @@
 ---
-// src/components/ContactForm.astro v18.4 - CHECKBOX ALIGNMENT FIX
-// ContactForm - Checkbox ordentlich aligned mit Input-Feldern
+// src/components/ContactForm.astro v18.7 - CHECKBOX INNERHALB TILE FIX
+// CHANGELOG v18.7:
+// - ✅ FIX: Checkbox + GDPR Text INNERHALB der Tile (vor dem Button)
+// - ✅ FIX: Korrekte Reihenfolge: Felder → Checkbox → Button → Pflichtfelder
+// - ✅ FIX: Keine CSS-Probleme die Elemente aus Tile drücken
+// - ✅ KEEP: Alpine.js Funktionalität unverändert
+// - ✅ KEEP: Alle Validierungen funktional
 
 interface Props {
   leadForm?: boolean;
@@ -19,7 +24,7 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${leadForm} - CHECKBOX FIX`);
+console.log(`📝 ContactForm v18.7 rendered - Checkbox IN Tile Fix - ${variant} variant, leadForm: ${leadForm}`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
@@ -49,7 +54,7 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
         },
 
         async submitForm() {
-            console.log('=== FORM SUBMISSION v18.4 ===');
+            console.log('=== FORM SUBMISSION v18.7 ===');
             
             if (this.isSubmitting) return;
             
@@ -272,7 +277,7 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
       />
     </div>
 
-    <!-- GDPR Consent - PERFEKT ALIGNED -->
+    <!-- GDPR Consent - JETZT INNERHALB der Tile VOR dem Button -->
     <div class="space-y-2">
       <div class="flex items-start space-x-3">
         <input
@@ -326,6 +331,11 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
       </button>
     </div>
 
+    <!-- Required Fields Note - BLEIBT am Ende -->
+    <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+      * Pflichtfelder - Alle Daten werden DSGVO-konform verarbeitet.
+    </p>
+
     <!-- Success Message -->
     <template x-if="showSuccess">
       <div class="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
@@ -362,10 +372,5 @@ console.log(`📝 ContactForm v18.4 rendered - ${variant} variant, leadForm: ${l
         </div>
       </div>
     </template>
-    
-    <!-- Required Fields Note -->
-    <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
-      * Pflichtfelder - Alle Daten werden DSGVO-konform verarbeitet.
-    </p>
   </form>
 </div>
