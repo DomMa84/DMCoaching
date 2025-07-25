@@ -25,9 +25,9 @@ const { title, description } = Astro.props;
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <title>{title}</title>
     
-    <!-- AOS Animation Library -->
+    <!-- AOS Animation Library - Safe Loading -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -36,20 +36,27 @@ const { title, description } = Astro.props;
     <slot />
     
     <script>
-      // Initialize AOS
-      AOS.init({
-        duration: 1000,
-        easing: 'ease-in-out',
-        once: true,
-        offset: 100
+      // AOS Safe Initialization
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if AOS is loaded
+        if (typeof AOS !== 'undefined') {
+          AOS.init({
+            duration: 1000,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+          });
+        } else {
+          console.warn('AOS library not loaded, skipping animation initialization');
+        }
+        
+        // Dark mode logic
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       });
-      
-      // Dark mode logic
-      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
     </script>
   </body>
 </html>
