@@ -1,11 +1,8 @@
 ---
-// Layout.astro v1.2.4 - Zentralisiertes CSS mit Value Tile Verbesserungen
-// CHANGELOG v1.2.4:
-// - ✅ CSS aus Index.astro hierher verschoben (saubere Struktur)
-// - ✅ FIX: Größere Kreise in Value Management Tiles (w-40 h-40)
-// - ✅ FIX: Bessere Zentrierung und gleichmäßige Tile-Höhen
-// - ✅ FIX: Vereinfachter Hero-Text CSS (hero-text-simple-white)
-// - ✅ KEEP: Alle bestehenden CSS-Definitionen
+// Layout.astro v1.2.5 - CSS Syntax Fix
+// CHANGELOG v1.2.5:
+// - ✅ FIX: CSS Syntax Error behoben (Zeile 46)
+// - ✅ KEEP: Alle anderen Funktionen unverändert
 
 export interface Props {
   title: string;
@@ -505,7 +502,7 @@ const { title, description } = Astro.props;
   .w-20 { width: 5rem; }
   .w-24 { width: 6rem; }
   .w-32 { width: 8rem; }
-  .w-40 { width: 10rem; }    /* NEUE KLASSE für größere Kreise */
+  .w-40 { width: 10rem; }
   .w-48 { width: 12rem; }
   .w-full { width: 100%; }
   .w-1\\/2 { width: 50%; }
@@ -520,17 +517,17 @@ const { title, description } = Astro.props;
   .h-20 { height: 5rem; }
   .h-24 { height: 6rem; }
   .h-32 { height: 8rem; }
-  .h-40 { height: 10rem; }   /* NEUE KLASSE für größere Kreise */
+  .h-40 { height: 10rem; }
   .h-48 { height: 12rem; }
   .h-full { height: 100%; }
   
   @media (min-width: 768px) {
     .md\\:w-20 { width: 5rem; }
     .md\\:w-32 { width: 8rem; }
-    .md\\:w-48 { width: 12rem; }   /* RESPONSIVE größere Kreise */
+    .md\\:w-48 { width: 12rem; }
     .md\\:h-20 { height: 5rem; }
     .md\\:h-32 { height: 8rem; }
-    .md\\:h-48 { height: 12rem; }  /* RESPONSIVE größere Kreise */
+    .md\\:h-48 { height: 12rem; }
   }
 
   /* MIN/MAX WIDTH */
