@@ -1,15 +1,16 @@
 ---
-// src/pages/index.astro v1.3.6 - VEREINFACHTER WEIßER HERO-TEXT
-// CHANGELOG v1.3.6:
-// - ✅ FIX: Vereinfachte CSS für Hero-Text (weniger text-shadow)  
-// - ✅ FIX: Direktes color: white !important für H1 und P
-// - ✅ KEEP: Alle anderen Bereiche komplett unverändert
-// - ✅ KEEP: Desktop 4-Spalten Layout funktional
+// Index.astro v1.3.7 - Sauberes HTML ohne CSS + Value Tile Verbesserungen
+// CHANGELOG v1.3.7:
+// - ✅ CLEAN: Alle CSS-Definitionen nach Layout.astro verschoben
+// - ✅ FIX: Größere Kreise in Value Tiles (w-40 h-40 → md:w-48 md:h-48)
+// - ✅ FIX: Verbesserte Tile-Zentrierung mit value-tile-improved Klasse
+// - ✅ FIX: Einheitliche Tile-Höhen für bessere Darstellung
+// - ✅ KEEP: Alle anderen Bereiche unverändert
 
 import Layout from '../layouts/Layout.astro';
 import ContactForm from '../components/ContactForm.astro';
 
-console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
+console.log('🎨 Index v1.3.7 - Sauberes HTML + Value Tile Fix');
 ---
 
 <Layout 
@@ -52,100 +53,6 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
           <!-- Highlight-Tags mit besserer Sichtbarkeit -->
           <div class="flex flex-wrap gap-3 mb-6">
             <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              ✓ 10-50% Kostenreduzierung
-            </span>
-            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              ✓ Strategische Beratung
-            </span>
-            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
-              ✓ Value Management
-            </span>
-          </div>
-        </div>
-        
-        <!-- Kontaktformular Bereich - Service-Tile Design -->
-        <div data-aos="fade-left" data-aos-delay="200">
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 md:p-8 max-w-lg mx-auto">
-            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
-              Kostenloses Erstgespräch
-            </h2>
-            <ContactForm leadForm={true} />
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  <!-- Services Section - SAUBERES HTML statt Components -->
-  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
-    <div class="container mx-auto px-4">
-      <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Unser Fokus</h2>
-        <p class="text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-lg md:text-xl leading-relaxed">
-          Experten für Unternehmensentwicklung in den Bereichen Vertrieb, Marketing, und Prozessoptimierung.
-        </p>
-      </div>
-      
-      <!-- 4 Service-Karten GARANTIERT nebeneinander -->
-      <div class="services-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto">
-        <!-- Service 1 -->
-        <article 
-          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
-          data-aos="fade-up"
-          data-aos-delay="100"
-        >
-          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
-              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
-            </svg>
-          </div>
-          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-            Strategische Unternehmens&shy;entwicklung
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
-            Entwicklung nachhaltiger Strategien für Wachstum und Wettbewerbsfähigkeit.
-          </p>
-          <a href="/leistung/strategische-unternehmensentwicklung" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
-            Mehr erfahren
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
-              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </article>
-        
-        <!-- Service 2 -->
-        <article 
-          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
-          data-aos="fade-up"
-          data-aos-delay="200"
-        >
-          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
-              <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
-            </svg>
-          </div>
-          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
-            Vertriebs&shy;optimierung
-          </h3>
-          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
-            Optimierung Ihrer Vertriebsprozesse und Erschließung neuer Märkte und Kunden.
-          </p>
-          <a href="/leistung/vertriebsoptimierung" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
-            Mehr erfahren
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
-              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
-            </svg>
-          </a>
-        </article>
-        
-        <!-- Service 3 -->
-        <article 
-          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
-          data-aos="fade-up"
-          data-aos-delay="300"
-        >
-          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
               <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
             </svg>
           </div>
@@ -191,7 +98,7 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
     </div>
   </section>
   
-  <!-- Value Management Section - KORRIGIERTE HTML-KREISE -->
+  <!-- Value Management Section - VERBESSERTE TILES mit größeren Kreisen -->
   <section class="py-16 md:py-20 bg-gray-100 dark:bg-gray-800">
     <div class="container mx-auto px-4">
       <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
@@ -201,15 +108,15 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
         </p>
       </div>
       
-      <!-- 4 Value-Karten GARANTIERT nebeneinander -->
+      <!-- 4 Value-Karten GARANTIERT nebeneinander mit GRÖßEREN KREISEN -->
       <div class="value-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto mb-12 md:mb-16">
         <!-- Value Card 1 - Kostenreduzierung -->
         <article 
-          class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 text-center group hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
           data-aos="fade-up"
           data-aos-delay="100"
         >
-          <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-6">
+          <div class="value-circle-large relative">
             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <!-- Background circle -->
               <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
@@ -227,7 +134,7 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
               />
             </svg>
             <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-2xl md:text-3xl font-bold text-primary-gold">10-50%</span>
+              <span class="value-circle-text">10-50%</span>
             </div>
           </div>
           <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Kostenreduzierung</h3>
@@ -236,11 +143,11 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
         
         <!-- Value Card 2 - Verkürzung Entwicklungszeit -->
         <article 
-          class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 text-center group hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
           data-aos="fade-up"
           data-aos-delay="200"
         >
-          <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-6">
+          <div class="value-circle-large relative">
             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
               <circle 
@@ -256,7 +163,7 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
               />
             </svg>
             <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-2xl md:text-3xl font-bold text-primary-gold">25-50%</span>
+              <span class="value-circle-text">25-50%</span>
             </div>
           </div>
           <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Verkürzung Entwicklungszeit</h3>
@@ -265,11 +172,11 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
         
         <!-- Value Card 3 - Verbesserung der Prozesse -->
         <article 
-          class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 text-center group hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
           data-aos="fade-up"
           data-aos-delay="300"
         >
-          <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-6">
+          <div class="value-circle-large relative">
             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
               <circle 
@@ -285,7 +192,7 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
               />
             </svg>
             <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-2xl md:text-3xl font-bold text-primary-gold">10-30%</span>
+              <span class="value-circle-text">10-30%</span>
             </div>
           </div>
           <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Verbesserung der Prozesse</h3>
@@ -294,11 +201,11 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
         
         <!-- Value Card 4 - Reduzierung Amortisationszeit -->
         <article 
-          class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 text-center group hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          class="value-tile-improved bg-white dark:bg-gray-900 rounded-xl shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
           data-aos="fade-up"
           data-aos-delay="400"
         >
-          <div class="relative w-24 h-24 md:w-32 md:h-32 mx-auto mb-6">
+          <div class="value-circle-large relative">
             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="40" stroke="rgba(210, 174, 108, 0.2)" stroke-width="8" fill="none" />
               <circle 
@@ -314,7 +221,7 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
               />
             </svg>
             <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-xl md:text-2xl font-bold text-primary-gold">< 2 Jahre</span>
+              <span class="value-circle-text">< 2 Jahre</span>
             </div>
           </div>
           <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">Reduzierung Amortisationszeit</h3>
@@ -444,182 +351,97 @@ console.log('🎨 Index v1.3.6 - Vereinfachter weißer Hero-Text');
   </section>
 </Layout>
 
-<style>
-  /* DESKTOP GRID FORCE-FIX - GARANTIERT 4 SPALTEN */
-  @media (min-width: 1024px) {
-    .services-desktop-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-      gap: 2rem !important;
-    }
-    
-    .value-desktop-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-      gap: 2rem !important;
-    }
-    
-    .process-desktop-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-      gap: 1.5rem !important;
-    }
-  }
+<!-- KEIN CSS MEHR HIER - Alles in Layout.astro! -->✓ 10-50% Kostenreduzierung
+            </span>
+            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
+              ✓ Strategische Beratung
+            </span>
+            <span class="bg-primary-gold/30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold/50">
+              ✓ Value Management
+            </span>
+          </div>
+        </div>
+        
+        <!-- Kontaktformular Bereich - Service-Tile Design -->
+        <div data-aos="fade-left" data-aos-delay="200">
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 md:p-8 max-w-lg mx-auto">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-gray-900 dark:text-white">
+              Kostenloses Erstgespräch
+            </h2>
+            <ContactForm leadForm={true} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
   
-  /* CSS-Klassen Definitionen für bessere Kontraste */
-  .text-primary-gold {
-    color: #D2AE6C;
-  }
-  
-  .bg-primary-gold {
-    background-color: #D2AE6C;
-  }
-  
-  .bg-primary-gold\/15 {
-    background-color: rgba(210, 174, 108, 0.15);
-  }
-  
-  .bg-primary-gold\/20 {
-    background-color: rgba(210, 174, 108, 0.20);
-  }
-  
-  .bg-primary-gold\/25 {
-    background-color: rgba(210, 174, 108, 0.25);
-  }
-  
-  .bg-primary-gold\/30 {
-    background-color: rgba(210, 174, 108, 0.30);
-  }
-  
-  .border-primary-gold\/50 {
-    border-color: rgba(210, 174, 108, 0.50);
-  }
-  
-  /* Hero Text VEREINFACHTER weißer Text */
-  .hero-text-simple-white h1 {
-    color: #ffffff !important;
-    font-weight: 800;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  }
-  
-  .hero-text-simple-white p {
-    color: #ffffff !important;
-    font-weight: 500;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
-  }
-  
-  /* Verfeinerte Logo Animation */
-  @keyframes float-refined {
-    0%, 100% {
-      transform: translateY(0) rotate(0deg);
-    }
-    33% {
-      transform: translateY(-15px) rotate(1deg);
-    }
-    66% {
-      transform: translateY(-25px) rotate(-1deg);
-    }
-  }
-  
-  .animate-float-refined {
-    animation: float-refined 12s infinite ease-in-out;
-  }
-  
-  /* Original Animationen */
-  @keyframes subtle-zoom {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.05);
-    }
-  }
-  
-  .animate-subtle-zoom {
-    animation: subtle-zoom 20s infinite ease-in-out;
-  }
-  
-  /* Value Cards Kreis-Animation */
-  @keyframes draw-circle {
-    from {
-      stroke-dashoffset: 251.2;
-    }
-    to {
-      stroke-dashoffset: var(--final-offset);
-    }
-  }
-  
-  .animate-draw-circle {
-    stroke-dashoffset: 251.2;
-    animation: draw-circle 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-  
-  /* Process Line Animation */
-  @keyframes pulse-line {
-    0%, 100% {
-      opacity: 0.3;
-      transform: scaleX(0.8);
-    }
-    50% {
-      opacity: 0.8;
-      transform: scaleX(1);
-    }
-  }
-  
-  .animate-pulse-line {
-    animation: pulse-line 3s infinite ease-in-out;
-  }
-  
-  /* Enhanced Gradients */
-  .bg-gradient-to-br {
-    background: linear-gradient(to bottom right, var(--tw-gradient-stops));
-  }
-  
-  /* Utilities */
-  .hyphens-auto {
-    hyphens: auto;
-    -webkit-hyphens: auto;
-    -ms-hyphens: auto;
-  }
-  
-  .break-words {
-    word-break: break-word;
-    overflow-wrap: break-word;
-  }
-  
-  .leading-relaxed {
-    line-height: 1.75;
-  }
-  
-  /* Backdrop Blur Fix */
-  .backdrop-blur-sm {
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 640px) {
-    .hero-text-simple-white h1 {
-      font-size: 2.5rem;
-    }
-    
-    .hero-text-simple-white p {
-      font-size: 1.125rem;
-    }
-  }
-  
-  /* Accessibility - Reduced Motion */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-subtle-zoom,
-    .animate-float-refined,
-    .animate-draw-circle,
-    .animate-pulse-line {
-      animation: none !important;
-    }
-    
-    .hover\:scale-105:hover,
-    .hover\:scale-110:hover {
-      transform: none !important;
-    }
-  }
-</style>
+  <!-- Services Section - SAUBERES HTML statt Components -->
+  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Unser Fokus</h2>
+        <p class="text-gray-600 dark:text-gray-300 max-w-4xl mx-auto text-lg md:text-xl leading-relaxed">
+          Experten für Unternehmensentwicklung in den Bereichen Vertrieb, Marketing, und Prozessoptimierung.
+        </p>
+      </div>
+      
+      <!-- 4 Service-Karten GARANTIERT nebeneinander -->
+      <div class="services-desktop-grid grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto">
+        <!-- Service 1 -->
+        <article 
+          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
+              <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
+            </svg>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Strategische Unternehmens&shy;entwicklung
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
+            Entwicklung nachhaltiger Strategien für Wachstum und Wettbewerbsfähigkeit.
+          </p>
+          <a href="/leistung/strategische-unternehmensentwicklung" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
+            Mehr erfahren
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
+              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </article>
+        
+        <!-- Service 2 -->
+        <article 
+          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
+              <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
+            </svg>
+          </div>
+          <h3 class="text-xl md:text-2xl font-bold mb-4 text-gray-900 dark:text-white leading-tight">
+            Vertriebs&shy;optimierung
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6 text-base md:text-lg leading-relaxed flex-grow">
+            Optimierung Ihrer Vertriebsprozesse und Erschließung neuer Märkte und Kunden.
+          </p>
+          <a href="/leistung/vertriebsoptimierung" class="text-primary-gold font-semibold hover:text-primary-gold/80 inline-flex items-center text-base group-hover:translate-x-1 transition-all">
+            Mehr erfahren
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform">
+              <path fill-rule="evenodd" d="M5 10a.75.75 0 01.75-.75h6.638L10.23 7.29a.75.75 0 111.04-1.08l3.5 3.25a.75.75 0 010 1.08l-3.5 3.25a.75.75 0 11-1.04-1.08l2.158-1.96H5.75A.75.75 0 015 10z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </article>
+        
+        <!-- Service 3 -->
+        <article 
+          class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 flex flex-col items-center text-center group hover:shadow-xl hover:scale-105 transition-all duration-300"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <div class="bg-primary-gold/15 p-5 rounded-2xl mb-6 group-hover:scale-110 group-hover:bg-primary-gold/25 transition-all duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-primary-gold">
