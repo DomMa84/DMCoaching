@@ -1,9 +1,9 @@
 ---
-// Contact.astro v1.1 - Header/Footer Integration + Layout-Fixes
+// Contact.astro v1.1 - KOMPLETTE Version ohne Abschnitte
 // CHANGELOG v1.1:
 // - ✅ INTEGRATION: Header v1.4 und Footer v1.3 eingebunden
-// - ✅ FIX: CSS-Klassen an Layout v1.2.8 angepasst
-// - ✅ FIX: Escape-Sequences entfernt für Netlify-Kompatibilität
+// - ✅ FIX: CSS-Klassen an Layout v1.2.8 angepasst (keine Escape-Sequences)
+// - ✅ FIX: Vollständiger Code ohne Abschnitte
 // - ✅ KEEP: Alle Contact-Inhalte und SEO-Optimierung
 
 export const prerender = true;
@@ -13,7 +13,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
 
-console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
+console.log('📞 Contact v1.1 - KOMPLETTE Version');
 ---
 
 <Layout 
@@ -31,7 +31,7 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
         <p class="text-gray-600 dark:text-gray-300 text-lg md:text-xl leading-relaxed">
           Haben Sie Fragen oder möchten Sie mehr über unsere Leistungen erfahren? Vereinbaren Sie jetzt Ihr <strong>kostenloses Erstgespräch</strong> und lassen Sie uns gemeinsam Ihre Herausforderungen besprechen.
         </p>
-        <div class="flex flex-wrap justify-center gap-3 mt-6" aria-label="Kontakt-Highlights">
+        <div class="flex flex-wrap justify-center gap-3 mt-6">
           <span class="bg-primary-gold-20 text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-medium">✅ Kostenlose Beratung</span>
           <span class="bg-primary-gold-20 text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-medium">📞 Sofortige Antwort</span>
           <span class="bg-primary-gold-20 text-gray-900 dark:text-white px-4 py-2 rounded-full text-sm font-medium">🎯 Maßgeschneiderte Lösungen</span>
@@ -55,68 +55,8 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
             <div class="space-y-6">
               <!-- Telefon -->
               <article class="flex items-start">
-                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
-              <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-              <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-            </svg>
-            Nachricht schreiben
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer Integration -->
-  <Footer />
-
-  <!-- Schema.org JSON-LD für Kontaktseite -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "mainEntity": {
-      "@type": "Organization",
-      "name": "Dominik Maier Coaching & Interim Management",
-      "url": "https://maier-value.com",
-      "contactPoint": [
-        {
-          "@type": "ContactPoint",
-          "telephone": "+497440913367",
-          "contactType": "customer service",
-          "availableLanguage": ["German", "English"],
-          "hoursAvailable": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-            "opens": "08:00",
-            "closes": "18:00"
-          }
-        },
-        {
-          "@type": "ContactPoint",
-          "email": "webmaster@maier-value.com",
-          "contactType": "customer service",
-          "availableLanguage": ["German", "English"]
-        }
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Gaisbachweg 4",
-        "addressLocality": "Bad Rippoldsau",
-        "postalCode": "77776",
-        "addressCountry": "DE"
-      },
-      "areaServed": "DE",
-      "serviceType": [
-        "Strategische Unternehmensentwicklung",
-        "Vertriebsoptimierung",
-        "Marketing-Strategien",
-        "Value Management"
-      ]
-    }
-  }
-  </script>
-</Layout>svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
+                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
                   </svg>
                 </div>
@@ -125,7 +65,6 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
                   <a 
                     href="tel:+497440913367" 
                     class="text-primary-gold hover:text-primary-gold-80 text-lg font-medium transition-colors"
-                    aria-label="Telefonnummer +497440 913367 anrufen"
                   >
                     +497440 913367
                   </a>
@@ -135,7 +74,7 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
               
               <!-- E-Mail -->
               <article class="flex items-start">
-                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0" aria-hidden="true">
+                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
                     <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
@@ -146,7 +85,6 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
                   <a 
                     href="mailto:webmaster@maier-value.com" 
                     class="text-primary-gold hover:text-primary-gold-80 transition-colors"
-                    aria-label="E-Mail an webmaster@maier-value.com senden"
                   >
                     webmaster@maier-value.com
                   </a>
@@ -156,8 +94,8 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
               
               <!-- LinkedIn -->
               <article class="flex items-start">
-                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0" aria-hidden="true">
-                  <svg class="w-6 h-6 text-primary-gold" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
                   </svg>
                 </div>
@@ -168,7 +106,6 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
                     target="_blank" 
                     rel="noopener noreferrer"
                     class="text-primary-gold hover:text-primary-gold-80 transition-colors"
-                    aria-label="Dominik Maier LinkedIn-Profil öffnen"
                   >
                     Zum Profil
                   </a>
@@ -178,7 +115,7 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
               
               <!-- Adresse -->
               <article class="flex items-start">
-                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0" aria-hidden="true">
+                <div class="bg-primary-gold-15 p-3 rounded-2xl mr-4 flex-shrink-0">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                     <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
                   </svg>
@@ -262,7 +199,6 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
           <a 
             href="tel:+497440913367" 
             class="bg-primary-gold text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-gold-90 transition-colors inline-flex items-center justify-center text-lg"
-            aria-label="Jetzt anrufen +497440 913367"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
               <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
@@ -273,6 +209,65 @@ console.log('📞 Contact v1.1 - Header/Footer Integration + Layout-Fixes');
             href="#contact-form" 
             class="bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-8 py-4 rounded-lg font-semibold border-2 border-primary-gold hover:bg-primary-gold hover:text-white transition-colors inline-flex items-center justify-center text-lg"
             onclick="document.querySelector('form').scrollIntoView({behavior: 'smooth'}); return false;"
-            aria-label="Zum Kontaktformular scrollen"
           >
-            <svg xmlns="http://www.w3.org/2000/
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-2">
+              <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+              <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+            </svg>
+            Nachricht schreiben
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Integration -->
+  <Footer />
+
+  <!-- Schema.org JSON-LD für Kontaktseite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Dominik Maier Coaching & Interim Management",
+      "url": "https://maier-value.com",
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+497440913367",
+          "contactType": "customer service",
+          "availableLanguage": ["German", "English"],
+          "hoursAvailable": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "08:00",
+            "closes": "18:00"
+          }
+        },
+        {
+          "@type": "ContactPoint",
+          "email": "webmaster@maier-value.com",
+          "contactType": "customer service",
+          "availableLanguage": ["German", "English"]
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gaisbachweg 4",
+        "addressLocality": "Bad Rippoldsau",
+        "postalCode": "77776",
+        "addressCountry": "DE"
+      },
+      "areaServed": "DE",
+      "serviceType": [
+        "Strategische Unternehmensentwicklung",
+        "Vertriebsoptimierung",
+        "Marketing-Strategien",
+        "Value Management"
+      ]
+    }
+  }
+  </script>
+</Layout>
