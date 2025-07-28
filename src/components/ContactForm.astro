@@ -1,10 +1,10 @@
 ---
-// src/components/ContactForm.astro v18.9 - MINIMAL E-Mail Integration
-// CHANGELOG v18.9:
-// - ✅ FIX: API Endpoint /contact → /api/contact (aus v18.8)
-// - ✅ ADD: E-Mail-Status-Anzeige in Success-Message (3 Zeilen Code)
+// src/components/ContactForm.astro v18.9.1 - Ehrlicher E-Mail Status
+// CHANGELOG v18.9.1:
+// - ✅ PATCH: E-Mail-Status nur bei echten E-Mails anzeigen
+// - ✅ PATCH: Demo-Modus ehrlich kennzeichnen  
+// - ✅ FIX: Keine falschen "E-Mail gesendet" Meldungen mehr
 // - ✅ KEEP: Komplettes v18.7 Design UNVERÄNDERT
-// - ✅ KEEP: Alle CSS-Klassen, Button-Farben, Layout identisch
 
 interface Props {
   leadForm?: boolean;
@@ -361,10 +361,15 @@ console.log(`📧 ContactForm v18.9 rendered - Minimal E-Mail Integration - ${va
               Wir melden uns schnellstmöglich bei Ihnen.
             </p>
             
-            <!-- ✅ NEW v18.9: E-Mail-Status (nur 3 Zeilen Code hinzugefügt) -->
-            <template x-if="emailStatus && emailStatus.confirmation">
-              <p class="text-xs text-green-500 mt-1" x-show="emailStatus.confirmation.sent">
+            <!-- ✅ NEW v18.9: E-Mail-Status (NUR bei ECHTEN E-Mails anzeigen) -->
+            <template x-if="emailStatus && emailStatus.confirmation && emailStatus.confirmation.real">
+              <p class="text-xs text-green-500 mt-1">
                 📧 Bestätigungs-E-Mail wurde an Sie gesendet.
+              </p>
+            </template>
+            <template x-if="emailStatus && emailStatus.confirmation && !emailStatus.confirmation.real">
+              <p class="text-xs text-blue-500 mt-1">
+                ⚙️ E-Mail-System wird vorbereitet (Demo-Modus).
               </p>
             </template>
           </div>
