@@ -266,7 +266,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
   </form>
 </div>
 
-<script>
+<script define:vars={{ leadForm }}>
   function contactFormData() {
     return {
       // ✅ FORM DATA v18.9
@@ -277,7 +277,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
         message: '',
         gdprConsent: false,
         honeypot: '',
-        leadForm: {{ leadForm ? 'true' : 'false' }}
+        leadForm: leadForm
       },
       
       // ✅ STATE MANAGEMENT v18.9
@@ -455,7 +455,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
           message: '',
           gdprConsent: false,
           honeypot: '',
-          leadForm: {{ leadForm ? 'true' : 'false' }}
+          leadForm: leadForm
         };
         this.errors = {};
         this.showSuccessMessage = false;
