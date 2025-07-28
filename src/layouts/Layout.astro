@@ -1,6 +1,6 @@
 ---
 // Layout.astro v1.2.8 - Kompletter CSS Syntax Fix für Netlify
-// CHANGELOG v1.2.8:test
+// CHANGELOG v1.2.8:
 // - ✅ FIX: ALLE CSS Syntax Errors behoben (escape sequences entfernt)
 // - ✅ FIX: Vereinfachte CSS-Klassen ohne problematische Zeichen
 // - ✅ KEEP: Alle Funktionen für Hero-Text und Value Tiles
@@ -576,9 +576,9 @@ const { title, description } = Astro.props;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
   }
 
-  /* VALUE MANAGEMENT TILES - EINHEITLICHE HÖHEN UND ABSTÄNDE */
+  /* VALUE MANAGEMENT TILES - PERFEKTE AUSRICHTUNG */
   .value-tile-improved {
-    min-height: 400px;
+    min-height: 420px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -599,7 +599,7 @@ const { title, description } = Astro.props;
   
   @media (min-width: 768px) {
     .value-tile-improved {
-      min-height: 450px;
+      min-height: 480px;
       padding: 2.5rem;
     }
     
@@ -623,29 +623,53 @@ const { title, description } = Astro.props;
     }
   }
   
-  /* VALUE TILES - EINHEITLICHE TITEL UND TEXT ABSTÄNDE */
+  /* VALUE TILES - PERFEKTE TITEL UND TEXT AUSRICHTUNG */
   .value-tile-improved h3 {
-    margin-bottom: 1rem;
-    min-height: 3.5rem;
+    margin-bottom: 1.5rem;
+    min-height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    line-height: 1.3;
   }
   
   .value-tile-improved p {
-    margin-top: auto;
+    margin: 0;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-start;
+    text-align: center;
   }
   
-  /* PROZESS STEPS - EINHEITLICHE BOX-HÖHEN */
+  /* PROZESS STEPS - GARANTIERT GLEICHE BOX-HÖHEN */
+  .process-step-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    align-items: center;
+    text-align: center;
+  }
+  
   .process-step-box {
-    min-height: 200px;
+    min-height: 180px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1.5rem;
+    text-align: center;
+    flex-grow: 1;
   }
   
   @media (min-width: 768px) {
+    .process-step-box {
+      min-height: 200px;
+      padding: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
     .process-step-box {
       min-height: 220px;
       padding: 2.5rem;
