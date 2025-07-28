@@ -1,55 +1,64 @@
 ---
+// marketing-strategien.astro v1.1 - Layout v1.2.8 Integration
+// CHANGELOG v1.1:
+// - ✅ FIX: Layout v1.2.8 CSS-Klassen verwendet (bg-gray-50, text-gray-900, etc.)
+// - ✅ FIX: Header v1.5.1 und Footer v1.3 integriert
+// - ✅ FIX: "Mehr Sichtbarkeit für Ihr Unternehmen?" CTA-Sektion entfernt
+// - ✅ FIX: Kontaktformular NACH Testimonial positioniert
+// - ✅ VERIFIED: Vollständiger Code ohne Abschnitte
+
 import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
 import ContactForm from '../../components/ContactForm.astro';
+
+console.log('🎯 Marketing-Strategien v1.1 - Layout Integration');
 ---
 
 <Layout 
   title="Marketing-Strategien | Dominik Maier"
   description="Entwicklung zielgerichteter Marketingkonzepte für mehr Sichtbarkeit und Kundenbindung. Dominik Maier unterstützt Sie bei der Optimierung Ihres Marketings."
 >
+  <!-- Header Integration -->
+  <Header />
+
   <!-- Hero Section -->
-  <section class="py-12 md:py-16 bg-light dark:bg-dark">
+  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto px-4">
-      <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl md:text-4xl font-bold text-text-dark dark:text-text-light mb-6" data-aos="fade-up">Marketing-Strategien</h1>
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6" data-aos="fade-up">Marketing-Strategien</h1>
         
-        <div class="bg-light-darker dark:bg-dark-lighter rounded-lg p-6 md:p-8 shadow-md mb-8 md:mb-10" data-aos="fade-up" data-aos-delay="100">
-          <p class="text-base md:text-lg text-text-muted mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 shadow-lg mb-8 md:mb-12" data-aos="fade-up" data-aos-delay="100">
+          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
             Erfolgreiches Marketing ist der Schlüssel zu mehr Sichtbarkeit, Kundenbindung und Wachstum. Wir unterstützen Sie dabei, zielgerichtete Marketingkonzepte zu entwickeln und umzusetzen, die Ihre Zielgruppe auf den richtigen Kanälen ansprechen.
           </p>
           
           <div class="flex items-start mb-6">
-            <div class="bg-primary-gold/10 p-3 rounded-full mr-4 mt-1 flex-shrink-0">
+            <div class="bg-primary-gold-15 p-3 rounded-full mr-4 mt-1 flex-shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                 <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
               </svg>
             </div>
             <div>
-              <h2 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-2 leading-tight">Integrierter Marketing&shy;ansatz</h2>
-              <p class="text-text-muted text-sm md:text-base">
+              <h2 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">Integrierter Marketing&shy;ansatz</h2>
+              <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
                 Unser Ansatz verbindet traditionelle und digitale Marketingkanäle zu einer ganzheitlichen Strategie, die perfekt auf Ihre Zielgruppe und Geschäftsziele abgestimmt ist.
               </p>
             </div>
           </div>
         </div>
         
-        <!-- Contact Box -->
-        <div class="bg-white dark:bg-dark rounded-lg shadow-md p-6 md:p-8 mb-10" data-aos="fade-up">
-          <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-6 text-center">Kontaktieren Sie uns</h2>
-          <ContactForm />
-        </div>
-        
         <!-- Main Content -->
-        <div class="space-y-8 md:space-y-10">
+        <div class="space-y-12 md:space-y-16">
           <div data-aos="fade-up">
-            <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Unsere Leistungen im Bereich Marketing-Strategien</h2>
+            <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-8">Unsere Leistungen im Bereich Marketing-Strategien</h2>
             
-            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 mb-5 md:mb-6">
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Strategische Marketing&shy;planung</h3>
-              <p class="text-text-muted text-sm md:text-base mb-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mb-6 md:mb-8">
+              <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-4">Strategische Marketing&shy;planung</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg mb-6 leading-relaxed">
                 Entwicklung einer maßgeschneiderten Marketingstrategie, die perfekt auf Ihre Unternehmensziele und Zielgruppen abgestimmt ist:
               </p>
-              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 md:space-y-3 ml-4 text-base md:text-lg leading-relaxed">
                 <li>Analyse der aktuellen Marketingsituation und des Wettbewerbsumfelds</li>
                 <li>Definition von Marketing-Zielen und -KPIs</li>
                 <li>Zielgruppenanalyse und Segmentierung</li>
@@ -59,12 +68,12 @@ import ContactForm from '../../components/ContactForm.astro';
               </ul>
             </div>
             
-            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 mb-5 md:mb-6">
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Digitales Marketing</h3>
-              <p class="text-text-muted text-sm md:text-base mb-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mb-6 md:mb-8">
+              <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-4">Digitales Marketing</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg mb-6 leading-relaxed">
                 Wir unterstützen Sie bei der Entwicklung und Umsetzung effektiver digitaler Marketingstrategien:
               </p>
-              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 md:space-y-3 ml-4 text-base md:text-lg leading-relaxed">
                 <li>Website-Optimierung und Content-Strategie</li>
                 <li>SEO (Suchmaschinenoptimierung) und SEA (Suchmaschinenwerbung)</li>
                 <li>Social Media Marketing und Community Management</li>
@@ -74,12 +83,12 @@ import ContactForm from '../../components/ContactForm.astro';
               </ul>
             </div>
             
-            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6">
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Content-Marketing & Branding</h3>
-              <p class="text-text-muted text-sm md:text-base mb-4">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+              <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-4">Content-Marketing & Branding</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg mb-6 leading-relaxed">
                 Entwicklung einer überzeugenden Markenkommunikation und wertvoller Inhalte für Ihre Zielgruppe:
               </p>
-              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 md:space-y-3 ml-4 text-base md:text-lg leading-relaxed">
                 <li>Markenentwicklung und Corporate Identity</li>
                 <li>Storytelling und Markenbotschaften</li>
                 <li>Content-Strategie und -Planung</li>
@@ -91,35 +100,35 @@ import ContactForm from '../../components/ContactForm.astro';
           </div>
           
           <div data-aos="fade-up">
-            <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Der Prozess</h2>
+            <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-8">Der Prozess</h2>
             
             <div class="relative max-w-4xl mx-auto">
               <!-- Timeline line -->
-              <div class="absolute left-1/2 -ml-px h-full w-0.5 bg-primary-gold hidden md:block"></div>
+              <div class="absolute left-half transform -translate-x-half h-full w-0.5 bg-primary-gold hidden md:block"></div>
               
               <!-- Timeline items for mobile and desktop -->
-              <div class="space-y-8 md:space-y-12">
+              <div class="space-y-12 md:space-y-16">
                 <!-- Step 1 -->
                 <div class="relative" data-aos="fade-up">
                   <!-- Desktop view -->
                   <div class="hidden md:flex items-center">
                     <div class="flex-1 text-right pr-12">
-                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Analyse</h3>
-                      <p class="text-text-muted text-sm md:text-base">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
+                      <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">Analyse</h3>
+                      <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
                     </div>
-                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                      <span class="text-white font-bold">1</span>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold text-sm md:text-base">1</span>
                     </div>
                     <div class="flex-1"></div>
                   </div>
                   
                   <!-- Mobile view -->
                   <div class="md:hidden flex flex-col items-center text-center">
-                    <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg mb-4">
                       <span class="text-white font-bold">1</span>
                     </div>
-                    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Analyse</h3>
-                    <p class="text-text-muted text-sm">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Analyse</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">Detaillierte Bestandsaufnahme und Identifikation von Potenzialen und Herausforderungen.</p>
                   </div>
                 </div>
                 
@@ -128,22 +137,22 @@ import ContactForm from '../../components/ContactForm.astro';
                   <!-- Desktop view -->
                   <div class="hidden md:flex items-center">
                     <div class="flex-1"></div>
-                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                      <span class="text-white font-bold">2</span>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold text-sm md:text-base">2</span>
                     </div>
                     <div class="flex-1 pl-12">
-                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Strategie</h3>
-                      <p class="text-text-muted text-sm md:text-base">Entwicklung maßgeschneiderter Strategien und Lösungsansätze für Ihre spezifischen Bedürfnisse.</p>
+                      <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">Strategie</h3>
+                      <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">Entwicklung maßgeschneiderter Strategien und Lösungsansätze für Ihre spezifischen Bedürfnisse.</p>
                     </div>
                   </div>
                   
                   <!-- Mobile view -->
                   <div class="md:hidden flex flex-col items-center text-center">
-                    <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg mb-4">
                       <span class="text-white font-bold">2</span>
                     </div>
-                    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Strategie</h3>
-                    <p class="text-text-muted text-sm">Entwicklung maßgeschneiderter Strategien für Ihre spezifischen Bedürfnisse.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Strategie</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">Entwicklung maßgeschneiderter Strategien für Ihre spezifischen Bedürfnisse.</p>
                   </div>
                 </div>
                 
@@ -152,22 +161,22 @@ import ContactForm from '../../components/ContactForm.astro';
                   <!-- Desktop view -->
                   <div class="hidden md:flex items-center">
                     <div class="flex-1 text-right pr-12">
-                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Umsetzung</h3>
-                      <p class="text-text-muted text-sm md:text-base">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
+                      <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">Umsetzung</h3>
+                      <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
                     </div>
-                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                      <span class="text-white font-bold">3</span>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold text-sm md:text-base">3</span>
                     </div>
                     <div class="flex-1"></div>
                   </div>
                   
                   <!-- Mobile view -->
                   <div class="md:hidden flex flex-col items-center text-center">
-                    <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg mb-4">
                       <span class="text-white font-bold">3</span>
                     </div>
-                    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Umsetzung</h3>
-                    <p class="text-text-muted text-sm">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Umsetzung</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">Systematische Implementation der erarbeiteten Strategien in Ihrem Unternehmen.</p>
                   </div>
                 </div>
                 
@@ -176,30 +185,30 @@ import ContactForm from '../../components/ContactForm.astro';
                   <!-- Desktop view -->
                   <div class="hidden md:flex items-center">
                     <div class="flex-1"></div>
-                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg">
-                      <span class="text-white font-bold">4</span>
+                    <div class="bg-primary-gold rounded-full w-12 h-12 md:w-16 md:h-16 flex items-center justify-center z-10 shadow-lg">
+                      <span class="text-white font-bold text-sm md:text-base">4</span>
                     </div>
                     <div class="flex-1 pl-12">
-                      <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light">Kontrolle & Anpassung</h3>
-                      <p class="text-text-muted text-sm md:text-base">Kontinuierliche Überprüfung der Ergebnisse und Anpassung der Maßnahmen an veränderte Rahmenbedingungen.</p>
+                      <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">Kontrolle & Anpassung</h3>
+                      <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">Kontinuierliche Überprüfung der Ergebnisse und Anpassung der Maßnahmen an veränderte Rahmenbedingungen.</p>
                     </div>
                   </div>
                   
                   <!-- Mobile view -->
                   <div class="md:hidden flex flex-col items-center text-center">
-                    <div class="bg-primary-gold rounded-full w-10 h-10 flex items-center justify-center z-10 shadow-lg mb-4">
+                    <div class="bg-primary-gold rounded-full w-12 h-12 flex items-center justify-center z-10 shadow-lg mb-4">
                       <span class="text-white font-bold">4</span>
                     </div>
-                    <h3 class="text-lg font-semibold text-text-dark dark:text-text-light mb-2">Kontrolle & Anpassung</h3>
-                    <p class="text-text-muted text-sm">Kontinuierliche Überprüfung der Ergebnisse und Anpassung der Maßnahmen.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Kontrolle & Anpassung</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-base leading-relaxed">Kontinuierliche Überprüfung der Ergebnisse und Anpassung der Maßnahmen.</p>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div class="bg-white dark:bg-dark rounded-lg shadow-md p-5 md:p-6 mt-8">
-              <h3 class="text-lg md:text-xl font-semibold text-text-dark dark:text-text-light mb-3">Ihr Mehrwert</h3>
-              <ul class="list-disc list-inside text-text-muted space-y-1 md:space-y-2 ml-2 md:ml-4 text-sm md:text-base">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mt-12">
+              <h3 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-4">Ihr Mehrwert</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2 md:space-y-3 ml-4 text-base md:text-lg leading-relaxed">
                 <li>Erhöhte Markenbekanntheit und -relevanz</li>
                 <li>Gesteigerte Kundenbindung und -zufriedenheit</li>
                 <li>Effizienterer Einsatz Ihres Marketingbudgets</li>
@@ -212,49 +221,29 @@ import ContactForm from '../../components/ContactForm.astro';
         </div>
         
         <!-- Testimonial -->
-        <div class="my-8 md:my-12 bg-primary-gold/10 dark:bg-primary-gold/5 rounded-lg p-5 md:p-8" data-aos="fade-up">
+        <div class="my-12 md:my-16 bg-primary-gold-15 rounded-xl p-6 md:p-8" data-aos="fade-up">
           <blockquote class="relative">
-            <svg class="absolute top-0 left-0 transform -translate-x-4 -translate-y-6 h-12 w-12 md:h-16 md:w-16 text-primary-gold/20" fill="currentColor" viewBox="0 0 32 32">
+            <svg class="absolute top-0 left-0 transform -translate-x-4 -translate-y-6 h-12 w-12 md:h-16 md:w-16 text-primary-gold opacity-20" fill="currentColor" viewBox="0 0 32 32">
               <path d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4z" />
             </svg>
-            <p class="relative text-base md:text-lg text-text-dark dark:text-text-light italic mb-4 pl-6 md:pl-0">
+            <p class="relative text-lg md:text-xl text-gray-900 dark:text-white italic mb-4 pl-6 md:pl-0 leading-relaxed">
               Dominik Maiers hybrider Ansatz bei Sales- und Marketing hat unser Unternehmen wirklich vorangebracht. Unsere Präsenz wurde deutlich gestärkt und wir sind dadurch profitabler geworden.
             </p>
-            <footer class="text-text-muted text-sm md:text-base pl-6 md:pl-0">
+            <footer class="text-gray-600 dark:text-gray-300 text-base md:text-lg pl-6 md:pl-0">
               — Geschäftsführerin eines Dienstleistungsunternehmen
             </footer>
           </blockquote>
         </div>
         
-        <!-- CTA -->
-        <div class="bg-white dark:bg-dark rounded-lg shadow-lg p-6 md:p-8 text-center" data-aos="fade-up">
-          <h2 class="text-xl md:text-2xl font-semibold text-text-dark dark:text-text-light mb-4">Mehr Sichtbarkeit für Ihr Unternehmen?</h2>
-          <p class="text-text-muted mb-6 text-sm md:text-base">
-            Lassen Sie uns gemeinsam eine effektive Marketingstrategie entwickeln, die Ihr Unternehmen wirklich voranbringt.
-          </p>
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a 
-              href="tel:+497440913367" 
-              class="inline-flex items-center justify-center bg-primary-gold hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-              </svg>
-              Anrufen
-            </a>
-            <a 
-              href="mailto:webmaster@maier-value.com?subject=Kostenloses%20Erstgespräch" 
-              class="inline-flex items-center justify-center bg-light-darkest dark:bg-dark-lightest text-text-dark dark:text-text-light font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-              </svg>
-              Kostenloses Erstgespräch
-            </a>
-          </div>
+        <!-- Kontaktformular -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8" data-aos="fade-up">
+          <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">Kontaktieren Sie uns</h2>
+          <ContactForm />
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Footer Integration -->
+  <Footer />
 </Layout>
