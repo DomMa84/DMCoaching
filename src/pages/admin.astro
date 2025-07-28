@@ -1,955 +1,508 @@
 ---
-// src/pages/admin.astro v24.3 (Server-Mode kompatibel)
-// Admin Dashboard - Server-Mode ready mit ENV-Login
+// src/pages/admin.astro v24.5 (Separate AdminStyles Integration)
+// Admin Dashboard - Layout v1.2.8 + Separate AdminStyles
+// ✅ ÄNDERUNGEN v24.5:
+// - Layout v1.2.8 UNVERÄNDERT verwendet
+// - Separate AdminStyles.astro importiert
+// - Design passt sich Homepage an (nicht umgekehrt)
+// - Header v1.5.1 + Footer v1.3 integriert
+// - Alle Admin-CSS-Klassen aus separater Datei
 
-// ✅ WICHTIG: Für Server-Mode - diese Seite bleibt dynamisch (braucht Login-API)
-// export const prerender = false;
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';  // Original v1.2.8
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AdminStyles from '../components/AdminStyles.astro';  // Separate CSS
 
 const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.3 (Server-Mode kompatibel)";
+const version = "Admin Dashboard v24.5 (Separate AdminStyles)";
 
-console.log('📊 Admin Dashboard v24.3 loaded - Server-Mode ready');
+console.log('📊 Admin Dashboard v24.5 loaded - Separate AdminStyles Integration');
 ---
 
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{pageTitle}</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    
-    <style>
-        /* CSS Reset */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-        }
-
-        body {
-            min-height: 100vh;
-            background: var(--bg-color);
-            color: var(--text-color);
-            transition: all 0.3s ease;
-        }
-
-        /* CSS Variables */
-        :root {
-            --primary-gold: #D4AF37;
-            --primary-dark: #B8941F;
-            --bg-color: #FFFFFF;
-            --bg-darker: #F8F9FA;
-            --bg-darkest: #E9ECEF;
-            --text-color: #333333;
-            --text-muted: #6B7280;
-            --border-color: #E9ECEF;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #1A1A1A;
-            --bg-darker: #2D2D2D;
-            --bg-darkest: #404040;
-            --text-color: #F5F5F5;
-            --text-muted: #9CA3AF;
-            --border-color: #404040;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Layout */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Cards */
-        .card {
-            background: var(--bg-darker);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-        }
-
-        .card-body {
-            padding: 2rem;
-        }
-
-        .card-header {
-            background: var(--bg-darkest);
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        /* Typography */
-        h1 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-color);
-        }
-
-        p {
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* Utilities */
-        .flex { display: flex; }
-        .items-center { align-items: center; }
-        .justify-center { justify-content: center; }
-        .justify-between { justify-content: space-between; }
-        .text-center { text-align: center; }
-        .w-full { width: 100%; }
-        .max-w-md { max-width: 28rem; margin: 0 auto; }
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-6 { margin-bottom: 1.5rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mt-2 { margin-top: 0.5rem; }
-        .mt-6 { margin-top: 1.5rem; }
-        .text-xs { font-size: 0.75rem; }
-        .text-sm { font-size: 0.875rem; }
-        .font-medium { font-weight: 500; }
-        .font-bold { font-weight: 700; }
-
-        /* Forms */
-        label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--text-color);
-            margin-bottom: 0.5rem;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--bg-color);
-            color: var(--text-color);
-            font-size: 0.875rem;
-            transition: border-color 0.3s ease;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: var(--primary-gold);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: #6B7280;
-            color: white;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background: #4B5563;
-        }
-
-        .btn-link {
-            background: none;
-            color: var(--primary-gold);
-            padding: 0.5rem;
-        }
-
-        .btn-link:hover {
-            color: var(--primary-dark);
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .alert-info {
-            background: #EFF6FF;
-            border: 1px solid #DBEAFE;
-            color: #1E40AF;
-        }
-
-        [data-theme="dark"] .alert-info {
-            background: rgba(30, 64, 175, 0.2);
-            border-color: #1E40AF;
-            color: #93C5FD;
-        }
-
-        .alert-error {
-            background: #FEF2F2;
-            border: 1px solid #FECACA;
-            color: #B91C1C;
-        }
-
-        [data-theme="dark"] .alert-error {
-            background: rgba(127, 29, 29, 0.2);
-            border-color: #991B1B;
-            color: #FCA5A5;
-        }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            z-index: 100;
-            background: var(--bg-darker);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 0.5rem;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            font-size: 1.2rem;
-        }
-
-        /* Version Badge */
-        .version-badge {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            z-index: 100;
-        }
-
-        /* Statistics Grid - Responsive */
-        .statistics-grid {
-            display: grid;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            grid-template-columns: 1fr;
-        }
-
-        @media (min-width: 640px) {
-            .statistics-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .statistics-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* Stat Cards */
-        .stat-card {
-            background: var(--bg-darker);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
-        }
-
-        .stat-icon {
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-
-        .stat-content {
-            flex: 1;
-        }
-
-        .stat-value {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            line-height: 1.2;
-        }
-
-        /* Status Badges */
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-            gap: 0.25rem;
-        }
-
-        .badge-neu {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        [data-theme="dark"] .badge-neu {
-            background: rgba(127, 29, 29, 0.2);
-            color: #FCA5A5;
-        }
-
-        .badge-offen {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        [data-theme="dark"] .badge-offen {
-            background: rgba(146, 64, 14, 0.2);
-            color: #FCD34D;
-        }
-
-        .badge-abgeschlossen {
-            background: #DCFCE7;
-            color: #166534;
-        }
-
-        [data-theme="dark"] .badge-abgeschlossen {
-            background: rgba(20, 83, 45, 0.2);
-            color: #86EFAC;
-        }
-
-        /* Filter Buttons */
-        .filter-container {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            border: 1px solid var(--border-color);
-            background: var(--bg-color);
-            color: var(--text-color);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .filter-btn.active {
-            background: var(--primary-gold);
-            color: white;
-            border-color: var(--primary-gold);
-        }
-
-        .filter-btn:hover:not(.active) {
-            background: var(--bg-darker);
-        }
-
-        /* Tables */
-        .table-container {
-            overflow-x: auto;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--bg-color);
-        }
-
-        th {
-            background: var(--bg-darkest);
-            padding: 1rem 1.5rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-color);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        td {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-color);
-        }
-
-        tr:hover {
-            background: var(--bg-darker);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            z-index: 50;
-        }
-
-        .modal-content {
-            background: var(--bg-color);
-            border-radius: 12px;
-            box-shadow: var(--shadow-lg);
-            max-width: 42rem;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        /* Spacing utilities */
-        .space-y-4 > * + * { margin-top: 1rem; }
-        .space-y-6 > * + * { margin-top: 1.5rem; }
-        .space-x-3 > * + * { margin-left: 0.75rem; }
-
-        /* Grid utilities */
-        .grid { display: grid; }
-        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
-        .gap-4 { gap: 1rem; }
-
-        /* Icons */
-        .icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            margin-right: 0.5rem;
-        }
-
-        .animate-spin {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-    </style>
-    
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body data-theme="dark">
-
-<div class="container" x-data="{
-    version: 'Admin Dashboard v24.3 (Server-Mode kompatibel)',
-    isLoggedIn: false,
-    showLoginForm: true,
-    loginData: {
-        username: '',
-        password: ''
-    },
-    loginError: '',
-    isLoading: false,
-    
-    // ✅ Demo-Kontakte für Funktionalität
-    contacts: [
-        {
-            id: 1,
-            name: 'Max Mustermann',
-            email: 'max.mustermann@email.de',
-            phone: '+49 123 456789',
-            message: 'Ich interessiere mich für eine Beratung bezüglich Vermögensaufbau. Könnten wir einen Termin vereinbaren?',
-            status: 'neu',
-            notes: '',
-            created_at: '2025-07-19T12:30:00Z',
-            updated_at: '2025-07-19T12:30:00Z'
-        },
-        {
-            id: 2,
-            name: 'Lisa Weber',
-            email: 'lisa.weber@example.com',
-            phone: '+49 987 654321',
-            message: 'Hallo, ich hätte gerne Informationen zu Ihren Versicherungsprodukten für junge Familien.',
-            status: 'offen',
-            notes: 'Termin für nächste Woche vereinbart',
-            created_at: '2025-07-19T09:15:00Z',
-            updated_at: '2025-07-19T09:15:00Z'
-        },
-        {
-            id: 3,
-            name: 'Thomas Schmidt',
-            email: 'thomas.schmidt@firma.de',
-            phone: '+49 555 123456',
-            message: 'Firmenversicherung für 15 Mitarbeiter gesucht. Bitte um Rückruf.',
-            status: 'abgeschlossen',
-            notes: 'Angebot versendet, Vertrag unterschrieben',
-            created_at: '2025-07-18T14:45:00Z',
-            updated_at: '2025-07-18T14:45:00Z'
-        }
-    ],
-    
-    selectedContact: null,
-    filterStatus: 'alle',
-    
-    toggleTheme() {
-        const currentTheme = document.body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-    },
-    
-    async login() {
-        console.log('🔐 Login attempt v24.3 - ENV credentials');
+<Layout 
+  title="Admin Dashboard | Dominik Maier"
+  description="Admin Dashboard für Kontaktanfragen - Dominik Maier Coaching & Interim Management"
+>
+  <!-- Separate Admin Styles -->
+  <AdminStyles />
+  
+  <Header />
+  
+  <main>
+    <!-- Admin Section mit Layout v1.2.8 Klassen -->
+    <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
+      <div class="admin-container">
         
-        this.isLoading = true;
-        this.loginError = '';
-        
-        try {
-            // ✅ Server-seitige Login-Prüfung mit ENV-Variablen
-            const response = await fetch('/api/admin/login', {
+        <!-- Alpine.js Admin App -->
+        <div x-data="{
+          version: 'Admin Dashboard v24.5 (Separate AdminStyles)',
+          isLoggedIn: false,
+          showLoginForm: true,
+          loginData: {
+            username: '',
+            password: ''
+          },
+          loginError: '',
+          isLoading: false,
+          
+          // ✅ Demo-Kontakte für Funktionalität
+          contacts: [
+            {
+              id: 1,
+              name: 'Max Mustermann',
+              email: 'max.mustermann@email.de',
+              phone: '+49 123 456789',
+              message: 'Ich interessiere mich für eine Beratung bezüglich Vermögensaufbau. Könnten wir einen Termin vereinbaren?',
+              status: 'neu',
+              notes: '',
+              created_at: '2025-07-19T12:30:00Z',
+              updated_at: '2025-07-19T12:30:00Z'
+            },
+            {
+              id: 2,
+              name: 'Lisa Weber',
+              email: 'lisa.weber@example.com',
+              phone: '+49 987 654321',
+              message: 'Hallo, ich hätte gerne Informationen zu Ihren Versicherungsprodukten für junge Familien.',
+              status: 'offen',
+              notes: 'Termin für nächste Woche vereinbart',
+              created_at: '2025-07-19T09:15:00Z',
+              updated_at: '2025-07-19T09:15:00Z'
+            },
+            {
+              id: 3,
+              name: 'Thomas Schmidt',
+              email: 'thomas.schmidt@firma.de',
+              phone: '+49 555 123456',
+              message: 'Firmenversicherung für 15 Mitarbeiter gesucht. Bitte um Rückruf.',
+              status: 'abgeschlossen',
+              notes: 'Angebot versendet, Vertrag unterschrieben',
+              created_at: '2025-07-18T14:45:00Z',
+              updated_at: '2025-07-18T14:45:00Z'
+            }
+          ],
+          
+          selectedContact: null,
+          filterStatus: 'alle',
+          
+          async login() {
+            console.log('🔐 Login attempt v24.5 - ENV credentials');
+            
+            this.isLoading = true;
+            this.loginError = '';
+            
+            try {
+              // ✅ Server-seitige Login-Prüfung mit ENV-Variablen
+              const response = await fetch('/api/admin/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                  'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    username: this.loginData.username,
-                    password: this.loginData.password
+                  username: this.loginData.username,
+                  password: this.loginData.password
                 })
-            });
-            
-            const result = await response.json();
-            
-            if (response.ok && result.success) {
+              });
+              
+              const result = await response.json();
+              
+              if (response.ok && result.success) {
                 this.isLoggedIn = true;
                 this.showLoginForm = false;
                 this.loginError = '';
-                console.log('✅ Login successful v24.3');
-            } else {
+                console.log('✅ Login successful v24.5');
+              } else {
                 this.loginError = result.message || 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed v24.3');
+                console.log('❌ Login failed v24.5');
+              }
+            } catch (error) {
+              console.error('Login error:', error);
+              this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
             }
-        } catch (error) {
-            console.error('Login error:', error);
-            this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-        }
-        
-        this.isLoading = false;
-    },
-    
-    async logout() {
-        console.log('🚪 Logout v24.3');
-        this.isLoggedIn = false;
-        this.showLoginForm = true;
-        this.loginData.username = '';
-        this.loginData.password = '';
-        this.selectedContact = null;
-    },
-    
-    // ✅ Alle Funktionen für Kontakt-Verwaltung
-    async loadContacts() {
-        console.log('📋 Loading contacts v24.3');
-        // Demo-Daten sind bereits geladen
-        console.log('✅ Demo contacts loaded:', this.contacts.length);
-    },
-    
-    getStatusClass(status) {
-        switch(status) {
-            case 'neu': return 'badge badge-neu';
-            case 'offen': return 'badge badge-offen';  
-            case 'abgeschlossen': return 'badge badge-abgeschlossen';
-            default: return 'badge';
-        }
-    },
-    
-    getStatusIcon(status) {
-        switch(status) {
-            case 'neu': return '🔴';
-            case 'offen': return '🟡';
-            case 'abgeschlossen': return '✅';
-            default: return '⚪';
-        }
-    },
-    
-    filteredContacts() {
-        if (this.filterStatus === 'alle') {
-            return this.contacts;
-        }
-        return this.contacts.filter(contact => contact.status === this.filterStatus);
-    },
-    
-    getStatusCount(status) {
-        return this.contacts.filter(contact => contact.status === status).length;
-    },
-    
-    async updateContactStatus(contactId, newStatus) {
-        console.log('🔄 Updating status v24.3:', { contactId, newStatus });
-        
-        const contact = this.contacts.find(c => c.id === contactId);
-        if (contact) {
-            contact.status = newStatus;
-            contact.updated_at = new Date().toISOString();
-            console.log('✅ Status updated');
-        }
-    },
-    
-    async saveContactNotes(contactId, notes) {
-        console.log('📝 Saving notes v24.3:', { contactId, notesLength: notes.length });
-        
-        const contact = this.contacts.find(c => c.id === contactId);
-        if (contact) {
-            contact.notes = notes;
-            contact.updated_at = new Date().toISOString();
-            console.log('✅ Notes saved');
-        }
-    },
-    
-    formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('de-DE');
-    },
-    
-    formatTime(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
-    }
-}" x-init="
-    console.log('🚀 Admin Dashboard v24.3 initialized - Server-Mode ready');
-    
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.body.setAttribute('data-theme', savedTheme);
-">
+            
+            this.isLoading = false;
+          },
+          
+          async logout() {
+            console.log('🚪 Logout v24.5');
+            this.isLoggedIn = false;
+            this.showLoginForm = true;
+            this.loginData.username = '';
+            this.loginData.password = '';
+            this.selectedContact = null;
+          },
+          
+          // ✅ Kontakt-Management Funktionen
+          getStatusClass(status) {
+            switch(status) {
+              case 'neu': return 'admin-badge admin-badge-neu';
+              case 'offen': return 'admin-badge admin-badge-offen';  
+              case 'abgeschlossen': return 'admin-badge admin-badge-abgeschlossen';
+              default: return 'admin-badge';
+            }
+          },
+          
+          getStatusIcon(status) {
+            switch(status) {
+              case 'neu': return '🔴';
+              case 'offen': return '🟡';
+              case 'abgeschlossen': return '✅';
+              default: return '⚪';
+            }
+          },
+          
+          filteredContacts() {
+            if (this.filterStatus === 'alle') {
+              return this.contacts;
+            }
+            return this.contacts.filter(contact => contact.status === this.filterStatus);
+          },
+          
+          getStatusCount(status) {
+            return this.contacts.filter(contact => contact.status === status).length;
+          },
+          
+          async updateContactStatus(contactId, newStatus) {
+            console.log('🔄 Updating status v24.5:', { contactId, newStatus });
+            
+            const contact = this.contacts.find(c => c.id === contactId);
+            if (contact) {
+              contact.status = newStatus;
+              contact.updated_at = new Date().toISOString();
+              console.log('✅ Status updated');
+            }
+          },
+          
+          async saveContactNotes(contactId, notes) {
+            console.log('📝 Saving notes v24.5:', { contactId, notesLength: notes.length });
+            
+            const contact = this.contacts.find(c => c.id === contactId);
+            if (contact) {
+              contact.notes = notes;
+              contact.updated_at = new Date().toISOString();
+              console.log('✅ Notes saved');
+            }
+          },
+          
+          formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('de-DE');
+          },
+          
+          formatTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+          }
+        }" x-init="
+          console.log('🚀 Admin Dashboard v24.5 initialized - Separate AdminStyles');
+        ">
 
-    <!-- Theme Toggle -->
-    <button @click="toggleTheme()" class="theme-toggle">
-        <span x-show="document.body.getAttribute('data-theme') === 'dark'">🌙</span>
-        <span x-show="document.body.getAttribute('data-theme') === 'light'">☀️</span>
-    </button>
-
-    <!-- Version Badge -->
-    <div class="version-badge" x-text="version"></div>
-
-    <!-- Login Form -->
-    <div x-show="showLoginForm" class="max-w-md">
-        <div class="card">
-            <div class="card-body">
-                <div class="text-center mb-6">
-                    <h1>Admin Dashboard</h1>
-                    <p>Bitte melden Sie sich an</p>
-                    <p class="text-xs mt-2" x-text="version"></p>
+          <!-- Login Form -->
+          <div x-show="showLoginForm" class="max-w-lg mx-auto">
+            <div class="admin-card">
+              <div class="admin-card-body">
+                <!-- Login Header -->
+                <div class="text-center mb-8">
+                  <div class="admin-icon">🔐</div>
+                  <h1 class="admin-title">Admin Dashboard</h1>
+                  <p class="text-gray-600 dark:text-gray-300 mb-2">
+                    Bitte melden Sie sich an
+                  </p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
                 
-                <form @submit.prevent="login()" class="space-y-6">
-                    <!-- ✅ Username-Feld -->
-                    <div>
-                        <label for="username">Benutzername</label>
-                        <input 
-                            type="text" 
-                            id="username"
-                            x-model="loginData.username"
-                            :disabled="isLoading"
-                            required
-                            placeholder="Benutzername eingeben"
-                        >
-                    </div>
-                    
-                    <div>
-                        <label for="password">Passwort</label>
-                        <input 
-                            type="password" 
-                            id="password"
-                            x-model="loginData.password"
-                            :disabled="isLoading"
-                            required
-                            placeholder="Passwort eingeben"
-                        >
-                    </div>
-                    
-                    <div x-show="loginError" class="alert alert-error">
-                        <span x-text="loginError"></span>
-                    </div>
-                    
-                    <button 
-                        type="submit"
-                        :disabled="isLoading"
-                        class="btn btn-primary w-full"
+                <!-- Login Form -->
+                <form @submit.prevent="login()" class="admin-space-y-6">
+                  <div>
+                    <label for="username" class="admin-label">
+                      Benutzername
+                    </label>
+                    <input 
+                      type="text" 
+                      id="username"
+                      x-model="loginData.username"
+                      :disabled="isLoading"
+                      required
+                      placeholder="Benutzername eingeben"
+                      class="admin-input"
                     >
-                        <span x-show="!isLoading">Anmelden</span>
-                        <span x-show="isLoading" class="flex items-center justify-center">
-                            <svg class="animate-spin icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            Wird angemeldet...
-                        </span>
-                    </button>
+                  </div>
+                  
+                  <div>
+                    <label for="password" class="admin-label">
+                      Passwort
+                    </label>
+                    <input 
+                      type="password" 
+                      id="password"
+                      x-model="loginData.password"
+                      :disabled="isLoading"
+                      required
+                      placeholder="Passwort eingeben"
+                      class="admin-input"
+                    >
+                  </div>
+                  
+                  <!-- Error Message -->
+                  <div x-show="loginError" class="admin-alert admin-alert-error">
+                    <span x-text="loginError"></span>
+                  </div>
+                  
+                  <!-- Submit Button -->
+                  <button 
+                    type="submit"
+                    :disabled="isLoading"
+                    class="admin-btn admin-btn-primary w-full"
+                  >
+                    <span x-show="!isLoading">Anmelden</span>
+                    <span x-show="isLoading" class="admin-flex-center">
+                      <div class="admin-spinner mr-2"></div>
+                      Wird angemeldet...
+                    </span>
+                  </button>
                 </form>
                 
-                <!-- ✅ Login-Hinweis ohne Credentials -->
-                <div class="alert alert-info mt-6">
-                    <div>
-                        <strong>Hinweis:</strong><br>
-                        Verwenden Sie Ihre Admin-Anmeldedaten für den Zugang.
-                    </div>
+                <!-- Login Hinweis -->
+                <div class="admin-alert admin-alert-info mt-6">
+                  <div>
+                    <strong>Hinweis:</strong><br>
+                    Verwenden Sie Ihre Admin-Anmeldedaten für den Zugang.
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
+          </div>
 
-    <!-- Dashboard Content -->
-    <div x-show="isLoggedIn" style="display: none;">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1>📧 Admin Dashboard</h1>
-                <p>Erfolgreich eingeloggt!</p>
-                <p class="text-xs mt-2" x-text="version"></p>
+          <!-- Dashboard Content -->
+          <div x-show="isLoggedIn" style="display: none;">
+            <!-- Header -->
+            <div class="admin-flex-between mb-8 flex-col lg:flex-row gap-4">
+              <div>
+                <h1 class="admin-title">📧 Admin Dashboard</h1>
+                <p class="text-gray-600 dark:text-gray-300 mb-1">
+                  Erfolgreich eingeloggt!
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
+              </div>
+              <button @click="logout()" class="admin-btn admin-btn-secondary">
+                🚪 Abmelden
+              </button>
             </div>
-            <button @click="logout()" class="btn btn-secondary">
-                Abmelden
-            </button>
-        </div>
 
-        <!-- Statistics Cards -->
-        <div class="statistics-grid">
-            <div class="stat-card">
-                <div class="stat-icon">🔴</div>
-                <div class="stat-content">
-                    <div class="stat-value" x-text="getStatusCount('neu')"></div>
-                    <div class="stat-label">Neue Anfragen</div>
+            <!-- Statistics Cards -->
+            <div class="admin-stats-grid">
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon">🔴</div>
+                <div class="admin-stat-content">
+                  <div class="admin-stat-value" x-text="getStatusCount('neu')"></div>
+                  <div class="admin-stat-label">Neue Anfragen</div>
                 </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">🟡</div>
-                <div class="stat-content">
-                    <div class="stat-value" x-text="getStatusCount('offen')"></div>
-                    <div class="stat-label">In Bearbeitung</div>
+              </div>
+              
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon">🟡</div>
+                <div class="admin-stat-content">
+                  <div class="admin-stat-value" x-text="getStatusCount('offen')"></div>
+                  <div class="admin-stat-label">In Bearbeitung</div>
                 </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">✅</div>
-                <div class="stat-content">
-                    <div class="stat-value" x-text="getStatusCount('abgeschlossen')"></div>
-                    <div class="stat-label">Abgeschlossen</div>
+              </div>
+              
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon">✅</div>
+                <div class="admin-stat-content">
+                  <div class="admin-stat-value" x-text="getStatusCount('abgeschlossen')"></div>
+                  <div class="admin-stat-label">Abgeschlossen</div>
                 </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-icon">📊</div>
-                <div class="stat-content">
-                    <div class="stat-value" x-text="contacts.length"></div>
-                    <div class="stat-label">Gesamt</div>
+              </div>
+              
+              <div class="admin-stat-card">
+                <div class="admin-stat-icon">📊</div>
+                <div class="admin-stat-content">
+                  <div class="admin-stat-value" x-text="contacts.length"></div>
+                  <div class="admin-stat-label">Gesamt</div>
                 </div>
+              </div>
             </div>
-        </div>
 
-        <!-- Filter -->
-        <div class="filter-container">
-            <button 
+            <!-- Filter Buttons -->
+            <div class="admin-filter-container">
+              <button 
                 @click="filterStatus = 'alle'"
-                :class="filterStatus === 'alle' ? 'filter-btn active' : 'filter-btn'"
-            >
+                :class="filterStatus === 'alle' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
+              >
                 Alle Anfragen
-            </button>
-            <button 
+              </button>
+              <button 
                 @click="filterStatus = 'neu'"
-                :class="filterStatus === 'neu' ? 'filter-btn active' : 'filter-btn'"
-            >
+                :class="filterStatus === 'neu' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
+              >
                 🔴 Neu
-            </button>
-            <button 
+              </button>
+              <button 
                 @click="filterStatus = 'offen'"
-                :class="filterStatus === 'offen' ? 'filter-btn active' : 'filter-btn'"
-            >
+                :class="filterStatus === 'offen' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
+              >
                 🟡 Offen
-            </button>
-            <button 
+              </button>
+              <button 
                 @click="filterStatus = 'abgeschlossen'"
-                :class="filterStatus === 'abgeschlossen' ? 'filter-btn active' : 'filter-btn'"
-            >
+                :class="filterStatus === 'abgeschlossen' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
+              >
                 ✅ Abgeschlossen
-            </button>
-        </div>
+              </button>
+            </div>
 
-        <!-- Contacts Table -->
-        <div class="card">
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Datum & Zeit</th>
-                            <th>Name</th>
-                            <th>Kontakt</th>
-                            <th>Status</th>
-                            <th>Aktionen</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template x-for="contact in filteredContacts()" :key="contact.id">
-                            <tr>
-                                <td>
-                                    <div class="text-sm" x-text="formatDate(contact.created_at)"></div>
-                                    <div class="text-xs" style="color: var(--text-muted);" x-text="formatTime(contact.created_at)"></div>
-                                </td>
-                                <td>
-                                    <div class="font-medium" x-text="contact.name"></div>
-                                </td>
-                                <td>
-                                    <div class="text-sm" x-text="contact.email"></div>
-                                    <div class="text-xs" style="color: var(--text-muted);" x-text="contact.phone"></div>
-                                </td>
-                                <td>
-                                    <span :class="getStatusClass(contact.status)">
-                                        <span x-text="getStatusIcon(contact.status)"></span>
-                                        <span x-text="contact.status"></span>
-                                    </span>
-                                </td>
-                                <td>
-                                    <button 
-                                        @click="selectedContact = contact"
-                                        class="btn-link"
-                                    >
-                                        Details ansehen
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
+            <!-- Contacts Table -->
+            <div class="admin-card">
+              <div class="admin-table-container">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Datum & Zeit</th>
+                      <th>Name</th>
+                      <th>Kontakt</th>
+                      <th>Status</th>
+                      <th>Aktionen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <template x-for="contact in filteredContacts()" :key="contact.id">
+                      <tr>
+                        <td>
+                          <div class="text-sm font-medium" x-text="formatDate(contact.created_at)"></div>
+                          <div class="text-xs text-gray-500 dark:text-gray-400" x-text="formatTime(contact.created_at)"></div>
+                        </td>
+                        <td>
+                          <div class="font-medium" x-text="contact.name"></div>
+                        </td>
+                        <td>
+                          <div class="text-sm" x-text="contact.email"></div>
+                          <div class="text-xs text-gray-500 dark:text-gray-400" x-text="contact.phone"></div>
+                        </td>
+                        <td>
+                          <span :class="getStatusClass(contact.status)">
+                            <span x-text="getStatusIcon(contact.status)"></span>
+                            <span x-text="contact.status"></span>
+                          </span>
+                        </td>
+                        <td>
+                          <button 
+                            @click="selectedContact = contact"
+                            class="admin-btn-link"
+                          >
+                            📋 Details
+                          </button>
+                        </td>
+                      </tr>
+                    </template>
+                  </tbody>
                 </table>
+              </div>
+              
+              <!-- Empty State -->
+              <div x-show="filteredContacts().length === 0" class="text-center py-12">
+                <div class="text-6xl mb-4">📭</div>
+                <p class="text-gray-500 dark:text-gray-400">Keine Kontaktanfragen gefunden.</p>
+              </div>
             </div>
-            
-            <!-- Empty State -->
-            <div x-show="filteredContacts().length === 0" class="text-center py-12">
-                <p style="color: var(--text-muted);">Keine Kontaktanfragen gefunden.</p>
-            </div>
-        </div>
 
-        <!-- Contact Detail Modal -->
-        <div x-show="selectedContact" class="modal-overlay" style="display: none;">
-            <div class="modal-content">
-                <div class="card-header">
-                    <div class="flex justify-between items-center">
-                        <h3>Kontaktdetails</h3>
-                        <button @click="selectedContact = null" class="btn-link">
-                            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
+            <!-- Contact Detail Modal -->
+            <div x-show="selectedContact" class="admin-modal-overlay" style="display: none;" @click.self="selectedContact = null">
+              <div class="admin-modal-content">
+                <div class="admin-modal-header">
+                  <h3 class="admin-subtitle mb-0">📋 Kontaktdetails</h3>
+                  <button @click="selectedContact = null" class="admin-btn-close">
+                    ✕
+                  </button>
                 </div>
                 
-                <div class="card-body">
-                    <template x-if="selectedContact">
-                        <div class="space-y-4">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label>Name</label>
-                                    <p x-text="selectedContact.name"></p>
-                                </div>
-                                <div>
-                                    <label>Datum</label>
-                                    <p x-text="formatDate(selectedContact.created_at) + ' ' + formatTime(selectedContact.created_at)"></p>
-                                </div>
-                                <div>
-                                    <label>E-Mail</label>
-                                    <p x-text="selectedContact.email"></p>
-                                </div>
-                                <div>
-                                    <label>Telefon</label>
-                                    <p x-text="selectedContact.phone"></p>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label>Nachricht</label>
-                                <p class="p-4" style="background: var(--bg-darker); border: 1px solid var(--border-color); border-radius: 8px;" x-text="selectedContact.message"></p>
-                            </div>
-                            
-                            <div>
-                                <label for="status">Status</label>
-                                <select 
-                                    id="status"
-                                    :value="selectedContact.status"
-                                    @change="updateContactStatus(selectedContact.id, $event.target.value)"
-                                >
-                                    <option value="neu">🔴 Neu</option>
-                                    <option value="offen">🟡 Offen</option>
-                                    <option value="abgeschlossen">✅ Abgeschlossen</option>
-                                </select>
-                            </div>
-                            
-                            <div>
-                                <label for="notes">Notizen</label>
-                                <textarea 
-                                    id="notes"
-                                    x-model="selectedContact.notes"
-                                    rows="3"
-                                    placeholder="Notizen hinzufügen..."
-                                ></textarea>
-                            </div>
-                            
-                            <div class="flex space-x-3 pt-4">
-                                <button 
-                                    @click="saveContactNotes(selectedContact.id, selectedContact.notes); selectedContact = null"
-                                    class="btn btn-primary"
-                                >
-                                    Speichern
-                                </button>
-                                <button 
-                                    @click="selectedContact = null"
-                                    class="btn btn-secondary"
-                                >
-                                    Abbrechen
-                                </button>
-                            </div>
+                <div class="admin-modal-body">
+                  <template x-if="selectedContact">
+                    <div class="admin-space-y-6">
+                      <!-- Kontakt Info Grid -->
+                      <div class="admin-grid-2">
+                        <div>
+                          <label class="admin-label">Name</label>
+                          <p class="admin-text" x-text="selectedContact.name"></p>
                         </div>
-                    </template>
+                        <div>
+                          <label class="admin-label">Datum</label>
+                          <p class="admin-text" x-text="formatDate(selectedContact.created_at) + ' ' + formatTime(selectedContact.created_at)"></p>
+                        </div>
+                        <div>
+                          <label class="admin-label">E-Mail</label>
+                          <p class="admin-text" x-text="selectedContact.email"></p>
+                        </div>
+                        <div>
+                          <label class="admin-label">Telefon</label>
+                          <p class="admin-text" x-text="selectedContact.phone"></p>
+                        </div>
+                      </div>
+                      
+                      <!-- Nachricht -->
+                      <div>
+                        <label class="admin-label">Nachricht</label>
+                        <div class="admin-message-box" x-text="selectedContact.message"></div>
+                      </div>
+                      
+                      <!-- Status -->
+                      <div>
+                        <label for="status" class="admin-label">Status</label>
+                        <select 
+                          id="status"
+                          :value="selectedContact.status"
+                          @change="updateContactStatus(selectedContact.id, $event.target.value)"
+                          class="admin-select"
+                        >
+                          <option value="neu">🔴 Neu</option>
+                          <option value="offen">🟡 Offen</option>
+                          <option value="abgeschlossen">✅ Abgeschlossen</option>
+                        </select>
+                      </div>
+                      
+                      <!-- Notizen -->
+                      <div>
+                        <label for="notes" class="admin-label">Notizen</label>
+                        <textarea 
+                          id="notes"
+                          x-model="selectedContact.notes"
+                          rows="3"
+                          placeholder="Notizen hinzufügen..."
+                          class="admin-textarea"
+                        ></textarea>
+                      </div>
+                      
+                      <!-- Action Buttons -->
+                      <div class="flex flex-col sm:flex-row gap-3 pt-4">
+                        <button 
+                          @click="saveContactNotes(selectedContact.id, selectedContact.notes); selectedContact = null"
+                          class="admin-btn admin-btn-primary"
+                        >
+                          💾 Speichern
+                        </button>
+                        <button 
+                          @click="selectedContact = null"
+                          class="admin-btn admin-btn-secondary"
+                        >
+                          ❌ Abbrechen
+                        </button>
+                      </div>
+                    </div>
+                  </template>
                 </div>
+              </div>
             </div>
+          </div>
+
         </div>
-    </div>
-
-</div>
-
-</body>
-</html>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+  
+  <!-- Alpine.js für Admin-Funktionalität -->
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</Layout>
