@@ -1,18 +1,18 @@
 ---
-// strategische-unternehmensentwicklung.astro v1.1 - Layout v1.2.8 Integration
-// CHANGELOG v1.1:
+// strategische-unternehmensentwicklung.astro v1.1.1 - Vollständiger Code mit korrekter Kontaktformular-Position
+// CHANGELOG v1.1.1:
 // - ✅ FIX: Layout v1.2.8 CSS-Klassen verwendet (bg-gray-50, text-gray-900, etc.)
 // - ✅ FIX: Header v1.5.1 und Footer v1.3 integriert
 // - ✅ FIX: "Bereit für den nächsten Schritt" CTA-Sektion entfernt
-// - ✅ FIX: Kontaktformular an das Ende der Seite verschoben
-// - ✅ VERIFIED: Responsive Design und CSS-Syntax Netlify-kompatibel
+// - ✅ FIX: Kontaktformular NACH Testimonial positioniert
+// - ✅ VERIFIED: Vollständiger Code ohne Abschnitte
 
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ContactForm from '../../components/ContactForm.astro';
 
-console.log('🎯 Strategische Entwicklung v1.1 - Layout Integration');
+console.log('🎯 Strategische Entwicklung v1.1.1 - Vollständiger Code');
 ---
 
 <Layout 
@@ -46,12 +46,6 @@ console.log('🎯 Strategische Entwicklung v1.1 - Layout Integration');
               </p>
             </div>
           </div>
-        </div>
-        
-        <!-- Kontaktformular -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8 mb-12 md:mb-16" data-aos="fade-up">
-          <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">Kontaktieren Sie uns</h2>
-          <ContactForm />
         </div>
         
         <!-- Main Content -->
@@ -233,6 +227,12 @@ console.log('🎯 Strategische Entwicklung v1.1 - Layout Integration');
               — Mark Joel Former CEO Hymmen North America
             </footer>
           </blockquote>
+        </div>
+        
+        <!-- Kontaktformular -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8" data-aos="fade-up">
+          <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-6 text-center">Kontaktieren Sie uns</h2>
+          <ContactForm />
         </div>
       </div>
     </div>
