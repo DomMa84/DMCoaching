@@ -1,13 +1,11 @@
 ---
-// Header.astro v1.5 - Dropdown Navigation für Leistungen
-// CHANGELOG v1.5:
-// - ✅ NEW: Dropdown-Menü für "Leistungen" hinzugefügt
-// - ✅ NEW: Service-Pages aus Index "Unser Fokus" verlinkt
-// - ✅ NEW: Hover-States und Desktop/Mobile Dropdown-Funktionalität
-// - ✅ KEEP: Logo, Dark Mode Toggle, alle anderen Header-Funktionen
-// - ✅ VERIFIED: CSS-Klassen aus Layout v1.2.8 verwendet
+// Header.astro v1.5.1 - Fixes: Service Buttons entfernt, "Alle Leistungen" Link entfernt
+// CHANGELOG v1.5.1:
+// - ✅ FIX: Service Quick Access Buttons entfernt (Strategische Entwicklung, Vertrieb)
+// - ✅ FIX: "Alle Leistungen →" Links aus Desktop und Mobile Dropdown entfernt
+// - ✅ KEEP: Dropdown-Funktionalität und alle Service-Pages bleiben
 
-console.log('🎨 Header v1.5 - Dropdown Navigation für Leistungen');
+console.log('🎨 Header v1.5.1 - Service Buttons & Alle Leistungen Fixes');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -33,18 +31,6 @@ console.log('🎨 Header v1.5 - Dropdown Navigation für Leistungen');
 
       <!-- Desktop Navigation & Service Buttons -->
       <div class="hidden lg:flex items-center space-x-8">
-        <!-- Service Quick Access Buttons (reduziert) -->
-        <div class="flex items-center space-x-4">
-          <a href="/leistung/strategische-unternehmensentwicklung" 
-             class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            Strategische Entwicklung
-          </a>
-          <a href="/leistung/vertriebsoptimierung" 
-             class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            Vertrieb
-          </a>
-        </div>
-
         <!-- Main Navigation with Dropdown -->
         <nav class="flex items-center space-x-6">
           <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
@@ -63,11 +49,6 @@ console.log('🎨 Header v1.5 - Dropdown Navigation für Leistungen');
             <!-- Dropdown Menu -->
             <div class="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
               <div class="p-4">
-                <div class="mb-3">
-                  <a href="/leistung" class="text-primary-gold hover:text-primary-gold-80 font-semibold text-sm">
-                    Alle Leistungen →
-                  </a>
-                </div>
                 <div class="space-y-3">
                   <a href="/leistung/strategische-unternehmensentwicklung" 
                      class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group/item">
@@ -236,9 +217,6 @@ console.log('🎨 Header v1.5 - Dropdown Navigation für Leistungen');
             </button>
             
             <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
-              <a href="/leistung" class="block px-3 py-2 text-sm text-primary-gold hover:text-primary-gold-80 font-semibold rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                Alle Leistungen →
-              </a>
               
               <a href="/leistung/strategische-unternehmensentwicklung" 
                  class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
