@@ -1,23 +1,23 @@
 ---
-// ContactForm.astro v18.9 (E-Mail Integration Enhanced)
-// Contact Form Component - E-Mail-Status Integration
+// ContactForm.astro v18.9 (Layout-Fix + E-Mail Integration)
+// ✅ WICHTIG: Layout v1.2.8 CSS-Klassen beibehalten!
 // ✅ ÄNDERUNGEN v18.9:
-// - E-Mail-Status im Success-Message angezeigt
-// - Enhanced Response-Handling für E-Mail-Bestätigung
-// - Lead-Form Unterscheidung in Success-Message
-// - Verbesserte Error-Behandlung für E-Mail-Versand
-// - Integration mit contact.js v17.10 E-Mail-Features
+// - Layout v1.2.8 CSS-Klassen wiederhergestellt
+// - E-Mail-Status Integration beibehalten
+// - Originaldesign nicht verändert
+// - Enhanced UX nur im JavaScript
 
 const { showTitle = true, leadForm = false } = Astro.props;
 ---
 
-<div class="contact-form-container">
+<!-- ✅ ORIGINAL CONTACT TILE DESIGN (Layout v1.2.8) -->
+<div class="value-tile-improved">
   {showTitle && (
-    <div class="contact-form-header">
-      <h2 class="contact-form-title">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
         {leadForm ? '🎯 Interesse an unseren Leistungen?' : '📞 Kontakt aufnehmen'}
       </h2>
-      <p class="contact-form-subtitle">
+      <p class="text-gray-600 dark:text-gray-300">
         {leadForm 
           ? 'Lassen Sie uns über Ihre Herausforderungen sprechen. Wir melden uns schnellstmöglich bei Ihnen.'
           : 'Haben Sie Fragen oder möchten Sie einen Beratungstermin vereinbaren? Schreiben Sie uns!'
@@ -26,14 +26,14 @@ const { showTitle = true, leadForm = false } = Astro.props;
     </div>
   )}
 
-  <!-- ✅ KONTAKTFORMULAR v18.9 -->
+  <!-- ✅ KONTAKTFORMULAR v18.9 mit Original-Layout -->
   <form 
     id="contactForm"
     x-data="contactFormData()"
     @submit.prevent="submitForm()"
-    class="contact-form"
+    class="space-y-6"
   >
-    <!-- ✅ HONEYPOT SCHUTZ -->
+    <!-- ✅ HONEYPOT SCHUTZ (unsichtbar) -->
     <input 
       type="text" 
       name="website" 
@@ -44,77 +44,77 @@ const { showTitle = true, leadForm = false } = Astro.props;
     >
 
     <!-- ✅ NAME FIELD -->
-    <div class="form-group">
-      <label for="name" class="form-label">
-        Name <span class="required">*</span>
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Name <span class="text-red-500">*</span>
       </label>
       <input
         type="text"
         id="name"
         name="name"
         x-model="formData.name"
-        class="form-input"
-        :class="{ 'error': errors.name }"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-gold focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.name }"
         placeholder="Ihr vollständiger Name"
         required
         maxlength="100"
         @input="clearFieldError('name')"
       >
-      <div x-show="errors.name" x-text="errors.name" class="error-message"></div>
+      <div x-show="errors.name" x-text="errors.name" class="text-red-500 text-sm mt-1"></div>
     </div>
 
     <!-- ✅ EMAIL FIELD -->
-    <div class="form-group">
-      <label for="email" class="form-label">
-        E-Mail-Adresse <span class="required">*</span>
+    <div>
+      <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        E-Mail-Adresse <span class="text-red-500">*</span>
       </label>
       <input
         type="email"
         id="email"
         name="email"
         x-model="formData.email"
-        class="form-input"
-        :class="{ 'error': errors.email }"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-gold focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.email }"
         placeholder="ihre.email@beispiel.de"
         required
         maxlength="255"
         @input="clearFieldError('email')"
       >
-      <div x-show="errors.email" x-text="errors.email" class="error-message"></div>
+      <div x-show="errors.email" x-text="errors.email" class="text-red-500 text-sm mt-1"></div>
     </div>
 
     <!-- ✅ PHONE FIELD -->
-    <div class="form-group">
-      <label for="phone" class="form-label">
-        Telefonnummer <span class="required">*</span>
+    <div>
+      <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Telefonnummer <span class="text-red-500">*</span>
       </label>
       <input
         type="tel"
         id="phone"
         name="phone"
         x-model="formData.phone"
-        class="form-input"
-        :class="{ 'error': errors.phone }"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-gold focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.phone }"
         placeholder="+49 123 456789"
         required
         maxlength="25"
         @input="clearFieldError('phone')"
       >
-      <div x-show="errors.phone" x-text="errors.phone" class="error-message"></div>
+      <div x-show="errors.phone" x-text="errors.phone" class="text-red-500 text-sm mt-1"></div>
     </div>
 
     <!-- ✅ MESSAGE FIELD -->
-    <div class="form-group">
-      <label for="message" class="form-label">
+    <div>
+      <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
         {leadForm ? 'Beschreiben Sie Ihre Herausforderung' : 'Nachricht'}
-        {!leadForm && <span class="optional">(optional)</span>}
+        {!leadForm && <span class="text-gray-500">(optional)</span>}
       </label>
       <textarea
         id="message"
         name="message"
         x-model="formData.message"
-        class="form-textarea"
-        :class="{ 'error': errors.message }"
+        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-gold focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors duration-200 resize-none"
+        :class="{ 'border-red-500 focus:ring-red-500': errors.message }"
         placeholder={leadForm 
           ? "Beschreiben Sie kurz Ihre aktuelle Situation und wobei wir Ihnen helfen können..."
           : "Ihre Nachricht an uns..."
@@ -123,142 +123,149 @@ const { showTitle = true, leadForm = false } = Astro.props;
         maxlength="2000"
         @input="clearFieldError('message')"
       ></textarea>
-      <div x-show="errors.message" x-text="errors.message" class="error-message"></div>
-      <div class="char-counter">
+      <div x-show="errors.message" x-text="errors.message" class="text-red-500 text-sm mt-1"></div>
+      <div class="text-right text-sm text-gray-500 mt-1">
         <span x-text="formData.message.length"></span>/2000 Zeichen
       </div>
     </div>
 
-    <!-- ✅ GDPR CHECKBOX -->
-    <div class="form-group gdpr-group">
-      <label class="checkbox-label">
+    <!-- ✅ GDPR CHECKBOX (Original Design) -->
+    <div>
+      <label class="flex items-start space-x-3">
         <input
           type="checkbox"
           name="gdprConsent"
           x-model="formData.gdprConsent"
-          class="checkbox-input"
-          :class="{ 'error': errors.gdprConsent }"
+          class="mt-1 h-4 w-4 text-primary-gold focus:ring-primary-gold border-gray-300 dark:border-gray-600 rounded"
+          :class="{ 'border-red-500': errors.gdprConsent }"
           required
           @change="clearFieldError('gdprConsent')"
         >
-        <span class="checkbox-custom"></span>
-        <span class="checkbox-text">
-          Ich stimme der <a href="/datenschutz" target="_blank" class="privacy-link">Datenschutzerklärung</a> zu und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage gespeichert werden. <span class="required">*</span>
+        <span class="text-sm text-gray-600 dark:text-gray-300">
+          Ich stimme der <a href="/datenschutz" target="_blank" class="text-primary-gold hover:underline">Datenschutzerklärung</a> zu und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Anfrage gespeichert werden. <span class="text-red-500">*</span>
         </span>
       </label>
-      <div x-show="errors.gdprConsent" x-text="errors.gdprConsent" class="error-message"></div>
+      <div x-show="errors.gdprConsent" x-text="errors.gdprConsent" class="text-red-500 text-sm mt-1"></div>
     </div>
 
-    <!-- ✅ SUBMIT BUTTON mit E-Mail Loading-Status -->
-    <div class="form-submit">
-      <button
-        type="submit"
-        class="submit-btn"
-        :disabled="isSubmitting"
-        :class="{ 'loading': isSubmitting }"
-      >
-        <span x-show="!isSubmitting">
-          {leadForm ? '🎯 Anfrage senden' : '📧 Nachricht senden'}
-        </span>
-        <span x-show="isSubmitting" class="loading-content">
-          <span class="loading-spinner"></span>
-          <span x-text="loadingText">Wird gesendet...</span>
-        </span>
-      </button>
-    </div>
+    <!-- ✅ SUBMIT BUTTON (Original Design) -->
+    <button
+      type="submit"
+      class="w-full bg-primary-gold hover:bg-primary-gold-dark text-white font-bold py-4 px-6 rounded-lg transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+      :disabled="isSubmitting"
+    >
+      <span x-show="!isSubmitting">
+        {leadForm ? '🎯 Anfrage senden' : '📧 Nachricht senden'}
+      </span>
+      <span x-show="isSubmitting" class="flex items-center space-x-2">
+        <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span x-text="loadingText">Wird gesendet...</span>
+      </span>
+    </button>
 
-    <!-- ✅ SUCCESS MESSAGE v18.9 - Enhanced mit E-Mail-Status -->
+    <!-- ✅ SUCCESS MESSAGE v18.9 (Verbessertes Design) -->
     <div 
       x-show="showSuccessMessage" 
       x-transition:enter="transition ease-out duration-300"
-      x-transition:enter-start="opacity-0 transform scale-95"
-      x-transition:enter-end="opacity-100 transform scale-100"
-      class="success-message"
+      x-transition:enter-start="opacity-0 transform translate-y-4"
+      x-transition:enter-end="opacity-100 transform translate-y-0"
+      class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6 mt-6"
     >
-      <div class="success-icon">✅</div>
-      <div class="success-content">
-        <h3 x-text="successTitle"></h3>
-        <div x-html="successMessage"></div>
-        
-        <!-- ✅ E-MAIL STATUS ANZEIGE v18.9 -->
-        <div x-show="emailStatus" class="email-status" x-transition>
-          <div class="email-status-header">
-            <span class="email-icon">📧</span>
-            <strong>E-Mail-Status:</strong>
-          </div>
+      <div class="flex items-start space-x-3">
+        <div class="text-green-500 text-2xl">✅</div>
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-green-800 dark:text-green-200 mb-2" x-text="successTitle"></h3>
+          <div class="text-green-700 dark:text-green-300 mb-4" x-html="successMessage"></div>
           
-          <div class="email-status-items">
-            <!-- Bestätigungs-E-Mail Status -->
-            <div class="email-status-item" x-show="emailStatus.confirmation">
-              <span x-show="emailStatus.confirmation.sent" class="status-success">
-                ✅ Bestätigungs-E-Mail an Sie gesendet
-              </span>
-              <span x-show="!emailStatus.confirmation.sent" class="status-warning">
-                ⚠️ Bestätigungs-E-Mail konnte nicht gesendet werden
-              </span>
-              <div class="status-detail" x-text="emailStatus.confirmation.recipient"></div>
+          <!-- ✅ E-MAIL STATUS v18.9 -->
+          <div x-show="emailStatus" class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700" x-transition>
+            <div class="flex items-center space-x-2 mb-3">
+              <span class="text-xl">📧</span>
+              <strong class="text-gray-800 dark:text-gray-200">E-Mail-Status:</strong>
             </div>
             
-            <!-- Admin-Benachrichtigung Status -->
-            <div class="email-status-item" x-show="emailStatus.admin">
-              <span x-show="emailStatus.admin.sent" class="status-success">
-                ✅ Admin-Benachrichtigung gesendet
-              </span>
-              <span x-show="!emailStatus.admin.sent" class="status-warning">
-                ⚠️ Admin-Benachrichtigung fehlgeschlagen
-              </span>
-              <div class="status-detail">
-                <span x-text="emailStatus.admin.priority"></span>
-                <span x-show="emailStatus.admin.priority === 'HIGH (Lead)'" class="lead-badge">🎯 LEAD</span>
+            <!-- Bestätigungs-E-Mail -->
+            <div x-show="emailStatus.confirmation" class="mb-2">
+              <div class="flex items-center space-x-2">
+                <span x-show="emailStatus.confirmation.sent" class="text-green-600">✅</span>
+                <span x-show="!emailStatus.confirmation.sent" class="text-yellow-600">⚠️</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">
+                  <span x-show="emailStatus.confirmation.sent">Bestätigungs-E-Mail an Sie gesendet</span>
+                  <span x-show="!emailStatus.confirmation.sent">Bestätigungs-E-Mail konnte nicht gesendet werden</span>
+                </span>
               </div>
+              <div class="text-xs text-gray-500 ml-6" x-text="emailStatus.confirmation.recipient"></div>
+            </div>
+            
+            <!-- Admin-Benachrichtigung -->
+            <div x-show="emailStatus.admin" class="mb-2">
+              <div class="flex items-center space-x-2">
+                <span x-show="emailStatus.admin.sent" class="text-green-600">✅</span>
+                <span x-show="!emailStatus.admin.sent" class="text-yellow-600">⚠️</span>
+                <span class="text-sm text-gray-700 dark:text-gray-300">
+                  <span x-show="emailStatus.admin.sent">Admin-Benachrichtigung gesendet</span>
+                  <span x-show="!emailStatus.admin.sent">Admin-Benachrichtigung fehlgeschlagen</span>
+                </span>
+                <span x-show="emailStatus.admin.priority === 'HIGH (Lead)'" class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">🎯 LEAD</span>
+              </div>
+            </div>
+            
+            <!-- E-Mail Fehler -->
+            <div x-show="emailStatus.errors && emailStatus.errors.length > 0" class="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded border border-yellow-200 dark:border-yellow-800">
+              <div class="text-sm font-medium text-yellow-800 dark:text-yellow-200 mb-1">⚠️ E-Mail-Probleme:</div>
+              <template x-for="error in emailStatus.errors" :key="error">
+                <div class="text-sm text-yellow-700 dark:text-yellow-300" x-text="error"></div>
+              </template>
             </div>
           </div>
           
-          <!-- E-Mail Fehler anzeigen -->
-          <div x-show="emailStatus.errors && emailStatus.errors.length > 0" class="email-errors">
-            <div class="email-errors-header">⚠️ E-Mail-Probleme:</div>
-            <template x-for="error in emailStatus.errors" :key="error">
-              <div class="email-error-item" x-text="error"></div>
-            </template>
-          </div>
-        </div>
-        
-        <!-- Kontakt-Info für direkten Kontakt -->
-        <div class="contact-backup">
-          <p><strong>Alternativ erreichen Sie uns direkt:</strong></p>
-          <div class="contact-methods">
-            <a href="tel:+497440913367" class="contact-method">
-              📞 +49 7440 913367
-            </a>
-            <a href="mailto:webmaster@maier-value.com" class="contact-method">
-              ✉️ webmaster@maier-value.com
-            </a>
+          <!-- Direkter Kontakt -->
+          <div class="mt-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alternativ erreichen Sie uns direkt:</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="tel:+497440913367" class="inline-flex items-center space-x-2 text-primary-gold hover:underline text-sm">
+                <span>📞</span>
+                <span>+49 7440 913367</span>
+              </a>
+              <a href="mailto:webmaster@maier-value.com" class="inline-flex items-center space-x-2 text-primary-gold hover:underline text-sm">
+                <span>✉️</span>
+                <span>webmaster@maier-value.com</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ✅ ERROR MESSAGE -->
+    <!-- ✅ ERROR MESSAGE (Original Design) -->
     <div 
       x-show="showErrorMessage" 
       x-transition:enter="transition ease-out duration-300"
-      x-transition:enter-start="opacity-0 transform scale-95"
-      x-transition:enter-end="opacity-100 transform scale-100"
-      class="error-message-container"
+      x-transition:enter-start="opacity-0 transform translate-y-4"
+      x-transition:enter-end="opacity-100 transform translate-y-0"
+      class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mt-6"
     >
-      <div class="error-icon">❌</div>
-      <div class="error-content">
-        <h3>Fehler beim Senden</h3>
-        <div x-html="errorMessage"></div>
-        <div class="contact-backup">
-          <p><strong>Bitte kontaktieren Sie uns direkt:</strong></p>
-          <div class="contact-methods">
-            <a href="tel:+497440913367" class="contact-method">
-              📞 +49 7440 913367
-            </a>
-            <a href="mailto:webmaster@maier-value.com" class="contact-method">
-              ✉️ webmaster@maier-value.com
-            </a>
+      <div class="flex items-start space-x-3">
+        <div class="text-red-500 text-2xl">❌</div>
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold text-red-800 dark:text-red-200 mb-2">Fehler beim Senden</h3>
+          <div class="text-red-700 dark:text-red-300 mb-4" x-html="errorMessage"></div>
+          
+          <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bitte kontaktieren Sie uns direkt:</p>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <a href="tel:+497440913367" class="inline-flex items-center space-x-2 text-primary-gold hover:underline text-sm">
+                <span>📞</span>
+                <span>+49 7440 913367</span>
+              </a>
+              <a href="mailto:webmaster@maier-value.com" class="inline-flex items-center space-x-2 text-primary-gold hover:underline text-sm">
+                <span>✉️</span>
+                <span>webmaster@maier-value.com</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -302,7 +309,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
         delete this.errors[field];
       },
 
-      // ✅ CLIENT-SIDE VALIDATION v18.9
+      // ✅ CLIENT-SIDE VALIDATION
       validateForm() {
         this.errors = {};
         let isValid = true;
@@ -335,7 +342,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
           isValid = false;
         }
 
-        // Message validation (optional, but if provided)
+        // Message validation (optional)
         if (this.formData.message && this.formData.message.trim().length > 2000) {
           this.errors.message = 'Nachricht darf maximal 2000 Zeichen lang sein';
           isValid = false;
@@ -389,13 +396,12 @@ const { showTitle = true, leadForm = false } = Astro.props;
               ? '🎯 Lead-Anfrage erfolgreich gesendet!'
               : '✅ Nachricht erfolgreich gesendet!';
             
-            // Enhanced Success Message mit E-Mail-Status
             this.successMessage = `
               <p><strong>Vielen Dank, ${this.formData.name}!</strong></p>
               <p>${result.message}</p>
               ${result.emails && result.emails.sent 
-                ? '<p class="email-success">📧 <strong>E-Mail-Bestätigung:</strong> Sie erhalten in Kürze eine Bestätigungs-E-Mail.</p>'
-                : '<p class="email-warning">⚠️ <strong>E-Mail-Hinweis:</strong> E-Mail-Versand hatte Probleme, aber Ihre Anfrage wurde gespeichert.</p>'
+                ? '<p class="text-green-600 font-medium">📧 Sie erhalten in Kürze eine Bestätigungs-E-Mail.</p>'
+                : '<p class="text-yellow-600 font-medium">⚠️ E-Mail-Versand hatte Probleme, aber Ihre Anfrage wurde gespeichert.</p>'
               }
             `;
             
@@ -406,8 +412,6 @@ const { showTitle = true, leadForm = false } = Astro.props;
                 admin: result.emails.admin || null,
                 errors: result.emails.errors || []
               };
-              
-              console.log('📧 Email Status set v18.9:', this.emailStatus);
             }
             
             this.showSuccessMessage = true;
@@ -415,7 +419,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
             // Form zurücksetzen nach Erfolg
             setTimeout(() => {
               this.resetForm();
-            }, 3000);
+            }, 5000);
 
           } else {
             // ✅ ERROR HANDLING v18.9
@@ -424,7 +428,7 @@ const { showTitle = true, leadForm = false } = Astro.props;
             this.errorMessage = `
               <p><strong>${result.message || 'Ein Fehler ist aufgetreten'}</strong></p>
               ${result.errors && result.errors.length > 0 
-                ? '<ul>' + result.errors.map(error => `<li>${error}</li>`).join('') + '</ul>'
+                ? '<ul class="list-disc list-inside mt-2">' + result.errors.map(error => `<li>${error}</li>`).join('') + '</ul>'
                 : ''
               }
             `;
