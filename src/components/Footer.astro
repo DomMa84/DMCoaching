@@ -1,382 +1,167 @@
 ---
-// src/components/Footer.astro v1.1 - CSS-KLASSEN VEREINHEITLICHT
-// Footer - Enhanced footer component mit korrigierten CSS-Klassen
+// Footer.astro v1.3 - Header-Style Design mit Sonne
+// CHANGELOG v1.3:
+// - ✅ STYLE: Header-Farbschema übernommen (weiß/grau im Light Mode)
+// - ✅ FIX: Dark Mode Kompatibilität wie Header
+// - ✅ ICON: Stern zu Sonne geändert für Light Mode
+// - ✅ KEEP: Alle Footer-Funktionen und Links beibehalten
 
-import Logo from './Logo.astro';
-
-interface Props {
-  variant?: 'default' | 'minimal' | 'extended';
-  showSocial?: boolean;
-  showNewsletter?: boolean;
-  className?: string;
-}
-
-const {
-  variant = 'default',
-  showSocial = true,
-  showNewsletter = false,
-  className = ""
-} = Astro.props;
-
-// Generate current year server-side for better SEO
-const currentYear = new Date().getFullYear();
-
-// Company information for structured data
-const companyInfo = {
-  name: "Dominik Maier Coaching & Interim Management",
-  description: "Experte für strategische Unternehmensentwicklung und Value Management",
-  address: {
-    street: "Gaisbachweg 4",
-    city: "Bad Rippoldsau", 
-    postalCode: "77776",
-    country: "Deutschland"
-  },
-  contact: {
-    phone: "+497440913367",
-    email: "webmaster@maier-value.com"
-  },
-  social: {
-    linkedin: "https://www.linkedin.com/in/dominik-maier-22144710a/"
-  }
-};
-
-// Navigation items with enhanced structure
-const footerNavigation = [
-  {
-    label: "Rechtliches",
-    items: [
-      { name: "Impressum", href: "/impressum", rel: "nofollow" },
-      { name: "Datenschutz", href: "/datenschutz", rel: "nofollow" },
-      { name: "AGB", href: "/agb", rel: "nofollow" }
-    ]
-  },
-  {
-    label: "Services",
-    items: [
-      { name: "Strategische Beratung", href: "/leistung/strategische-unternehmensentwicklung" },
-      { name: "Vertriebsoptimierung", href: "/leistung/vertriebsoptimierung" },
-      { name: "Value Management", href: "/leistung/wertanalyse" }
-    ]
-  },
-  {
-    label: "Unternehmen", 
-    items: [
-      { name: "Über uns", href: "/ueber-mich" },
-      { name: "Kontakt", href: "/kontakt" },
-      { name: "Karriere", href: "/karriere" }
-    ]
-  }
-];
-
-console.log(`🦶 Footer v1.1 rendered - ${variant} variant, year: ${currentYear}`);
+console.log('🎨 Footer v1.3 - Header-Style mit Sonne');
 ---
 
-<footer 
-  class={`footer-container bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white border-t border-gray-300 dark:border-gray-600 ${className}`}
-  role="contentinfo"
-  aria-label="Website-Footer mit Kontaktinformationen und Links"
->
-  <div class="container mx-auto px-4 py-10">
-    
-    {variant === 'extended' ? (
-      <!-- Extended Footer Layout -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-        <!-- Company Info -->
-        <div class="lg:col-span-2">
-          <div class="flex flex-col items-start">
-            <Logo height={48} class="mb-4" />
-            <h2 class="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
-              {companyInfo.name}
-            </h2>
-            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-              {companyInfo.description}. Wir helfen Unternehmen dabei, ihre Prozesse zu optimieren, 
-              Kosten zu reduzieren und nachhaltiges Wachstum zu erreichen.
-            </p>
-            
-            <!-- Contact Info -->
-            <div class="space-y-2 text-sm">
-              <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
-                </svg>
-                <address class="not-italic text-gray-600 dark:text-gray-300">
-                  {companyInfo.address.street}, {companyInfo.address.postalCode} {companyInfo.address.city}
-                </address>
-              </div>
-              
-              <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" />
-                </svg>
-                <a href={`tel:${companyInfo.contact.phone}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
-                  {companyInfo.contact.phone}
-                </a>
-              </div>
-              
-              <div class="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4 mr-2 text-primary-gold" aria-hidden="true">
-                  <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-                  <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-                </svg>
-                <a href={`mailto:${companyInfo.contact.email}`} class="text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors">
-                  {companyInfo.contact.email}
-                </a>
-              </div>
+<footer class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 transition-all duration-300">
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+      
+      <!-- Logo & Beschreibung -->
+      <div class="space-y-6">
+        <div class="flex items-center space-x-3">
+          <!-- LOGO VOM HEADER -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 lg:w-12 lg:h-12" viewBox="0 0 1778 1433">
+            <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.948,1203.843,634.465C1164.791,595.267,1125.659,556.15,1086.512,517.048C1085.021,515.56,1083.236,514.366,1082.683,513.919C1147.624,448.977,1211.974,384.625,1276.126,320.471C1276.126,535.349,1276.126,750.942,1276.126,966.733C1299.839,966.733,1323.23,966.733,1346.536,966.733C1346.536,693.677,1346.536,420.888,1346.536,147.84ZM557.5,896C540.532,896,524.563,896,508.298,896C508.298,659.685,508.298,423.687,508.298,187.253C514.828,194.314,521.223,201.047,527.408,207.968C533.978,215.32,540.294,222.899,546.816,230.294C559.777,244.989,572.794,259.634,585.807,274.283C591.498,280.69,597.249,287.043,602.947,293.444C616.308,308.452,629.613,323.509,643.021,338.474C650.293,346.592,657.83,354.474,665.07,362.619C677.093,376.145,688.917,389.847,700.931,403.381C710.238,413.864,719.783,424.137,729.086,434.624C740.985,448.038,752.712,461.603,764.582,475.043C770.805,482.09,777.214,488.972,783.468,495.991C796.614,510.744,809.715,525.537,822.831,540.317C830.701,549.185,838.73,557.918,846.394,566.961C860.957,584.143,872.228,603.446,879.606,624.62C884.543,638.787,888.677,653.549,890.562,668.376C892.42,682.996,891.345,698.044,890.917,712.885C890.423,729.964,885.796,746.269,880.002,762.23C872.064,784.095,860.843,804.09,846.296,822.313C831.898,840.35,814.712,855.172,795.173,867.156C776.669,878.505,756.706,886.425,735.376,891.178C718.368,894.968,701.308,896.149,683.977,896.066C641.819,895.864,599.659,896,557.5,896Z" />
+          </svg>
+          <div class="text-left">
+            <div class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+              Dominik Maier
+            </div>
+            <div class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 -mt-1">
+              Coaching & Interim Management
             </div>
           </div>
         </div>
+        <p class="text-gray-600 dark:text-gray-300 leading-relaxed max-w-md">
+          Strategische Unternehmensentwicklung, Vertriebsoptimierung und Value Management für nachhaltigen Erfolg.
+        </p>
         
-        <!-- Navigation Columns -->
-        {footerNavigation.map((section) => (
-          <div>
-            <h3 class="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wider">
-              {section.label}
-            </h3>
-            <nav aria-label={`${section.label} Navigation`}>
-              <ul class="space-y-2">
-                {section.items.map((item) => (
-                  <li>
-                    <a 
-                      href={item.href}
-                      rel={item.rel}
-                      class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors"
-                    >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          </div>
-        ))}
-      </div>
-    ) : variant === 'minimal' ? (
-      <!-- Minimal Footer Layout -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div class="flex items-center">
-          <Logo height={32} class="mr-3" />
-          <span class="text-sm text-gray-600 dark:text-gray-300">
-            &copy; {currentYear} Dominik Maier
-          </span>
+        <!-- Dark Mode Toggle wie im Header -->
+        <div class="flex items-center space-x-3">
+          <span class="text-sm text-gray-600 dark:text-gray-300">Theme:</span>
+          <button 
+            id="footer-theme-toggle"
+            class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Toggle dark mode"
+          >
+            <!-- SONNE für Light Mode -->
+            <svg id="footer-theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+            </svg>
+            <!-- MOND für Dark Mode -->
+            <svg id="footer-theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+            </svg>
+          </button>
         </div>
-        
-        <nav class="flex space-x-6" aria-label="Footer Navigation">
-          <a href="/impressum" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
-            Impressum
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Services</h3>
+        <nav class="space-y-3">
+          <a href="/leistung/strategische-unternehmensentwicklung" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Strategische Unternehmensentwicklung
           </a>
-          <a href="/datenschutz" class="text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold transition-colors" rel="nofollow">
-            Datenschutz
+          <a href="/leistung/vertriebsoptimierung" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Vertriebsoptimierung
+          </a>
+          <a href="/leistung/marketing-strategien" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Marketing-Strategien
+          </a>
+          <a href="/leistung/wertanalyse" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Value Management
           </a>
         </nav>
       </div>
-    ) : (
-      <!-- Default Footer Layout -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-        <!-- Logo & Branding -->
-        <div class="flex flex-col items-center md:items-start">
-          <Logo height={40} class="mb-4" />
-          <p class="text-center md:text-left text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-            Coaching und Interim Management<br>
-            Experte für Unternehmensentwicklung<br>
-            <strong>15+ Jahre Erfahrung</strong>
-          </p>
+      
+      <!-- Kontakt & Rechtliches -->
+      <div class="space-y-6">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Kontakt & Info</h3>
+        <div class="space-y-3">
+          <a href="/kontakt" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Kontakt
+          </a>
+          <a href="/ueber-mich" 
+             class="block text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Über mich
+          </a>
         </div>
         
-        <!-- Footer Navigation -->
-        <nav class="flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-6 h-full" aria-label="Footer Navigation">
-          <a href="/impressum" class="text-sm hover:text-primary-gold transition-colors" rel="nofollow">
-            Impressum
-          </a>
-          <a href="/datenschutz" class="text-sm hover:text-primary-gold transition-colors" rel="nofollow">
-            Datenschutz
-          </a>
-          <a href="/agb" class="text-sm hover:text-primary-gold transition-colors" rel="nofollow">
-            AGB
-          </a>
-        </nav>
-        
-        <!-- Social Media & Contact -->
-        <div class="flex flex-col items-center md:items-end space-y-3">
-          {showSocial && (
-            <div class="flex space-x-4">
-              <a 
-                href={companyInfo.social.linkedin}
-                target="_blank" 
-                rel="noopener noreferrer"
-                aria-label="Dominik Maier LinkedIn Profil besuchen"
-                class="flex items-center text-sm hover:text-primary-gold transition-colors group"
-              >
-                <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
-                </svg>
-                LinkedIn
-              </a>
-            </div>
-          )}
-          
-          <!-- Quick Contact -->
-          <div class="text-center md:text-right">
-            <p class="text-xs text-gray-600 dark:text-gray-300 mb-1">Kostenlose Beratung:</p>
-            <a 
-              href={`tel:${companyInfo.contact.phone}`}
-              class="text-sm font-medium text-primary-gold hover:text-primary-gold/80 transition-colors"
-              aria-label={`Anrufen unter ${companyInfo.contact.phone}`}
-            >
-              {companyInfo.contact.phone}
+        <div class="space-y-3">
+          <h4 class="text-sm font-medium text-gray-900 dark:text-white">Rechtliches</h4>
+          <div class="space-y-2">
+            <a href="/impressum" 
+               class="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+              Impressum
+            </a>
+            <a href="/datenschutz" 
+               class="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+              Datenschutz
+            </a>
+            <a href="/agb" 
+               class="block text-sm text-gray-600 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+              AGB
             </a>
           </div>
         </div>
       </div>
-    )}
-
-    {showNewsletter && (
-      <!-- Newsletter Signup -->
-      <div class="mt-8 pt-8 border-t border-gray-300 dark:border-gray-600">
-        <div class="max-w-md mx-auto text-center">
-          <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">
-            Business Newsletter
-          </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            Erhalten Sie monatlich Insights zu Unternehmensentwicklung und Value Management.
-          </p>
-          <form class="flex gap-2">
-            <input 
-              type="email" 
-              placeholder="ihre.email@beispiel.de"
-              class="flex-1 px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-gold"
-              aria-label="E-Mail-Adresse für Newsletter"
-            />
-            <button 
-              type="submit"
-              class="px-4 py-2 bg-primary-gold text-white text-sm font-medium rounded-md hover:bg-primary-gold/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2"
-            >
-              Anmelden
-            </button>
-          </form>
-        </div>
-      </div>
-    )}
+    </div>
     
-    <!-- Copyright & Legal -->
-    <div class="mt-8 pt-6 border-t border-gray-300 dark:border-gray-600">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-        <p class="text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
-          &copy; {currentYear} {companyInfo.name}. Alle Rechte vorbehalten.
+    <!-- Copyright -->
+    <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          © 2025 Dominik Maier. Alle Rechte vorbehalten.
         </p>
-        
-        <div class="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
-          <span>Made with ❤️ in Baden-Württemberg</span>
-          <span>•</span>
-          <span>DSGVO konform</span>
-          <span>•</span>
-          <span>CO₂ neutral</span>
-        </div>
+        <p class="text-sm text-gray-600 dark:text-gray-300">
+          Coaching & Interim Management
+        </p>
       </div>
     </div>
   </div>
-
-  <!-- Structured Data for Organization -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": companyInfo.name,
-    "description": companyInfo.description,
-    "url": "https://maier-value.com",
-    "logo": "https://maier-value.com/logo.svg",
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "telephone": companyInfo.contact.phone,
-      "email": companyInfo.contact.email,
-      "contactType": "customer service",
-      "availableLanguage": ["German", "English"]
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": companyInfo.address.street,
-      "addressLocality": companyInfo.address.city,
-      "postalCode": companyInfo.address.postalCode,
-      "addressCountry": "DE"
-    },
-    "sameAs": [
-      companyInfo.social.linkedin
-    ],
-    "founder": {
-      "@type": "Person",
-      "name": "Dominik Maier"
-    },
-    "areaServed": "DE",
-    "serviceType": [
-      "Strategische Unternehmensentwicklung",
-      "Vertriebsoptimierung", 
-      "Marketing-Strategien",
-      "Value Management",
-      "Interim Management"
-    ]
-  })} />
 </footer>
 
-<style>
-  /* Enhanced footer styling */
-  .footer-container {
-    background: linear-gradient(180deg, 
-      rgba(243, 244, 246, 0.8) 0%, 
-      rgba(243, 244, 246, 1) 100%);
-    backdrop-filter: blur(10px);
-  }
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Footer Dark Mode Toggle
+    const footerThemeToggle = document.getElementById('footer-theme-toggle');
+    const footerDarkIcon = document.getElementById('footer-theme-toggle-dark-icon');
+    const footerLightIcon = document.getElementById('footer-theme-toggle-light-icon');
 
-  .dark .footer-container {
-    background: linear-gradient(180deg, 
-      rgba(31, 41, 55, 0.8) 0%, 
-      rgba(31, 41, 55, 1) 100%);
-  }
-
-  /* Link hover effects */
-  .footer-container a {
-    position: relative;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .footer-container a:hover {
-    transform: translateY(-1px);
-  }
-
-  /* Logo hover effect */
-  .footer-container .logo:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease;
-  }
-
-  /* Social icon effects */
-  .footer-container .group:hover svg {
-    animation: pulse 1s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-  }
-
-  /* Newsletter form styling */
-  .footer-container input:focus {
-    box-shadow: 0 0 0 2px #D2AE6C;
-  }
-
-  /* Mobile optimizations */
-  @media (max-width: 768px) {
-    .footer-container {
-      padding-bottom: env(safe-area-inset-bottom, 0);
-    }
-  }
-
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    .footer-container a,
-    .footer-container .logo {
-      transition: none;
+    function updateFooterThemeIcons() {
+      if (document.documentElement.classList.contains('dark')) {
+        footerDarkIcon?.classList.add('hidden');
+        footerLightIcon?.classList.remove('hidden');
+      } else {
+        footerDarkIcon?.classList.remove('hidden');
+        footerLightIcon?.classList.add('hidden');
+      }
     }
 
-    .footer-container .group:hover svg {
-      animation: none;
+    function toggleFooterTheme() {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      updateFooterThemeIcons();
+      
+      // Sync mit Header Theme Toggles
+      const event = new CustomEvent('themeChanged');
+      document.dispatchEvent(event);
     }
-  }
-</style>
+
+    footerThemeToggle?.addEventListener('click', toggleFooterTheme);
+
+    // Initialize footer theme icons
+    updateFooterThemeIcons();
+
+    // Listen for theme changes from header
+    document.addEventListener('themeChanged', updateFooterThemeIcons);
+  });
+</script>
