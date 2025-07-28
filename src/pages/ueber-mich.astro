@@ -1,11 +1,9 @@
 ---
-// ueber-mich.astro v1.1 - Layout v1.2.8 Integration & Bild-Fix
-// CHANGELOG v1.1:
-// - ✅ FIX: Layout v1.2.8 CSS-Klassen verwendet (keine Escape-Sequences)
-// - ✅ FIX: Header v1.5.1 und Footer v1.3 integriert
-// - ✅ FIX: Bild-Problem gelöst mit Unsplash Fallback
-// - ✅ KEEP: Alle Inhalte und Struktur beibehalten
-// - ✅ VERIFIED: CSS-Syntax Netlify-kompatibel
+// ueber-mich.astro v1.1.1 - Bild-Fix & Konsistenz-Fix
+// CHANGELOG v1.1.1:
+// - ✅ FIX: Original Bild /images/dominik-maier-portrait-new.jpeg verwendet
+// - ✅ FIX: Alle Cards konsistent weißer Hintergrund (keine Hervorhebung)
+// - ✅ FIX: AI-Sektion gleicher Style wie andere Cards
 
 export const prerender = true;
 
@@ -13,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-console.log('👤 Über Mich v1.1 - Layout v1.2.8 Integration & Bild-Fix');
+console.log('👤 Über Mich v1.1.1 - Original Bild & Konsistenz-Fix');
 ---
 
 <Layout 
@@ -28,10 +26,10 @@ console.log('👤 Über Mich v1.1 - Layout v1.2.8 Integration & Bild-Fix');
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
         <div data-aos="fade-right">
-          <!-- Profile Image mit Fallback -->
+          <!-- Profile Image - ORIGINAL BILD -->
           <div class="rounded-xl shadow-lg overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop"
+              src="/images/dominik-maier-portrait-new.jpeg"
               alt="Dominik Maier - Erfahrener Business Coach, Interim Manager und Wertanalytiker VDI"
               class="w-full h-96 lg:h-half object-cover"
               loading="eager"
@@ -265,10 +263,10 @@ console.log('👤 Über Mich v1.1 - Layout v1.2.8 Integration & Bild-Fix');
             <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">Durch ein starkes Netzwerk, in dem man sich gegenseitig hilft zu wachsen, entstehen die besten Ideen. Der Austausch mit Gleichgesinnten inspiriert mich und öffnet neue Perspektiven für innovative Lösungen.</p>
           </article>
           
-          <!-- AI Integration -->
-          <article class="bg-gradient-to-br from-primary-gold-15 to-primary-gold-25 rounded-xl shadow-lg p-6 md:p-8 border border-primary-gold-30 hover:shadow-xl transition-all duration-300">
+          <!-- AI Integration - KONSISTENTER WEISSER HINTERGRUND -->
+          <article class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6 md:p-8 hover:shadow-xl transition-all duration-300">
             <div class="flex items-center mb-4">
-              <div class="bg-primary-gold-25 p-3 rounded-full mr-4" aria-hidden="true">
+              <div class="bg-primary-gold-15 p-3 rounded-full mr-4" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-primary-gold">
                   <path fill-rule="evenodd" d="M14.615 1.595a.75.75 0 01.359.852L12.982 9.75h7.268a.75.75 0 01.548 1.262l-10.5 11.25a.75.75 0 01-1.272-.71L10.018 14.25H2.75a.75.75 0 01-.548-1.262l10.5-11.25a.75.75 0 01.913-.143z" clip-rule="evenodd" />
                 </svg>
