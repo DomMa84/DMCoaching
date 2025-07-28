@@ -1,9 +1,9 @@
 ---
-// ueber-mich.astro v1.1.1 - Bild-Fix & Konsistenz-Fix
-// CHANGELOG v1.1.1:
-// - ✅ FIX: Original Bild /images/dominik-maier-portrait-new.jpeg verwendet
-// - ✅ FIX: Alle Cards konsistent weißer Hintergrund (keine Hervorhebung)
-// - ✅ FIX: AI-Sektion gleicher Style wie andere Cards
+// ueber-mich.astro v1.1.2 - Bolt.new Bild-URL Fix
+// CHANGELOG v1.1.2:
+// - ✅ FIX: Bolt.new Storage URL für Entwicklungsumgebung verwendet
+// - ✅ FIX: Fallback auf lokales Bild mit onerror für Produktion
+// - ✅ KEEP: Alle anderen Fixes beibehalten
 
 export const prerender = true;
 
@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-console.log('👤 Über Mich v1.1.1 - Original Bild & Konsistenz-Fix');
+console.log('👤 Über Mich v1.1.2 - Bolt.new Bild-URL Fix');
 ---
 
 <Layout 
@@ -26,16 +26,17 @@ console.log('👤 Über Mich v1.1.1 - Original Bild & Konsistenz-Fix');
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
         <div data-aos="fade-right">
-          <!-- Profile Image - ORIGINAL BILD -->
+          <!-- Profile Image - BOLT.NEW KOMPATIBEL -->
           <div class="rounded-xl shadow-lg overflow-hidden">
             <img
-              src="/images/dominik-maier-portrait-new.jpeg"
+              src="https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMzJqK2c9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--61878fdc4a4cdc235e229ea2c09ad1e0e482029b/Dominik%20Maier%20-%20Portrait.jpeg"
               alt="Dominik Maier - Erfahrener Business Coach, Interim Manager und Wertanalytiker VDI"
               class="w-full h-96 lg:h-half object-cover"
               loading="eager"
               fetchpriority="high"
               width="600"
               height="800"
+              onerror="this.src='/images/dominik-maier-portrait-new.jpeg'"
             />
           </div>
         </div>
@@ -327,7 +328,7 @@ console.log('👤 Über Mich v1.1.1 - Original Bild & Konsistenz-Fix');
     "jobTitle": "Business Coach und Interim Manager",
     "description": "Erfahrener Manager mit über 15 Jahren Berufserfahrung in Vertrieb und Business Development. Wertanalytiker VDI und Experte für KI-Integration im Business.",
     "url": "https://maier-value.com/ueber-mich",
-    "image": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop",
+    "image": "https://stackblitz.com/storage/blobs/redirect/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBMzJqK2c9PSIsImV4cCI6bnVsbCwicHVyIjoiYmxvYl9pZCJ9fQ==--61878fdc4a4cdc235e229ea2c09ad1e0e482029b/Dominik%20Maier%20-%20Portrait.jpeg",
     "email": "webmaster@maier-value.com",
     "telephone": "+497440913367",
     "address": {
