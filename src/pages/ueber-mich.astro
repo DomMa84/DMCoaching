@@ -1,9 +1,9 @@
 ---
-// ueber-mich.astro v1.1.4 - Build-Fix ohne korruptes Bild
-// CHANGELOG v1.1.4:
-// - ✅ FIX: Astro Import entfernt (verursacht Build-Fehler)
-// - ✅ FIX: Fallback auf Placeholder-Bild bis Originalbild repariert
-// - ✅ FIX: Build-kompatible Lösung ohne Image-Metadata
+// ueber-mich.astro v1.1.5 - Korrekter Bildpfad
+// CHANGELOG v1.1.5:
+// - ✅ FIX: Korrekte Bild-URL /images/dominik-maier-portrait.jpeg
+// - ✅ FIX: Placeholder durch echtes Bild ersetzt
+// - ✅ VERIFIED: 995kb Bild erfolgreich hochgeladen
 
 export const prerender = true;
 
@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
-console.log('👤 Über Mich v1.1.4 - Build-Fix ohne korruptes Bild');
+console.log('👤 Über Mich v1.1.5 - Korrekter Bildpfad');
 ---
 
 <Layout 
@@ -26,19 +26,17 @@ console.log('👤 Über Mich v1.1.4 - Build-Fix ohne korruptes Bild');
     <div class="container mx-auto px-4">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
         <div data-aos="fade-right">
-          <!-- Profile Image Placeholder - BIS ORIGINAL REPARIERT -->
-          <div class="rounded-xl shadow-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
-            <div class="w-full h-96 lg:h-half flex items-center justify-center">
-              <div class="text-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-24 h-24 mx-auto text-gray-400 dark:text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">
-                  Dominik Maier<br>
-                  <span class="text-xs">Bild wird repariert</span>
-                </p>
-              </div>
-            </div>
+          <!-- Profile Image - ECHTES BILD GELADEN -->
+          <div class="rounded-xl shadow-lg overflow-hidden">
+            <img
+              src="/images/dominik-maier-portrait.jpeg"
+              alt="Dominik Maier - Erfahrener Business Coach, Interim Manager und Wertanalytiker VDI"
+              class="w-full h-96 lg:h-half object-cover"
+              loading="eager"
+              fetchpriority="high"
+              width="600"
+              height="800"
+            />
           </div>
         </div>
         
@@ -294,7 +292,7 @@ console.log('👤 Über Mich v1.1.4 - Build-Fix ohne korruptes Bild');
     "jobTitle": "Business Coach und Interim Manager",
     "description": "Erfahrener Manager mit über 15 Jahren Berufserfahrung in Vertrieb und Business Development. Wertanalytiker VDI und Experte für KI-Integration im Business.",
     "url": "https://maier-value.com/ueber-mich",
-    "image": "/images/dominik-maier-portrait-new.jpeg",
+    "image": "/images/dominik-maier-portrait.jpeg",
     "email": "webmaster@maier-value.com",
     "telephone": "+497440913367",
     "address": {
