@@ -13,6 +13,7 @@
     "@astrojs/alpinejs": "^0.4.0",
     "@astrojs/netlify": "^6.5.1",
     "@astrojs/tailwind": "^5.1.5",
+    "@supabase/supabase-js": "^2.38.0",
     "@types/alpinejs": "^3.13.7",
     "@types/nodemailer": "^6.4.17",
     "alpinejs": "^3.13.5",
