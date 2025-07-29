@@ -1,16 +1,16 @@
-// src/pages/api/contact.js v18.0 (MySQL Database Integration)
-// Contact API - Echte MySQL-Datenbank statt Demo Database
-// ✅ ÄNDERUNGEN v18.0:
-// - MySQL Database Integration (Strato Database)
-// - Demo Database als Fallback beibehalten
+// src/pages/api/contact.js v18.1 (Inline MySQL Integration - Build-Fix)
+// Contact API - Inline MySQL Integration ohne externe Imports
+// ✅ ÄNDERUNGEN v18.1:
+// - MySQL Service INLINE implementiert (Build-kompatibel)
+// - Keine externen ../lib/ Imports mehr
 // - Intelligente Database-Auswahl (MySQL → Demo Fallback)
 // - E-Mail Integration beibehalten (v17.13 Features)
-// - Migration-Support für bestehende Demo-Daten
+// - Auto-Migration weiterhin funktional
 
 // ✅ WICHTIG: Server-Rendering für Build aktivieren
 export const prerender = false;
 
-console.log('🗄️ Contact API v18.0 loaded - MySQL Database Integration');
+console.log('🗄️ Contact API v18.1 loaded - Inline MySQL Integration (Build-Fix)');
 
 // ✅ DEMO DATABASE FALLBACK (beibehalten für Kompatibilität)
 let demoContacts = [
@@ -69,6 +69,21 @@ let demoContacts = [
 
 let nextContactId = 4;
 
+// ✅ MYSQL KONFIGURATION (aus .env)
+const MYSQL_CONFIG = {
+  host: process.env.DB_HOST || 'database-5017670143.webspace-host.com',
+  user: process.env.DB_USER || 'dbu5377946',
+  password: process.env.DB_PASSWORD || 'MaierValue#2025',
+  database: process.env.DB_NAME || 'dbs14130950',
+  port: parseInt(process.env.DB_PORT) || 3306,
+  connectionLimit: 10,
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true,
+  charset: 'utf8mb4',
+  ssl: false
+};
+
 // ✅ STRATO SMTP KONFIGURATION (von v17.13 beibehalten)
 const SMTP_CONFIG = {
   host: process.env.SMTP_HOST || 'smtp.strato.de',
@@ -88,33 +103,392 @@ const EMAIL_CONFIG = {
 
 // ✅ DATABASE MANAGEMENT - MySQL mit Demo Fallback
 let databaseMode = 'unknown'; // 'mysql', 'demo', 'unknown'
-let mysqlService = null;
+let mysqlPool = null;
 
-/**
- * Database Service initialisieren
- * @returns {Object} Database Service
- */
-async function initializeDatabaseService() {
-  console.log('🗄️ Initializing database service v18.0...');
+// ✅ INLINE MYSQL SERVICE (Build-kompatibel)
+async function createMySQLPool() {
+  try {
+    console.log('🔗 Creating MySQL connection pool for Strato v18.1...');
+    
+    // ✅ MySQL2 dynamisch importieren (Build-kompatibel)
+    const mysql = await import('mysql2/promise');
+    
+    mysqlPool = mysql.createPool(MYSQL_CONFIG);
+    
+    // Connection Test
+    const connection = await mysqlPool.getConnection();
+    await connection.ping();
+    connection.release();
+    
+    console.log('✅ MySQL Pool created successfully v18.1 - Strato Database connected');
+    return mysqlPool;
+    
+  } catch (error) {
+    console.error('❌ MySQL Pool creation failed v18.1:', error.message);
+    mysqlPool = null;
+    return null;
+  }
+}
+
+async function getMySQLPool() {
+  if (!mysqlPool) {
+    await createMySQLPool();
+  }
+  return mysqlPool;
+}
+
+async function testMySQLConnection() {
+  console.log('🔍 Testing MySQL connection to Strato v18.1...');
   
   try {
-    // ✅ MySQL Service laden
-    const mysqlModule = await import('../lib/mysqlService.js');
-    mysqlService = mysqlModule.default;
+    const pool = await getMySQLPool();
     
+    if (!pool) {
+      throw new Error('MySQL Pool could not be created');
+    }
+    
+    const connection = await pool.getConnection();
+    
+    const [rows] = await connection.execute(`
+      SELECT 
+        DATABASE() as current_database,
+        VERSION() as mysql_version,
+        NOW() as server_time,
+        CONNECTION_ID() as connection_id
+    `);
+    
+    const [tables] = await connection.execute(`
+      SELECT COUNT(*) as table_count 
+      FROM information_schema.tables 
+      WHERE table_schema = ?
+    `, [MYSQL_CONFIG.database]);
+    
+    connection.release();
+    
+    console.log('✅ MySQL connection test successful v18.1:', {
+      database: rows[0].current_database,
+      version: rows[0].mysql_version,
+      tables: tables[0].table_count
+    });
+    
+    return {
+      success: true,
+      database: rows[0].current_database,
+      version: rows[0].mysql_version,
+      serverTime: rows[0].server_time,
+      connectionId: rows[0].connection_id,
+      tableCount: tables[0].table_count
+    };
+    
+  } catch (error) {
+    console.error('❌ MySQL connection test failed v18.1:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+async function createContactMySQL(contactData) {
+  console.log('💾 Creating contact in MySQL v18.1:', contactData.name);
+  
+  try {
+    const pool = await getMySQLPool();
+    
+    if (!pool) {
+      throw new Error('MySQL connection not available');
+    }
+    
+    const connection = await pool.getConnection();
+    
+    try {
+      const [result] = await connection.execute(`
+        INSERT INTO contacts (
+          name, email, phone, message, status, notes, lead_form, processed,
+          source, gdpr_consent, gdpr_consent_timestamp, 
+          user_agent, ip_address, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+      `, [
+        contactData.name,
+        contactData.email,
+        contactData.phone,
+        contactData.message || '',
+        'neu',
+        '',
+        contactData.leadForm || false,
+        false,
+        contactData.source || 'Website-Kontaktformular',
+        contactData.gdprConsent || false,
+        new Date(),
+        contactData.userAgent || 'Unknown',
+        contactData.ipAddress || 'Unknown'
+      ]);
+      
+      const contactId = result.insertId;
+      
+      const [contacts] = await connection.execute(`
+        SELECT * FROM contacts WHERE id = ?
+      `, [contactId]);
+      
+      console.log('✅ Contact created in MySQL v18.1 with ID:', contactId);
+      
+      return {
+        success: true,
+        contact: contacts[0],
+        id: contactId
+      };
+      
+    } finally {
+      connection.release();
+    }
+    
+  } catch (error) {
+    console.error('❌ Error creating contact in MySQL v18.1:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+async function getContactStatsMySQL() {
+  console.log('📊 Fetching contact statistics from MySQL v18.1');
+  
+  try {
+    const pool = await getMySQLPool();
+    
+    if (!pool) {
+      throw new Error('MySQL connection not available');
+    }
+    
+    const connection = await pool.getConnection();
+    
+    try {
+      const [stats] = await connection.execute(`
+        SELECT 
+          COUNT(*) as total_contacts,
+          SUM(CASE WHEN status = 'neu' THEN 1 ELSE 0 END) as neu,
+          SUM(CASE WHEN status = 'offen' THEN 1 ELSE 0 END) as offen,
+          SUM(CASE WHEN status = 'abgeschlossen' THEN 1 ELSE 0 END) as abgeschlossen,
+          SUM(CASE WHEN lead_form = TRUE THEN 1 ELSE 0 END) as leads,
+          SUM(CASE WHEN processed = TRUE THEN 1 ELSE 0 END) as processed,
+          SUM(CASE WHEN deleted_at IS NULL THEN 1 ELSE 0 END) as active
+        FROM contacts
+      `);
+      
+      const [recent] = await connection.execute(`
+        SELECT COUNT(*) as recent_count
+        FROM contacts 
+        WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        AND deleted_at IS NULL
+      `);
+      
+      console.log('✅ Contact statistics fetched from MySQL v18.1');
+      
+      const statistics = stats[0] || {
+        total_contacts: 0,
+        neu: 0,
+        offen: 0,
+        abgeschlossen: 0,
+        leads: 0,
+        processed: 0,
+        active: 0
+      };
+      
+      return {
+        success: true,
+        stats: {
+          total: statistics.total_contacts,
+          neu: statistics.neu,
+          offen: statistics.offen,
+          abgeschlossen: statistics.abgeschlossen,
+          leadForm: statistics.leads,
+          processed: statistics.processed,
+          active: statistics.active,
+          recentWeek: recent[0].recent_count
+        }
+      };
+      
+    } finally {
+      connection.release();
+    }
+    
+  } catch (error) {
+    console.error('❌ Error fetching statistics from MySQL v18.1:', error);
+    return {
+      success: false,
+      error: error.message,
+      stats: {
+        total: 0, neu: 0, offen: 0, abgeschlossen: 0, leadForm: 0, processed: 0
+      }
+    };
+  }
+}
+
+async function checkDuplicateEmailMySQL(email) {
+  try {
+    const pool = await getMySQLPool();
+    
+    if (!pool) {
+      return { exists: false, contact: null };
+    }
+    
+    const connection = await pool.getConnection();
+    
+    try {
+      const [contacts] = await connection.execute(`
+        SELECT * FROM contacts 
+        WHERE email = ? 
+        AND deleted_at IS NULL 
+        ORDER BY created_at DESC 
+        LIMIT 1
+      `, [email.toLowerCase()]);
+      
+      return {
+        exists: contacts.length > 0,
+        contact: contacts[0] || null
+      };
+      
+    } finally {
+      connection.release();
+    }
+    
+  } catch (error) {
+    console.error('❌ Error checking duplicate email v18.1:', error);
+    return { exists: false, contact: null };
+  }
+}
+
+async function updateEmailStatusMySQL(contactId, emailType, success) {
+  console.log(`📧 Updating email status in MySQL v18.1: ${emailType} for contact ${contactId}`);
+  
+  try {
+    const pool = await getMySQLPool();
+    
+    if (!pool) {
+      return { success: true, affectedRows: 1 }; // Fallback
+    }
+    
+    const connection = await pool.getConnection();
+    
+    try {
+      let query, params;
+      
+      if (emailType === 'confirmation') {
+        query = `
+          UPDATE contacts 
+          SET confirmation_email_sent = ?, 
+              confirmation_email_timestamp = IF(? = TRUE, NOW(), NULL),
+              updated_at = NOW()
+          WHERE id = ?
+        `;
+        params = [success, success, contactId];
+      } else if (emailType === 'admin') {
+        query = `
+          UPDATE contacts 
+          SET admin_email_sent = ?, 
+              admin_email_timestamp = IF(? = TRUE, NOW(), NULL),
+              updated_at = NOW()
+          WHERE id = ?
+        `;
+        params = [success, success, contactId];
+      } else {
+        throw new Error('Invalid email type');
+      }
+      
+      const [result] = await connection.execute(query, params);
+      
+      console.log(`✅ Email status updated in MySQL v18.1: ${emailType} = ${success}`);
+      
+      return {
+        success: true,
+        affectedRows: result.affectedRows
+      };
+      
+    } finally {
+      connection.release();
+    }
+    
+  } catch (error) {
+    console.error('❌ Error updating email status in MySQL v18.1:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+}
+
+async function migrateDemoDataToMySQL(demoContacts) {
+  console.log('🔄 Migrating demo data to MySQL v18.1...');
+  
+  const results = {
+    migrated: 0,
+    errors: 0,
+    details: []
+  };
+  
+  try {
+    for (const demoContact of demoContacts) {
+      try {
+        const result = await createContactMySQL({
+          name: demoContact.name,
+          email: demoContact.email,
+          phone: demoContact.phone,
+          message: demoContact.message,
+          leadForm: demoContact.leadForm,
+          source: demoContact.source,
+          gdprConsent: demoContact.gdprConsent,
+          userAgent: demoContact.userAgent,
+          ipAddress: demoContact.ipAddress
+        });
+        
+        if (result.success) {
+          results.migrated++;
+          results.details.push(`✅ Migrated: ${demoContact.name}`);
+        } else {
+          results.errors++;
+          results.details.push(`❌ Failed: ${demoContact.name} - ${result.error}`);
+        }
+      } catch (error) {
+        results.errors++;
+        results.details.push(`❌ Error: ${demoContact.name} - ${error.message}`);
+      }
+    }
+    
+    console.log(`✅ Migration completed v18.1: ${results.migrated} migrated, ${results.errors} errors`);
+    return results;
+    
+  } catch (error) {
+    console.error('❌ Migration failed v18.1:', error);
+    return {
+      migrated: 0,
+      errors: demoContacts.length,
+      details: [`❌ Migration failed: ${error.message}`],
+      error: error.message
+    };
+  }
+}
+
+/**
+ * Database Service initialisieren v18.1
+ */
+async function initializeDatabaseService() {
+  console.log('🗄️ Initializing database service v18.1...');
+  
+  try {
     // ✅ MySQL Connection testen
-    const connectionTest = await mysqlService.testConnection();
+    const connectionTest = await testMySQLConnection();
     
     if (connectionTest.success) {
       databaseMode = 'mysql';
-      console.log('✅ MySQL Database connected - Using Strato MySQL');
+      console.log('✅ MySQL Database connected v18.1 - Using Strato MySQL');
       
       // ✅ Auto-Migration: Demo → MySQL (nur beim ersten Mal)
-      const statsResult = await mysqlService.getStats();
+      const statsResult = await getContactStatsMySQL();
       if (statsResult.success && statsResult.stats.total === 0 && demoContacts.length > 0) {
-        console.log('🔄 Auto-migrating demo data to MySQL...');
-        const migrationResult = await mysqlService.migrateDemoData(demoContacts);
-        console.log(`✅ Migration completed: ${migrationResult.migrated} contacts migrated`);
+        console.log('🔄 Auto-migrating demo data to MySQL v18.1...');
+        const migrationResult = await migrateDemoDataToMySQL(demoContacts);
+        console.log(`✅ Migration completed v18.1: ${migrationResult.migrated} contacts migrated`);
       }
       
     } else {
@@ -122,19 +496,18 @@ async function initializeDatabaseService() {
     }
     
   } catch (error) {
-    console.error('❌ MySQL initialization failed:', error.message);
-    console.log('🔄 Falling back to Demo Database');
+    console.error('❌ MySQL initialization failed v18.1:', error.message);
+    console.log('🔄 Falling back to Demo Database v18.1');
     databaseMode = 'demo';
-    mysqlService = null;
   }
   
-  console.log(`🗄️ Database mode: ${databaseMode.toUpperCase()}`);
-  return { mode: databaseMode, service: mysqlService };
+  console.log(`🗄️ Database mode v18.1: ${databaseMode.toUpperCase()}`);
+  return { mode: databaseMode };
 }
 
 // ✅ DEMO DATABASE OPERATIONS (Fallback)
 function createContactDemo(contactData) {
-  console.log('💾 Creating contact in Demo Database');
+  console.log('💾 Creating contact in Demo Database v18.1');
 
   const newContact = {
     id: nextContactId++,
@@ -155,7 +528,7 @@ function createContactDemo(contactData) {
   };
 
   demoContacts.push(newContact);
-  console.log('✅ Contact created in Demo Database with ID:', newContact.id);
+  console.log('✅ Contact created in Demo Database v18.1 with ID:', newContact.id);
   return { success: true, contact: newContact, id: newContact.id };
 }
 
@@ -185,8 +558,8 @@ function checkDuplicateEmailDemo(email) {
 async function createContact(contactData) {
   await initializeDatabaseService();
   
-  if (databaseMode === 'mysql' && mysqlService) {
-    return await mysqlService.createContact(contactData);
+  if (databaseMode === 'mysql') {
+    return await createContactMySQL(contactData);
   } else {
     return createContactDemo(contactData);
   }
@@ -195,8 +568,8 @@ async function createContact(contactData) {
 async function getContactStats() {
   await initializeDatabaseService();
   
-  if (databaseMode === 'mysql' && mysqlService) {
-    return await mysqlService.getStats();
+  if (databaseMode === 'mysql') {
+    return await getContactStatsMySQL();
   } else {
     return getContactStatsDemo();
   }
@@ -205,27 +578,25 @@ async function getContactStats() {
 async function checkDuplicateEmail(email) {
   await initializeDatabaseService();
   
-  if (databaseMode === 'mysql' && mysqlService) {
-    return await mysqlService.checkDuplicateEmail(email);
+  if (databaseMode === 'mysql') {
+    return await checkDuplicateEmailMySQL(email);
   } else {
     return checkDuplicateEmailDemo(email);
   }
 }
 
 async function updateEmailStatus(contactId, emailType, success) {
-  if (databaseMode === 'mysql' && mysqlService) {
-    return await mysqlService.updateEmailStatus(contactId, emailType, success);
+  if (databaseMode === 'mysql') {
+    return await updateEmailStatusMySQL(contactId, emailType, success);
   } else {
-    // Demo Database: E-Mail Status wird nicht persistiert
-    console.log(`📧 Demo Database: Email status ${emailType}=${success} for contact ${contactId} (not persisted)`);
+    console.log(`📧 Demo Database v18.1: Email status ${emailType}=${success} for contact ${contactId} (not persisted)`);
     return { success: true, affectedRows: 1 };
   }
 }
 
-// ✅ NODEMAILER TRANSPORT ERSTELLEN v18.0 (von v17.13)
+// ✅ NODEMAILER TRANSPORT ERSTELLEN v18.1 (von v17.13)
 async function createNodemailerTransport() {
   try {
-    // ✅ AKTIVIERT: Echte Nodemailer-Integration
     const nodemailer = await import('nodemailer');
     
     const transporter = nodemailer.default.createTransport({
@@ -237,25 +608,23 @@ async function createNodemailerTransport() {
         pass: SMTP_CONFIG.auth.pass
       },
       tls: {
-        rejectUnauthorized: false // Für Strato SMTP
+        rejectUnauthorized: false
       }
     });
     
-    // SMTP-Verbindung testen
     await transporter.verify();
-    console.log('✅ Strato SMTP-Verbindung erfolgreich v18.0');
+    console.log('✅ Strato SMTP-Verbindung erfolgreich v18.1');
     
     return { transporter, isReal: true };
     
   } catch (error) {
-    console.error('❌ Nodemailer/SMTP Error v18.0:', error.message);
-    console.log('🔄 Fallback zu Simulation-Modus v18.0');
+    console.error('❌ Nodemailer/SMTP Error v18.1:', error.message);
+    console.log('🔄 Fallback zu Simulation-Modus v18.1');
     
-    // Fallback zu Simulation
     return {
       transporter: {
         sendMail: async (mailOptions) => {
-          console.log('📧 FALLBACK: Simulating email send v18.0:', {
+          console.log('📧 FALLBACK: Simulating email send v18.1:', {
             to: mailOptions.to,
             subject: mailOptions.subject
           });
@@ -275,9 +644,9 @@ async function createNodemailerTransport() {
   }
 }
 
-// ✅ ECHTE E-MAIL INTEGRATION v18.0 (Corporate Design von v17.13)
+// ✅ ECHTE E-MAIL INTEGRATION v18.1 (Corporate Design von v17.13)
 async function sendContactEmails(contactData) {
-  console.log('📧 E-Mail Service v18.0: ECHTE E-Mail-Versendung startet für:', contactData.name);
+  console.log('📧 E-Mail Service v18.1: ECHTE E-Mail-Versendung startet für:', contactData.name);
   
   const results = {
     confirmation: null,
@@ -287,13 +656,10 @@ async function sendContactEmails(contactData) {
   };
   
   try {
-    // ✅ NODEMAILER TRANSPORT ERSTELLEN
     const { transporter, isReal } = await createNodemailerTransport();
-    console.log(`📧 Transport Mode v18.0: ${isReal ? 'REAL SMTP' : 'SIMULATION'}`);
+    console.log(`📧 Transport Mode v18.1: ${isReal ? 'REAL SMTP' : 'SIMULATION'}`);
     
     // ✅ BESTÄTIGUNGS-E-MAIL AN USER
-    console.log('📤 Sending confirmation email to:', contactData.email);
-    
     try {
       const confirmationResult = await transporter.sendMail({
         from: `"${EMAIL_CONFIG.from}" <${EMAIL_CONFIG.fromAddress}>`,
@@ -312,17 +678,11 @@ async function sendContactEmails(contactData) {
         response: confirmationResult.response
       };
       
-      // ✅ E-Mail-Status in Datenbank aktualisieren
       await updateEmailStatus(contactData.id, 'confirmation', true);
-      
-      console.log(`✅ Confirmation email ${isReal ? 'SENT' : 'SIMULATED'} v18.0:`, {
-        to: contactData.email,
-        messageId: confirmationResult.messageId,
-        real: isReal
-      });
+      console.log(`✅ Confirmation email ${isReal ? 'SENT' : 'SIMULATED'} v18.1`);
       
     } catch (error) {
-      console.error('❌ Confirmation email failed v18.0:', error);
+      console.error('❌ Confirmation email failed v18.1:', error);
       results.confirmation = {
         success: false,
         error: error.message,
@@ -331,13 +691,10 @@ async function sendContactEmails(contactData) {
         realEmail: false
       };
       results.errors.push(`Bestätigung: ${error.message}`);
-      
       await updateEmailStatus(contactData.id, 'confirmation', false);
     }
     
     // ✅ ADMIN-BENACHRICHTIGUNG
-    console.log('📤 Sending admin notification to:', EMAIL_CONFIG.toAddress);
-    
     try {
       const adminResult = await transporter.sendMail({
         from: `"Website Kontaktformular" <${EMAIL_CONFIG.fromAddress}>`,
@@ -357,18 +714,11 @@ async function sendContactEmails(contactData) {
         response: adminResult.response
       };
       
-      // ✅ E-Mail-Status in Datenbank aktualisieren
       await updateEmailStatus(contactData.id, 'admin', true);
-      
-      console.log(`✅ Admin notification ${isReal ? 'SENT' : 'SIMULATED'} v18.0:`, {
-        to: EMAIL_CONFIG.toAddress,
-        messageId: adminResult.messageId,
-        real: isReal,
-        priority: results.admin.priority
-      });
+      console.log(`✅ Admin notification ${isReal ? 'SENT' : 'SIMULATED'} v18.1`);
       
     } catch (error) {
-      console.error('❌ Admin notification failed v18.0:', error);
+      console.error('❌ Admin notification failed v18.1:', error);
       results.admin = {
         success: false,
         error: error.message,
@@ -377,34 +727,30 @@ async function sendContactEmails(contactData) {
         realEmail: false
       };
       results.errors.push(`Admin: ${error.message}`);
-      
       await updateEmailStatus(contactData.id, 'admin', false);
     }
     
-    // Erfolg wenn mindestens eine E-Mail erfolgreich
     results.success = results.confirmation?.success || results.admin?.success;
     
-    console.log('📊 Email sending summary v18.0:', {
+    console.log('📊 Email sending summary v18.1:', {
       confirmationSent: results.confirmation?.success || false,
       adminSent: results.admin?.success || false,
       overallSuccess: results.success,
       errors: results.errors.length,
       mode: isReal ? 'REAL_SMTP' : 'SIMULATION',
-      realEmails: (results.confirmation?.realEmail || false) || (results.admin?.realEmail || false),
       database: databaseMode.toUpperCase()
     });
     
     return results;
     
   } catch (error) {
-    console.error('❌ Error in sendContactEmails v18.0:', error);
-    
+    console.error('❌ Error in sendContactEmails v18.1:', error);
     results.errors.push(`General: ${error.message}`);
     return results;
   }
 }
 
-// ✅ E-MAIL TEMPLATE GENERATOREN (Corporate Design von v17.13)
+// ✅ E-MAIL TEMPLATE GENERATOREN (Corporate Design von v17.13 - unverändert)
 function generateConfirmationHTML(contactData) {
   return `
 <!DOCTYPE html>
@@ -596,7 +942,7 @@ DSGVO-Zustimmung: ${contactData.gdprConsent ? 'Ja' : 'Nein'}
 }
 
 export async function POST({ request }) {
-  console.log('=== CONTACT API v18.0 CALLED - MYSQL DATABASE INTEGRATION ===');
+  console.log('=== CONTACT API v18.1 CALLED - INLINE MYSQL INTEGRATION (BUILD-FIX) ===');
   console.log('📅 Timestamp:', new Date().toISOString());
   
   try {
@@ -604,14 +950,14 @@ export async function POST({ request }) {
     let data;
     try {
       const rawBody = await request.text();
-      console.log('📥 Raw body received v18.0 (length):', rawBody.length);
+      console.log('📥 Raw body received v18.1 (length):', rawBody.length);
       
       if (!rawBody || rawBody.trim() === '') {
         throw new Error('Empty request body');
       }
       
       data = JSON.parse(rawBody);
-      console.log('📥 Parsed data successfully v18.0:', {
+      console.log('📥 Parsed data successfully v18.1:', {
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -621,11 +967,11 @@ export async function POST({ request }) {
         honeypot: data.honeypot || 'empty'
       });
     } catch (parseError) {
-      console.error('❌ JSON Parse Error v18.0:', parseError.message);
+      console.error('❌ JSON Parse Error v18.1:', parseError.message);
       return new Response(JSON.stringify({
         success: false,
         message: 'Ungültige Anfrage: Daten konnten nicht verarbeitet werden.',
-        version: 'Contact API v18.0 - MySQL Database Integration',
+        version: 'Contact API v18.1 - Inline MySQL Integration',
         error: 'JSON_PARSE_ERROR'
       }), {
         status: 400,
@@ -635,12 +981,12 @@ export async function POST({ request }) {
 
     // ✅ Honeypot-Schutz
     if (data.honeypot && data.honeypot.trim() !== '') {
-      console.log('🚫 Honeypot-Schutz aktiviert v18.0 - Bot erkannt');
+      console.log('🚫 Honeypot-Schutz aktiviert v18.1 - Bot erkannt');
       
       return new Response(JSON.stringify({
         success: true,
         message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.',
-        version: 'Contact API v18.0 - Honeypot Block',
+        version: 'Contact API v18.1 - Honeypot Block',
         timestamp: new Date().toISOString()
       }), {
         status: 200,
@@ -670,7 +1016,7 @@ export async function POST({ request }) {
     // Check for duplicate email
     const duplicateCheck = await checkDuplicateEmail(data.email.trim());
     if (duplicateCheck.exists) {
-      console.log('⚠️ Duplicate email detected v18.0:', data.email);
+      console.log('⚠️ Duplicate email detected v18.1:', data.email);
     }
     
     // Phone validation
@@ -692,12 +1038,12 @@ export async function POST({ request }) {
     }
 
     if (errors.length > 0) {
-      console.log('❌ Validierungsfehler v18.0:', errors);
+      console.log('❌ Validierungsfehler v18.1:', errors);
       return new Response(JSON.stringify({
         success: false,
         message: 'Bitte korrigieren Sie die folgenden Fehler:',
         errors: errors,
-        version: 'Contact API v18.0 - MySQL Database Integration'
+        version: 'Contact API v18.1 - Inline MySQL Integration'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -721,7 +1067,7 @@ export async function POST({ request }) {
     };
 
     // ✅ KONTAKT IN DATENBANK SPEICHERN (MySQL oder Demo)
-    console.log('💾 Saving contact to database v18.0');
+    console.log('💾 Saving contact to database v18.1');
     const saveResult = await createContact(contactData);
     
     if (!saveResult.success) {
@@ -729,7 +1075,7 @@ export async function POST({ request }) {
     }
 
     const savedContact = saveResult.contact;
-    console.log('✅ Kontakt erfolgreich gespeichert v18.0:', {
+    console.log('✅ Kontakt erfolgreich gespeichert v18.1:', {
       id: savedContact.id,
       name: savedContact.name,
       email: savedContact.email,
@@ -737,13 +1083,13 @@ export async function POST({ request }) {
       database: databaseMode.toUpperCase()
     });
 
-    // ✅ ECHTE E-MAIL VERSENDUNG v18.0
-    console.log('📧 Initiating REAL Strato email sending v18.0');
+    // ✅ ECHTE E-MAIL VERSENDUNG v18.1
+    console.log('📧 Initiating REAL Strato email sending v18.1');
     let emailResults = null;
     
     try {
       emailResults = await sendContactEmails(savedContact);
-      console.log('📧 Email sending completed v18.0:', {
+      console.log('📧 Email sending completed v18.1:', {
         confirmationSent: emailResults.confirmation?.success || false,
         adminSent: emailResults.admin?.success || false,
         overallSuccess: emailResults.success,
@@ -753,7 +1099,7 @@ export async function POST({ request }) {
         database: databaseMode.toUpperCase()
       });
     } catch (emailError) {
-      console.error('❌ Email sending error v18.0:', emailError);
+      console.error('❌ Email sending error v18.1:', emailError);
       emailResults = {
         success: false,
         errors: [`E-Mail-Versand fehlgeschlagen: ${emailError.message}`],
@@ -768,18 +1114,18 @@ export async function POST({ request }) {
       total: 0, neu: 0, offen: 0, abgeschlossen: 0, leadForm: 0, processed: 0
     };
     
-    console.log('📊 Database stats after contact v18.0:', {
+    console.log('📊 Database stats after contact v18.1:', {
       ...stats,
       database: databaseMode.toUpperCase()
     });
     
-    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v18.0');
+    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v18.1');
     
     // ✅ SUCCESS RESPONSE mit Database-Info
     return new Response(JSON.stringify({
       success: true,
       message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.',
-      version: 'Contact API v18.0 - MySQL Database Integration',
+      version: 'Contact API v18.1 - Inline MySQL Integration (Build-Fix)',
       timestamp: new Date().toISOString(),
       contactId: savedContact.id,
       
@@ -787,7 +1133,8 @@ export async function POST({ request }) {
       database: {
         mode: databaseMode.toUpperCase(),
         type: databaseMode === 'mysql' ? 'Strato MySQL Database' : 'Demo Database (Fallback)',
-        persistent: databaseMode === 'mysql'
+        persistent: databaseMode === 'mysql',
+        buildCompatible: true
       },
       
       // Kontakt-Daten
@@ -800,7 +1147,7 @@ export async function POST({ request }) {
         status: savedContact.status
       },
       
-      // ✅ E-MAIL-STATUS (von v17.13)
+      // ✅ E-MAIL-STATUS
       emails: {
         sent: emailResults?.success || false,
         mode: (emailResults?.confirmation?.realEmail || emailResults?.admin?.realEmail) ? 'REAL' : 'SIMULATION',
@@ -839,13 +1186,13 @@ export async function POST({ request }) {
     });
 
   } catch (error) {
-    console.error('❌ CONTACT API ERROR v18.0:', error);
-    console.error('❌ Error stack v18.0:', error.stack);
+    console.error('❌ CONTACT API ERROR v18.1:', error);
+    console.error('❌ Error stack v18.1:', error.stack);
     
     return new Response(JSON.stringify({
       success: false,
       message: 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.',
-      version: 'Contact API v18.0 - MySQL Database Integration',
+      version: 'Contact API v18.1 - Inline MySQL Integration (Build-Fix)',
       error: process.env.NODE_ENV === 'development' ? error.message : 'INTERNAL_SERVER_ERROR',
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       timestamp: new Date().toISOString(),
@@ -866,7 +1213,7 @@ export async function POST({ request }) {
 
 // ✅ GET Handler für API-Dokumentation & Database Status
 export async function GET({ request }) {
-  console.log('📖 Contact API Documentation & Database Status requested v18.0');
+  console.log('📖 Contact API Documentation & Database Status requested v18.1');
   
   try {
     // ✅ Database Service initialisieren
@@ -882,20 +1229,28 @@ export async function GET({ request }) {
       mode: databaseMode.toUpperCase(),
       type: databaseMode === 'mysql' ? 'Strato MySQL Database' : 'Demo Database (Fallback)',
       persistent: databaseMode === 'mysql',
-      available: databaseMode !== 'unknown'
+      available: databaseMode !== 'unknown',
+      buildCompatible: true,
+      inline: true
     };
     
-    if (databaseMode === 'mysql' && mysqlService) {
-      const mysqlStatus = await mysqlService.getServiceStatus();
+    if (databaseMode === 'mysql') {
+      const connectionTest = await testMySQLConnection();
       databaseServiceStatus = {
         ...databaseServiceStatus,
-        ...mysqlStatus
+        connection: connectionTest,
+        config: {
+          host: MYSQL_CONFIG.host,
+          database: MYSQL_CONFIG.database,
+          user: MYSQL_CONFIG.user,
+          port: MYSQL_CONFIG.port
+        }
       };
     }
     
-    // E-Mail Service Status v18.0
+    // E-Mail Service Status v18.1
     const emailServiceStatus = {
-      version: '1.3',
+      version: '1.4',
       service: 'Strato SMTP Integration',
       mode: 'REAL_WITH_FALLBACK',
       config: {
@@ -931,8 +1286,8 @@ export async function GET({ request }) {
     
     return new Response(JSON.stringify({
       api: 'Contact API',
-      version: 'v18.0',
-      description: 'Dominik Maier Contact Form API with MySQL Database Integration',
+      version: 'v18.1',
+      description: 'Dominik Maier Contact Form API with Inline MySQL Integration (Build-Compatible)',
       
       // ✅ DATABASE STATUS
       database: databaseServiceStatus,
@@ -971,7 +1326,7 @@ export async function GET({ request }) {
       },
       
       features: [
-        '🗄️ MYSQL DATABASE INTEGRATION',
+        '🗄️ INLINE MYSQL INTEGRATION (Build-Compatible)',
         '🔄 Intelligent Database Fallback (MySQL → Demo)',
         '📧 Echte Strato E-Mail Integration',
         '✅ Nodemailer SMTP Transport',
@@ -983,13 +1338,20 @@ export async function GET({ request }) {
         '🛡️ Spam Protection (Honeypot)',
         '✔️ Server-side Validation',
         '🔒 GDPR Compliance',
-        '🚀 Build-Compatible',
+        '🚀 Build-Compatible (No External Imports)',
         '🔍 Ehrlicher E-Mail-Status',
         '🔧 SMTP Connection Testing',
         '📈 Database Statistics & Analytics',
         '🔄 Auto-Migration (Demo → MySQL)',
         '💾 Persistent Data Storage'
       ],
+      
+      buildFix: {
+        issue: 'External lib/mysqlService.js import caused build failure',
+        solution: 'Inline MySQL integration without external imports',
+        compatible: true,
+        version: '18.1'
+      },
       
       migration: {
         status: databaseMode === 'mysql' ? 'COMPLETED' : 'NOT_REQUIRED',
@@ -1008,19 +1370,20 @@ export async function GET({ request }) {
       status: 200,
       headers: { 
         'Content-Type': 'application/json',
-        'X-API-Version': 'v18.0',
+        'X-API-Version': 'v18.1',
         'X-Database-Type': databaseMode.toUpperCase(),
-        'X-Email-Service': 'Strato-SMTP-ACTIVATED'
+        'X-Email-Service': 'Strato-SMTP-ACTIVATED',
+        'X-Build-Compatible': 'true'
       }
     });
     
   } catch (error) {
-    console.error('❌ GET API Error v18.0:', error);
+    console.error('❌ GET API Error v18.1:', error);
     
     return new Response(JSON.stringify({
       success: false,
       message: 'Error retrieving API documentation',
-      version: 'Contact API v18.0',
+      version: 'Contact API v18.1',
       error: error.message
     }), {
       status: 500,
