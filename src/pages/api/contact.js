@@ -1,6 +1,6 @@
-// src/pages/api/contact.js v18.1 (Inline MySQL Integration - Build-Fix)
+// src/pages/api/contact.js v18.1.1 (Inline MySQL Integration - Build-Fix)
 // Contact API - Inline MySQL Integration ohne externe Imports
-// ✅ ÄNDERUNGEN v18.1:
+// ✅ ÄNDERUNGEN v18.1.1:
 // - MySQL Service INLINE implementiert (Build-kompatibel)
 // - Keine externen ../lib/ Imports mehr
 // - Intelligente Database-Auswahl (MySQL → Demo Fallback)
@@ -10,7 +10,7 @@
 // ✅ WICHTIG: Server-Rendering für Build aktivieren
 export const prerender = false;
 
-console.log('🗄️ Contact API v18.1 loaded - Inline MySQL Integration (Build-Fix)');
+console.log('🗄️ Contact API v18.1.1 loaded - Inline MySQL Integration (Timeout-Fix)');
 
 // ✅ DEMO DATABASE FALLBACK (beibehalten für Kompatibilität)
 let demoContacts = [
@@ -69,19 +69,27 @@ let demoContacts = [
 
 let nextContactId = 4;
 
-// ✅ MYSQL KONFIGURATION (aus .env)
+// ✅ MYSQL KONFIGURATION (aus .env) - v18.1.1 Timeout-Fix
 const MYSQL_CONFIG = {
   host: process.env.DB_HOST || 'database-5017670143.webspace-host.com',
   user: process.env.DB_USER || 'dbu5377946',
   password: process.env.DB_PASSWORD || 'MaierValue#2025',
   database: process.env.DB_NAME || 'dbs14130950',
   port: parseInt(process.env.DB_PORT) || 3306,
-  connectionLimit: 10,
-  acquireTimeout: 60000,
-  timeout: 60000,
+  
+  // ✅ STRATO-OPTIMIERTE CONNECTION SETTINGS
+  connectionLimit: 5,        // Weniger Connections für Shared Hosting
+  acquireTimeout: 10000,     // 10s statt 60s
+  timeout: 15000,            // 15s statt 60s  
   reconnect: true,
   charset: 'utf8mb4',
-  ssl: false
+  ssl: false,
+  
+  // ✅ ZUSÄTZLICHE STRATO-SETTINGS
+  multipleStatements: false,
+  dateStrings: true,
+  supportBigNumbers: true,
+  bigNumberStrings: true
 };
 
 // ✅ STRATO SMTP KONFIGURATION (von v17.13 beibehalten)
@@ -108,23 +116,44 @@ let mysqlPool = null;
 // ✅ INLINE MYSQL SERVICE (Build-kompatibel)
 async function createMySQLPool() {
   try {
-    console.log('🔗 Creating MySQL connection pool for Strato v18.1...');
+    console.log('🔗 Creating MySQL connection pool for Strato v18.1.1 - Timeout-Fix...');
     
     // ✅ MySQL2 dynamisch importieren (Build-kompatibel)
     const mysql = await import('mysql2/promise');
     
     mysqlPool = mysql.createPool(MYSQL_CONFIG);
     
-    // Connection Test
-    const connection = await mysqlPool.getConnection();
-    await connection.ping();
-    connection.release();
+    // ✅ SCHNELLER CONNECTION TEST mit Timeout
+    const connectionTestPromise = async () => {
+      const connection = await mysqlPool.getConnection();
+      await connection.ping();
+      connection.release();
+      return true;
+    };
     
-    console.log('✅ MySQL Pool created successfully v18.1 - Strato Database connected');
+    // ✅ 8 SEKUNDEN TIMEOUT für Strato
+    await Promise.race([
+      connectionTestPromise(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Connection timeout after 8s')), 8000)
+      )
+    ]);
+    
+    console.log('✅ MySQL Pool created successfully v18.1.1 - Strato Database connected');
     return mysqlPool;
     
   } catch (error) {
-    console.error('❌ MySQL Pool creation failed v18.1:', error.message);
+    console.error('❌ MySQL Pool creation failed v18.1.1:', error.message);
+    
+    // ✅ Pool cleanup bei Fehler
+    if (mysqlPool) {
+      try {
+        await mysqlPool.end();
+      } catch (cleanupError) {
+        console.error('❌ Pool cleanup error:', cleanupError.message);
+      }
+    }
+    
     mysqlPool = null;
     return null;
   }
@@ -138,7 +167,7 @@ async function getMySQLPool() {
 }
 
 async function testMySQLConnection() {
-  console.log('🔍 Testing MySQL connection to Strato v18.1...');
+  console.log('🔍 Testing MySQL connection to Strato v18.1.1 - Fast Test...');
   
   try {
     const pool = await getMySQLPool();
@@ -147,41 +176,43 @@ async function testMySQLConnection() {
       throw new Error('MySQL Pool could not be created');
     }
     
-    const connection = await pool.getConnection();
-    
-    const [rows] = await connection.execute(`
-      SELECT 
-        DATABASE() as current_database,
-        VERSION() as mysql_version,
-        NOW() as server_time,
-        CONNECTION_ID() as connection_id
-    `);
-    
-    const [tables] = await connection.execute(`
-      SELECT COUNT(*) as table_count 
-      FROM information_schema.tables 
-      WHERE table_schema = ?
-    `, [MYSQL_CONFIG.database]);
-    
-    connection.release();
-    
-    console.log('✅ MySQL connection test successful v18.1:', {
-      database: rows[0].current_database,
-      version: rows[0].mysql_version,
-      tables: tables[0].table_count
-    });
-    
-    return {
-      success: true,
-      database: rows[0].current_database,
-      version: rows[0].mysql_version,
-      serverTime: rows[0].server_time,
-      connectionId: rows[0].connection_id,
-      tableCount: tables[0].table_count
+    // ✅ SCHNELLER CONNECTION TEST mit 5s Timeout
+    const testPromise = async () => {
+      const connection = await pool.getConnection();
+      
+      try {
+        const [rows] = await connection.execute(`SELECT DATABASE() as current_database, VERSION() as mysql_version, NOW() as server_time`);
+        const [tables] = await connection.execute(`SELECT COUNT(*) as table_count FROM information_schema.tables WHERE table_schema = ?`, [MYSQL_CONFIG.database]);
+        
+        return {
+          success: true,
+          database: rows[0].current_database,
+          version: rows[0].mysql_version,
+          serverTime: rows[0].server_time,
+          tableCount: tables[0].table_count
+        };
+      } finally {
+        connection.release();
+      }
     };
     
+    const result = await Promise.race([
+      testPromise(),
+      new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Connection test timeout after 5s')), 5000)
+      )
+    ]);
+    
+    console.log('✅ MySQL connection test successful v18.1.1:', {
+      database: result.database,
+      version: result.version,
+      tables: result.tableCount
+    });
+    
+    return result;
+    
   } catch (error) {
-    console.error('❌ MySQL connection test failed v18.1:', error);
+    console.error('❌ MySQL connection test failed v18.1.1:', error);
     return {
       success: false,
       error: error.message
@@ -470,25 +501,43 @@ async function migrateDemoDataToMySQL(demoContacts) {
 }
 
 /**
- * Database Service initialisieren v18.1
+ * Database Service initialisieren v18.1.1 - Timeout-Fix
  */
 async function initializeDatabaseService() {
-  console.log('🗄️ Initializing database service v18.1...');
+  console.log('🗄️ Initializing database service v18.1.1 - Fast Mode...');
   
   try {
-    // ✅ MySQL Connection testen
-    const connectionTest = await testMySQLConnection();
+    // ✅ SCHNELLE MySQL Connection Test mit 7s Gesamt-Timeout
+    const connectionTestPromise = testMySQLConnection();
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Database initialization timeout after 7s')), 7000)
+    );
+    
+    const connectionTest = await Promise.race([
+      connectionTestPromise,
+      timeoutPromise
+    ]);
     
     if (connectionTest.success) {
       databaseMode = 'mysql';
-      console.log('✅ MySQL Database connected v18.1 - Using Strato MySQL');
+      console.log('✅ MySQL Database connected v18.1.1 - Using Strato MySQL');
       
-      // ✅ Auto-Migration: Demo → MySQL (nur beim ersten Mal)
-      const statsResult = await getContactStatsMySQL();
+      // ✅ SCHNELLE Auto-Migration Check (max 3s)
+      const statsResult = await Promise.race([
+        getContactStatsMySQL(),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Stats timeout')), 3000)
+        )
+      ]);
+      
       if (statsResult.success && statsResult.stats.total === 0 && demoContacts.length > 0) {
-        console.log('🔄 Auto-migrating demo data to MySQL v18.1...');
-        const migrationResult = await migrateDemoDataToMySQL(demoContacts);
-        console.log(`✅ Migration completed v18.1: ${migrationResult.migrated} contacts migrated`);
+        console.log('🔄 Auto-migrating demo data to MySQL v18.1.1...');
+        // Migration im Hintergrund laufen lassen (nicht blockierend)
+        migrateDemoDataToMySQL(demoContacts).then(migrationResult => {
+          console.log(`✅ Migration completed v18.1.1: ${migrationResult.migrated} contacts migrated`);
+        }).catch(migrationError => {
+          console.error('❌ Background migration failed:', migrationError.message);
+        });
       }
       
     } else {
@@ -496,12 +545,12 @@ async function initializeDatabaseService() {
     }
     
   } catch (error) {
-    console.error('❌ MySQL initialization failed v18.1:', error.message);
-    console.log('🔄 Falling back to Demo Database v18.1');
+    console.error('❌ MySQL initialization failed v18.1.1:', error.message);
+    console.log('🔄 Falling back to Demo Database v18.1.1');
     databaseMode = 'demo';
   }
   
-  console.log(`🗄️ Database mode v18.1: ${databaseMode.toUpperCase()}`);
+  console.log(`🗄️ Database mode v18.1.1: ${databaseMode.toUpperCase()}`);
   return { mode: databaseMode };
 }
 
