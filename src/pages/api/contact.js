@@ -1,17 +1,18 @@
-// src/pages/api/contact.js v17.13 (Echte Strato E-Mails AKTIVIERT)
-// Contact API - Echte Strato SMTP E-Mail-Versendung aktiviert
-// ✅ ÄNDERUNGEN v17.13:
-// - Nodemailer-Code aktiviert (TODO-Kommentare entfernt)
-// - realEmail: true für echte E-Mail-Versendung
-// - Strato SMTP vollständig implementiert
-// - Fallback zu Simulation bei Fehlern
+// src/pages/api/contact.js v18.0 (MySQL Database Integration)
+// Contact API - Echte MySQL-Datenbank statt Demo Database
+// ✅ ÄNDERUNGEN v18.0:
+// - MySQL Database Integration (Strato Database)
+// - Demo Database als Fallback beibehalten
+// - Intelligente Database-Auswahl (MySQL → Demo Fallback)
+// - E-Mail Integration beibehalten (v17.13 Features)
+// - Migration-Support für bestehende Demo-Daten
 
 // ✅ WICHTIG: Server-Rendering für Build aktivieren
 export const prerender = false;
 
-console.log('📧 Contact API v17.12 loaded - ECHTE Strato E-Mails AKTIVIERT');
+console.log('🗄️ Contact API v18.0 loaded - MySQL Database Integration');
 
-// ✅ INLINE DATABASE (weiterhin für Demo)
+// ✅ DEMO DATABASE FALLBACK (beibehalten für Kompatibilität)
 let demoContacts = [
   {
     id: 1,
@@ -68,7 +69,7 @@ let demoContacts = [
 
 let nextContactId = 4;
 
-// ✅ STRATO SMTP KONFIGURATION
+// ✅ STRATO SMTP KONFIGURATION (von v17.13 beibehalten)
 const SMTP_CONFIG = {
   host: process.env.SMTP_HOST || 'smtp.strato.de',
   port: parseInt(process.env.EMAIL_PORT) || 587,
@@ -85,18 +86,55 @@ const EMAIL_CONFIG = {
   toAddress: process.env.EMAIL_TO || 'maier@maier-value.com'
 };
 
-console.log('📧 SMTP Config v17.12:', {
-  host: SMTP_CONFIG.host,
-  port: SMTP_CONFIG.port,
-  secure: SMTP_CONFIG.secure,
-  user: SMTP_CONFIG.auth.user,
-  fromAddress: EMAIL_CONFIG.fromAddress,
-  toAddress: EMAIL_CONFIG.toAddress
-});
+// ✅ DATABASE MANAGEMENT - MySQL mit Demo Fallback
+let databaseMode = 'unknown'; // 'mysql', 'demo', 'unknown'
+let mysqlService = null;
 
-// ✅ INLINE DATABASE OPERATIONS
-function createContact(contactData) {
-  console.log('✅ Inline DB: createContact called v17.12');
+/**
+ * Database Service initialisieren
+ * @returns {Object} Database Service
+ */
+async function initializeDatabaseService() {
+  console.log('🗄️ Initializing database service v18.0...');
+  
+  try {
+    // ✅ MySQL Service laden
+    const mysqlModule = await import('../lib/mysqlService.js');
+    mysqlService = mysqlModule.default;
+    
+    // ✅ MySQL Connection testen
+    const connectionTest = await mysqlService.testConnection();
+    
+    if (connectionTest.success) {
+      databaseMode = 'mysql';
+      console.log('✅ MySQL Database connected - Using Strato MySQL');
+      
+      // ✅ Auto-Migration: Demo → MySQL (nur beim ersten Mal)
+      const statsResult = await mysqlService.getStats();
+      if (statsResult.success && statsResult.stats.total === 0 && demoContacts.length > 0) {
+        console.log('🔄 Auto-migrating demo data to MySQL...');
+        const migrationResult = await mysqlService.migrateDemoData(demoContacts);
+        console.log(`✅ Migration completed: ${migrationResult.migrated} contacts migrated`);
+      }
+      
+    } else {
+      throw new Error(`MySQL connection failed: ${connectionTest.error}`);
+    }
+    
+  } catch (error) {
+    console.error('❌ MySQL initialization failed:', error.message);
+    console.log('🔄 Falling back to Demo Database');
+    databaseMode = 'demo';
+    mysqlService = null;
+  }
+  
+  console.log(`🗄️ Database mode: ${databaseMode.toUpperCase()}`);
+  return { mode: databaseMode, service: mysqlService };
+}
+
+// ✅ DEMO DATABASE OPERATIONS (Fallback)
+function createContactDemo(contactData) {
+  console.log('💾 Creating contact in Demo Database');
 
   const newContact = {
     id: nextContactId++,
@@ -117,27 +155,74 @@ function createContact(contactData) {
   };
 
   demoContacts.push(newContact);
-  
-  console.log('🎉 Inline DB: Contact created with ID v17.12:', newContact.id);
-  return newContact;
+  console.log('✅ Contact created in Demo Database with ID:', newContact.id);
+  return { success: true, contact: newContact, id: newContact.id };
 }
 
-function getContactByEmail(email) {
-  return demoContacts.find(c => c.email.toLowerCase() === email.toLowerCase()) || null;
-}
-
-function getContactStats() {
+function getContactStatsDemo() {
   return {
-    total: demoContacts.length,
-    neu: demoContacts.filter(c => c.status === 'neu').length,
-    offen: demoContacts.filter(c => c.status === 'offen').length,
-    abgeschlossen: demoContacts.filter(c => c.status === 'abgeschlossen').length,
-    leadForm: demoContacts.filter(c => c.leadForm === true).length,
-    processed: demoContacts.filter(c => c.processed === true).length
+    success: true,
+    stats: {
+      total: demoContacts.length,
+      neu: demoContacts.filter(c => c.status === 'neu').length,
+      offen: demoContacts.filter(c => c.status === 'offen').length,
+      abgeschlossen: demoContacts.filter(c => c.status === 'abgeschlossen').length,
+      leadForm: demoContacts.filter(c => c.leadForm === true).length,
+      processed: demoContacts.filter(c => c.processed === true).length
+    }
   };
 }
 
-// ✅ NODEMAILER TRANSPORT ERSTELLEN v17.12
+function checkDuplicateEmailDemo(email) {
+  const existing = demoContacts.find(c => c.email.toLowerCase() === email.toLowerCase());
+  return {
+    exists: !!existing,
+    contact: existing || null
+  };
+}
+
+// ✅ UNIFIED DATABASE OPERATIONS
+async function createContact(contactData) {
+  await initializeDatabaseService();
+  
+  if (databaseMode === 'mysql' && mysqlService) {
+    return await mysqlService.createContact(contactData);
+  } else {
+    return createContactDemo(contactData);
+  }
+}
+
+async function getContactStats() {
+  await initializeDatabaseService();
+  
+  if (databaseMode === 'mysql' && mysqlService) {
+    return await mysqlService.getStats();
+  } else {
+    return getContactStatsDemo();
+  }
+}
+
+async function checkDuplicateEmail(email) {
+  await initializeDatabaseService();
+  
+  if (databaseMode === 'mysql' && mysqlService) {
+    return await mysqlService.checkDuplicateEmail(email);
+  } else {
+    return checkDuplicateEmailDemo(email);
+  }
+}
+
+async function updateEmailStatus(contactId, emailType, success) {
+  if (databaseMode === 'mysql' && mysqlService) {
+    return await mysqlService.updateEmailStatus(contactId, emailType, success);
+  } else {
+    // Demo Database: E-Mail Status wird nicht persistiert
+    console.log(`📧 Demo Database: Email status ${emailType}=${success} for contact ${contactId} (not persisted)`);
+    return { success: true, affectedRows: 1 };
+  }
+}
+
+// ✅ NODEMAILER TRANSPORT ERSTELLEN v18.0 (von v17.13)
 async function createNodemailerTransport() {
   try {
     // ✅ AKTIVIERT: Echte Nodemailer-Integration
@@ -158,19 +243,19 @@ async function createNodemailerTransport() {
     
     // SMTP-Verbindung testen
     await transporter.verify();
-    console.log('✅ Strato SMTP-Verbindung erfolgreich v17.12');
+    console.log('✅ Strato SMTP-Verbindung erfolgreich v18.0');
     
     return { transporter, isReal: true };
     
   } catch (error) {
-    console.error('❌ Nodemailer/SMTP Error v17.12:', error.message);
-    console.log('🔄 Fallback zu Simulation-Modus v17.12');
+    console.error('❌ Nodemailer/SMTP Error v18.0:', error.message);
+    console.log('🔄 Fallback zu Simulation-Modus v18.0');
     
     // Fallback zu Simulation
     return {
       transporter: {
         sendMail: async (mailOptions) => {
-          console.log('📧 FALLBACK: Simulating email send v17.12:', {
+          console.log('📧 FALLBACK: Simulating email send v18.0:', {
             to: mailOptions.to,
             subject: mailOptions.subject
           });
@@ -190,9 +275,9 @@ async function createNodemailerTransport() {
   }
 }
 
-// ✅ ECHTE E-MAIL INTEGRATION v17.12
+// ✅ ECHTE E-MAIL INTEGRATION v18.0 (Corporate Design von v17.13)
 async function sendContactEmails(contactData) {
-  console.log('📧 E-Mail Service v17.12: ECHTE E-Mail-Versendung startet für:', contactData.name);
+  console.log('📧 E-Mail Service v18.0: ECHTE E-Mail-Versendung startet für:', contactData.name);
   
   const results = {
     confirmation: null,
@@ -204,7 +289,7 @@ async function sendContactEmails(contactData) {
   try {
     // ✅ NODEMAILER TRANSPORT ERSTELLEN
     const { transporter, isReal } = await createNodemailerTransport();
-    console.log(`📧 Transport Mode v17.12: ${isReal ? 'REAL SMTP' : 'SIMULATION'}`);
+    console.log(`📧 Transport Mode v18.0: ${isReal ? 'REAL SMTP' : 'SIMULATION'}`);
     
     // ✅ BESTÄTIGUNGS-E-MAIL AN USER
     console.log('📤 Sending confirmation email to:', contactData.email);
@@ -223,18 +308,21 @@ async function sendContactEmails(contactData) {
         messageId: confirmationResult.messageId,
         type: 'confirmation',
         recipient: contactData.email,
-        realEmail: isReal, // ✅ EHRLICH: true bei echten E-Mails
+        realEmail: isReal,
         response: confirmationResult.response
       };
       
-      console.log(`✅ Confirmation email ${isReal ? 'SENT' : 'SIMULATED'} v17.12:`, {
+      // ✅ E-Mail-Status in Datenbank aktualisieren
+      await updateEmailStatus(contactData.id, 'confirmation', true);
+      
+      console.log(`✅ Confirmation email ${isReal ? 'SENT' : 'SIMULATED'} v18.0:`, {
         to: contactData.email,
         messageId: confirmationResult.messageId,
         real: isReal
       });
       
     } catch (error) {
-      console.error('❌ Confirmation email failed v17.12:', error);
+      console.error('❌ Confirmation email failed v18.0:', error);
       results.confirmation = {
         success: false,
         error: error.message,
@@ -243,6 +331,8 @@ async function sendContactEmails(contactData) {
         realEmail: false
       };
       results.errors.push(`Bestätigung: ${error.message}`);
+      
+      await updateEmailStatus(contactData.id, 'confirmation', false);
     }
     
     // ✅ ADMIN-BENACHRICHTIGUNG
@@ -263,11 +353,14 @@ async function sendContactEmails(contactData) {
         type: 'admin_notification',
         recipient: EMAIL_CONFIG.toAddress,
         priority: contactData.leadForm ? 'HIGH (Lead)' : 'Normal',
-        realEmail: isReal, // ✅ EHRLICH: true bei echten E-Mails
+        realEmail: isReal,
         response: adminResult.response
       };
       
-      console.log(`✅ Admin notification ${isReal ? 'SENT' : 'SIMULATED'} v17.12:`, {
+      // ✅ E-Mail-Status in Datenbank aktualisieren
+      await updateEmailStatus(contactData.id, 'admin', true);
+      
+      console.log(`✅ Admin notification ${isReal ? 'SENT' : 'SIMULATED'} v18.0:`, {
         to: EMAIL_CONFIG.toAddress,
         messageId: adminResult.messageId,
         real: isReal,
@@ -275,7 +368,7 @@ async function sendContactEmails(contactData) {
       });
       
     } catch (error) {
-      console.error('❌ Admin notification failed v17.12:', error);
+      console.error('❌ Admin notification failed v18.0:', error);
       results.admin = {
         success: false,
         error: error.message,
@@ -284,31 +377,34 @@ async function sendContactEmails(contactData) {
         realEmail: false
       };
       results.errors.push(`Admin: ${error.message}`);
+      
+      await updateEmailStatus(contactData.id, 'admin', false);
     }
     
     // Erfolg wenn mindestens eine E-Mail erfolgreich
     results.success = results.confirmation?.success || results.admin?.success;
     
-    console.log('📊 Email sending summary v17.12:', {
+    console.log('📊 Email sending summary v18.0:', {
       confirmationSent: results.confirmation?.success || false,
       adminSent: results.admin?.success || false,
       overallSuccess: results.success,
       errors: results.errors.length,
       mode: isReal ? 'REAL_SMTP' : 'SIMULATION',
-      realEmails: (results.confirmation?.realEmail || false) || (results.admin?.realEmail || false)
+      realEmails: (results.confirmation?.realEmail || false) || (results.admin?.realEmail || false),
+      database: databaseMode.toUpperCase()
     });
     
     return results;
     
   } catch (error) {
-    console.error('❌ Error in sendContactEmails v17.12:', error);
+    console.error('❌ Error in sendContactEmails v18.0:', error);
     
     results.errors.push(`General: ${error.message}`);
     return results;
   }
 }
 
-// ✅ E-MAIL TEMPLATE GENERATOREN (Inline für Build-Kompatibilität)
+// ✅ E-MAIL TEMPLATE GENERATOREN (Corporate Design von v17.13)
 function generateConfirmationHTML(contactData) {
   return `
 <!DOCTYPE html>
@@ -419,6 +515,7 @@ function generateAdminHTML(contactData) {
         .label { font-weight: bold; color: #555; }
         .lead-badge { background: #D2AE6C; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         .normal-badge { background: #6B7280; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .database-badge { background: #10B981; color: white; padding: 2px 6px; border-radius: 8px; font-size: 10px; font-weight: bold; }
         h1 { margin: 0; font-size: 22px; }
         h2 { color: #D2AE6C; font-size: 16px; margin-top: 20px; margin-bottom: 10px; }
         .urgent { background: #FFF8E1; border: 1px solid #D2AE6C; color: #8B6914; padding: 10px; border-radius: 6px; margin: 10px 0; }
@@ -427,7 +524,8 @@ function generateAdminHTML(contactData) {
 <body>
     <div class="header">
         <h1>${leadIndicator} Neue Kontaktanfrage</h1>
-        <p>Eingegangen: ${new Date(contactData.timestamp).toLocaleString('de-DE')}</p>
+        <p>Eingegangen: ${new Date(contactData.timestamp).toLocaleString('de-DE')} 
+        <span class="database-badge">${databaseMode.toUpperCase()}</span></p>
     </div>
     
     <div class="content">
@@ -453,6 +551,7 @@ function generateAdminHTML(contactData) {
         
         <h2>⚙️ Technische Details:</h2>
         <div class="tech-details">
+            <p><strong>Datenbank:</strong> ${databaseMode.toUpperCase()} ${contactData.id ? `(ID: ${contactData.id})` : ''}</p>
             <p><strong>IP-Adresse:</strong> ${contactData.ipAddress}</p>
             <p><strong>DSGVO-Zustimmung:</strong> ${contactData.gdprConsent ? '✅ Ja' : '❌ Nein'}</p>
             <p><strong>User-Agent:</strong> ${contactData.userAgent}</p>
@@ -467,7 +566,8 @@ function generateAdminHTML(contactData) {
     </div>
     
     <div class="footer">
-        <p>Automatische Benachrichtigung von Dominik Maier Website</p>
+        <p>Automatische Benachrichtigung von Dominik Maier Website<br>
+        Database: ${databaseMode.toUpperCase()}</p>
     </div>
 </body>
 </html>
@@ -476,7 +576,7 @@ function generateAdminHTML(contactData) {
 
 function generateAdminText(contactData) {
   return `
-NEUE KONTAKTANFRAGE ${contactData.leadForm ? '(LEAD)' : ''}
+NEUE KONTAKTANFRAGE ${contactData.leadForm ? '(LEAD)' : ''} - ${databaseMode.toUpperCase()}
 
 Name: ${contactData.name}
 E-Mail: ${contactData.email}
@@ -488,6 +588,7 @@ Nachricht:
 ${contactData.message}
 
 ---
+Datenbank: ${databaseMode.toUpperCase()}${contactData.id ? ` (ID: ${contactData.id})` : ''}
 IP-Adresse: ${contactData.ipAddress}
 User-Agent: ${contactData.userAgent}
 DSGVO-Zustimmung: ${contactData.gdprConsent ? 'Ja' : 'Nein'}
@@ -495,7 +596,7 @@ DSGVO-Zustimmung: ${contactData.gdprConsent ? 'Ja' : 'Nein'}
 }
 
 export async function POST({ request }) {
-  console.log('=== CONTACT API v17.12 CALLED - ECHTE STRATO E-MAILS AKTIVIERT ===');
+  console.log('=== CONTACT API v18.0 CALLED - MYSQL DATABASE INTEGRATION ===');
   console.log('📅 Timestamp:', new Date().toISOString());
   
   try {
@@ -503,14 +604,14 @@ export async function POST({ request }) {
     let data;
     try {
       const rawBody = await request.text();
-      console.log('📥 Raw body received v17.12 (length):', rawBody.length);
+      console.log('📥 Raw body received v18.0 (length):', rawBody.length);
       
       if (!rawBody || rawBody.trim() === '') {
         throw new Error('Empty request body');
       }
       
       data = JSON.parse(rawBody);
-      console.log('📥 Parsed data successfully v17.12:', {
+      console.log('📥 Parsed data successfully v18.0:', {
         name: data.name,
         email: data.email,
         phone: data.phone,
@@ -520,11 +621,11 @@ export async function POST({ request }) {
         honeypot: data.honeypot || 'empty'
       });
     } catch (parseError) {
-      console.error('❌ JSON Parse Error v17.12:', parseError.message);
+      console.error('❌ JSON Parse Error v18.0:', parseError.message);
       return new Response(JSON.stringify({
         success: false,
         message: 'Ungültige Anfrage: Daten konnten nicht verarbeitet werden.',
-        version: 'Contact API v17.12 - Echte Strato E-Mails',
+        version: 'Contact API v18.0 - MySQL Database Integration',
         error: 'JSON_PARSE_ERROR'
       }), {
         status: 400,
@@ -534,12 +635,12 @@ export async function POST({ request }) {
 
     // ✅ Honeypot-Schutz
     if (data.honeypot && data.honeypot.trim() !== '') {
-      console.log('🚫 Honeypot-Schutz aktiviert v17.12 - Bot erkannt');
+      console.log('🚫 Honeypot-Schutz aktiviert v18.0 - Bot erkannt');
       
       return new Response(JSON.stringify({
         success: true,
         message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet.',
-        version: 'Contact API v17.12 - Honeypot Block',
+        version: 'Contact API v18.0 - Honeypot Block',
         timestamp: new Date().toISOString()
       }), {
         status: 200,
@@ -567,9 +668,9 @@ export async function POST({ request }) {
     }
     
     // Check for duplicate email
-    const existingContact = getContactByEmail(data.email.trim());
-    if (existingContact) {
-      console.log('⚠️ Duplicate email detected v17.12:', data.email);
+    const duplicateCheck = await checkDuplicateEmail(data.email.trim());
+    if (duplicateCheck.exists) {
+      console.log('⚠️ Duplicate email detected v18.0:', data.email);
     }
     
     // Phone validation
@@ -591,12 +692,12 @@ export async function POST({ request }) {
     }
 
     if (errors.length > 0) {
-      console.log('❌ Validierungsfehler v17.12:', errors);
+      console.log('❌ Validierungsfehler v18.0:', errors);
       return new Response(JSON.stringify({
         success: false,
         message: 'Bitte korrigieren Sie die folgenden Fehler:',
         errors: errors,
-        version: 'Contact API v17.12 - Echte Strato E-Mails'
+        version: 'Contact API v18.0 - MySQL Database Integration'
       }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
@@ -619,37 +720,40 @@ export async function POST({ request }) {
       timestamp: new Date().toISOString()
     };
 
-    // ✅ KONTAKT IN DATENBANK SPEICHERN
-    console.log('💾 Saving contact to database v17.12');
-    const savedContact = createContact(contactData);
+    // ✅ KONTAKT IN DATENBANK SPEICHERN (MySQL oder Demo)
+    console.log('💾 Saving contact to database v18.0');
+    const saveResult = await createContact(contactData);
     
-    if (!savedContact) {
-      throw new Error('Failed to save contact to database');
+    if (!saveResult.success) {
+      throw new Error(`Failed to save contact: ${saveResult.error}`);
     }
 
-    console.log('✅ Kontakt erfolgreich gespeichert v17.12:', {
+    const savedContact = saveResult.contact;
+    console.log('✅ Kontakt erfolgreich gespeichert v18.0:', {
       id: savedContact.id,
       name: savedContact.name,
       email: savedContact.email,
-      leadForm: savedContact.leadForm
+      leadForm: savedContact.leadForm,
+      database: databaseMode.toUpperCase()
     });
 
-    // ✅ ECHTE E-MAIL VERSENDUNG v17.12
-    console.log('📧 Initiating REAL Strato email sending v17.12');
+    // ✅ ECHTE E-MAIL VERSENDUNG v18.0
+    console.log('📧 Initiating REAL Strato email sending v18.0');
     let emailResults = null;
     
     try {
       emailResults = await sendContactEmails(savedContact);
-      console.log('📧 Email sending completed v17.12:', {
+      console.log('📧 Email sending completed v18.0:', {
         confirmationSent: emailResults.confirmation?.success || false,
         adminSent: emailResults.admin?.success || false,
         overallSuccess: emailResults.success,
         errors: emailResults.errors?.length || 0,
         confirmationReal: emailResults.confirmation?.realEmail || false,
-        adminReal: emailResults.admin?.realEmail || false
+        adminReal: emailResults.admin?.realEmail || false,
+        database: databaseMode.toUpperCase()
       });
     } catch (emailError) {
-      console.error('❌ Email sending error v17.12:', emailError);
+      console.error('❌ Email sending error v18.0:', emailError);
       emailResults = {
         success: false,
         errors: [`E-Mail-Versand fehlgeschlagen: ${emailError.message}`],
@@ -659,18 +763,32 @@ export async function POST({ request }) {
     }
 
     // ✅ STATISTIKEN AKTUALISIEREN
-    const stats = getContactStats();
-    console.log('📊 Database stats after contact v17.12:', stats);
+    const statsResult = await getContactStats();
+    const stats = statsResult.success ? statsResult.stats : {
+      total: 0, neu: 0, offen: 0, abgeschlossen: 0, leadForm: 0, processed: 0
+    };
     
-    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v17.12');
+    console.log('📊 Database stats after contact v18.0:', {
+      ...stats,
+      database: databaseMode.toUpperCase()
+    });
     
-    // ✅ SUCCESS RESPONSE mit E-Mail-Status
+    console.log('🎉 Kontaktanfrage erfolgreich verarbeitet v18.0');
+    
+    // ✅ SUCCESS RESPONSE mit Database-Info
     return new Response(JSON.stringify({
       success: true,
       message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gesendet. Wir melden uns schnellstmöglich bei Ihnen.',
-      version: 'Contact API v17.12 - Echte Strato E-Mails AKTIVIERT',
+      version: 'Contact API v18.0 - MySQL Database Integration',
       timestamp: new Date().toISOString(),
       contactId: savedContact.id,
+      
+      // ✅ DATABASE INFO
+      database: {
+        mode: databaseMode.toUpperCase(),
+        type: databaseMode === 'mysql' ? 'Strato MySQL Database' : 'Demo Database (Fallback)',
+        persistent: databaseMode === 'mysql'
+      },
       
       // Kontakt-Daten
       contact: {
@@ -682,7 +800,7 @@ export async function POST({ request }) {
         status: savedContact.status
       },
       
-      // ✅ EHRLICHER E-MAIL-STATUS v17.12
+      // ✅ E-MAIL-STATUS (von v17.13)
       emails: {
         sent: emailResults?.success || false,
         mode: (emailResults?.confirmation?.realEmail || emailResults?.admin?.realEmail) ? 'REAL' : 'SIMULATION',
@@ -706,33 +824,38 @@ export async function POST({ request }) {
       stats: {
         totalContacts: stats.total,
         newContacts: stats.neu,
-        leads: stats.leadForm
+        leads: stats.leadForm,
+        database: databaseMode.toUpperCase()
       }
     }), {
       status: 200,
       headers: { 
         'Content-Type': 'application/json',
         'X-Contact-ID': savedContact.id.toString(),
-        'X-Database-Type': 'Demo',
+        'X-Database-Type': databaseMode.toUpperCase(),
         'X-Email-Status': emailResults?.success ? 'sent' : 'failed',
         'X-Email-Mode': (emailResults?.confirmation?.realEmail || emailResults?.admin?.realEmail) ? 'REAL' : 'SIMULATION'
       }
     });
 
   } catch (error) {
-    console.error('❌ CONTACT API ERROR v17.12:', error);
-    console.error('❌ Error stack v17.12:', error.stack);
+    console.error('❌ CONTACT API ERROR v18.0:', error);
+    console.error('❌ Error stack v18.0:', error.stack);
     
     return new Response(JSON.stringify({
       success: false,
       message: 'Ein unerwarteter Fehler ist aufgetreten. Bitte versuchen Sie es später erneut oder kontaktieren Sie uns direkt.',
-      version: 'Contact API v17.12 - Echte Strato E-Mails AKTIVIERT',
+      version: 'Contact API v18.0 - MySQL Database Integration',
       error: process.env.NODE_ENV === 'development' ? error.message : 'INTERNAL_SERVER_ERROR',
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
       timestamp: new Date().toISOString(),
+      database: {
+        mode: databaseMode || 'UNKNOWN',
+        available: databaseMode !== 'unknown'
+      },
       contactInfo: {
         phone: '+49 7440 913367',
-        email: 'webmaster@maier-value.com'
+        email: 'maier@maier-value.com'
       }
     }), {
       status: 500,
@@ -741,18 +864,40 @@ export async function POST({ request }) {
   }
 }
 
-// ✅ GET Handler für API-Dokumentation & E-Mail Service Status
+// ✅ GET Handler für API-Dokumentation & Database Status
 export async function GET({ request }) {
-  console.log('📖 Contact API Documentation & E-Mail Service Status requested v17.12');
+  console.log('📖 Contact API Documentation & Database Status requested v18.0');
   
   try {
-    const stats = getContactStats();
+    // ✅ Database Service initialisieren
+    await initializeDatabaseService();
     
-    // E-Mail Service Status v17.12
+    const statsResult = await getContactStats();
+    const stats = statsResult.success ? statsResult.stats : {
+      total: 0, neu: 0, offen: 0, abgeschlossen: 0, leadForm: 0, processed: 0
+    };
+    
+    // ✅ Database Service Status
+    let databaseServiceStatus = {
+      mode: databaseMode.toUpperCase(),
+      type: databaseMode === 'mysql' ? 'Strato MySQL Database' : 'Demo Database (Fallback)',
+      persistent: databaseMode === 'mysql',
+      available: databaseMode !== 'unknown'
+    };
+    
+    if (databaseMode === 'mysql' && mysqlService) {
+      const mysqlStatus = await mysqlService.getServiceStatus();
+      databaseServiceStatus = {
+        ...databaseServiceStatus,
+        ...mysqlStatus
+      };
+    }
+    
+    // E-Mail Service Status v18.0
     const emailServiceStatus = {
-      version: '1.2',
+      version: '1.3',
       service: 'Strato SMTP Integration',
-      mode: 'REAL_WITH_FALLBACK', // ✅ Echte E-Mails mit Fallback
+      mode: 'REAL_WITH_FALLBACK',
       config: {
         host: SMTP_CONFIG.host,
         port: SMTP_CONFIG.port,
@@ -766,45 +911,37 @@ export async function GET({ request }) {
         'Nodemailer Transport',
         'Fallback zu Simulation bei Fehlern',
         'Inline E-Mail Templates',
+        'Corporate Design Templates',
         'Bestätigungs-E-Mails an Kontakte',
         'Admin-Benachrichtigungen',
         'HTML + Text E-Mails',
         'Lead-Priorisierung',
         'DSGVO-konforme Verarbeitung',
         'Ehrlicher E-Mail-Status',
-        'SMTP Connection Testing'
+        'SMTP Connection Testing',
+        'Database E-Mail Status Tracking'
       ],
       status: {
         ready: true,
-        simulation: false, // ✅ Nicht mehr nur Simulation
-        realSMTP: true,    // ✅ Echte SMTP-Integration
-        fallback: true     // ✅ Fallback zu Simulation bei Problemen
+        simulation: false,
+        realSMTP: true,
+        fallback: true
       }
     };
     
     return new Response(JSON.stringify({
       api: 'Contact API',
-      version: 'v17.12',
-      description: 'Dominik Maier Contact Form API with ACTIVATED Strato E-Mail Integration',
+      version: 'v18.0',
+      description: 'Dominik Maier Contact Form API with MySQL Database Integration',
       
-      database: {
-        type: 'Inline Demo Database (In-Memory)',
-        contactCount: demoContacts.length,
-        nextId: nextContactId,
-        currentStats: stats,
-        features: [
-          'CRUD Operations',
-          'Status Management', 
-          'Lead Tracking',
-          'Build-Compatible'
-        ]
-      },
+      // ✅ DATABASE STATUS
+      database: databaseServiceStatus,
       
       emailService: emailServiceStatus,
       
       endpoints: {
         POST: {
-          description: 'Submit contact form with REAL Strato email notifications',
+          description: 'Submit contact form with MySQL storage and email notifications',
           url: '/api/contact',
           required: ['name', 'email', 'phone', 'gdprConsent'],
           optional: ['message', 'leadForm', 'honeypot'],
@@ -816,76 +953,54 @@ export async function GET({ request }) {
             gdprConsent: 'must be true'
           },
           response: {
-            success: 'Contact saved + emails sent (REAL Strato SMTP)',
+            success: 'Contact saved to MySQL + emails sent',
             error: 'Validation errors or server error',
             includes: [
               'Contact details',
+              'Database status (MySQL/Demo)',
               'Email sending status (real SMTP)',
-              'Database statistics',
-              'SMTP connection status'
+              'Database statistics'
             ]
           }
         },
         GET: {
           description: 'API documentation and service status',
           url: '/api/contact',
-          response: 'This documentation with email service status'
+          response: 'This documentation with database and email service status'
         }
       },
       
       features: [
-        '📧 ECHTE Strato E-Mail Integration AKTIVIERT',
+        '🗄️ MYSQL DATABASE INTEGRATION',
+        '🔄 Intelligent Database Fallback (MySQL → Demo)',
+        '📧 Echte Strato E-Mail Integration',
         '✅ Nodemailer SMTP Transport',
         '🔄 Automatischer Fallback bei SMTP-Problemen', 
         '✅ Bestätigungs-E-Mails (HTML + Text)',
         '🚨 Admin-Benachrichtigungen',
         '🎯 Lead-Priorisierung',
-        '📊 Demo Database Storage',
+        '📊 MySQL Database Storage',
         '🛡️ Spam Protection (Honeypot)',
         '✔️ Server-side Validation',
         '🔒 GDPR Compliance',
         '🚀 Build-Compatible',
         '🔍 Ehrlicher E-Mail-Status',
-        '🔧 SMTP Connection Testing'
+        '🔧 SMTP Connection Testing',
+        '📈 Database Statistics & Analytics',
+        '🔄 Auto-Migration (Demo → MySQL)',
+        '💾 Persistent Data Storage'
       ],
       
-      emailTemplates: [
-        {
-          type: 'confirmation',
-          recipient: 'contact_email',
-          subject: 'Ihre Nachricht ist bei uns angekommen - Dominik Maier',
-          features: ['Professional HTML Design', 'Responsive Layout', 'Contact Details', 'Branding'],
-          status: 'ACTIVE'
-        },
-        {
-          type: 'admin_notification',
-          recipient: 'maier@maier-value.com',
-          subject: 'Neue Anfrage von {name}',
-          features: ['Lead Priority Highlighting', 'Technical Details', 'Direct Actions', 'Contact Info'],
-          status: 'ACTIVE'
-        }
-      ],
-      
-      requirements: {
-        dependencies: ['nodemailer (will be imported dynamically)'],
-        environment: [
-          'SMTP_HOST=smtp.strato.de',
-          'SMTP_USER=webmaster@maier-value.com',
-          'SMTP_PASS=***',
-          'EMAIL_PORT=587',
-          'EMAIL_TO=maier@maier-value.com'
-        ],
-        notes: [
-          'Nodemailer will be imported dynamically',
-          'Falls back to simulation if SMTP fails',
-          'Honest email status reporting',
-          'SMTP connection is tested before sending'
-        ]
+      migration: {
+        status: databaseMode === 'mysql' ? 'COMPLETED' : 'NOT_REQUIRED',
+        from: 'Demo Database (In-Memory)',
+        to: 'Strato MySQL Database',
+        autoMigration: true
       },
       
       contact: {
         phone: '+49 7440 913367',
-        email: 'webmaster@maier-value.com'
+        email: 'maier@maier-value.com'
       },
       
       timestamp: new Date().toISOString()
@@ -893,19 +1008,19 @@ export async function GET({ request }) {
       status: 200,
       headers: { 
         'Content-Type': 'application/json',
-        'X-API-Version': 'v17.12',
-        'X-Database-Type': 'Demo',
+        'X-API-Version': 'v18.0',
+        'X-Database-Type': databaseMode.toUpperCase(),
         'X-Email-Service': 'Strato-SMTP-ACTIVATED'
       }
     });
     
   } catch (error) {
-    console.error('❌ GET API Error v17.12:', error);
+    console.error('❌ GET API Error v18.0:', error);
     
     return new Response(JSON.stringify({
       success: false,
       message: 'Error retrieving API documentation',
-      version: 'Contact API v17.12',
+      version: 'Contact API v18.0',
       error: error.message
     }), {
       status: 500,
