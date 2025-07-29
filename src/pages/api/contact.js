@@ -1,6 +1,6 @@
-// src/pages/api/contact.js v17.12 (Echte Strato E-Mails AKTIVIERT)
+// src/pages/api/contact.js v17.13 (Echte Strato E-Mails AKTIVIERT)
 // Contact API - Echte Strato SMTP E-Mail-Versendung aktiviert
-// ✅ ÄNDERUNGEN v17.12:
+// ✅ ÄNDERUNGEN v17.13:
 // - Nodemailer-Code aktiviert (TODO-Kommentare entfernt)
 // - realEmail: true für echte E-Mail-Versendung
 // - Strato SMTP vollständig implementiert
@@ -358,7 +358,7 @@ function generateConfirmationHTML(contactData) {
                 <strong>Dominik Maier</strong><br>
                 Coaching & Interim Management<br>
                 Telefon: <a href="tel:+497440913367">+49 7440 913367</a><br>
-                E-Mail: <a href="mailto:webmaster@maier-value.com">webmaster@maier-value.com</a>
+                E-Mail: <a href="mailto:maier@maier-value.com">maier@maier-value.com</a>
             </p>
         </div>
         
@@ -392,7 +392,7 @@ Coaching & Interim Management
 ---
 Kontakt:
 Telefon: +49 7440 913367
-E-Mail: webmaster@maier-value.com
+E-Mail: maier@maier-value.com
 
 Diese E-Mail wurde automatisch generiert.
   `;
@@ -410,18 +410,18 @@ function generateAdminHTML(contactData) {
     <title>Neue Kontaktanfrage</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: ${contactData.leadForm ? 'linear-gradient(135deg, #3B82F6, #1E40AF)' : 'linear-gradient(135deg, #D2AE6C, #B8941F)'}; color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0; }
+        .header { background: linear-gradient(135deg, #D2AE6C, #B8941F); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0; }
         .content { background: #ffffff; padding: 25px; border: 1px solid #e0e0e0; border-top: none; }
         .contact-details { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 20px; margin: 15px 0; }
         .message-box { background: #f9f9f9; border-left: 4px solid #D2AE6C; padding: 15px; margin: 15px 0; }
         .tech-details { background: #f1f3f4; border-radius: 6px; padding: 15px; margin: 15px 0; font-size: 12px; color: #666; }
         .footer { background: #f5f5f5; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666; }
         .label { font-weight: bold; color: #555; }
-        .lead-badge { background: #3B82F6; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .lead-badge { background: #D2AE6C; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         .normal-badge { background: #6B7280; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
         h1 { margin: 0; font-size: 22px; }
         h2 { color: #D2AE6C; font-size: 16px; margin-top: 20px; margin-bottom: 10px; }
-        .urgent { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; padding: 10px; border-radius: 6px; margin: 10px 0; }
+        .urgent { background: #FFF8E1; border: 1px solid #D2AE6C; color: #8B6914; padding: 10px; border-radius: 6px; margin: 10px 0; }
     </style>
 </head>
 <body>
