@@ -4,6 +4,13 @@
  * DATEI PFAD: src/pages/api/contact.js
  * 
  * Contact API v18.1 - Supabase Integration (Astro Version)
+ * 
+ * CHANGELOG v18.1:
+ * - Echte Supabase PostgreSQL Integration
+ * - Intelligentes Fallback zu Demo Database
+ * - Astro-kompatible API-Struktur
+ * - Environment Variables: import.meta.env
+ * - Response-Format für Astro optimiert
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -109,8 +116,14 @@ async function getAllContacts() {
 
       if (error) throw error;
       
-      console.log(`✅ Loaded ${data.length} contacts from Supabase`);
-      return data || [];
+      // leadform zu leadForm mapping für Admin Dashboard
+      const contacts = data.map(contact => ({
+        ...contact,
+        leadForm: contact.leadform || false
+      }));
+      
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase`);
+      return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
@@ -132,7 +145,8 @@ async function createContact(contactData) {
           company: contactData.company || null,
           message: contactData.message,
           status: 'new',
-          notes: ''
+          notes: '',
+          leadform: contactData.leadForm || false
         }])
         .select()
         .single();
@@ -162,12 +176,32 @@ async function createContact(contactData) {
 async function updateContact(contactId, updateData) {
   if (supabase && await testSupabaseConnection()) {
     try {
+      // Erlaubte Felder für Updates (leadForm hinzugefügt)
+      const allowedFields = ['status', 'notes', 'leadform'];
+      const updates = {};
+      
+      // leadForm zu leadform mapping für Supabase
+      if (updateData.hasOwnProperty('leadForm')) {
+        updates.leadform = updateData.leadForm;
+      }
+      
+      // Andere Felder direkt übernehmen
+      allowedFields.forEach(field => {
+        if (updateData.hasOwnProperty(field) && field !== 'leadform') {
+          updates[field] = updateData[field];
+        }
+      });
+      
+      if (Object.keys(updates).length === 0) {
+        throw new Error('No valid fields to update');
+      }
+      
+      // Updated_at hinzufügen
+      updates.updated_at = new Date().toISOString();
+      
       const { data, error } = await supabase
         .from('contacts')
-        .update({
-          ...updateData,
-          updated_at: new Date().toISOString()
-        })
+        .update(updates)
         .eq('id', contactId)
         .select()
         .single();
