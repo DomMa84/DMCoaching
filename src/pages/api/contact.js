@@ -176,8 +176,8 @@ async function createContact(contactData) {
 async function updateContact(contactId, updateData) {
   if (supabase && await testSupabaseConnection()) {
     try {
-      // Erlaubte Felder für Updates (leadForm hinzugefügt)
-      const allowedFields = ['status', 'notes', 'leadform'];
+      // Erlaubte Felder für Updates (company hinzugefügt)
+      const allowedFields = ['status', 'notes', 'leadform', 'name', 'email', 'phone', 'company', 'message'];
       const updates = {};
       
       // leadForm zu leadform mapping für Supabase
