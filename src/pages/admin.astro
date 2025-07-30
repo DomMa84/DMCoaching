@@ -171,21 +171,21 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
           },
           
           // ===== CONTACT MANAGEMENT (SUPABASE API) =====
-          async updateContactStatus(contactId, newStatus) {
-            console.log('🔄 Updating status via Supabase API v24.8:', { contactId, newStatus });
+          async updateContact(contactId, updateData) {
+            console.log('🔄 Updating contact via Supabase API v24.8:', { contactId, updateData });
             
             try {
-              // Admin Status zu Supabase Status mapping
-              const supabaseStatus = this.mapAdminStatus(newStatus);
+              // Admin Status zu Supabase Status mapping (falls status geändert wird)
+              if (updateData.status) {
+                updateData.status = this.mapAdminStatus(updateData.status);
+              }
               
               const response = await fetch(`/api/contact?id=${contactId}`, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                  status: supabaseStatus
-                })
+                body: JSON.stringify(updateData)
               });
               
               if (!response.ok) {
@@ -198,100 +198,42 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                 // Lokalen Kontakt aktualisieren
                 const contact = this.contacts.find(c => c.id === contactId);
                 if (contact) {
-                  contact.status = newStatus;
+                  Object.assign(contact, updateData);
                   contact.updated_at = new Date().toISOString();
+                  // Status zurück zu Admin-Format mappen falls nötig
+                  if (updateData.status) {
+                    contact.status = this.mapSupabaseStatus(updateData.status);
+                  }
                 }
                 
                 // Stats neu laden
                 await this.loadStats();
                 
-                console.log('✅ Status updated via Supabase API v24.8');
+                console.log('✅ Contact updated via Supabase API v24.8');
               } else {
                 throw new Error(data.error || 'Update failed');
               }
               
             } catch (error) {
-              console.error('❌ Error updating status via Supabase API v24.8:', error);
-              alert(`Fehler beim Aktualisieren des Status: ${error.message}`);
+              console.error('❌ Error updating contact via Supabase API v24.8:', error);
+              alert(`Fehler beim Aktualisieren des Kontakts: ${error.message}`);
             }
           },
           
           async updateContactLeadStatus(contactId, newLeadStatus) {
-            console.log('🎯 Updating lead status via Supabase API v24.8:', { contactId, newLeadStatus });
-            
-            try {
-              const response = await fetch(`/api/contact?id=${contactId}`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  leadForm: newLeadStatus
-                })
-              });
-              
-              if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-              }
-              
-              const data = await response.json();
-              
-              if (data.success) {
-                // Lokalen Kontakt aktualisieren
-                const contact = this.contacts.find(c => c.id === contactId);
-                if (contact) {
-                  contact.leadForm = newLeadStatus;
-                  contact.updated_at = new Date().toISOString();
-                }
-                
-                console.log('✅ Lead status updated via Supabase API v24.8');
-              } else {
-                throw new Error(data.error || 'Update failed');
-              }
-              
-            } catch (error) {
-              console.error('❌ Error updating lead status via Supabase API v24.8:', error);
-              alert(`Fehler beim Aktualisieren des Lead-Status: ${error.message}`);
-            }
+            return this.updateContact(contactId, { leadForm: newLeadStatus });
+          },
+          
+          async updateContactStatus(contactId, newStatus) {
+            return this.updateContact(contactId, { status: newStatus });
           },
           
           async saveContactNotes(contactId, notes) {
-            console.log('📝 Saving notes via Supabase API v24.8:', { contactId, notesLength: notes.length });
-            
-            try {
-              const response = await fetch(`/api/contact?id=${contactId}`, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                  notes: notes
-                })
-              });
-              
-              if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-              }
-              
-              const data = await response.json();
-              
-              if (data.success) {
-                // Lokalen Kontakt aktualisieren
-                const contact = this.contacts.find(c => c.id === contactId);
-                if (contact) {
-                  contact.notes = notes;
-                  contact.updated_at = new Date().toISOString();
-                }
-                
-                console.log('✅ Notes saved via Supabase API v24.8');
-              } else {
-                throw new Error(data.error || 'Save failed');
-              }
-              
-            } catch (error) {
-              console.error('❌ Error saving notes via Supabase API v24.8:', error);
-              alert(`Fehler beim Speichern der Notizen: ${error.message}`);
-            }
+            return this.updateContact(contactId, { notes: notes });
+          },
+          
+          async saveContactDetails(contactId, details) {
+            return this.updateContact(contactId, details);
           },
           
           // ===== STATUS MAPPING FUNCTIONS =====
@@ -338,12 +280,18 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
           filteredContacts() {
             if (this.filterStatus === 'alle') {
               return this.contacts;
+            } else if (this.filterStatus === 'aktiv') {
+              return this.contacts.filter(contact => contact.status !== 'archived');
             }
             return this.contacts.filter(contact => contact.status === this.filterStatus);
           },
           
           getStatusCount(status) {
             return this.contacts.filter(contact => contact.status === status).length;
+          },
+          
+          getActiveCount() {
+            return this.contacts.filter(contact => contact.status !== 'archived').length;
           },
           
           calculateLocalStats() {
@@ -537,6 +485,12 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                   Alle Anfragen (<span x-text="contacts.length"></span>)
                 </button>
                 <button 
+                  @click="filterStatus = 'aktiv'"
+                  :class="filterStatus === 'aktiv' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
+                >
+                  ✅ Nur Aktive (<span x-text="getActiveCount()"></span>)
+                </button>
+                <button 
                   @click="filterStatus = 'neu'"
                   :class="filterStatus === 'neu' ? 'admin-filter-btn admin-filter-btn-active' : 'admin-filter-btn'"
                 >
@@ -678,25 +632,45 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                         <div class="admin-grid-2">
                           <div>
                             <label class="admin-label">Name</label>
-                            <p class="admin-text" x-text="selectedContact.name"></p>
+                            <input 
+                              type="text"
+                              x-model="selectedContact.name"
+                              class="admin-input"
+                              placeholder="Name eingeben..."
+                            >
                           </div>
                           <div>
+                            <label class="admin-label">E-Mail</label>
+                            <input 
+                              type="email"
+                              x-model="selectedContact.email"
+                              class="admin-input"
+                              placeholder="E-Mail eingeben..."
+                            >
+                          </div>
+                          <div>
+                            <label class="admin-label">Telefon</label>
+                            <input 
+                              type="tel"
+                              x-model="selectedContact.phone"
+                              class="admin-input"
+                              placeholder="Telefon eingeben..."
+                            >
+                          </div>
+                          <div>
+                            <label class="admin-label">Unternehmen</label>
+                            <input 
+                              type="text"
+                              x-model="selectedContact.company"
+                              class="admin-input"
+                              placeholder="Unternehmen eingeben..."
+                            >
+                          </div>
+                          <div class="admin-grid-2-span">
                             <label class="admin-label">Erstellt</label>
                             <p class="admin-text">
                               <span x-text="formatDate(selectedContact.created_at)"></span>
                               <span class="text-xs ml-2" x-text="'(' + getRelativeTime(selectedContact.created_at) + ')'"></span>
-                            </p>
-                          </div>
-                          <div>
-                            <label class="admin-label">E-Mail</label>
-                            <p class="admin-text">
-                              <a :href="'mailto:' + selectedContact.email" class="text-primary-gold hover:underline" x-text="selectedContact.email"></a>
-                            </p>
-                          </div>
-                          <div>
-                            <label class="admin-label">Telefon</label>
-                            <p class="admin-text">
-                              <a :href="'tel:' + selectedContact.phone" class="text-primary-gold hover:underline" x-text="selectedContact.phone"></a>
                             </p>
                           </div>
                         </div>
@@ -704,7 +678,12 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                         <!-- Nachricht -->
                         <div>
                           <label class="admin-label">Nachricht</label>
-                          <div class="admin-message-box" x-text="selectedContact.message"></div>
+                          <textarea 
+                            x-model="selectedContact.message"
+                            rows="3"
+                            class="admin-textarea"
+                            placeholder="Nachricht eingeben..."
+                          ></textarea>
                         </div>
                         
                         <!-- Status -->
@@ -737,10 +716,17 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                         <!-- Action Buttons -->
                         <div class="flex flex-col sm:flex-row gap-3 pt-4">
                           <button 
-                            @click="saveContactNotes(selectedContact.id, selectedContact.notes); selectedContact = null"
+                            @click="saveContactDetails(selectedContact.id, {
+                              name: selectedContact.name,
+                              email: selectedContact.email,
+                              phone: selectedContact.phone,
+                              company: selectedContact.company,
+                              message: selectedContact.message,
+                              notes: selectedContact.notes
+                            }); selectedContact = null"
                             class="admin-btn admin-btn-primary"
                           >
-                            💾 Speichern & Schließen
+                            💾 Alle Änderungen speichern & Schließen
                           </button>
                           <button 
                             @click="selectedContact = null"
