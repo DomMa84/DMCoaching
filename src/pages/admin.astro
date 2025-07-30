@@ -1,11 +1,12 @@
 ---
-// src/pages/admin.astro v24.7 (Lead-Funktionalität Fix - Clean Code)
-// Admin Dashboard - Lead-Funktionalität komplett repariert
-// ✅ ÄNDERUNGEN v24.7:
-// - Lead-Funktionalität vollständig implementiert
-// - Code sauber strukturiert und durcheinander-frei
-// - Demo-Daten mit korrekten Lead-Flags
-// - Lead-Status änderbar im Modal
+// src/pages/admin.astro v24.8 (Supabase API Integration)
+// Admin Dashboard - Supabase API statt Demo-Daten
+// ✅ ÄNDERUNGEN v24.8:
+// - Demo-Daten entfernt
+// - Lädt echte Kontakte über /api/contact?action=list
+// - Statistics über /api/contact?action=stats
+// - Updates über PUT /api/contact?id=X
+// - Alle anderen Funktionen unverändert
 
 export const prerender = false;
 
@@ -15,9 +16,9 @@ import Footer from '../components/Footer.astro';
 import AdminStyles from '../components/AdminStyles.astro';
 
 const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.7 (Lead-Funktionalität Fix)";
+const version = "Admin Dashboard v24.8 (Supabase API Integration)";
 
-console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett');
+console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
 ---
 
 <Layout 
@@ -34,9 +35,9 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Clean & Strukturiert -->
+        <!-- Alpine.js Admin App - Supabase Integration -->
         <div x-data="{
-          version: 'Admin Dashboard v24.7 (Lead-Funktionalität Fix)',
+          version: 'Admin Dashboard v24.8 (Supabase API Integration)',
           isLoggedIn: false,
           showLoginForm: true,
           
@@ -54,10 +55,17 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
           contactsError: '',
           selectedContact: null,
           filterStatus: 'alle',
+          stats: {
+            total: 0,
+            new: 0,
+            contacted: 0,
+            converted: 0,
+            archived: 0
+          },
           
-          // ===== LOGIN FUNCTIONS =====
+          // ===== LOGIN FUNCTIONS (UNVERÄNDERT) =====
           async login() {
-            console.log('🔐 Login attempt v24.7');
+            console.log('🔐 Login attempt v24.8');
             this.isLoading = true;
             this.loginError = '';
             
@@ -67,7 +75,8 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                 this.showLoginForm = false;
                 this.loginError = '';
                 await this.loadContacts();
-                console.log('✅ Demo Login successful v24.7');
+                await this.loadStats();
+                console.log('✅ Demo Login successful v24.8');
               } else {
                 this.loginError = 'Ungültige Anmeldedaten (Demo: admin/admin)';
               }
@@ -79,7 +88,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
           },
           
           async logout() {
-            console.log('🚪 Logout v24.7');
+            console.log('🚪 Logout v24.8');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
@@ -88,114 +97,226 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
             this.contacts = [];
           },
           
-          // ===== DATA LOADING =====
+          // ===== SUPABASE API FUNCTIONS (NEU) =====
           async loadContacts() {
-            console.log('📋 Loading contacts v24.7');
+            console.log('📋 Loading contacts from Supabase API v24.8');
             this.contactsLoading = true;
             this.contactsError = '';
             
             try {
-              // ✅ DEMO-DATEN mit korrekten Lead-Flags
-              const demoContacts = [
-                {
-                  id: 1,
-                  name: 'Max Mustermann',
-                  email: 'max.mustermann@email.de',
-                  phone: '+49 123 456789',
-                  message: 'Ich interessiere mich für eine Beratung bezüglich strategischer Unternehmensentwicklung. Könnten wir einen Termin vereinbaren?',
-                  status: 'neu',
-                  notes: '',
-                  leadForm: false, // Normaler Kontakt
-                  created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-                  updated_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-                },
-                {
-                  id: 2,
-                  name: 'Lisa Weber',
-                  email: 'lisa.weber@techstart.com',
-                  phone: '+49 987 654321',
-                  message: 'Hallo Herr Maier, wir sind ein Startup im Bereich KI-Technologie und benötigen Unterstützung bei der Vertriebsoptimierung.',
-                  status: 'offen',
-                  notes: 'Termin für nächste Woche vereinbart - Mittwoch 14:00 Uhr',
-                  leadForm: true, // LEAD
-                  created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-                  updated_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
-                },
-                {
-                  id: 3,
-                  name: 'Thomas Schmidt',
-                  email: 'thomas.schmidt@industriefirma.de',
-                  phone: '+49 555 123456',
-                  message: 'Guten Tag, wir sind ein Industrieunternehmen mit 200 Mitarbeitern und benötigen Interim Management für unsere Marketingabteilung.',
-                  status: 'abgeschlossen',
-                  notes: 'Projekt erfolgreich abgeschlossen. 6-monatiges Interim Management durchgeführt.',
-                  leadForm: false, // Normaler Kontakt
-                  created_at: new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString(),
-                  updated_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-                },
-                {
-                  id: 4,
-                  name: 'Sandra Müller',
-                  email: 'sandra.mueller@beratung.de',
-                  phone: '+49 711 987654',
-                  message: 'Interesse an Wertanalyse-Beratung für unser Consulting-Unternehmen.',
-                  status: 'neu',
-                  notes: '',
-                  leadForm: true, // LEAD
-                  created_at: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-                  updated_at: new Date(Date.now() - 30 * 60 * 1000).toISOString()
-                }
-              ];
+              const response = await fetch('/api/contact?action=list');
               
-              this.contacts = demoContacts.sort((a, b) => 
-                new Date(b.created_at) - new Date(a.created_at)
-              );
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
               
-              console.log('✅ Contacts loaded v24.7:', this.contacts.length, 'contacts');
+              const data = await response.json();
+              
+              if (data.contacts) {
+                // Supabase Status mapping zu Admin Status
+                this.contacts = data.contacts.map(contact => ({
+                  ...contact,
+                  // Supabase verwendet andere Status-Namen
+                  status: this.mapSupabaseStatus(contact.status),
+                  // Lead-Flag aus leadForm ableiten (falls nicht vorhanden, false)
+                  leadForm: contact.leadForm || false
+                })).sort((a, b) => 
+                  new Date(b.created_at) - new Date(a.created_at)
+                );
+                
+                console.log('✅ Contacts loaded from Supabase v24.8:', this.contacts.length, 'contacts');
+              } else {
+                throw new Error('Ungültige API-Response');
+              }
               
             } catch (error) {
-              console.error('❌ Error loading contacts v24.7:', error);
-              this.contactsError = 'Fehler beim Laden der Kontakte';
+              console.error('❌ Error loading contacts from Supabase v24.8:', error);
+              this.contactsError = `Fehler beim Laden der Kontakte: ${error.message}`;
+              this.contacts = [];
             }
             
             this.contactsLoading = false;
           },
           
-          // ===== CONTACT MANAGEMENT =====
-          async updateContactStatus(contactId, newStatus) {
-            console.log('🔄 Updating status v24.7:', { contactId, newStatus });
+          async loadStats() {
+            console.log('📊 Loading stats from Supabase API v24.8');
             
-            const contact = this.contacts.find(c => c.id === contactId);
-            if (contact) {
-              contact.status = newStatus;
-              contact.updated_at = new Date().toISOString();
-              console.log('✅ Status updated v24.7');
+            try {
+              const response = await fetch('/api/contact?action=stats');
+              
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
+              
+              const data = await response.json();
+              
+              if (data.stats) {
+                // Supabase Stats mapping zu Admin Stats
+                this.stats = {
+                  total: data.stats.total || 0,
+                  new: data.stats.new || 0,
+                  contacted: data.stats.contacted || 0,
+                  converted: data.stats.converted || 0,
+                  archived: data.stats.archived || 0
+                };
+                
+                console.log('✅ Stats loaded from Supabase v24.8:', this.stats);
+              }
+              
+            } catch (error) {
+              console.error('❌ Error loading stats from Supabase v24.8:', error);
+              // Stats-Fehler nicht kritisch, weiter mit lokaler Berechnung
+              this.calculateLocalStats();
+            }
+          },
+          
+          // ===== CONTACT MANAGEMENT (SUPABASE API) =====
+          async updateContactStatus(contactId, newStatus) {
+            console.log('🔄 Updating status via Supabase API v24.8:', { contactId, newStatus });
+            
+            try {
+              // Admin Status zu Supabase Status mapping
+              const supabaseStatus = this.mapAdminStatus(newStatus);
+              
+              const response = await fetch(`/api/contact?id=${contactId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  status: supabaseStatus
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
+              
+              const data = await response.json();
+              
+              if (data.success) {
+                // Lokalen Kontakt aktualisieren
+                const contact = this.contacts.find(c => c.id === contactId);
+                if (contact) {
+                  contact.status = newStatus;
+                  contact.updated_at = new Date().toISOString();
+                }
+                
+                // Stats neu laden
+                await this.loadStats();
+                
+                console.log('✅ Status updated via Supabase API v24.8');
+              } else {
+                throw new Error(data.error || 'Update failed');
+              }
+              
+            } catch (error) {
+              console.error('❌ Error updating status via Supabase API v24.8:', error);
+              alert(`Fehler beim Aktualisieren des Status: ${error.message}`);
             }
           },
           
           async updateContactLeadStatus(contactId, newLeadStatus) {
-            console.log('🎯 Updating lead status v24.7:', { contactId, newLeadStatus });
+            console.log('🎯 Updating lead status via Supabase API v24.8:', { contactId, newLeadStatus });
             
-            const contact = this.contacts.find(c => c.id === contactId);
-            if (contact) {
-              contact.leadForm = newLeadStatus;
-              contact.updated_at = new Date().toISOString();
-              console.log('✅ Lead status updated v24.7');
+            try {
+              const response = await fetch(`/api/contact?id=${contactId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  leadForm: newLeadStatus
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
+              
+              const data = await response.json();
+              
+              if (data.success) {
+                // Lokalen Kontakt aktualisieren
+                const contact = this.contacts.find(c => c.id === contactId);
+                if (contact) {
+                  contact.leadForm = newLeadStatus;
+                  contact.updated_at = new Date().toISOString();
+                }
+                
+                console.log('✅ Lead status updated via Supabase API v24.8');
+              } else {
+                throw new Error(data.error || 'Update failed');
+              }
+              
+            } catch (error) {
+              console.error('❌ Error updating lead status via Supabase API v24.8:', error);
+              alert(`Fehler beim Aktualisieren des Lead-Status: ${error.message}`);
             }
           },
           
           async saveContactNotes(contactId, notes) {
-            console.log('📝 Saving notes v24.7:', { contactId, notesLength: notes.length });
+            console.log('📝 Saving notes via Supabase API v24.8:', { contactId, notesLength: notes.length });
             
-            const contact = this.contacts.find(c => c.id === contactId);
-            if (contact) {
-              contact.notes = notes;
-              contact.updated_at = new Date().toISOString();
-              console.log('✅ Notes saved v24.7');
+            try {
+              const response = await fetch(`/api/contact?id=${contactId}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                  notes: notes
+                })
+              });
+              
+              if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+              }
+              
+              const data = await response.json();
+              
+              if (data.success) {
+                // Lokalen Kontakt aktualisieren
+                const contact = this.contacts.find(c => c.id === contactId);
+                if (contact) {
+                  contact.notes = notes;
+                  contact.updated_at = new Date().toISOString();
+                }
+                
+                console.log('✅ Notes saved via Supabase API v24.8');
+              } else {
+                throw new Error(data.error || 'Save failed');
+              }
+              
+            } catch (error) {
+              console.error('❌ Error saving notes via Supabase API v24.8:', error);
+              alert(`Fehler beim Speichern der Notizen: ${error.message}`);
             }
           },
           
-          // ===== HELPER FUNCTIONS =====
+          // ===== STATUS MAPPING FUNCTIONS =====
+          mapSupabaseStatus(supabaseStatus) {
+            // Supabase Status → Admin Status
+            switch(supabaseStatus) {
+              case 'new': return 'neu';
+              case 'contacted': return 'offen';
+              case 'converted': return 'abgeschlossen';
+              case 'archived': return 'abgeschlossen';
+              default: return 'neu';
+            }
+          },
+          
+          mapAdminStatus(adminStatus) {
+            // Admin Status → Supabase Status
+            switch(adminStatus) {
+              case 'neu': return 'new';
+              case 'offen': return 'contacted';
+              case 'abgeschlossen': return 'converted';
+              default: return 'new';
+            }
+          },
+          
+          // ===== HELPER FUNCTIONS (UNVERÄNDERT) =====
           getStatusClass(status) {
             switch(status) {
               case 'neu': return 'admin-badge admin-badge-neu';
@@ -225,6 +346,17 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
             return this.contacts.filter(contact => contact.status === status).length;
           },
           
+          calculateLocalStats() {
+            // Fallback: Stats aus lokalen Kontakten berechnen
+            this.stats = {
+              total: this.contacts.length,
+              new: this.getStatusCount('neu'),
+              contacted: this.getStatusCount('offen'),
+              converted: this.getStatusCount('abgeschlossen'),
+              archived: 0
+            };
+          },
+          
           formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('de-DE');
@@ -251,10 +383,10 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
             }
           }
         }" x-init="
-          console.log('🚀 Admin Dashboard v24.7 initialized - Clean Code');
+          console.log('🚀 Admin Dashboard v24.8 initialized - Supabase API Integration');
         ">
 
-          <!-- ===== LOGIN FORM ===== -->
+          <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
           <div x-show="showLoginForm" class="max-w-lg mx-auto">
             <div class="admin-card">
               <div class="admin-card-body">
@@ -262,7 +394,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                   <div class="admin-icon">🔐</div>
                   <h1 class="admin-title">Admin Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten
+                    Kontaktanfragen verwalten - Supabase Integration
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
@@ -330,12 +462,12 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
               <div>
                 <h1 class="admin-title">📧 Admin Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-300 mb-1">
-                  Lead-Funktionalität aktiv
+                  Supabase API Integration aktiv
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
               </div>
               <div class="flex gap-3">
-                <button @click="loadContacts()" class="admin-btn admin-btn-secondary">
+                <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-secondary">
                   🔄 Neu laden
                 </button>
                 <button @click="logout()" class="admin-btn admin-btn-secondary">
@@ -347,23 +479,26 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
             <!-- Loading State -->
             <div x-show="contactsLoading" class="text-center py-8">
               <div class="admin-spinner mx-auto mb-4" style="width: 2rem; height: 2rem;"></div>
-              <p class="text-gray-600 dark:text-gray-300">Lade Kontakte...</p>
+              <p class="text-gray-600 dark:text-gray-300">Lade Kontakte von Supabase...</p>
             </div>
 
             <!-- Error State -->
             <div x-show="contactsError" class="admin-alert admin-alert-error mb-6">
               <span x-text="contactsError"></span>
+              <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-secondary mt-2">
+                🔄 Erneut versuchen
+              </button>
             </div>
 
             <!-- Dashboard Content -->
             <div x-show="!contactsLoading">
               
-              <!-- Statistics Cards -->
+              <!-- Statistics Cards (Supabase Data) -->
               <div class="admin-stats-grid mb-8">
                 <div class="admin-stat-card">
                   <div class="admin-stat-icon">🔴</div>
                   <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="getStatusCount('neu')"></div>
+                    <div class="admin-stat-value" x-text="stats.new"></div>
                     <div class="admin-stat-label">Neue Anfragen</div>
                   </div>
                 </div>
@@ -371,7 +506,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                 <div class="admin-stat-card">
                   <div class="admin-stat-icon">🟡</div>
                   <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="getStatusCount('offen')"></div>
+                    <div class="admin-stat-value" x-text="stats.contacted"></div>
                     <div class="admin-stat-label">In Bearbeitung</div>
                   </div>
                 </div>
@@ -379,7 +514,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                 <div class="admin-stat-card">
                   <div class="admin-stat-icon">✅</div>
                   <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="getStatusCount('abgeschlossen')"></div>
+                    <div class="admin-stat-value" x-text="stats.converted"></div>
                     <div class="admin-stat-label">Abgeschlossen</div>
                   </div>
                 </div>
@@ -387,7 +522,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                 <div class="admin-stat-card">
                   <div class="admin-stat-icon">📊</div>
                   <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="contacts.length"></div>
+                    <div class="admin-stat-value" x-text="stats.total"></div>
                     <div class="admin-stat-label">Gesamt</div>
                   </div>
                 </div>
@@ -486,7 +621,7 @@ console.log('📊 Admin Dashboard v24.7 loaded - Lead-Funktionalität komplett')
                     <span x-show="filterStatus === 'alle'">Keine Kontaktanfragen gefunden.</span>
                     <span x-show="filterStatus !== 'alle'">Keine Kontakte mit Status "<span x-text="filterStatus"></span>" gefunden.</span>
                   </p>
-                  <button @click="loadContacts()" class="admin-btn admin-btn-primary mt-4">
+                  <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-primary mt-4">
                     🔄 Neu laden
                   </button>
                 </div>
