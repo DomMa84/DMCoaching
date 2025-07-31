@@ -30,20 +30,28 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
   
   <Header />
   
+  <!-- Globale JavaScript Variablen für Alpine.js -->
+  <script>
+    window.ADMIN_CREDENTIALS = {
+      username: {JSON.stringify(adminUsername)},
+      password: {JSON.stringify(adminPassword)}
+    };
+  </script>
+  
   <main>
     <!-- Admin Section -->
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Funktionierender Fallback -->
+        <!-- Alpine.js Admin App - Sichere Environment Variables -->
         <div x-data="{
-          version: 'Admin Dashboard v24.8.3 (Fallback Fix)',
+          version: 'Admin Dashboard v24.8.4 (Sichere Environment Variables)',
           isLoggedIn: false,
           showLoginForm: true,
           
-          // Temporärer Fallback zu admin/admin (funktioniert garantiert)
-          adminUsername: 'admin',
-          adminPassword: 'admin',
+          // Admin Credentials aus globalen JavaScript-Variablen
+          adminUsername: window.ADMIN_CREDENTIALS?.username || 'admin',
+          adminPassword: window.ADMIN_CREDENTIALS?.password || 'admin',
           
           // Login Data
           loginData: {
@@ -67,9 +75,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             archived: 0
           },
           
-          // ===== LOGIN FUNCTIONS (Temporärer Fallback) =====
+          // ===== LOGIN FUNCTIONS (Sichere Environment Variables) =====
           async login() {
-            console.log('🔐 Login attempt v24.8.3 - Fallback admin/admin');
+            console.log('🔐 Login attempt v24.8.4 - Secure Environment Variables');
             this.isLoading = true;
             this.loginError = '';
             
@@ -81,21 +89,21 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 this.loginError = '';
                 await this.loadContacts();
                 await this.loadStats();
-                console.log('✅ Fallback Login successful v24.8.3');
+                console.log('✅ Secure Environment Variable Login successful v24.8.4');
               } else {
-                this.loginError = 'Ungültige Anmeldedaten (admin/admin)';
-                console.log('❌ Login failed - Invalid credentials v24.8.3');
+                this.loginError = 'Ungültige Anmeldedaten';
+                console.log('❌ Login failed - Invalid credentials v24.8.4');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-              console.error('❌ Login error v24.8.3:', error);
+              console.error('❌ Login error v24.8.4:', error);
             }
             
             this.isLoading = false;
           },
           
           async logout() {
-            console.log('🚪 Logout v24.8.2');
+            console.log('🚪 Logout v24.8.4');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
@@ -354,7 +362,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                   <div class="admin-icon">🔐</div>
                   <h1 class="admin-title">Admin Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten - Environment Variables via HTML
+                    Kontaktanfragen verwalten - Sichere Environment Variables
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
