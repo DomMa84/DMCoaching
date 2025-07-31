@@ -1,9 +1,9 @@
 ---
-// src/components/ContactForm.astro v18.10.3 - API Endpoint & Service-Mapping Fix
-// CHANGELOG v18.10.3:
-// - ✅ FIX: API Endpoint korrigiert (war /api/contact1, jetzt /api/contact)
-// - ✅ FIX: Service-Mapping erweitert (/kontakt hinzugefügt)
-// - ✅ FIX: Alle Service-Seiten sollten jetzt erkannt werden
+// src/components/ContactForm.astro v18.10.4 - Korrekte URL-Struktur Fix
+// CHANGELOG v18.10.4:
+// - ✅ FIX: Korrekte URL-Struktur mit /leistung/ Prefix erkannt
+// - ✅ FIX: Alle Service-Seiten sollten jetzt richtig gemappt werden
+// - ✅ KEEP: Fallback für alte URLs beibehalten
 
 interface Props {
   leadForm?: boolean;
@@ -22,7 +22,7 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`📧 ContactForm v18.10.3 rendered - API & Service-Mapping Fix - ${variant} variant, leadForm: ${leadForm}`);
+console.log(`📧 ContactForm v18.10.4 rendered - Korrekte URL-Struktur Fix - ${variant} variant, leadForm: ${leadForm}`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
@@ -61,12 +61,21 @@ console.log(`📧 ContactForm v18.10.3 rendered - API & Service-Mapping Fix - ${
             
             console.log('🔍 Current pathname for source tracking:', path);
             
-            // Service-Seiten Mapping (ERWEITERT v18.10.3)
+            // Service-Seiten Mapping (KORREKTE URLs v18.10.4)
             const servicePages = {
+                // Korrekte URLs mit /leistung/ Prefix
+                '/leistung/strategische-unternehmensentwicklung': 'Strategische Unternehmensentwicklung',
+                '/leistung/vertriebsoptimierung': 'Vertriebsoptimierung', 
+                '/leistung/marketing-strategien': 'Marketing Strategien',
+                '/leistung/wertanalyse': 'Wertanalyse',
+                
+                // Fallback für alte URLs (falls noch verwendet)
                 '/strategische-unternehmensentwicklung': 'Strategische Unternehmensentwicklung',
                 '/vertriebsoptimierung': 'Vertriebsoptimierung', 
                 '/marketing-strategien': 'Marketing Strategien',
                 '/wertanalyse': 'Wertanalyse',
+                
+                // Andere Seiten
                 '/kontakt': 'Kontakt-Seite',
                 '/': 'Homepage',
                 '/ueber-mich': 'Über Mich'
