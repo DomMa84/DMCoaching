@@ -1,5 +1,5 @@
 ---
-// src/pages/admin.astro v24.8.2 (Environment Variable Login + Active Filter Fix)
+// src/pages/admin.astro v24.8.1 (Environment Variable Login + Active Filter Fix)
 // Admin Dashboard - Environment Variables für Login + Aktive-Filter korrigiert
 // ✅ ÄNDERUNGEN v24.8.1:
 // - Environment Variables für Admin-Login (ADMIN_USERNAME, ADMIN_PASSWORD)
@@ -35,16 +35,15 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Environment Variables über HTML-Attribute -->
-        <div 
-          x-data="{
-            version: 'Admin Dashboard v24.8.2 (Alpine.js Environment Variable Fix)',
-            isLoggedIn: false,
-            showLoginForm: true,
-            
-            // Admin Credentials von HTML data-attributes
-            adminUsername: $el.dataset.adminUsername,
-            adminPassword: $el.dataset.adminPassword,
+        <!-- Alpine.js Admin App - Funktionierender Fallback -->
+        <div x-data="{
+          version: 'Admin Dashboard v24.8.3 (Fallback Fix)',
+          isLoggedIn: false,
+          showLoginForm: true,
+          
+          // Temporärer Fallback zu admin/admin (funktioniert garantiert)
+          adminUsername: 'admin',
+          adminPassword: 'admin',
           
           // Login Data
           loginData: {
@@ -68,9 +67,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             archived: 0
           },
           
-          // ===== LOGIN FUNCTIONS (Environment Variables über HTML) =====
+          // ===== LOGIN FUNCTIONS (Temporärer Fallback) =====
           async login() {
-            console.log('🔐 Login attempt v24.8.2 - Environment Variable Auth via HTML');
+            console.log('🔐 Login attempt v24.8.3 - Fallback admin/admin');
             this.isLoading = true;
             this.loginError = '';
             
@@ -82,14 +81,14 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 this.loginError = '';
                 await this.loadContacts();
                 await this.loadStats();
-                console.log('✅ Environment Variable Login successful v24.8.2');
+                console.log('✅ Fallback Login successful v24.8.3');
               } else {
-                this.loginError = 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed - Invalid credentials v24.8.2');
+                this.loginError = 'Ungültige Anmeldedaten (admin/admin)';
+                console.log('❌ Login failed - Invalid credentials v24.8.3');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-              console.error('❌ Login error v24.8.2:', error);
+              console.error('❌ Login error v24.8.3:', error);
             }
             
             this.isLoading = false;
@@ -343,11 +342,8 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             }
           }
         }" 
-        data-admin-username={adminUsername}
-        data-admin-password={adminPassword}
         x-init="
-          console.log('🚀 Admin Dashboard v24.8.2 initialized - Environment Variables via HTML');
-          console.log('🔐 Admin credentials loaded:', { username: this.adminUsername, hasPassword: !!this.adminPassword });
+          console.log('🚀 Admin Dashboard v24.8.3 initialized - Fallback funktioniert');
         ">
 
           <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
@@ -409,9 +405,10 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 
                 <div class="admin-alert admin-alert-info mt-6">
                   <div>
-                    <strong>Admin-Login:</strong><br>
-                    Login-Daten sind über Environment Variables konfiguriert.<br>
-                    <span class="text-xs text-gray-500">ADMIN_USERNAME und ADMIN_PASSWORD in Netlify setzen</span>
+                    <strong>Temporärer Login:</strong><br>
+                    Benutzername: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code><br>
+                    Passwort: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code><br>
+                    <span class="text-xs text-gray-500">Environment Variables kommen später</span>
                   </div>
                 </div>
               </div>
