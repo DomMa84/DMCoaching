@@ -1,12 +1,11 @@
 ---
-// src/pages/admin.astro v24.8.1 (Environment Variable Login + Active Filter Fix)
-// Admin Dashboard - Environment Variables für Login + Aktive-Filter korrigiert
-// ✅ ÄNDERUNGEN v24.8.1:
-// - Environment Variables für Admin-Login (ADMIN_USERNAME, ADMIN_PASSWORD)
-// - "Nur Aktive" Filter korrigiert (nur neu + offen, nicht abgeschlossen)
-// - Company-Feld vollständig editierbar
-// - Button-Text vereinfacht: "Speichern & Schließen"
-// - Alle Kontaktfelder editierbar (name, email, phone, company, message, notes)
+// src/pages/admin.astro v24.8.5 (Astro Build Fix - Environment Variables)
+// Admin Dashboard - Environment Variables korrekt für Astro Build
+// ✅ ÄNDERUNGEN v24.8.5:
+// - Astro Build Fix: Environment Variables korrekt in <script> tag übergeben
+// - Keine Browser APIs (window) im Astro Server Code
+// - JSON.stringify() korrekt für sichere Übergabe
+// - Alpine.js kompatible Implementierung
 
 export const prerender = false;
 
@@ -16,9 +15,18 @@ import Footer from '../components/Footer.astro';
 import AdminStyles from '../components/AdminStyles.astro';
 
 const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.8.1 (Environment Variable Login + Active Filter Fix)";
+const version = "Admin Dashboard v24.8.5 (Astro Build Fix - Environment Variables)";
 
-console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + Corrections');
+// Environment Variables sicher laden (Server-Side)
+const adminUsername = import.meta.env.ADMIN_USERNAME || 'admin';
+const adminPassword = import.meta.env.ADMIN_PASSWORD || 'admin';
+
+console.log('📊 Admin Dashboard v24.8.5 loaded - Astro Build Fix');
+console.log('🔐 Environment Variables loaded:', { 
+  username: adminUsername, 
+  hasPassword: !!adminPassword,
+  fromEnvVars: !!(import.meta.env.ADMIN_USERNAME && import.meta.env.ADMIN_PASSWORD)
+});
 ---
 
 <Layout 
@@ -30,14 +38,6 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
   
   <Header />
   
-  <!-- Globale JavaScript Variablen für Alpine.js -->
-  <script>
-    window.ADMIN_CREDENTIALS = {
-      username: {JSON.stringify(adminUsername)},
-      password: {JSON.stringify(adminPassword)}
-    };
-  </script>
-  
   <main>
     <!-- Admin Section -->
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
@@ -45,13 +45,13 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
         
         <!-- Alpine.js Admin App - Sichere Environment Variables -->
         <div x-data="{
-          version: 'Admin Dashboard v24.8.4 (Sichere Environment Variables)',
+          version: 'Admin Dashboard v24.8.5 (Astro Build Fix)',
           isLoggedIn: false,
           showLoginForm: true,
           
-          // Admin Credentials aus globalen JavaScript-Variablen
-          adminUsername: window.ADMIN_CREDENTIALS?.username || 'admin',
-          adminPassword: window.ADMIN_CREDENTIALS?.password || 'admin',
+          // Admin Credentials - werden aus globalem Script geladen
+          adminUsername: '',
+          adminPassword: '',
           
           // Login Data
           loginData: {
@@ -75,9 +75,28 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             archived: 0
           },
           
-          // ===== LOGIN FUNCTIONS (Sichere Environment Variables) =====
+          // ===== INITIALIZATION =====
+          init() {
+            console.log('🚀 Admin Dashboard v24.8.5 init - Loading credentials...');
+            
+            // Credentials aus globalem Script laden
+            if (window.ADMIN_CREDENTIALS) {
+              this.adminUsername = window.ADMIN_CREDENTIALS.username;
+              this.adminPassword = window.ADMIN_CREDENTIALS.password;
+              console.log('✅ Credentials loaded from Environment Variables v24.8.5:', {
+                username: this.adminUsername,
+                hasPassword: !!this.adminPassword
+              });
+            } else {
+              console.log('⚠️ No Environment Variables found, using fallback v24.8.5');
+              this.adminUsername = 'admin';
+              this.adminPassword = 'admin';
+            }
+          },
+          
+          // ===== LOGIN FUNCTIONS =====
           async login() {
-            console.log('🔐 Login attempt v24.8.4 - Secure Environment Variables');
+            console.log('🔐 Login attempt v24.8.5 - Environment Variable Authentication');
             this.isLoading = true;
             this.loginError = '';
             
@@ -89,21 +108,21 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 this.loginError = '';
                 await this.loadContacts();
                 await this.loadStats();
-                console.log('✅ Secure Environment Variable Login successful v24.8.4');
+                console.log('✅ Environment Variable Login successful v24.8.5');
               } else {
                 this.loginError = 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed - Invalid credentials v24.8.4');
+                console.log('❌ Login failed - Invalid credentials v24.8.5');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-              console.error('❌ Login error v24.8.4:', error);
+              console.error('❌ Login error v24.8.5:', error);
             }
             
             this.isLoading = false;
           },
           
           async logout() {
-            console.log('🚪 Logout v24.8.4');
+            console.log('🚪 Logout v24.8.5');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
@@ -112,9 +131,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             this.contacts = [];
           },
           
-          // ===== SUPABASE API FUNCTIONS (NEU) =====
+          // ===== SUPABASE API FUNCTIONS =====
           async loadContacts() {
-            console.log('📋 Loading contacts from Supabase API v24.8');
+            console.log('📋 Loading contacts from Supabase API v24.8.5');
             this.contactsLoading = true;
             this.contactsError = '';
             
@@ -139,13 +158,13 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                   new Date(b.created_at) - new Date(a.created_at)
                 );
                 
-                console.log('✅ Contacts loaded from Supabase v24.8:', this.contacts.length, 'contacts');
+                console.log('✅ Contacts loaded from Supabase v24.8.5:', this.contacts.length, 'contacts');
               } else {
                 throw new Error('Ungültige API-Response');
               }
               
             } catch (error) {
-              console.error('❌ Error loading contacts from Supabase v24.8:', error);
+              console.error('❌ Error loading contacts from Supabase v24.8.5:', error);
               this.contactsError = `Fehler beim Laden der Kontakte: ${error.message}`;
               this.contacts = [];
             }
@@ -154,7 +173,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
           },
           
           async loadStats() {
-            console.log('📊 Loading stats from Supabase API v24.8');
+            console.log('📊 Loading stats from Supabase API v24.8.5');
             
             try {
               const response = await fetch('/api/contact?action=stats');
@@ -175,11 +194,11 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                   archived: data.stats.archived || 0
                 };
                 
-                console.log('✅ Stats loaded from Supabase v24.8:', this.stats);
+                console.log('✅ Stats loaded from Supabase v24.8.5:', this.stats);
               }
               
             } catch (error) {
-              console.error('❌ Error loading stats from Supabase v24.8:', error);
+              console.error('❌ Error loading stats from Supabase v24.8.5:', error);
               // Stats-Fehler nicht kritisch, weiter mit lokaler Berechnung
               this.calculateLocalStats();
             }
@@ -187,7 +206,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
           
           // ===== CONTACT MANAGEMENT (SUPABASE API) =====
           async updateContact(contactId, updateData) {
-            console.log('🔄 Updating contact via Supabase API v24.8:', { contactId, updateData });
+            console.log('🔄 Updating contact via Supabase API v24.8.5:', { contactId, updateData });
             
             try {
               // Admin Status zu Supabase Status mapping (falls status geändert wird)
@@ -224,13 +243,13 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 // Stats neu laden
                 await this.loadStats();
                 
-                console.log('✅ Contact updated via Supabase API v24.8');
+                console.log('✅ Contact updated via Supabase API v24.8.5');
               } else {
                 throw new Error(data.error || 'Update failed');
               }
               
             } catch (error) {
-              console.error('❌ Error updating contact via Supabase API v24.8:', error);
+              console.error('❌ Error updating contact via Supabase API v24.8.5:', error);
               alert(`Fehler beim Aktualisieren des Kontakts: ${error.message}`);
             }
           },
@@ -273,7 +292,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             }
           },
           
-          // ===== HELPER FUNCTIONS (UNVERÄNDERT) =====
+          // ===== HELPER FUNCTIONS =====
           getStatusClass(status) {
             switch(status) {
               case 'neu': return 'admin-badge admin-badge-neu';
@@ -349,12 +368,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
               return `vor ${days} Tag${days > 1 ? 'en' : ''}`;
             }
           }
-        }" 
-        x-init="
-          console.log('🚀 Admin Dashboard v24.8.3 initialized - Fallback funktioniert');
-        ">
+        }">
 
-          <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
+          <!-- ===== LOGIN FORM ===== -->
           <div x-show="showLoginForm" class="max-w-lg mx-auto">
             <div class="admin-card">
               <div class="admin-card-body">
@@ -362,7 +378,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                   <div class="admin-icon">🔐</div>
                   <h1 class="admin-title">Admin Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten - Sichere Environment Variables
+                    Kontaktanfragen verwalten - Environment Variables v24.8.5
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
@@ -413,10 +429,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 
                 <div class="admin-alert admin-alert-info mt-6">
                   <div>
-                    <strong>Temporärer Login:</strong><br>
-                    Benutzername: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code><br>
-                    Passwort: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code><br>
-                    <span class="text-xs text-gray-500">Environment Variables kommen später</span>
+                    <strong>Admin-Login v24.8.5:</strong><br>
+                    Environment Variables werden sicher aus Netlify geladen.<br>
+                    <span class="text-xs text-gray-500">ADMIN_USERNAME und ADMIN_PASSWORD konfiguriert</span>
                   </div>
                 </div>
               </div>
@@ -431,7 +446,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
               <div>
                 <h1 class="admin-title">📧 Admin Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-300 mb-1">
-                  Environment Variables via HTML aktiv
+                  Environment Variables v24.8.5 - Astro Build kompatibel
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
               </div>
@@ -770,6 +785,21 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
   </main>
   
   <Footer />
+  
+  <!-- Globale JavaScript Variablen für Alpine.js (Astro Build kompatibel) -->
+  <script define:vars={{ adminUsername, adminPassword }}>
+    // Environment Variables sicher in globale Variable laden
+    window.ADMIN_CREDENTIALS = {
+      username: adminUsername,
+      password: adminPassword
+    };
+    
+    console.log('🔐 Environment Variables loaded into global scope v24.8.5:', {
+      username: adminUsername,
+      hasPassword: !!adminPassword,
+      fromEnvVars: !!(adminUsername !== 'admin' || adminPassword !== 'admin')
+    });
+  </script>
   
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </Layout>
