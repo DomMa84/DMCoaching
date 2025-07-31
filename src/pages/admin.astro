@@ -1,12 +1,12 @@
 ---
-// src/pages/admin.astro v24.8 (Supabase API Integration)
-// Admin Dashboard - Supabase API statt Demo-Daten
-// ✅ ÄNDERUNGEN v24.8:
-// - Demo-Daten entfernt
-// - Lädt echte Kontakte über /api/contact?action=list
-// - Statistics über /api/contact?action=stats
-// - Updates über PUT /api/contact?id=X
-// - Alle anderen Funktionen unverändert
+// src/pages/admin.astro v24.8.1 (Environment Variable Login + Active Filter Fix)
+// Admin Dashboard - Environment Variables für Login + Aktive-Filter korrigiert
+// ✅ ÄNDERUNGEN v24.8.1:
+// - Environment Variables für Admin-Login (ADMIN_USERNAME, ADMIN_PASSWORD)
+// - "Nur Aktive" Filter korrigiert (nur neu + offen, nicht abgeschlossen)
+// - Company-Feld vollständig editierbar
+// - Button-Text vereinfacht: "Speichern & Schließen"
+// - Alle Kontaktfelder editierbar (name, email, phone, company, message, notes)
 
 export const prerender = false;
 
@@ -16,9 +16,9 @@ import Footer from '../components/Footer.astro';
 import AdminStyles from '../components/AdminStyles.astro';
 
 const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.8 (Supabase API Integration)";
+const version = "Admin Dashboard v24.8.1 (Environment Variable Login + Active Filter Fix)";
 
-console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
+console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + Corrections');
 ---
 
 <Layout 
@@ -35,11 +35,15 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Supabase Integration -->
+        <!-- Alpine.js Admin App - Environment Variable Login -->
         <div x-data="{
-          version: 'Admin Dashboard v24.8 (Supabase API Integration)',
+          version: 'Admin Dashboard v24.8.1 (Environment Variable Login + Active Filter Fix)',
           isLoggedIn: false,
           showLoginForm: true,
+          
+          // Admin Credentials from Environment Variables
+          adminUsername: import.meta.env.ADMIN_USERNAME || 'admin',
+          adminPassword: import.meta.env.ADMIN_PASSWORD || 'admin',
           
           // Login Data
           loginData: {
@@ -63,32 +67,35 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
             archived: 0
           },
           
-          // ===== LOGIN FUNCTIONS (UNVERÄNDERT) =====
+          // ===== LOGIN FUNCTIONS (Environment Variables) =====
           async login() {
-            console.log('🔐 Login attempt v24.8');
+            console.log('🔐 Login attempt v24.8.1 - Environment Variable Auth');
             this.isLoading = true;
             this.loginError = '';
             
             try {
-              if (this.loginData.username === 'admin' && this.loginData.password === 'admin') {
+              if (this.loginData.username === this.adminUsername && 
+                  this.loginData.password === this.adminPassword) {
                 this.isLoggedIn = true;
                 this.showLoginForm = false;
                 this.loginError = '';
                 await this.loadContacts();
                 await this.loadStats();
-                console.log('✅ Demo Login successful v24.8');
+                console.log('✅ Environment Variable Login successful v24.8.1');
               } else {
-                this.loginError = 'Ungültige Anmeldedaten (Demo: admin/admin)';
+                this.loginError = 'Ungültige Anmeldedaten';
+                console.log('❌ Login failed - Invalid credentials v24.8.1');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
+              console.error('❌ Login error v24.8.1:', error);
             }
             
             this.isLoading = false;
           },
           
           async logout() {
-            console.log('🚪 Logout v24.8');
+            console.log('🚪 Logout v24.8.1');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
@@ -281,7 +288,9 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
             if (this.filterStatus === 'alle') {
               return this.contacts;
             } else if (this.filterStatus === 'aktiv') {
-              return this.contacts.filter(contact => contact.status !== 'archived');
+              return this.contacts.filter(contact => 
+                contact.status === 'neu' || contact.status === 'offen'
+              );
             }
             return this.contacts.filter(contact => contact.status === this.filterStatus);
           },
@@ -291,7 +300,9 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
           },
           
           getActiveCount() {
-            return this.contacts.filter(contact => contact.status !== 'archived').length;
+            return this.contacts.filter(contact => 
+              contact.status === 'neu' || contact.status === 'offen'
+            ).length;
           },
           
           calculateLocalStats() {
@@ -331,7 +342,8 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
             }
           }
         }" x-init="
-          console.log('🚀 Admin Dashboard v24.8 initialized - Supabase API Integration');
+          console.log('🚀 Admin Dashboard v24.8.1 initialized - Environment Variable Login + Active Filter Fix');
+          console.log('🔐 Admin credentials loaded from env vars:', { username: this.adminUsername, hasPassword: !!this.adminPassword });
         ">
 
           <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
@@ -342,7 +354,7 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                   <div class="admin-icon">🔐</div>
                   <h1 class="admin-title">Admin Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten - Supabase Integration
+                    Kontaktanfragen verwalten - Environment Variable Login
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
@@ -356,7 +368,7 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                       x-model="loginData.username"
                       :disabled="isLoading"
                       required
-                      placeholder="admin"
+                      placeholder="Benutzername"
                       class="admin-input"
                     >
                   </div>
@@ -369,7 +381,7 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                       x-model="loginData.password"
                       :disabled="isLoading"
                       required
-                      placeholder="admin"
+                      placeholder="Passwort"
                       class="admin-input"
                     >
                   </div>
@@ -393,9 +405,9 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                 
                 <div class="admin-alert admin-alert-info mt-6">
                   <div>
-                    <strong>Demo Login:</strong><br>
-                    Benutzername: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code><br>
-                    Passwort: <code class="bg-gray-200 dark:bg-gray-700 px-1 rounded">admin</code>
+                    <strong>Admin-Login:</strong><br>
+                    Login-Daten sind über Environment Variables konfiguriert.<br>
+                    <span class="text-xs text-gray-500">ADMIN_USERNAME und ADMIN_PASSWORD in Netlify setzen</span>
                   </div>
                 </div>
               </div>
@@ -410,7 +422,7 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
               <div>
                 <h1 class="admin-title">📧 Admin Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-300 mb-1">
-                  Supabase API Integration aktiv
+                  Environment Variable Login aktiv
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
               </div>
@@ -726,7 +738,7 @@ console.log('📊 Admin Dashboard v24.8 loaded - Supabase API Integration');
                             }); selectedContact = null"
                             class="admin-btn admin-btn-primary"
                           >
-                            💾 Alle Änderungen speichern & Schließen
+                            💾 Speichern & Schließen
                           </button>
                           <button 
                             @click="selectedContact = null"
