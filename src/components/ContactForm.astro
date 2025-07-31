@@ -1,9 +1,9 @@
 ---
-// src/components/ContactForm.astro v18.10.1 - Service-Mapping Fix
-// CHANGELOG v18.10.1:
-// - ✅ FIX: Service-Seiten Mapping korrigiert (/wertanalyse wird erkannt)
-// - ✅ FIX: Debug-Logging für bessere Transparenz
-// - ✅ FIX: Fallback zeigt jetzt auch den Pfad für Debugging
+// src/components/ContactForm.astro v18.10.2 - Astro Build Fix
+// CHANGELOG v18.10.2:
+// - ✅ FIX: Template Literal Problem behoben (Build-Fehler)
+// - ✅ FIX: String Concatenation statt Template Literals
+// - ✅ KEEP: Service-Mapping funktional
 
 interface Props {
   leadForm?: boolean;
@@ -22,7 +22,7 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`📧 ContactForm v18.10.1 rendered - Service-Mapping Fix - ${variant} variant, leadForm: ${leadForm}`);
+console.log(`📧 ContactForm v18.10.2 rendered - Astro Build Fix - ${variant} variant, leadForm: ${leadForm}`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
@@ -54,7 +54,7 @@ console.log(`📧 ContactForm v18.10.1 rendered - Service-Mapping Fix - ${varian
             gdprConsent: true
         },
 
-        // ===== NEW v18.10.1: ENHANCED STATISTICS FUNCTIONS (CORRECTED) =====
+        // ===== NEW v18.10.1: ENHANCED STATISTICS FUNCTIONS (BUILD-FIX) =====
         getSourcePage() {
             // Service-Seiten ermitteln
             const path = window.location.pathname;
@@ -71,7 +71,7 @@ console.log(`📧 ContactForm v18.10.1 rendered - Service-Mapping Fix - ${varian
                 '/ueber-mich': 'Über Mich'
             };
             
-            const detectedService = servicePages[path] || `Andere Seite (${path})`;
+            const detectedService = servicePages[path] || ('Andere Seite (' + path + ')');
             console.log('📊 Detected service page:', detectedService);
             
             return detectedService;
