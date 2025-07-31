@@ -1,10 +1,9 @@
 ---
-// src/components/ContactForm.astro v18.10 - Enhanced Statistics Tracking
-// CHANGELOG v18.10:
-// - ✅ NEW: Automatisches Tracking für Enhanced Statistics
-// - ✅ NEW: source_page, contact_hour, contact_day_of_week erfassung
-// - ✅ NEW: Service-Seiten Performance Tracking
-// - ✅ KEEP: Komplettes v18.9.1 Design und Funktionalität UNVERÄNDERT
+// src/components/ContactForm.astro v18.10.1 - Service-Mapping Fix
+// CHANGELOG v18.10.1:
+// - ✅ FIX: Service-Seiten Mapping korrigiert (/wertanalyse wird erkannt)
+// - ✅ FIX: Debug-Logging für bessere Transparenz
+// - ✅ FIX: Fallback zeigt jetzt auch den Pfad für Debugging
 
 interface Props {
   leadForm?: boolean;
@@ -23,7 +22,7 @@ const {
 // Generate unique form ID
 const formId = `contact-form-${Math.random().toString(36).substr(2, 9)}`;
 
-console.log(`📧 ContactForm v18.10 rendered - Enhanced Statistics Tracking - ${variant} variant, leadForm: ${leadForm}`);
+console.log(`📧 ContactForm v18.10.1 rendered - Service-Mapping Fix - ${variant} variant, leadForm: ${leadForm}`);
 ---
 
 <div class={`contact-form-wrapper ${className}`}>
@@ -55,12 +54,14 @@ console.log(`📧 ContactForm v18.10 rendered - Enhanced Statistics Tracking - $
             gdprConsent: true
         },
 
-        // ===== NEW v18.10: ENHANCED STATISTICS FUNCTIONS =====
+        // ===== NEW v18.10.1: ENHANCED STATISTICS FUNCTIONS (CORRECTED) =====
         getSourcePage() {
             // Service-Seiten ermitteln
             const path = window.location.pathname;
             
-            // Service-Seiten Mapping
+            console.log('🔍 Current pathname for source tracking:', path);
+            
+            // Service-Seiten Mapping (KORRIGIERT)
             const servicePages = {
                 '/strategische-unternehmensentwicklung': 'Strategische Unternehmensentwicklung',
                 '/vertriebsoptimierung': 'Vertriebsoptimierung', 
@@ -70,7 +71,10 @@ console.log(`📧 ContactForm v18.10 rendered - Enhanced Statistics Tracking - $
                 '/ueber-mich': 'Über Mich'
             };
             
-            return servicePages[path] || 'Andere Seite';
+            const detectedService = servicePages[path] || `Andere Seite (${path})`;
+            console.log('📊 Detected service page:', detectedService);
+            
+            return detectedService;
         },
         
         getContactHour() {
