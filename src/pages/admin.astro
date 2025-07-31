@@ -35,15 +35,16 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Environment Variable Login -->
-        <div x-data="{
-          version: 'Admin Dashboard v24.8.1 (Environment Variable Login + Active Filter Fix)',
-          isLoggedIn: false,
-          showLoginForm: true,
-          
-          // Admin Credentials from Environment Variables
-          adminUsername: import.meta.env.ADMIN_USERNAME || 'admin',
-          adminPassword: import.meta.env.ADMIN_PASSWORD || 'admin',
+        <!-- Alpine.js Admin App - Environment Variables über HTML-Attribute -->
+        <div 
+          x-data="{
+            version: 'Admin Dashboard v24.8.2 (Alpine.js Environment Variable Fix)',
+            isLoggedIn: false,
+            showLoginForm: true,
+            
+            // Admin Credentials von HTML data-attributes
+            adminUsername: $el.dataset.adminUsername,
+            adminPassword: $el.dataset.adminPassword,
           
           // Login Data
           loginData: {
@@ -67,9 +68,9 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
             archived: 0
           },
           
-          // ===== LOGIN FUNCTIONS (Environment Variables) =====
+          // ===== LOGIN FUNCTIONS (Environment Variables über HTML) =====
           async login() {
-            console.log('🔐 Login attempt v24.8.1 - Environment Variable Auth');
+            console.log('🔐 Login attempt v24.8.2 - Environment Variable Auth via HTML');
             this.isLoading = true;
             this.loginError = '';
             
@@ -81,21 +82,21 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                 this.loginError = '';
                 await this.loadContacts();
                 await this.loadStats();
-                console.log('✅ Environment Variable Login successful v24.8.1');
+                console.log('✅ Environment Variable Login successful v24.8.2');
               } else {
                 this.loginError = 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed - Invalid credentials v24.8.1');
+                console.log('❌ Login failed - Invalid credentials v24.8.2');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-              console.error('❌ Login error v24.8.1:', error);
+              console.error('❌ Login error v24.8.2:', error);
             }
             
             this.isLoading = false;
           },
           
           async logout() {
-            console.log('🚪 Logout v24.8.1');
+            console.log('🚪 Logout v24.8.2');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
@@ -341,9 +342,12 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
               return `vor ${days} Tag${days > 1 ? 'en' : ''}`;
             }
           }
-        }" x-init="
-          console.log('🚀 Admin Dashboard v24.8.1 initialized - Environment Variable Login + Active Filter Fix');
-          console.log('🔐 Admin credentials loaded from env vars:', { username: this.adminUsername, hasPassword: !!this.adminPassword });
+        }" 
+        data-admin-username={adminUsername}
+        data-admin-password={adminPassword}
+        x-init="
+          console.log('🚀 Admin Dashboard v24.8.2 initialized - Environment Variables via HTML');
+          console.log('🔐 Admin credentials loaded:', { username: this.adminUsername, hasPassword: !!this.adminPassword });
         ">
 
           <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
@@ -354,7 +358,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
                   <div class="admin-icon">🔐</div>
                   <h1 class="admin-title">Admin Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten - Environment Variable Login
+                    Kontaktanfragen verwalten - Environment Variables via HTML
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
@@ -422,7 +426,7 @@ console.log('📊 Admin Dashboard v24.8.1 loaded - Environment Variable Login + 
               <div>
                 <h1 class="admin-title">📧 Admin Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-300 mb-1">
-                  Environment Variable Login aktiv
+                  Environment Variables via HTML aktiv
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
               </div>
