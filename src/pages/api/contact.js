@@ -3,14 +3,14 @@
  * 
  * DATEI PFAD: src/pages/api/contact.js
  * 
- * Contact API v18.1 - Supabase Integration (Astro Version)
+ * Contact API v18.2 - Enhanced Statistics Integration
  * 
- * CHANGELOG v18.1:
- * - Echte Supabase PostgreSQL Integration
- * - Intelligentes Fallback zu Demo Database
- * - Astro-kompatible API-Struktur
- * - Environment Variables: import.meta.env
- * - Response-Format für Astro optimiert
+ * CHANGELOG v18.2:
+ * - ✅ NEW: Enhanced Statistics Endpoints (enhanced-stats, service-breakdown, time-analysis)
+ * - ✅ NEW: Automatische Speicherung von source_page, contact_hour, contact_day_of_week
+ * - ✅ NEW: Service-Performance Tracking
+ * - ✅ NEW: Tageszeit und Wochentag Auswertungen
+ * - ✅ KEEP: Komplette v18.1 Funktionalität UNVERÄNDERT
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -29,14 +29,14 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized');
+    console.log('✅ Supabase client initialized v18.2');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
 }
 
 // ===============================
-// DEMO DATABASE (FALLBACK)
+// DEMO DATABASE (FALLBACK) - Enhanced Statistics Support
 // ===============================
 
 const demoDatabase = {
@@ -50,6 +50,14 @@ const demoDatabase = {
       message: "Interesse an strategischer Beratung für Expansion in neue Märkte.",
       status: "new",
       notes: "",
+      // ✅ NEW v18.2: Enhanced Statistics Demo Data
+      source_page: "Strategische Unternehmensentwicklung",
+      contact_hour: 10,
+      contact_day_of_week: "Donnerstag",
+      time_slot: "Vormittag (09-12)",
+      contact_date: "2025-07-25",
+      browser: "Chrome",
+      device: "Desktop",
       created_at: "2025-07-25T10:30:00Z",
       updated_at: "2025-07-25T10:30:00Z"
     },
@@ -62,6 +70,14 @@ const demoDatabase = {
       message: "Benötigen Unterstützung bei Vertriebsoptimierung. Zeitnaher Termin gewünscht.",
       status: "contacted",
       notes: "Erstgespräch am 28.07. vereinbart",
+      // ✅ NEW v18.2: Enhanced Statistics Demo Data
+      source_page: "Vertriebsoptimierung",
+      contact_hour: 14,
+      contact_day_of_week: "Mittwoch",
+      time_slot: "Nachmittag (14-17)",
+      contact_date: "2025-07-24",
+      browser: "Safari",
+      device: "Mobile",
       created_at: "2025-07-24T14:15:00Z",
       updated_at: "2025-07-26T09:20:00Z"
     },
@@ -74,6 +90,14 @@ const demoDatabase = {
       message: "Junges Unternehmen sucht erfahrenen Interim Manager für Strukturaufbau.",
       status: "converted",
       notes: "3-Monats-Projekt gestartet",
+      // ✅ NEW v18.2: Enhanced Statistics Demo Data
+      source_page: "Homepage",
+      contact_hour: 16,
+      contact_day_of_week: "Samstag",
+      time_slot: "Nachmittag (14-17)",
+      contact_date: "2025-07-20",
+      browser: "Chrome",
+      device: "Desktop",
       created_at: "2025-07-20T16:45:00Z",
       updated_at: "2025-07-23T11:10:00Z"
     }
@@ -81,7 +105,7 @@ const demoDatabase = {
 };
 
 // ===============================
-// DATABASE FUNKTIONEN
+// DATABASE FUNKTIONEN (ENHANCED)
 // ===============================
 
 async function testSupabaseConnection() {
@@ -96,7 +120,7 @@ async function testSupabaseConnection() {
 
     if (error) throw error;
     
-    console.log(`✅ Supabase connection successful. Found ${count} contacts.`);
+    console.log(`✅ Supabase connection successful v18.2. Found ${count} contacts.`);
     supabaseConnectionTested = true;
     return true;
   } catch (error) {
@@ -122,14 +146,14 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.2`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback');
+  console.log('📦 Using demo database fallback v18.2');
   return demoDatabase.contacts;
 }
 
@@ -146,21 +170,29 @@ async function createContact(contactData) {
           message: contactData.message,
           status: 'new',
           notes: '',
-          leadform: contactData.leadForm || false
+          leadform: contactData.leadForm || false,
+          // ✅ NEW v18.2: Enhanced Statistics Fields
+          source_page: contactData.source_page || null,
+          contact_hour: contactData.contact_hour || null,
+          contact_day_of_week: contactData.contact_day_of_week || null,
+          time_slot: contactData.time_slot || null,
+          contact_date: contactData.contact_date || null,
+          browser: contactData.browser || null,
+          device: contactData.device || null
         }])
         .select()
         .single();
 
       if (error) throw error;
       
-      console.log(`✅ Contact created in Supabase with ID: ${data.id}`);
+      console.log(`✅ Contact created in Supabase v18.2 with ID: ${data.id} (source: ${contactData.source_page})`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
     }
   }
   
-  console.log('📦 Creating contact in demo database');
+  console.log('📦 Creating contact in demo database v18.2');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
@@ -176,8 +208,11 @@ async function createContact(contactData) {
 async function updateContact(contactId, updateData) {
   if (supabase && await testSupabaseConnection()) {
     try {
-      // Erlaubte Felder für Updates (company hinzugefügt)
-      const allowedFields = ['status', 'notes', 'leadform', 'name', 'email', 'phone', 'company', 'message'];
+      // Erlaubte Felder für Updates (Enhanced Statistics Fields hinzugefügt)
+      const allowedFields = [
+        'status', 'notes', 'leadform', 'name', 'email', 'phone', 'company', 'message',
+        'source_page', 'contact_hour', 'contact_day_of_week', 'time_slot', 'contact_date', 'browser', 'device'
+      ];
       const updates = {};
       
       // leadForm zu leadform mapping für Supabase
@@ -208,14 +243,14 @@ async function updateContact(contactId, updateData) {
 
       if (error) throw error;
       
-      console.log(`✅ Contact ${contactId} updated in Supabase`);
+      console.log(`✅ Contact ${contactId} updated in Supabase v18.2`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase updateContact failed:', error.message);
     }
   }
   
-  console.log(`📦 Updating contact ${contactId} in demo database`);
+  console.log(`📦 Updating contact ${contactId} in demo database v18.2`);
   const contact = demoDatabase.contacts.find(c => c.id == contactId);
   if (contact) {
     Object.assign(contact, updateData);
@@ -245,20 +280,164 @@ async function getContactStats() {
         }
       });
 
-      console.log(`✅ Stats loaded from Supabase: ${stats.total} total contacts`);
+      console.log(`✅ Stats loaded from Supabase v18.2: ${stats.total} total contacts`);
       return stats;
     } catch (error) {
       console.warn('❌ Supabase getContactStats failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database stats');
+  console.log('📦 Using demo database stats v18.2');
   const stats = { total: 0, new: 0, contacted: 0, converted: 0, archived: 0 };
   demoDatabase.contacts.forEach(contact => {
     stats.total++;
     stats[contact.status] = (stats[contact.status] || 0) + 1;
   });
   return stats;
+}
+
+// ===============================
+// ✅ NEW v18.2: ENHANCED STATISTICS FUNCTIONS
+// ===============================
+
+async function getEnhancedStats() {
+  console.log('📊 Getting Enhanced Statistics v18.2');
+  
+  const contacts = await getAllContacts();
+  const now = new Date();
+  const thisWeekStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+  
+  // Zeitraum-Analyse
+  const thisWeekContacts = contacts.filter(c => new Date(c.created_at) >= thisWeekStart);
+  const thisMonthContacts = contacts.filter(c => new Date(c.created_at) >= thisMonthStart);
+  const lastMonthContacts = contacts.filter(c => {
+    const createdAt = new Date(c.created_at);
+    return createdAt >= lastMonthStart && createdAt <= lastMonthEnd;
+  });
+  
+  // Conversion Rate berechnen
+  const totalContacts = contacts.length;
+  const convertedContacts = contacts.filter(c => c.status === 'converted').length;
+  const conversionRate = totalContacts > 0 ? Math.round((convertedContacts / totalContacts) * 100) : 0;
+  
+  // Lead vs Normal Contacts
+  const leadContacts = contacts.filter(c => c.leadForm || c.leadform).length;
+  const normalContacts = totalContacts - leadContacts;
+  
+  const enhancedStats = {
+    timeframe: {
+      thisWeek: thisWeekContacts.length,
+      thisMonth: thisMonthContacts.length,
+      lastMonth: lastMonthContacts.length,
+      total: totalContacts
+    },
+    conversion: {
+      rate: conversionRate,
+      converted: convertedContacts,
+      pending: contacts.filter(c => c.status === 'new' || c.status === 'contacted').length
+    },
+    types: {
+      leads: leadContacts,
+      normal: normalContacts,
+      leadPercentage: totalContacts > 0 ? Math.round((leadContacts / totalContacts) * 100) : 0
+    }
+  };
+  
+  console.log('✅ Enhanced Stats calculated v18.2:', enhancedStats);
+  return enhancedStats;
+}
+
+async function getServiceBreakdown() {
+  console.log('📊 Getting Service Breakdown v18.2');
+  
+  const contacts = await getAllContacts();
+  const serviceStats = {};
+  
+  contacts.forEach(contact => {
+    const source = contact.source_page || 'Unbekannt';
+    serviceStats[source] = (serviceStats[source] || 0) + 1;
+  });
+  
+  // Nach Anzahl sortieren
+  const sortedServices = Object.entries(serviceStats)
+    .sort(([,a], [,b]) => b - a)
+    .map(([service, count]) => ({
+      service,
+      count,
+      percentage: contacts.length > 0 ? Math.round((count / contacts.length) * 100) : 0
+    }));
+  
+  console.log('✅ Service Breakdown calculated v18.2:', sortedServices);
+  return { services: sortedServices, total: contacts.length };
+}
+
+async function getTimeAnalysis() {
+  console.log('📊 Getting Time Analysis v18.2');
+  
+  const contacts = await getAllContacts();
+  
+  // Stunden-Analyse
+  const hourStats = {};
+  const dayStats = {};
+  const timeSlotStats = {};
+  
+  contacts.forEach(contact => {
+    // Stunden
+    const hour = contact.contact_hour;
+    if (hour !== null && hour !== undefined) {
+      hourStats[hour] = (hourStats[hour] || 0) + 1;
+    }
+    
+    // Wochentage
+    const day = contact.contact_day_of_week;
+    if (day) {
+      dayStats[day] = (dayStats[day] || 0) + 1;
+    }
+    
+    // Zeitslots
+    const timeSlot = contact.time_slot;
+    if (timeSlot) {
+      timeSlotStats[timeSlot] = (timeSlotStats[timeSlot] || 0) + 1;
+    }
+  });
+  
+  // Top 3 Stunden ermitteln
+  const topHours = Object.entries(hourStats)
+    .sort(([,a], [,b]) => b - a)
+    .slice(0, 3)
+    .map(([hour, count]) => ({
+      hour: parseInt(hour),
+      timeDisplay: `${hour}:00-${parseInt(hour) + 1}:00`,
+      count,
+      percentage: contacts.length > 0 ? Math.round((count / contacts.length) * 100) : 0
+    }));
+  
+  // Top Wochentag
+  const topDay = Object.entries(dayStats)
+    .sort(([,a], [,b]) => b - a)[0];
+  
+  // Top Zeitslot
+  const topTimeSlot = Object.entries(timeSlotStats)
+    .sort(([,a], [,b]) => b - a)[0];
+  
+  const timeAnalysis = {
+    peak: {
+      hours: topHours,
+      day: topDay ? { day: topDay[0], count: topDay[1] } : null,
+      timeSlot: topTimeSlot ? { slot: topTimeSlot[0], count: topTimeSlot[1] } : null
+    },
+    distribution: {
+      hours: hourStats,
+      days: dayStats,
+      timeSlots: timeSlotStats
+    }
+  };
+  
+  console.log('✅ Time Analysis calculated v18.2:', timeAnalysis);
+  return timeAnalysis;
 }
 
 // ===============================
@@ -279,7 +458,7 @@ async function sendSimulatedEmail(to, subject, message) {
 }
 
 // ===============================
-// ASTRO API ENDPOINTS
+// ASTRO API ENDPOINTS (ENHANCED v18.2)
 // ===============================
 
 export async function GET({ url }) {
@@ -309,6 +488,28 @@ export async function GET({ url }) {
           status: 200, 
           headers 
         });
+      
+      // ✅ NEW v18.2: Enhanced Statistics Endpoints
+      case 'enhanced-stats':
+        const enhancedStats = await getEnhancedStats();
+        return new Response(JSON.stringify({ enhancedStats }), { 
+          status: 200, 
+          headers 
+        });
+        
+      case 'service-breakdown':
+        const serviceBreakdown = await getServiceBreakdown();
+        return new Response(JSON.stringify({ serviceBreakdown }), { 
+          status: 200, 
+          headers 
+        });
+        
+      case 'time-analysis':
+        const timeAnalysis = await getTimeAnalysis();
+        return new Response(JSON.stringify({ timeAnalysis }), { 
+          status: 200, 
+          headers 
+        });
         
       case 'debug':
         const debugInfo = {
@@ -323,9 +524,10 @@ export async function GET({ url }) {
             hasKey: !!supabaseKey,
             keyLength: supabaseKey ? supabaseKey.length : 0
           },
-          version: '18.1-astro',
+          version: '18.2-enhanced-statistics',
           timestamp: new Date().toISOString(),
-          runtime: 'Astro API Route'
+          runtime: 'Astro API Route',
+          features: ['Enhanced Statistics', 'Service Breakdown', 'Time Analysis']
         };
         
         return new Response(JSON.stringify(debugInfo), { 
@@ -341,10 +543,11 @@ export async function GET({ url }) {
     }
 
   } catch (error) {
-    console.error('API GET Error:', error);
+    console.error('API GET Error v18.2:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
-      debug: error.message
+      debug: error.message,
+      version: '18.2'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -355,7 +558,12 @@ export async function GET({ url }) {
 export async function POST({ request }) {
   try {
     const body = await request.json();
-    const { name, email, message, phone, company } = body;
+    const { 
+      name, email, message, phone, company,
+      // ✅ NEW v18.2: Enhanced Statistics Fields
+      source_page, contact_hour, contact_day_of_week, time_slot, 
+      contact_date, browser, device
+    } = body;
 
     // CORS Headers
     const headers = {
@@ -396,7 +604,19 @@ export async function POST({ request }) {
       });
     }
 
-    const contactData = { name, email, message, phone, company };
+    // ✅ NEW v18.2: Enhanced Statistics Data zusammenfassen
+    const contactData = { 
+      name, email, message, phone, company,
+      source_page, contact_hour, contact_day_of_week, 
+      time_slot, contact_date, browser, device
+    };
+    
+    console.log('📊 Creating contact with Enhanced Statistics v18.2:', {
+      name, 
+      source_page, 
+      contact_hour, 
+      time_slot
+    });
     
     try {
       // Kontakt in Datenbank speichern
@@ -411,7 +631,7 @@ export async function POST({ request }) {
       
       const adminResult = await sendSimulatedEmail(
         'kontakt@dominik-maier.com',
-        `🎯 Neue Kontaktanfrage von ${name}`,
+        `🎯 Neue Kontaktanfrage von ${name} (${source_page || 'Unbekannte Seite'})`,
         message
       );
 
@@ -428,17 +648,24 @@ export async function POST({ request }) {
           confirmation: confirmationResult.success,
           admin: adminResult.success
         },
-        database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo'
+        database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
+        // ✅ NEW v18.2: Enhanced Statistics bestätigen
+        statistics: {
+          source_page: source_page || 'Unbekannt',
+          time_slot: time_slot || 'Unbekannt',
+          tracked: !!(source_page && contact_hour && contact_day_of_week)
+        }
       }), { 
         status: 200, 
         headers 
       });
 
     } catch (error) {
-      console.error('Contact creation error:', error);
+      console.error('Contact creation error v18.2:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Speichern der Kontaktdaten',
-        debug: error.message
+        debug: error.message,
+        version: '18.2'
       }), { 
         status: 500, 
         headers 
@@ -446,10 +673,11 @@ export async function POST({ request }) {
     }
 
   } catch (error) {
-    console.error('API POST Error:', error);
+    console.error('API POST Error v18.2:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
-      debug: error.message
+      debug: error.message,
+      version: '18.2'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -491,17 +719,19 @@ export async function PUT({ request, url }) {
         success: true,
         message: 'Kontakt erfolgreich aktualisiert',
         contact: updatedContact,
-        database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo'
+        database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
+        version: '18.2'
       }), { 
         status: 200, 
         headers 
       });
 
     } catch (error) {
-      console.error('Contact update error:', error);
+      console.error('Contact update error v18.2:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Aktualisieren des Kontakts',
-        debug: error.message
+        debug: error.message,
+        version: '18.2'
       }), { 
         status: 500, 
         headers 
@@ -509,10 +739,11 @@ export async function PUT({ request, url }) {
     }
 
   } catch (error) {
-    console.error('API PUT Error:', error);
+    console.error('API PUT Error v18.2:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
-      debug: error.message
+      debug: error.message,
+      version: '18.2'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
