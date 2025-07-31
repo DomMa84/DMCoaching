@@ -1,11 +1,12 @@
 ---
-// src/pages/admin.astro v24.8.5 (Astro Build Fix - Environment Variables)
-// Admin Dashboard - Environment Variables korrekt für Astro Build
-// ✅ ÄNDERUNGEN v24.8.5:
-// - Astro Build Fix: Environment Variables korrekt in <script> tag übergeben
-// - Keine Browser APIs (window) im Astro Server Code
-// - JSON.stringify() korrekt für sichere Übergabe
-// - Alpine.js kompatible Implementierung
+// src/pages/admin.astro v24.9 (Enhanced Statistics Dashboard)
+// Admin Dashboard - Enhanced Statistics Integration
+// ✅ ÄNDERUNGEN v24.9:
+// - Enhanced Statistics Cards (Wöchentlich/Monatlich/Conversion Rate)
+// - Service-Performance Breakdown
+// - Peak-Time Analysis
+// - Zeitraum-Vergleiche
+// - Business Intelligence Dashboard
 
 export const prerender = false;
 
@@ -14,24 +15,19 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro'; 
 import AdminStyles from '../components/AdminStyles.astro';
 
-const pageTitle = "Admin Dashboard - Kontaktanfragen";
-const version = "Admin Dashboard v24.8.5 (Astro Build Fix - Environment Variables)";
+const pageTitle = "Admin Dashboard - Enhanced Statistics";
+const version = "Admin Dashboard v24.9 (Enhanced Statistics Dashboard)";
 
 // Environment Variables sicher laden (Server-Side)
 const adminUsername = import.meta.env.ADMIN_USERNAME || 'admin';
 const adminPassword = import.meta.env.ADMIN_PASSWORD || 'admin';
 
-console.log('📊 Admin Dashboard v24.8.5 loaded - Astro Build Fix');
-console.log('🔐 Environment Variables loaded:', { 
-  username: adminUsername, 
-  hasPassword: !!adminPassword,
-  fromEnvVars: !!(import.meta.env.ADMIN_USERNAME && import.meta.env.ADMIN_PASSWORD)
-});
+console.log('📊 Admin Dashboard v24.9 loaded - Enhanced Statistics Dashboard');
 ---
 
 <Layout 
   title="Admin Dashboard | Dominik Maier"
-  description="Admin Dashboard für Kontaktanfragen - Dominik Maier Coaching & Interim Management"
+  description="Admin Dashboard für Kontaktanfragen - Enhanced Statistics"
 >
   <!-- Separate Admin Styles -->
   <AdminStyles />
@@ -43,9 +39,9 @@ console.log('🔐 Environment Variables loaded:', {
     <section class="py-16 bg-gray-50 dark:bg-gray-900 min-h-80vh">
       <div class="admin-container">
         
-        <!-- Alpine.js Admin App - Sichere Environment Variables -->
+        <!-- Alpine.js Admin App - Enhanced Statistics -->
         <div x-data="{
-          version: 'Admin Dashboard v24.8.5 (Astro Build Fix)',
+          version: 'Admin Dashboard v24.9 (Enhanced Statistics)',
           isLoggedIn: false,
           showLoginForm: true,
           
@@ -75,20 +71,37 @@ console.log('🔐 Environment Variables loaded:', {
             archived: 0
           },
           
+          // ===== NEW v24.9: Enhanced Statistics Data =====
+          enhancedStats: {
+            timeframe: { thisWeek: 0, thisMonth: 0, lastMonth: 0, total: 0 },
+            conversion: { rate: 0, converted: 0, pending: 0 },
+            types: { leads: 0, normal: 0, leadPercentage: 0 }
+          },
+          serviceBreakdown: {
+            services: [],
+            total: 0
+          },
+          timeAnalysis: {
+            peak: {
+              hours: [],
+              day: null,
+              timeSlot: null
+            }
+          },
+          statisticsLoading: false,
+          statisticsError: '',
+          
           // ===== INITIALIZATION =====
           init() {
-            console.log('🚀 Admin Dashboard v24.8.5 init - Loading credentials...');
+            console.log('🚀 Admin Dashboard v24.9 init - Enhanced Statistics...');
             
             // Credentials aus globalem Script laden
             if (window.ADMIN_CREDENTIALS) {
               this.adminUsername = window.ADMIN_CREDENTIALS.username;
               this.adminPassword = window.ADMIN_CREDENTIALS.password;
-              console.log('✅ Credentials loaded from Environment Variables v24.8.5:', {
-                username: this.adminUsername,
-                hasPassword: !!this.adminPassword
-              });
+              console.log('✅ Credentials loaded v24.9');
             } else {
-              console.log('⚠️ No Environment Variables found, using fallback v24.8.5');
+              console.log('⚠️ No Environment Variables found, using fallback v24.9');
               this.adminUsername = 'admin';
               this.adminPassword = 'admin';
             }
@@ -96,7 +109,7 @@ console.log('🔐 Environment Variables loaded:', {
           
           // ===== LOGIN FUNCTIONS =====
           async login() {
-            console.log('🔐 Login attempt v24.8.5 - Environment Variable Authentication');
+            console.log('🔐 Login attempt v24.9 - Enhanced Statistics Dashboard');
             this.isLoading = true;
             this.loginError = '';
             
@@ -106,34 +119,43 @@ console.log('🔐 Environment Variables loaded:', {
                 this.isLoggedIn = true;
                 this.showLoginForm = false;
                 this.loginError = '';
-                await this.loadContacts();
-                await this.loadStats();
-                console.log('✅ Environment Variable Login successful v24.8.5');
+                await this.loadAllData();
+                console.log('✅ Login successful - Loading Enhanced Statistics v24.9');
               } else {
                 this.loginError = 'Ungültige Anmeldedaten';
-                console.log('❌ Login failed - Invalid credentials v24.8.5');
+                console.log('❌ Login failed v24.9');
               }
             } catch (error) {
               this.loginError = 'Verbindungsfehler. Bitte versuchen Sie es erneut.';
-              console.error('❌ Login error v24.8.5:', error);
+              console.error('❌ Login error v24.9:', error);
             }
             
             this.isLoading = false;
           },
           
           async logout() {
-            console.log('🚪 Logout v24.8.5');
+            console.log('🚪 Logout v24.9');
             this.isLoggedIn = false;
             this.showLoginForm = true;
             this.loginData.username = '';
             this.loginData.password = '';
             this.selectedContact = null;
             this.contacts = [];
+            this.resetStatistics();
           },
           
-          // ===== SUPABASE API FUNCTIONS =====
+          // ===== DATA LOADING FUNCTIONS =====
+          async loadAllData() {
+            console.log('📊 Loading all data including Enhanced Statistics v24.9');
+            await Promise.all([
+              this.loadContacts(),
+              this.loadStats(),
+              this.loadEnhancedStatistics()
+            ]);
+          },
+          
           async loadContacts() {
-            console.log('📋 Loading contacts from Supabase API v24.8.5');
+            console.log('📋 Loading contacts from Supabase API v24.9');
             this.contactsLoading = true;
             this.contactsError = '';
             
@@ -147,24 +169,21 @@ console.log('🔐 Environment Variables loaded:', {
               const data = await response.json();
               
               if (data.contacts) {
-                // Supabase Status mapping zu Admin Status
                 this.contacts = data.contacts.map(contact => ({
                   ...contact,
-                  // Supabase verwendet andere Status-Namen
                   status: this.mapSupabaseStatus(contact.status),
-                  // Lead-Flag aus leadForm ableiten (falls nicht vorhanden, false)
                   leadForm: contact.leadForm || false
                 })).sort((a, b) => 
                   new Date(b.created_at) - new Date(a.created_at)
                 );
                 
-                console.log('✅ Contacts loaded from Supabase v24.8.5:', this.contacts.length, 'contacts');
+                console.log('✅ Contacts loaded v24.9:', this.contacts.length, 'contacts');
               } else {
                 throw new Error('Ungültige API-Response');
               }
               
             } catch (error) {
-              console.error('❌ Error loading contacts from Supabase v24.8.5:', error);
+              console.error('❌ Error loading contacts v24.9:', error);
               this.contactsError = `Fehler beim Laden der Kontakte: ${error.message}`;
               this.contacts = [];
             }
@@ -173,7 +192,7 @@ console.log('🔐 Environment Variables loaded:', {
           },
           
           async loadStats() {
-            console.log('📊 Loading stats from Supabase API v24.8.5');
+            console.log('📊 Loading basic stats v24.9');
             
             try {
               const response = await fetch('/api/contact?action=stats');
@@ -185,7 +204,6 @@ console.log('🔐 Environment Variables loaded:', {
               const data = await response.json();
               
               if (data.stats) {
-                // Supabase Stats mapping zu Admin Stats
                 this.stats = {
                   total: data.stats.total || 0,
                   new: data.stats.new || 0,
@@ -194,31 +212,77 @@ console.log('🔐 Environment Variables loaded:', {
                   archived: data.stats.archived || 0
                 };
                 
-                console.log('✅ Stats loaded from Supabase v24.8.5:', this.stats);
+                console.log('✅ Basic stats loaded v24.9:', this.stats);
               }
               
             } catch (error) {
-              console.error('❌ Error loading stats from Supabase v24.8.5:', error);
-              // Stats-Fehler nicht kritisch, weiter mit lokaler Berechnung
+              console.error('❌ Error loading basic stats v24.9:', error);
               this.calculateLocalStats();
             }
           },
           
-          // ===== CONTACT MANAGEMENT (SUPABASE API) =====
-          async updateContact(contactId, updateData) {
-            console.log('🔄 Updating contact via Supabase API v24.8.5:', { contactId, updateData });
+          // ===== NEW v24.9: ENHANCED STATISTICS LOADING =====
+          async loadEnhancedStatistics() {
+            console.log('📊 Loading Enhanced Statistics v24.9');
+            this.statisticsLoading = true;
+            this.statisticsError = '';
             
             try {
-              // Admin Status zu Supabase Status mapping (falls status geändert wird)
+              // Parallel loading für bessere Performance
+              const [enhancedResponse, serviceResponse, timeResponse] = await Promise.all([
+                fetch('/api/contact?action=enhanced-stats'),
+                fetch('/api/contact?action=service-breakdown'),
+                fetch('/api/contact?action=time-analysis')
+              ]);
+              
+              if (!enhancedResponse.ok || !serviceResponse.ok || !timeResponse.ok) {
+                throw new Error('Enhanced Statistics API Error');
+              }
+              
+              const enhancedData = await enhancedResponse.json();
+              const serviceData = await serviceResponse.json();
+              const timeData = await timeResponse.json();
+              
+              this.enhancedStats = enhancedData.enhancedStats || this.enhancedStats;
+              this.serviceBreakdown = serviceData.serviceBreakdown || this.serviceBreakdown;
+              this.timeAnalysis = timeData.timeAnalysis || this.timeAnalysis;
+              
+              console.log('✅ Enhanced Statistics loaded v24.9:', {
+                timeframe: this.enhancedStats.timeframe,
+                services: this.serviceBreakdown.services.length,
+                peakHours: this.timeAnalysis.peak.hours.length
+              });
+              
+            } catch (error) {
+              console.error('❌ Error loading Enhanced Statistics v24.9:', error);
+              this.statisticsError = `Enhanced Statistics: ${error.message}`;
+            }
+            
+            this.statisticsLoading = false;
+          },
+          
+          resetStatistics() {
+            this.enhancedStats = {
+              timeframe: { thisWeek: 0, thisMonth: 0, lastMonth: 0, total: 0 },
+              conversion: { rate: 0, converted: 0, pending: 0 },
+              types: { leads: 0, normal: 0, leadPercentage: 0 }
+            };
+            this.serviceBreakdown = { services: [], total: 0 };
+            this.timeAnalysis = { peak: { hours: [], day: null, timeSlot: null } };
+          },
+          
+          // ===== CONTACT MANAGEMENT (UNVERÄNDERT) =====
+          async updateContact(contactId, updateData) {
+            console.log('🔄 Updating contact via Supabase API v24.9:', { contactId, updateData });
+            
+            try {
               if (updateData.status) {
                 updateData.status = this.mapAdminStatus(updateData.status);
               }
               
               const response = await fetch(`/api/contact?id=${contactId}`, {
                 method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updateData)
               });
               
@@ -229,50 +293,43 @@ console.log('🔐 Environment Variables loaded:', {
               const data = await response.json();
               
               if (data.success) {
-                // Lokalen Kontakt aktualisieren
                 const contact = this.contacts.find(c => c.id === contactId);
                 if (contact) {
                   Object.assign(contact, updateData);
                   contact.updated_at = new Date().toISOString();
-                  // Status zurück zu Admin-Format mappen falls nötig
                   if (updateData.status) {
                     contact.status = this.mapSupabaseStatus(updateData.status);
                   }
                 }
                 
-                // Stats neu laden
                 await this.loadStats();
+                await this.loadEnhancedStatistics();
                 
-                console.log('✅ Contact updated via Supabase API v24.8.5');
+                console.log('✅ Contact updated - Enhanced Statistics reloaded v24.9');
               } else {
                 throw new Error(data.error || 'Update failed');
               }
               
             } catch (error) {
-              console.error('❌ Error updating contact via Supabase API v24.8.5:', error);
+              console.error('❌ Error updating contact v24.9:', error);
               alert(`Fehler beim Aktualisieren des Kontakts: ${error.message}`);
             }
           },
           
           async updateContactLeadStatus(contactId, newLeadStatus) {
-            return this.updateContact(contactId, { leadForm: newLeadStatus });
+            await this.updateContact(contactId, { leadForm: newLeadStatus });
           },
           
           async updateContactStatus(contactId, newStatus) {
-            return this.updateContact(contactId, { status: newStatus });
-          },
-          
-          async saveContactNotes(contactId, notes) {
-            return this.updateContact(contactId, { notes: notes });
+            await this.updateContact(contactId, { status: newStatus });
           },
           
           async saveContactDetails(contactId, details) {
-            return this.updateContact(contactId, details);
+            await this.updateContact(contactId, details);
           },
           
-          // ===== STATUS MAPPING FUNCTIONS =====
+          // ===== STATUS MAPPING FUNCTIONS (UNVERÄNDERT) =====
           mapSupabaseStatus(supabaseStatus) {
-            // Supabase Status → Admin Status
             switch(supabaseStatus) {
               case 'new': return 'neu';
               case 'contacted': return 'offen';
@@ -283,7 +340,6 @@ console.log('🔐 Environment Variables loaded:', {
           },
           
           mapAdminStatus(adminStatus) {
-            // Admin Status → Supabase Status
             switch(adminStatus) {
               case 'neu': return 'new';
               case 'offen': return 'contacted';
@@ -333,7 +389,6 @@ console.log('🔐 Environment Variables loaded:', {
           },
           
           calculateLocalStats() {
-            // Fallback: Stats aus lokalen Kontakten berechnen
             this.stats = {
               total: this.contacts.length,
               new: this.getStatusCount('neu'),
@@ -370,15 +425,15 @@ console.log('🔐 Environment Variables loaded:', {
           }
         }">
 
-          <!-- ===== LOGIN FORM ===== -->
+          <!-- ===== LOGIN FORM (UNVERÄNDERT) ===== -->
           <div x-show="showLoginForm" class="max-w-lg mx-auto">
             <div class="admin-card">
               <div class="admin-card-body">
                 <div class="text-center mb-8">
-                  <div class="admin-icon">🔐</div>
-                  <h1 class="admin-title">Admin Dashboard</h1>
+                  <div class="admin-icon">📊</div>
+                  <h1 class="admin-title">Enhanced Statistics Dashboard</h1>
                   <p class="text-gray-600 dark:text-gray-300 mb-2">
-                    Kontaktanfragen verwalten - Environment Variables v24.8.5
+                    Business Intelligence & Analytics v24.9
                   </p>
                   <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
                 </div>
@@ -429,27 +484,27 @@ console.log('🔐 Environment Variables loaded:', {
                 
                 <div class="text-center mt-6">
                   <p class="text-xs text-gray-500 dark:text-gray-400">
-                    Admin Dashboard v24.8.5 - Environment Variables aktiv
+                    Admin Dashboard v24.9 - Enhanced Statistics
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- ===== DASHBOARD CONTENT ===== -->
+          <!-- ===== ENHANCED STATISTICS DASHBOARD ===== -->
           <div x-show="isLoggedIn" style="display: none;">
             
             <!-- Header -->
             <div class="admin-flex-between mb-8 flex-col lg:flex-row gap-4">
               <div>
-                <h1 class="admin-title">📧 Admin Dashboard</h1>
+                <h1 class="admin-title">📊 Enhanced Statistics Dashboard</h1>
                 <p class="text-gray-600 dark:text-gray-300 mb-1">
-                  Environment Variables v24.8.5 - Astro Build kompatibel
+                  Business Intelligence & Analytics v24.9
                 </p>
                 <p class="text-xs text-gray-500 dark:text-gray-400" x-text="version"></p>
               </div>
               <div class="flex gap-3">
-                <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-secondary">
+                <button @click="loadAllData()" class="admin-btn admin-btn-secondary">
                   🔄 Neu laden
                 </button>
                 <button @click="logout()" class="admin-btn admin-btn-secondary">
@@ -459,58 +514,193 @@ console.log('🔐 Environment Variables loaded:', {
             </div>
 
             <!-- Loading State -->
-            <div x-show="contactsLoading" class="text-center py-8">
+            <div x-show="contactsLoading || statisticsLoading" class="text-center py-8">
               <div class="admin-spinner mx-auto mb-4" style="width: 2rem; height: 2rem;"></div>
-              <p class="text-gray-600 dark:text-gray-300">Lade Kontakte von Supabase...</p>
+              <p class="text-gray-600 dark:text-gray-300">
+                <span x-show="contactsLoading">Lade Kontakte...</span>
+                <span x-show="statisticsLoading">Lade Enhanced Statistics...</span>
+              </p>
             </div>
 
-            <!-- Error State -->
-            <div x-show="contactsError" class="admin-alert admin-alert-error mb-6">
-              <span x-text="contactsError"></span>
-              <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-secondary mt-2">
-                🔄 Erneut versuchen
-              </button>
+            <!-- Error States -->
+            <div x-show="contactsError || statisticsError" class="space-y-4 mb-6">
+              <div x-show="contactsError" class="admin-alert admin-alert-error">
+                <span x-text="contactsError"></span>
+              </div>
+              <div x-show="statisticsError" class="admin-alert admin-alert-error">
+                <span x-text="statisticsError"></span>
+              </div>
             </div>
 
-            <!-- Dashboard Content -->
-            <div x-show="!contactsLoading">
+            <!-- Enhanced Statistics Content -->
+            <div x-show="!contactsLoading && !statisticsLoading">
               
-              <!-- Statistics Cards (Supabase Data) -->
-              <div class="admin-stats-grid mb-8">
-                <div class="admin-stat-card">
-                  <div class="admin-stat-icon">🔴</div>
-                  <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="stats.new"></div>
-                    <div class="admin-stat-label">Neue Anfragen</div>
+              <!-- ===== ENHANCED STATISTICS CARDS v24.9 ===== -->
+              <div class="mb-8">
+                <h2 class="admin-subtitle mb-4">📈 Zeitraum-Analyse</h2>
+                <div class="admin-stats-grid">
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📅</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="enhancedStats.timeframe.thisWeek"></div>
+                      <div class="admin-stat-label">Diese Woche</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📊</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="enhancedStats.timeframe.thisMonth"></div>
+                      <div class="admin-stat-label">Dieser Monat</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📈</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="enhancedStats.conversion.rate + '%'"></div>
+                      <div class="admin-stat-label">Conversion Rate</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">🎯</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="enhancedStats.types.leadPercentage + '%'"></div>
+                      <div class="admin-stat-label">Lead-Anteil</div>
+                    </div>
                   </div>
                 </div>
-                
-                <div class="admin-stat-card">
-                  <div class="admin-stat-icon">🟡</div>
-                  <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="stats.contacted"></div>
-                    <div class="admin-stat-label">In Bearbeitung</div>
+              </div>
+              
+              <!-- ===== SERVICE PERFORMANCE v24.9 ===== -->
+              <div class="mb-8">
+                <h2 class="admin-subtitle mb-4">🎯 Service-Performance</h2>
+                <div class="admin-card">
+                  <div class="admin-card-body">
+                    <template x-if="serviceBreakdown.services.length > 0">
+                      <div class="space-y-4">
+                        <template x-for="service in serviceBreakdown.services" :key="service.service">
+                          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div class="flex-1">
+                              <div class="font-medium text-gray-900 dark:text-white" x-text="service.service"></div>
+                              <div class="text-sm text-gray-500 dark:text-gray-400">
+                                <span x-text="service.count"></span> Anfragen 
+                                (<span x-text="service.percentage"></span>%)
+                              </div>
+                            </div>
+                            <div class="w-24 bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                              <div 
+                                class="bg-primary-gold h-3 rounded-full transition-all duration-300"
+                                :style="`width: ${service.percentage}%`"
+                              ></div>
+                            </div>
+                          </div>
+                        </template>
+                      </div>
+                    </template>
+                    <template x-if="serviceBreakdown.services.length === 0">
+                      <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+                        📭 Noch keine Service-Daten verfügbar
+                      </div>
+                    </template>
                   </div>
                 </div>
-                
-                <div class="admin-stat-card">
-                  <div class="admin-stat-icon">✅</div>
-                  <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="stats.converted"></div>
-                    <div class="admin-stat-label">Abgeschlossen</div>
+              </div>
+              
+              <!-- ===== PEAK TIME ANALYSIS v24.9 ===== -->
+              <div class="mb-8">
+                <h2 class="admin-subtitle mb-4">⏰ Peak-Time Analyse</h2>
+                <div class="admin-grid-2">
+                  <div class="admin-card">
+                    <div class="admin-card-body">
+                      <h3 class="font-semibold text-gray-900 dark:text-white mb-3">🕐 Aktivste Stunden</h3>
+                      <template x-if="timeAnalysis.peak.hours.length > 0">
+                        <div class="space-y-2">
+                          <template x-for="hour in timeAnalysis.peak.hours" :key="hour.hour">
+                            <div class="flex justify-between items-center">
+                              <span class="text-sm font-medium" x-text="hour.timeDisplay"></span>
+                              <span class="text-xs bg-primary-gold/20 text-primary-gold px-2 py-1 rounded">
+                                <span x-text="hour.count"></span> (<span x-text="hour.percentage"></span>%)
+                              </span>
+                            </div>
+                          </template>
+                        </div>
+                      </template>
+                      <template x-if="timeAnalysis.peak.hours.length === 0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Keine Daten verfügbar</p>
+                      </template>
+                    </div>
                   </div>
-                </div>
-                
-                <div class="admin-stat-card">
-                  <div class="admin-stat-icon">📊</div>
-                  <div class="admin-stat-content">
-                    <div class="admin-stat-value" x-text="stats.total"></div>
-                    <div class="admin-stat-label">Gesamt</div>
+                  
+                  <div class="admin-card">
+                    <div class="admin-card-body">
+                      <h3 class="font-semibold text-gray-900 dark:text-white mb-3">📅 Aktivster Tag & Zeitslot</h3>
+                      <div class="space-y-3">
+                        <template x-if="timeAnalysis.peak.day">
+                          <div>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">Bester Wochentag:</span>
+                            <div class="font-medium text-primary-gold" x-text="timeAnalysis.peak.day.day"></div>
+                            <div class="text-xs text-gray-500" x-text="timeAnalysis.peak.day.count + ' Anfragen'"></div>
+                          </div>
+                        </template>
+                        
+                        <template x-if="timeAnalysis.peak.timeSlot">
+                          <div>
+                            <span class="text-sm text-gray-600 dark:text-gray-300">Beste Tageszeit:</span>
+                            <div class="font-medium text-primary-gold" x-text="timeAnalysis.peak.timeSlot.slot"></div>
+                            <div class="text-xs text-gray-500" x-text="timeAnalysis.peak.timeSlot.count + ' Anfragen'"></div>
+                          </div>
+                        </template>
+                        
+                        <template x-if="!timeAnalysis.peak.day && !timeAnalysis.peak.timeSlot">
+                          <p class="text-sm text-gray-500 dark:text-gray-400">Keine Daten verfügbar</p>
+                        </template>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Filter Buttons -->
+              <!-- ===== BASIC STATISTICS (BESTEHEND) ===== -->
+              <div class="mb-8">
+                <h2 class="admin-subtitle mb-4">📊 Status-Übersicht</h2>
+                <div class="admin-stats-grid">
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">🔴</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="stats.new"></div>
+                      <div class="admin-stat-label">Neue Anfragen</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">🟡</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="stats.contacted"></div>
+                      <div class="admin-stat-label">In Bearbeitung</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">✅</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="stats.converted"></div>
+                      <div class="admin-stat-label">Abgeschlossen</div>
+                    </div>
+                  </div>
+                  
+                  <div class="admin-stat-card">
+                    <div class="admin-stat-icon">📊</div>
+                    <div class="admin-stat-content">
+                      <div class="admin-stat-value" x-text="stats.total"></div>
+                      <div class="admin-stat-label">Gesamt</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filter Buttons (BESTEHEND) -->
               <div class="admin-filter-container">
                 <button 
                   @click="filterStatus = 'alle'"
@@ -555,6 +745,7 @@ console.log('🔐 Environment Variables loaded:', {
                         <th>Kontakt</th>
                         <th>Status</th>
                         <th>Lead</th>
+                        <th>Service</th>
                         <th>Aktionen</th>
                       </tr>
                     </thead>
@@ -589,6 +780,10 @@ console.log('🔐 Environment Variables loaded:', {
                             </div>
                           </td>
                           <td>
+                            <div class="text-xs text-gray-600 dark:text-gray-300" x-text="contact.source_page || 'Unbekannt'"></div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400" x-text="contact.time_slot || ''"></div>
+                          </td>
+                          <td>
                             <button 
                               @click="selectedContact = contact"
                               class="admin-btn-link"
@@ -609,17 +804,17 @@ console.log('🔐 Environment Variables loaded:', {
                     <span x-show="filterStatus === 'alle'">Keine Kontaktanfragen gefunden.</span>
                     <span x-show="filterStatus !== 'alle'">Keine Kontakte mit Status "<span x-text="filterStatus"></span>" gefunden.</span>
                   </p>
-                  <button @click="loadContacts(); loadStats()" class="admin-btn admin-btn-primary mt-4">
+                  <button @click="loadAllData()" class="admin-btn admin-btn-primary mt-4">
                     🔄 Neu laden
                   </button>
                 </div>
               </div>
 
-              <!-- ===== CONTACT DETAIL MODAL ===== -->
+              <!-- ===== CONTACT DETAIL MODAL (ERWEITERT) ===== -->
               <div x-show="selectedContact" class="admin-modal-overlay" style="display: none;" @click.self="selectedContact = null">
                 <div class="admin-modal-content">
                   <div class="admin-modal-header">
-                    <h3 class="admin-subtitle mb-0">📋 Kontaktdetails</h3>
+                    <h3 class="admin-subtitle mb-0">📋 Kontaktdetails & Statistics</h3>
                     <button @click="selectedContact = null" class="admin-btn-close">✕</button>
                   </div>
                   
@@ -627,18 +822,41 @@ console.log('🔐 Environment Variables loaded:', {
                     <template x-if="selectedContact">
                       <div class="admin-space-y-6">
                         
+                        <!-- ===== ENHANCED STATISTICS INFO v24.9 ===== -->
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+                          <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">📊 Enhanced Statistics</h4>
+                          <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                              <span class="text-blue-600 dark:text-blue-300">Service-Seite:</span>
+                              <div class="font-medium" x-text="selectedContact.source_page || 'Unbekannt'"></div>
+                            </div>
+                            <div>
+                              <span class="text-blue-600 dark:text-blue-300">Zeitslot:</span>
+                              <div class="font-medium" x-text="selectedContact.time_slot || 'Unbekannt'"></div>
+                            </div>
+                            <div>
+                              <span class="text-blue-600 dark:text-blue-300">Wochentag:</span>
+                              <div class="font-medium" x-text="selectedContact.contact_day_of_week || 'Unbekannt'"></div>
+                            </div>
+                            <div>
+                              <span class="text-blue-600 dark:text-blue-300">Device:</span>
+                              <div class="font-medium" x-text="selectedContact.device || 'Unbekannt'"></div>
+                            </div>
+                          </div>
+                        </div>
+                        
                         <!-- ===== LEAD STATUS MANAGEMENT ===== -->
                         <div x-show="selectedContact.leadForm">
-                          <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                          <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
                             <div class="flex items-center justify-between">
                               <div class="flex items-center">
-                                <span class="text-blue-800 dark:text-blue-200 text-sm">
+                                <span class="text-green-800 dark:text-green-200 text-sm">
                                   🎯 <strong>Lead-Kontakt:</strong> Kam über Lead-Formular
                                 </span>
                               </div>
                               <button 
                                 @click="updateContactLeadStatus(selectedContact.id, false)"
-                                class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline"
+                                class="text-xs text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-200 underline"
                               >
                                 Als normalen Kontakt markieren
                               </button>
@@ -792,7 +1010,7 @@ console.log('🔐 Environment Variables loaded:', {
       password: adminPassword
     };
     
-    console.log('🔐 Environment Variables loaded into global scope v24.8.5:', {
+    console.log('🔐 Environment Variables loaded for Enhanced Statistics Dashboard v24.9:', {
       username: adminUsername,
       hasPassword: !!adminPassword,
       fromEnvVars: !!(adminUsername !== 'admin' || adminPassword !== 'admin')
