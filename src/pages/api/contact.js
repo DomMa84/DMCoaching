@@ -759,7 +759,7 @@ export async function PUT({ request, url }) {
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2.1'
+      version: '18.2.1.1'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
