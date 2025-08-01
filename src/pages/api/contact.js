@@ -698,6 +698,8 @@ export async function POST({ request }) {
     });
   }
 }
+  }
+}
 
 export async function PUT({ request, url }) {
   try {
@@ -762,6 +764,8 @@ export async function PUT({ request, url }) {
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
     });
+  }
+}
   }
 }
 
