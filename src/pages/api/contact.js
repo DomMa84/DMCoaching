@@ -3,15 +3,13 @@
  * 
  * DATEI PFAD: src/pages/api/contact.js
  * 
- * Contact API v18.2 - Enhanced Statistics Integration
+ * Contact API v18.2.1 - Lead-Form Validation Fix
  * 
- * CHANGELOG v18.2:
- * - ✅ NEW: Enhanced Statistics Endpoints (enhanced-stats, service-breakdown, time-analysis)
- * - ✅ NEW: Automatische Speicherung von source_page, contact_hour, contact_day_of_week
- * - ✅ NEW: Service-Performance Tracking
- * - ✅ NEW: Tageszeit und Wochentag Auswertungen
- * - ✅ KEEP: Komplette v18.1 Funktionalität UNVERÄNDERT
- */
+ * CHANGELOG v18.2.1:
+ * - ✅ FIX: Lead-Form Validation korrigiert (message optional für leadForm)
+ * - ✅ FIX: Normale Forms benötigen weiterhin name + email + message
+ * - ✅ FIX: Lead-Forms benötigen nur name + email (message optional)
+ * - ✅ KEEP: Komplette Enhanced Statistics Funktionalität
 
 import { createClient } from '@supabase/supabase-js';
 
@@ -29,7 +27,7 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.2');
+    console.log('✅ Supabase client initialized v18.2.1');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
@@ -120,7 +118,7 @@ async function testSupabaseConnection() {
 
     if (error) throw error;
     
-    console.log(`✅ Supabase connection successful v18.2. Found ${count} contacts.`);
+    console.log(`✅ Supabase connection successful v18.2.1. Found ${count} contacts.`);
     supabaseConnectionTested = true;
     return true;
   } catch (error) {
@@ -146,14 +144,14 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.2`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.2.1`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback v18.2');
+  console.log('📦 Using demo database fallback v18.2.1');
   return demoDatabase.contacts;
 }
 
@@ -243,14 +241,14 @@ async function updateContact(contactId, updateData) {
 
       if (error) throw error;
       
-      console.log(`✅ Contact ${contactId} updated in Supabase v18.2`);
+      console.log(`✅ Contact ${contactId} updated in Supabase v18.2.1`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase updateContact failed:', error.message);
     }
   }
   
-  console.log(`📦 Updating contact ${contactId} in demo database v18.2`);
+  console.log(`📦 Updating contact ${contactId} in demo database v18.2.1`);
   const contact = demoDatabase.contacts.find(c => c.id == contactId);
   if (contact) {
     Object.assign(contact, updateData);
@@ -280,14 +278,14 @@ async function getContactStats() {
         }
       });
 
-      console.log(`✅ Stats loaded from Supabase v18.2: ${stats.total} total contacts`);
+      console.log(`✅ Stats loaded from Supabase v18.2.1: ${stats.total} total contacts`);
       return stats;
     } catch (error) {
       console.warn('❌ Supabase getContactStats failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database stats v18.2');
+  console.log('📦 Using demo database stats v18.2.1');
   const stats = { total: 0, new: 0, contacted: 0, converted: 0, archived: 0 };
   demoDatabase.contacts.forEach(contact => {
     stats.total++;
@@ -301,7 +299,7 @@ async function getContactStats() {
 // ===============================
 
 async function getEnhancedStats() {
-  console.log('📊 Getting Enhanced Statistics v18.2');
+  console.log('📊 Getting Enhanced Statistics v18.2.1');
   
   const contacts = await getAllContacts();
   const now = new Date();
@@ -346,12 +344,12 @@ async function getEnhancedStats() {
     }
   };
   
-  console.log('✅ Enhanced Stats calculated v18.2:', enhancedStats);
+  console.log('✅ Enhanced Stats calculated v18.2.1:', enhancedStats);
   return enhancedStats;
 }
 
 async function getServiceBreakdown() {
-  console.log('📊 Getting Service Breakdown v18.2');
+  console.log('📊 Getting Service Breakdown v18.2.1');
   
   const contacts = await getAllContacts();
   const serviceStats = {};
@@ -370,12 +368,12 @@ async function getServiceBreakdown() {
       percentage: contacts.length > 0 ? Math.round((count / contacts.length) * 100) : 0
     }));
   
-  console.log('✅ Service Breakdown calculated v18.2:', sortedServices);
+  console.log('✅ Service Breakdown calculated v18.2.1:', sortedServices);
   return { services: sortedServices, total: contacts.length };
 }
 
 async function getTimeAnalysis() {
-  console.log('📊 Getting Time Analysis v18.2');
+  console.log('📊 Getting Time Analysis v18.2.1');
   
   const contacts = await getAllContacts();
   
@@ -436,7 +434,7 @@ async function getTimeAnalysis() {
     }
   };
   
-  console.log('✅ Time Analysis calculated v18.2:', timeAnalysis);
+  console.log('✅ Time Analysis calculated v18.2.1:', timeAnalysis);
   return timeAnalysis;
 }
 
@@ -524,10 +522,10 @@ export async function GET({ url }) {
             hasKey: !!supabaseKey,
             keyLength: supabaseKey ? supabaseKey.length : 0
           },
-          version: '18.2-enhanced-statistics',
+          version: '18.2.1-enhanced-statistics-leadform-fix',
           timestamp: new Date().toISOString(),
           runtime: 'Astro API Route',
-          features: ['Enhanced Statistics', 'Service Breakdown', 'Time Analysis']
+          features: ['Enhanced Statistics', 'Service Breakdown', 'Time Analysis', 'Lead-Form Validation']
         };
         
         return new Response(JSON.stringify(debugInfo), { 
@@ -543,11 +541,11 @@ export async function GET({ url }) {
     }
 
   } catch (error) {
-    console.error('API GET Error v18.2:', error);
+    console.error('API GET Error v18.2.1:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2'
+      version: '18.2.1'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -573,10 +571,23 @@ export async function POST({ request }) {
       'Content-Type': 'application/json'
     };
 
-    // Validierung
-    if (!name || !email || !message) {
+    // ✅ NEW v18.2.1: Lead-Form Validation Fix
+    // Lead-Forms benötigen nur name + email (message optional)
+    // Normale Forms benötigen name + email + message
+    const isLeadForm = !!body.leadForm;
+    
+    if (!name || !email) {
       return new Response(JSON.stringify({ 
-        error: 'Name, E-Mail und Nachricht sind Pflichtfelder' 
+        error: 'Name und E-Mail sind Pflichtfelder' 
+      }), { 
+        status: 400, 
+        headers 
+      });
+    }
+    
+    if (!isLeadForm && !message) {
+      return new Response(JSON.stringify({ 
+        error: 'Nachricht ist für normale Kontaktformulare erforderlich' 
       }), { 
         status: 400, 
         headers 
@@ -604,18 +615,20 @@ export async function POST({ request }) {
       });
     }
 
-    // ✅ NEW v18.2: Enhanced Statistics Data zusammenfassen
+    // ✅ NEW v18.2.1: Enhanced Statistics Data zusammenfassen
     const contactData = { 
-      name, email, message, phone, company,
+      name, email, message: message || '', phone, company,
+      leadForm: isLeadForm,
       source_page, contact_hour, contact_day_of_week, 
       time_slot, contact_date, browser, device
     };
     
-    console.log('📊 Creating contact with Enhanced Statistics v18.2:', {
+    console.log('📊 Creating contact with Enhanced Statistics v18.2.1:', {
       name, 
       source_page, 
       contact_hour, 
-      time_slot
+      time_slot,
+      isLeadForm
     });
     
     try {
@@ -626,13 +639,13 @@ export async function POST({ request }) {
       const confirmationResult = await sendSimulatedEmail(
         email,
         'Bestätigung Ihrer Kontaktanfrage - Dominik Maier',
-        message
+        message || `Kontaktanfrage${isLeadForm ? ' (Lead-Form)' : ''} von ${name}`
       );
       
       const adminResult = await sendSimulatedEmail(
         'kontakt@dominik-maier.com',
-        `🎯 Neue Kontaktanfrage von ${name} (${source_page || 'Unbekannte Seite'})`,
-        message
+        `🎯 Neue ${isLeadForm ? 'Lead-' : ''}Kontaktanfrage von ${name} (${source_page || 'Unbekannte Seite'})`,
+        message || `${isLeadForm ? 'Lead-Form' : 'Kontakt'} Anfrage ohne Nachricht`
       );
 
       const emailsSent = confirmationResult.success && adminResult.success;
@@ -649,11 +662,12 @@ export async function POST({ request }) {
           admin: adminResult.success
         },
         database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
-        // ✅ NEW v18.2: Enhanced Statistics bestätigen
+        // ✅ NEW v18.2.1: Enhanced Statistics bestätigen
         statistics: {
           source_page: source_page || 'Unbekannt',
           time_slot: time_slot || 'Unbekannt',
-          tracked: !!(source_page && contact_hour && contact_day_of_week)
+          tracked: !!(source_page && contact_hour && contact_day_of_week),
+          leadForm: isLeadForm
         }
       }), { 
         status: 200, 
@@ -661,11 +675,11 @@ export async function POST({ request }) {
       });
 
     } catch (error) {
-      console.error('Contact creation error v18.2:', error);
+      console.error('Contact creation error v18.2.1:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Speichern der Kontaktdaten',
         debug: error.message,
-        version: '18.2'
+        version: '18.2.1'
       }), { 
         status: 500, 
         headers 
@@ -673,11 +687,11 @@ export async function POST({ request }) {
     }
 
   } catch (error) {
-    console.error('API POST Error v18.2:', error);
+    console.error('API POST Error v18.2.1:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2'
+      version: '18.2.1'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -720,18 +734,18 @@ export async function PUT({ request, url }) {
         message: 'Kontakt erfolgreich aktualisiert',
         contact: updatedContact,
         database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
-        version: '18.2'
+        version: '18.2.1'
       }), { 
         status: 200, 
         headers 
       });
 
     } catch (error) {
-      console.error('Contact update error v18.2:', error);
+      console.error('Contact update error v18.2.1:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Aktualisieren des Kontakts',
         debug: error.message,
-        version: '18.2'
+        version: '18.2.1'
       }), { 
         status: 500, 
         headers 
@@ -739,11 +753,11 @@ export async function PUT({ request, url }) {
     }
 
   } catch (error) {
-    console.error('API PUT Error v18.2:', error);
+    console.error('API PUT Error v18.2.1:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2'
+      version: '18.2.1'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
