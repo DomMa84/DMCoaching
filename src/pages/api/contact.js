@@ -3,13 +3,12 @@
  * 
  * DATEI PFAD: src/pages/api/contact.js
  * 
- * Contact API v18.2.12 - Build-Fix
+ * Contact API v18.2.13 - Validation Fix: Telefon Pflichtfeld
  * 
- * CHANGELOG v18.2.12:
- * - ✅ FIX: Doppelte schließende Klammern am PUT-Endpoint entfernt
- * - ✅ FIX: Syntax-Fehler bei Export-Funktionen behoben
- * - ✅ KEEP: Lead-Form Validation (message optional für leadForm)
- * - ✅ KEEP: Komplette Enhanced Statistics Funktionalität
+ * CHANGELOG v18.2.13:
+ * - ✅ FIX: Name + E-Mail + Telefon sind jetzt für ALLE Formulare Pflichtfelder
+ * - ✅ FIX: Nachricht ist für ALLE Formulare optional
+ * - ✅ KEEP: Enhanced Statistics Funktionalität vollständig erhalten
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -28,7 +27,7 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.2.12');
+    console.log('✅ Supabase client initialized v18.2.13');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
@@ -119,7 +118,7 @@ async function testSupabaseConnection() {
 
     if (error) throw error;
     
-    console.log(`✅ Supabase connection successful v18.2.12. Found ${count} contacts.`);
+    console.log(`✅ Supabase connection successful v18.2.13. Found ${count} contacts.`);
     supabaseConnectionTested = true;
     return true;
   } catch (error) {
@@ -572,23 +571,13 @@ export async function POST({ request }) {
       'Content-Type': 'application/json'
     };
 
-    // ✅ NEW v18.2.1: Lead-Form Validation Fix
-    // Lead-Forms benötigen nur name + email (message optional)
-    // Normale Forms benötigen name + email + message
+    // ✅ NEW v18.2.13: Alle Formulare benötigen Name + E-Mail + Telefon
+    // Nachricht ist optional für alle Formulare
     const isLeadForm = !!body.leadForm;
     
-    if (!name || !email) {
+    if (!name || !email || !phone) {
       return new Response(JSON.stringify({ 
-        error: 'Name und E-Mail sind Pflichtfelder' 
-      }), { 
-        status: 400, 
-        headers 
-      });
-    }
-    
-    if (!isLeadForm && !message) {
-      return new Response(JSON.stringify({ 
-        error: 'Nachricht ist für normale Kontaktformulare erforderlich' 
+        error: 'Name, E-Mail und Telefonnummer sind Pflichtfelder' 
       }), { 
         status: 400, 
         headers 
