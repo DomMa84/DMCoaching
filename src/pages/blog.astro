@@ -1,0 +1,183 @@
+---
+// blog.astro v1.0 - Blog-Übersichtsseite mit Layout v1.2.8 Integration
+// CHANGELOG v1.0:
+// - ✅ NEW: Blog-Übersichtsseite erstellt
+// - ✅ FIX: Layout v1.2.8 CSS-Klassen verwendet
+// - ✅ FIX: Header v1.5.1 und Footer v1.3 integriert
+// - ✅ SEO: Keywords KI im Vertrieb, Mittelstand Digitalisierung
+
+export const prerender = true;
+
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+console.log('📄 Blog v1.0 - Layout Integration');
+
+// Blog-Artikel Daten
+const blogPosts = [
+  {
+    id: 1,
+    title: "KI im Vertrieb: Rückblick auf die wvib-Veranstaltung vom 24. Juni 2025",
+    excerpt: "Künstliche Intelligenz revolutioniert den B2B-Vertrieb – Einblicke von der Expertenrunde in Emmendingen mit konkreten Praxisbeispielen für den Mittelstand.",
+    date: "24. Juni 2025",
+    readTime: "4 Min Lesezeit",
+    category: "KI & Digitalisierung",
+    image: "/images/blog/ki-vertrieb-veranstaltung.jpg",
+    slug: "ki-vertrieb-rueckblick-wvib-veranstaltung-juni-2025",
+    tags: ["KI im Vertrieb", "Mittelstand", "Digitalisierung", "Neukundengewinnung", "B2B"]
+  }
+];
+---
+
+<Layout 
+  title="Blog | Dominik Maier - KI, Vertrieb & Business Development"
+  description="Aktuelle Insights zu KI im Vertrieb, Mittelstand-Digitalisierung und modernen Business Development Strategien von Dominik Maier."
+>
+  <!-- Header Integration -->
+  <Header />
+
+  <!-- Hero Section -->
+  <section class="py-16 md:py-20 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6" data-aos="fade-up">
+          Insights & Expertise
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+          Aktuelle Entwicklungen in KI, Vertrieb und Business Development – 
+          Praxisnahe Einblicke für erfolgreiches Interim Management im Mittelstand.
+        </p>
+        
+        <!-- Keywords für SEO -->
+        <div class="flex flex-wrap justify-center gap-2 mb-8" data-aos="fade-up" data-aos-delay="200">
+          <span class="px-3 py-1 bg-primary-gold-15 text-primary-gold rounded-full text-sm font-medium">KI im Vertrieb</span>
+          <span class="px-3 py-1 bg-primary-gold-15 text-primary-gold rounded-full text-sm font-medium">Mittelstand Digitalisierung</span>
+          <span class="px-3 py-1 bg-primary-gold-15 text-primary-gold rounded-full text-sm font-medium">Business Development</span>
+          <span class="px-3 py-1 bg-primary-gold-15 text-primary-gold rounded-full text-sm font-medium">Neukundengewinnung</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog Posts Section -->
+  <section class="py-16 md:py-20 bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <div class="max-w-6xl mx-auto">
+        
+        <!-- Featured Article -->
+        <div class="mb-16">
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center" data-aos="fade-up">
+            Aktueller Beitrag
+          </h2>
+          
+          {blogPosts.map((post) => (
+            <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300" data-aos="fade-up">
+              <div class="md:flex">
+                <!-- Image Placeholder -->
+                <div class="md:w-1/2">
+                  <div class="h-64 md:h-full bg-gradient-to-br from-primary-gold-20 to-primary-gold-30 flex items-center justify-center">
+                    <div class="text-center text-primary-gold">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                      <p class="text-sm font-medium">KI & Innovation</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="md:w-1/2 p-6 md:p-8">
+                  <div class="flex items-center gap-4 mb-4">
+                    <span class="px-3 py-1 bg-primary-gold text-white rounded-full text-xs font-semibold">
+                      {post.category}
+                    </span>
+                    <time class="text-sm text-gray-500 dark:text-gray-400">
+                      {post.date}
+                    </time>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">
+                      {post.readTime}
+                    </span>
+                  </div>
+                  
+                  <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+                    {post.title}
+                  </h3>
+                  
+                  <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  
+                  <!-- Tags -->
+                  <div class="flex flex-wrap gap-2 mb-6">
+                    {post.tags.map((tag) => (
+                      <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded text-xs">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <a 
+                    href={`/blog/${post.slug}`}
+                    class="inline-flex items-center bg-primary-gold text-white px-6 py-3 rounded-lg hover:bg-primary-gold-90 transition-colors font-medium group"
+                  >
+                    Artikel lesen
+                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- Newsletter Signup -->
+        <div class="bg-gradient-to-r from-primary-gold-10 to-primary-gold-20 rounded-xl p-6 md:p-8 text-center" data-aos="fade-up">
+          <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Bleiben Sie auf dem Laufenden
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">
+            Verpassen Sie keine neuen Insights zu KI im Vertrieb und modernen Business Development Strategien.
+          </p>
+          <a 
+            href="/kontakt" 
+            class="inline-flex items-center bg-primary-gold text-white px-6 py-3 rounded-lg hover:bg-primary-gold-90 transition-colors font-medium"
+          >
+            Kontakt aufnehmen
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Coming Soon -->
+        <div class="mt-16 text-center" data-aos="fade-up">
+          <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Weitere Artikel folgen
+          </h3>
+          <p class="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Bald finden Sie hier weitere Einblicke zu Themen wie strategische Unternehmensentwicklung, 
+            Vertriebsoptimierung und Value Management im digitalen Zeitalter.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Integration -->
+  <Footer />
+</Layout>
+
+<style>
+  /* Blog-spezifische Styles falls benötigt */
+  article:hover {
+    transform: translateY(-2px);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    article:hover {
+      transform: none;
+    }
+  }
+</style>
