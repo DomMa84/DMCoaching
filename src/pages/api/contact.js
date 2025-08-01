@@ -3,7 +3,7 @@
  * 
  * DATEI PFAD: src/pages/api/contact.js
  * 
- * Contact API v18.2.1 - Lead-Form Validation Fix
+ * Contact API v18.2.11 - Lead-Form Validation Fix
  * 
  * CHANGELOG v18.2.1:
  * - ✅ FIX: Lead-Form Validation korrigiert (message optional für leadForm)
