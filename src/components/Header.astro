@@ -1,11 +1,11 @@
 ---
-// Header.astro v1.5.1 - Fixes: Service Buttons entfernt, "Alle Leistungen" Link entfernt
-// CHANGELOG v1.5.1:
-// - ✅ FIX: Service Quick Access Buttons entfernt (Strategische Entwicklung, Vertrieb)
-// - ✅ FIX: "Alle Leistungen →" Links aus Desktop und Mobile Dropdown entfernt
-// - ✅ KEEP: Dropdown-Funktionalität und alle Service-Pages bleiben
+// Header.astro v1.5.2 - Blog Navigation Integration
+// CHANGELOG v1.5.2:
+// - ✅ NEW: "Blog" Menüpunkt in Desktop und Mobile Navigation hinzugefügt
+// - ✅ KEEP: Alle bestehenden Service-Dropdown Funktionen
+// - ✅ KEEP: Layout und Styling unverändert
 
-console.log('🎨 Header v1.5.1 - Service Buttons & Alle Leistungen Fixes');
+console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -113,6 +113,11 @@ console.log('🎨 Header v1.5.1 - Service Buttons & Alle Leistungen Fixes');
               </div>
             </div>
           </div>
+          
+          <!-- ✅ NEW: Blog Navigation -->
+          <a href="/blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
+            Blog
+          </a>
           
           <a href="/ueber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
             Über mich
@@ -243,6 +248,11 @@ console.log('🎨 Header v1.5.1 - Service Buttons & Alle Leistungen Fixes');
               </a>
             </div>
           </div>
+          
+          <!-- ✅ NEW: Blog Mobile Navigation -->
+          <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            Blog
+          </a>
           
           <a href="/ueber-mich" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             Über mich
