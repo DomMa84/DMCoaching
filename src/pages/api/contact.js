@@ -3,15 +3,52 @@
  * 
  * DATEI PFAD: src/pages/api/contact.js
  * 
- * Contact API v18.2.13 - Validation Fix: Telefon Pflichtfeld
+ * Contact API v18.3.0 - E-Mail Integration Strato SMTP
  * 
- * CHANGELOG v18.2.13:
- * - ✅ FIX: Name + E-Mail + Telefon sind jetzt für ALLE Formulare Pflichtfelder
- * - ✅ FIX: Nachricht ist für ALLE Formulare optional
- * - ✅ KEEP: Enhanced Statistics Funktionalität vollständig erhalten
+ * CHANGELOG v18.3.0:
+ * - ✅ NEW: Strato SMTP E-Mail Integration
+ * - ✅ NEW: Corporate Design E-Mail Templates
+ * - ✅ NEW: Lead-Form vs Normal-Form E-Mail Templates
+ * - ✅ KEEP: Enhanced Statistics Funktionalität vollständig
+ * - ✅ KEEP: Telefon-Pflichtfeld Validation
  */
 
 import { createClient } from '@supabase/supabase-js';
+
+// ===============================
+// E-MAIL INTEGRATION (STRATO SMTP)
+// ===============================
+
+let nodemailer = null;
+let emailTransporter = null;
+
+// Dynamischer Import für Nodemailer (falls verfügbar)
+try {
+  nodemailer = await import('nodemailer');
+  console.log('✅ Nodemailer loaded for email functionality');
+  
+  // Strato SMTP Transporter konfigurieren
+  if (import.meta.env.SMTP_HOST && import.meta.env.SMTP_USER && import.meta.env.SMTP_PASS) {
+    emailTransporter = nodemailer.default.createTransporter({
+      host: import.meta.env.SMTP_HOST, // smtp.strato.de
+      port: parseInt(import.meta.env.EMAIL_PORT) || 587,
+      secure: import.meta.env.EMAIL_SECURE === 'true' || false, // true für 465, false für 587
+      auth: {
+        user: import.meta.env.SMTP_USER,
+        pass: import.meta.env.SMTP_PASS
+      },
+      tls: {
+        ciphers: 'SSLv3',
+        rejectUnauthorized: false
+      }
+    });
+    console.log('✅ Strato SMTP transporter configured v18.3.0');
+  } else {
+    console.warn('⚠️ SMTP Environment variables not configured - using simulation');
+  }
+} catch (error) {
+  console.warn('⚠️ Nodemailer not available, using email simulation:', error.message);
+}
 
 // ===============================
 // SUPABASE SETUP (PRODUCTION)
@@ -27,9 +64,201 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.2.13');
+    console.log('✅ Supabase client initialized v18.3.0');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
+  }
+}
+
+// ===============================
+// E-MAIL TEMPLATES (CORPORATE DESIGN)
+// ===============================
+
+function getEmailTemplate(type, data) {
+  const baseStyle = `
+    <div style="font-family: 'Montserrat', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
+      <div style="background: linear-gradient(135deg, #D2AE6C 0%, #B8954A 100%); padding: 40px 30px; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+          Dominik Maier
+        </h1>
+        <p style="color: #ffffff; margin: 8px 0 0 0; font-size: 14px; opacity: 0.95;">
+          Coaching & Interim Management
+        </p>
+      </div>
+      <div style="padding: 40px 30px; background: #ffffff;">
+  `;
+  
+  const baseFooter = `
+      </div>
+      <div style="background: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
+        <p style="color: #6c757d; margin: 0 0 15px 0; font-size: 14px;">
+          <strong>Dominik Maier</strong><br>
+          Coaching & Interim Management<br>
+          Gaisbachweg 4, 77776 Bad Rippoldsau
+        </p>
+        <p style="color: #6c757d; margin: 0 0 15px 0; font-size: 14px;">
+          📞 +49 7440 913367 | 📧 webmaster@maier-value.com<br>
+          🌐 <a href="https://dominik-maier.com" style="color: #D2AE6C; text-decoration: none;">dominik-maier.com</a>
+        </p>
+        <p style="color: #868e96; margin: 0; font-size: 12px;">
+          Diese E-Mail wurde automatisch generiert. Bitte antworten Sie nicht auf diese Nachricht.
+        </p>
+      </div>
+    </div>
+  `;
+
+  switch (type) {
+    case 'confirmation_normal':
+      return baseStyle + `
+        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
+          Vielen Dank für Ihre Kontaktanfrage!
+        </h2>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          Liebe/r ${data.name},
+        </p>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          herzlichen Dank für Ihr Interesse an meinen Leistungen im Bereich Coaching und Interim Management. 
+          Ihre Nachricht ist bei mir eingegangen und ich werde mich in Kürze bei Ihnen melden.
+        </p>
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #D2AE6C;">
+          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Ihre Anfrage im Überblick:</h3>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
+          ${data.company ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
+          ${data.message ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Nachricht:</strong> ${data.message}</p>` : ''}
+        </div>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          Ich melde mich zeitnah bei Ihnen zurück, um Ihr Anliegen zu besprechen und gemeinsam 
+          die optimale Lösung für Ihre Herausforderungen zu finden.
+        </p>
+        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
+          Mit freundlichen Grüßen<br>
+          <strong style="color: #D2AE6C;">Dominik Maier</strong>
+        </p>
+      ` + baseFooter;
+
+    case 'confirmation_lead':
+      return baseStyle + `
+        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
+          Vielen Dank für Ihr Interesse!
+        </h2>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          Liebe/r ${data.name},
+        </p>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          herzlichen Dank für Ihr Interesse an meinen Leistungen. Ich freue mich über Ihre Kontaktaufnahme 
+          und werde mich in den nächsten Tagen bei Ihnen melden.
+        </p>
+        <div style="background: linear-gradient(135deg, #D2AE6C15 0%, #D2AE6C25 100%); padding: 25px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Ihre Kontaktdaten:</h3>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
+          ${data.company ? `<p style="color: #495057; margin: 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
+        </div>
+        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
+          In der Zwischenzeit können Sie gerne meine aktuellen Insights zu KI im Vertrieb und 
+          modernen Business Development Strategien in meinem 
+          <a href="https://dominik-maier.com/blog" style="color: #D2AE6C; text-decoration: none;">Blog</a> lesen.
+        </p>
+        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
+          Mit freundlichen Grüßen<br>
+          <strong style="color: #D2AE6C;">Dominik Maier</strong>
+        </p>
+      ` + baseFooter;
+
+    case 'admin_notification':
+      return baseStyle + `
+        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
+          🎯 Neue ${data.isLeadForm ? 'Lead-' : ''}Kontaktanfrage
+        </h2>
+        <div style="background: #e8f4f8; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #D2AE6C;">
+          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Kontaktdaten:</h3>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
+          ${data.company ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
+          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Formular-Typ:</strong> ${data.isLeadForm ? 'Lead-Form (Schnellanfrage)' : 'Vollständiges Kontaktformular'}</p>
+        </div>
+        ${data.message ? `
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 25px 0;">
+          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Nachricht:</h3>
+          <p style="color: #495057; margin: 0; line-height: 1.6; font-style: italic;">"${data.message}"</p>
+        </div>
+        ` : ''}
+        ${data.source_page ? `
+        <div style="background: #D2AE6C15; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 16px;">📊 Enhanced Statistics:</h3>
+          <p style="color: #495057; margin: 0 0 8px 0; font-size: 14px;"><strong>Quelle:</strong> ${data.source_page}</p>
+          ${data.time_slot ? `<p style="color: #495057; margin: 0 0 8px 0; font-size: 14px;"><strong>Zeitslot:</strong> ${data.time_slot}</p>` : ''}
+          ${data.device ? `<p style="color: #495057; margin: 0 0 8px 0; font-size: 14px;"><strong>Gerät:</strong> ${data.device}</p>` : ''}
+          ${data.browser ? `<p style="color: #495057; margin: 0; font-size: 14px;"><strong>Browser:</strong> ${data.browser}</p>` : ''}
+        </div>
+        ` : ''}
+        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
+          Diese Anfrage wurde automatisch über die Homepage erfasst und ist im Admin Dashboard verfügbar.
+        </p>
+      ` + baseFooter;
+
+    default:
+      return baseStyle + `<p>Unbekannter E-Mail-Typ</p>` + baseFooter;
+  }
+}
+
+// ===============================
+// E-MAIL FUNKTIONEN (STRATO SMTP)
+// ===============================
+
+async function sendEmail(to, subject, htmlContent) {
+  // Wenn E-Mail-System nicht verfügbar, Simulation verwenden
+  if (!emailTransporter || !nodemailer) {
+    console.log(`📧 Email simulation - To: ${to}, Subject: ${subject}`);
+    return {
+      success: true,
+      simulation: true,
+      messageId: `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    };
+  }
+
+  try {
+    // Strato SMTP E-Mail versenden
+    const mailOptions = {
+      from: {
+        name: 'Dominik Maier - Coaching & Interim Management',
+        address: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER
+      },
+      to: to,
+      subject: subject,
+      html: htmlContent,
+      text: htmlContent.replace(/<[^>]*>/g, ''), // HTML zu Text konvertieren
+      headers: {
+        'X-Mailer': 'Dominik Maier Homepage v18.3.0',
+        'X-Priority': '3'
+      }
+    };
+
+    const info = await emailTransporter.sendMail(mailOptions);
+    
+    console.log(`✅ Email sent successfully via Strato SMTP: ${info.messageId}`);
+    return {
+      success: true,
+      simulation: false,
+      messageId: info.messageId,
+      provider: 'strato'
+    };
+
+  } catch (error) {
+    console.error('❌ Email sending failed:', error.message);
+    
+    // Fallback zu Simulation bei Fehlern
+    console.log(`📧 Fallback to email simulation - To: ${to}`);
+    return {
+      success: false,
+      simulation: true,
+      error: error.message,
+      messageId: `fallback_${Date.now()}`
+    };
   }
 }
 
@@ -48,7 +277,7 @@ const demoDatabase = {
       message: "Interesse an strategischer Beratung für Expansion in neue Märkte.",
       status: "new",
       notes: "",
-      // ✅ NEW v18.2: Enhanced Statistics Demo Data
+      // ✅ Enhanced Statistics Demo Data
       source_page: "Strategische Unternehmensentwicklung",
       contact_hour: 10,
       contact_day_of_week: "Donnerstag",
@@ -68,7 +297,7 @@ const demoDatabase = {
       message: "Benötigen Unterstützung bei Vertriebsoptimierung. Zeitnaher Termin gewünscht.",
       status: "contacted",
       notes: "Erstgespräch am 28.07. vereinbart",
-      // ✅ NEW v18.2: Enhanced Statistics Demo Data
+      // ✅ Enhanced Statistics Demo Data
       source_page: "Vertriebsoptimierung",
       contact_hour: 14,
       contact_day_of_week: "Mittwoch",
@@ -78,26 +307,6 @@ const demoDatabase = {
       device: "Mobile",
       created_at: "2025-07-24T14:15:00Z",
       updated_at: "2025-07-26T09:20:00Z"
-    },
-    {
-      id: 3,
-      name: "Robert Klein",
-      email: "robert.klein@startup-innovations.com",
-      phone: "+49 555 123456",
-      company: "Startup Innovations",
-      message: "Junges Unternehmen sucht erfahrenen Interim Manager für Strukturaufbau.",
-      status: "converted",
-      notes: "3-Monats-Projekt gestartet",
-      // ✅ NEW v18.2: Enhanced Statistics Demo Data
-      source_page: "Homepage",
-      contact_hour: 16,
-      contact_day_of_week: "Samstag",
-      time_slot: "Nachmittag (14-17)",
-      contact_date: "2025-07-20",
-      browser: "Chrome",
-      device: "Desktop",
-      created_at: "2025-07-20T16:45:00Z",
-      updated_at: "2025-07-23T11:10:00Z"
     }
   ]
 };
@@ -118,7 +327,7 @@ async function testSupabaseConnection() {
 
     if (error) throw error;
     
-    console.log(`✅ Supabase connection successful v18.2.13. Found ${count} contacts.`);
+    console.log(`✅ Supabase connection successful v18.3.0. Found ${count} contacts.`);
     supabaseConnectionTested = true;
     return true;
   } catch (error) {
@@ -144,14 +353,14 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.2.12`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.0`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback v18.2.12');
+  console.log('📦 Using demo database fallback v18.3.0');
   return demoDatabase.contacts;
 }
 
@@ -169,7 +378,7 @@ async function createContact(contactData) {
           status: 'new',
           notes: '',
           leadform: contactData.leadForm || false,
-          // ✅ NEW v18.2: Enhanced Statistics Fields
+          // ✅ Enhanced Statistics Fields
           source_page: contactData.source_page || null,
           contact_hour: contactData.contact_hour || null,
           contact_day_of_week: contactData.contact_day_of_week || null,
@@ -183,14 +392,14 @@ async function createContact(contactData) {
 
       if (error) throw error;
       
-      console.log(`✅ Contact created in Supabase v18.2.12 with ID: ${data.id} (source: ${contactData.source_page})`);
+      console.log(`✅ Contact created in Supabase v18.3.0 with ID: ${data.id} (source: ${contactData.source_page})`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
     }
   }
   
-  console.log('📦 Creating contact in demo database v18.2.12');
+  console.log('📦 Creating contact in demo database v18.3.0');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
@@ -241,14 +450,14 @@ async function updateContact(contactId, updateData) {
 
       if (error) throw error;
       
-      console.log(`✅ Contact ${contactId} updated in Supabase v18.2.12`);
+      console.log(`✅ Contact ${contactId} updated in Supabase v18.3.0`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase updateContact failed:', error.message);
     }
   }
   
-  console.log(`📦 Updating contact ${contactId} in demo database v18.2.12`);
+  console.log(`📦 Updating contact ${contactId} in demo database v18.3.0`);
   const contact = demoDatabase.contacts.find(c => c.id == contactId);
   if (contact) {
     Object.assign(contact, updateData);
@@ -278,14 +487,14 @@ async function getContactStats() {
         }
       });
 
-      console.log(`✅ Stats loaded from Supabase v18.2.12: ${stats.total} total contacts`);
+      console.log(`✅ Stats loaded from Supabase v18.3.0: ${stats.total} total contacts`);
       return stats;
     } catch (error) {
       console.warn('❌ Supabase getContactStats failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database stats v18.2.12');
+  console.log('📦 Using demo database stats v18.3.0');
   const stats = { total: 0, new: 0, contacted: 0, converted: 0, archived: 0 };
   demoDatabase.contacts.forEach(contact => {
     stats.total++;
@@ -295,11 +504,11 @@ async function getContactStats() {
 }
 
 // ===============================
-// ✅ NEW v18.2: ENHANCED STATISTICS FUNCTIONS
+// ✅ ENHANCED STATISTICS FUNCTIONS (UNVERÄNDERT)
 // ===============================
 
 async function getEnhancedStats() {
-  console.log('📊 Getting Enhanced Statistics v18.2.12');
+  console.log('📊 Getting Enhanced Statistics v18.3.0');
   
   const contacts = await getAllContacts();
   const now = new Date();
@@ -344,12 +553,12 @@ async function getEnhancedStats() {
     }
   };
   
-  console.log('✅ Enhanced Stats calculated v18.2.12:', enhancedStats);
+  console.log('✅ Enhanced Stats calculated v18.3.0:', enhancedStats);
   return enhancedStats;
 }
 
 async function getServiceBreakdown() {
-  console.log('📊 Getting Service Breakdown v18.2.12');
+  console.log('📊 Getting Service Breakdown v18.3.0');
   
   const contacts = await getAllContacts();
   const serviceStats = {};
@@ -368,12 +577,12 @@ async function getServiceBreakdown() {
       percentage: contacts.length > 0 ? Math.round((count / contacts.length) * 100) : 0
     }));
   
-  console.log('✅ Service Breakdown calculated v18.2.12:', sortedServices);
+  console.log('✅ Service Breakdown calculated v18.3.0:', sortedServices);
   return { services: sortedServices, total: contacts.length };
 }
 
 async function getTimeAnalysis() {
-  console.log('📊 Getting Time Analysis v18.2.12');
+  console.log('📊 Getting Time Analysis v18.3.0');
   
   const contacts = await getAllContacts();
   
@@ -434,29 +643,12 @@ async function getTimeAnalysis() {
     }
   };
   
-  console.log('✅ Time Analysis calculated v18.2.12:', timeAnalysis);
+  console.log('✅ Time Analysis calculated v18.3.0:', timeAnalysis);
   return timeAnalysis;
 }
 
 // ===============================
-// E-MAIL FUNKTIONEN (VEREINFACHT FÜR ASTRO)
-// ===============================
-
-async function sendSimulatedEmail(to, subject, message) {
-  // Für Astro-Environment - E-Mail-Simulation
-  console.log(`📧 Email would be sent to: ${to}`);
-  console.log(`📧 Subject: ${subject}`);
-  console.log(`📧 Message preview: ${message.substring(0, 100)}...`);
-  
-  return {
-    success: true,
-    simulation: true,
-    messageId: `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-  };
-}
-
-// ===============================
-// ASTRO API ENDPOINTS (ENHANCED v18.2)
+// ASTRO API ENDPOINTS (ENHANCED v18.3)
 // ===============================
 
 export async function GET({ url }) {
@@ -487,7 +679,7 @@ export async function GET({ url }) {
           headers 
         });
       
-      // ✅ NEW v18.2: Enhanced Statistics Endpoints
+      // ✅ Enhanced Statistics Endpoints
       case 'enhanced-stats':
         const enhancedStats = await getEnhancedStats();
         return new Response(JSON.stringify({ enhancedStats }), { 
@@ -517,15 +709,21 @@ export async function GET({ url }) {
             client: supabase ? 'Initialized' : 'Failed',
             tested: supabaseConnectionTested
           },
+          email: {
+            transporter: emailTransporter ? 'Configured' : 'Not configured',
+            nodemailer: nodemailer ? 'Available' : 'Not available',
+            smtp_host: import.meta.env.SMTP_HOST || 'Not set',
+            smtp_user: import.meta.env.SMTP_USER ? 'Present' : 'Not set'
+          },
           environment: {
             supabaseUrl: supabaseUrl || 'undefined',
             hasKey: !!supabaseKey,
             keyLength: supabaseKey ? supabaseKey.length : 0
           },
-          version: '18.2.12-build-fix',
+          version: '18.3.0-email-integration',
           timestamp: new Date().toISOString(),
           runtime: 'Astro API Route',
-          features: ['Enhanced Statistics', 'Service Breakdown', 'Time Analysis', 'Lead-Form Validation']
+          features: ['Enhanced Statistics', 'Strato SMTP Email', 'Corporate Templates', 'Lead-Form Support']
         };
         
         return new Response(JSON.stringify(debugInfo), { 
@@ -541,11 +739,11 @@ export async function GET({ url }) {
     }
 
   } catch (error) {
-    console.error('API GET Error v18.2.12:', error);
+    console.error('API GET Error v18.3.0:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2.12'
+      version: '18.3.0'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -558,7 +756,7 @@ export async function POST({ request }) {
     const body = await request.json();
     const { 
       name, email, message, phone, company,
-      // ✅ NEW v18.2: Enhanced Statistics Fields
+      // ✅ Enhanced Statistics Fields
       source_page, contact_hour, contact_day_of_week, time_slot, 
       contact_date, browser, device
     } = body;
@@ -571,8 +769,7 @@ export async function POST({ request }) {
       'Content-Type': 'application/json'
     };
 
-    // ✅ NEW v18.2.13: Alle Formulare benötigen Name + E-Mail + Telefon
-    // Nachricht ist optional für alle Formulare
+    // ✅ NEW v18.3.0: Name + E-Mail + Telefon Pflichtfelder für alle Formulare
     const isLeadForm = !!body.leadForm;
     
     if (!name || !email || !phone) {
@@ -605,7 +802,7 @@ export async function POST({ request }) {
       });
     }
 
-    // ✅ NEW v18.2.1: Enhanced Statistics Data zusammenfassen
+    // ✅ Enhanced Statistics Data zusammenfassen
     const contactData = { 
       name, email, message: message || '', phone, company,
       leadForm: isLeadForm,
@@ -613,7 +810,7 @@ export async function POST({ request }) {
       time_slot, contact_date, browser, device
     };
     
-    console.log('📊 Creating contact with Enhanced Statistics v18.2.12:', {
+    console.log('📊 Creating contact with Enhanced Statistics v18.3.0:', {
       name, 
       source_page, 
       contact_hour, 
@@ -625,17 +822,41 @@ export async function POST({ request }) {
       // Kontakt in Datenbank speichern
       const newContact = await createContact(contactData);
       
-      // E-Mail-Simulation (für Astro)
-      const confirmationResult = await sendSimulatedEmail(
+      // ✅ NEW v18.3.0: E-Mail Templates versenden
+      const emailData = {
+        name,
         email,
-        'Bestätigung Ihrer Kontaktanfrage - Dominik Maier',
-        message || `Kontaktanfrage${isLeadForm ? ' (Lead-Form)' : ''} von ${name}`
+        phone,
+        company,
+        message,
+        isLeadForm,
+        source_page,
+        time_slot,
+        device,
+        browser
+      };
+
+      // Bestätigungs-E-Mail an Kunden
+      const confirmationTemplate = isLeadForm ? 'confirmation_lead' : 'confirmation_normal';
+      const confirmationHtml = getEmailTemplate(confirmationTemplate, emailData);
+      const confirmationSubject = isLeadForm 
+        ? 'Vielen Dank für Ihr Interesse - Dominik Maier'
+        : 'Bestätigung Ihrer Kontaktanfrage - Dominik Maier';
+      
+      const confirmationResult = await sendEmail(
+        email,
+        confirmationSubject,
+        confirmationHtml
       );
       
-      const adminResult = await sendSimulatedEmail(
-        'kontakt@dominik-maier.com',
-        `🎯 Neue ${isLeadForm ? 'Lead-' : ''}Kontaktanfrage von ${name} (${source_page || 'Unbekannte Seite'})`,
-        message || `${isLeadForm ? 'Lead-Form' : 'Kontakt'} Anfrage ohne Nachricht`
+      // Admin-Benachrichtigung
+      const adminHtml = getEmailTemplate('admin_notification', emailData);
+      const adminSubject = `🎯 Neue ${isLeadForm ? 'Lead-' : ''}Kontaktanfrage von ${name} (${source_page || 'Unbekannte Seite'})`;
+      
+      const adminResult = await sendEmail(
+        import.meta.env.EMAIL_TO || 'kontakt@dominik-maier.com',
+        adminSubject,
+        adminHtml
       );
 
       const emailsSent = confirmationResult.success && adminResult.success;
@@ -643,16 +864,24 @@ export async function POST({ request }) {
 
       return new Response(JSON.stringify({
         success: true,
-        message: 'Vielen Dank! Ihre Nachricht wurde gespeichert.',
+        message: 'Vielen Dank! Ihre Nachricht wurde gespeichert und eine Bestätigung versendet.',
         contact: newContact,
         emailStatus: {
           sent: emailsSent,
           simulation: isSimulation,
-          confirmation: confirmationResult.success,
-          admin: adminResult.success
+          confirmation: {
+            success: confirmationResult.success,
+            messageId: confirmationResult.messageId,
+            provider: confirmationResult.provider || 'simulation'
+          },
+          admin: {
+            success: adminResult.success,
+            messageId: adminResult.messageId,
+            provider: adminResult.provider || 'simulation'
+          }
         },
         database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
-        // ✅ NEW v18.2.1: Enhanced Statistics bestätigen
+        // ✅ Enhanced Statistics bestätigen
         statistics: {
           source_page: source_page || 'Unbekannt',
           time_slot: time_slot || 'Unbekannt',
@@ -665,11 +894,11 @@ export async function POST({ request }) {
       });
 
     } catch (error) {
-      console.error('Contact creation error v18.2.12:', error);
+      console.error('Contact creation error v18.3.0:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Speichern der Kontaktdaten',
         debug: error.message,
-        version: '18.2.12'
+        version: '18.3.0'
       }), { 
         status: 500, 
         headers 
@@ -677,11 +906,11 @@ export async function POST({ request }) {
     }
 
   } catch (error) {
-    console.error('API POST Error v18.2.12:', error);
+    console.error('API POST Error v18.3.0:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2.12'
+      version: '18.3.0'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
@@ -724,18 +953,18 @@ export async function PUT({ request, url }) {
         message: 'Kontakt erfolgreich aktualisiert',
         contact: updatedContact,
         database: supabase && await testSupabaseConnection() ? 'supabase' : 'demo',
-        version: '18.2.12'
+        version: '18.3.0'
       }), { 
         status: 200, 
         headers 
       });
 
     } catch (error) {
-      console.error('Contact update error v18.2.12:', error);
+      console.error('Contact update error v18.3.0:', error);
       return new Response(JSON.stringify({
         error: 'Fehler beim Aktualisieren des Kontakts',
         debug: error.message,
-        version: '18.2.12'
+        version: '18.3.0'
       }), { 
         status: 500, 
         headers 
@@ -743,11 +972,11 @@ export async function PUT({ request, url }) {
     }
 
   } catch (error) {
-    console.error('API PUT Error v18.2.12:', error);
+    console.error('API PUT Error v18.3.0:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       debug: error.message,
-      version: '18.2.12'
+      version: '18.3.0'
     }), { 
       status: 500, 
       headers: { 'Content-Type': 'application/json' }
