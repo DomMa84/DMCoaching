@@ -13,20 +13,60 @@
 import { createClient } from '@supabase/supabase-js';
 
 // ===============================
-// E-MAIL INTEGRATION v18.3.6 - STRATO SMTP FIX
+// E-MAIL INTEGRATION v18.3.7 - NODEMAILER IMPORT FIX
 // ===============================
+// 🎯 ERSETZE NUR DIESEN TEIL IN contact.js (Zeilen ~20-140)
 
 let nodemailer = null;
 let emailTransporter = null;
 let emailError = null;
 
-// Dynamischer Import für Nodemailer
+// ✅ KORRIGIERTER NODEMAILER IMPORT
 try {
-  const nodemailerModule = await import('nodemailer');
-  nodemailer = nodemailerModule.default || nodemailerModule;
-  console.log('✅ Nodemailer loaded successfully v18.3.6');
+  console.log('🔄 Loading Nodemailer v18.3.7...');
   
-  // Erweiterte SMTP Transporter Konfiguration für Strato
+  // Mehrere Import-Strategien versuchen
+  try {
+    // Strategie 1: ESM Import
+    const nodemailerModule = await import('nodemailer');
+    console.log('📦 Nodemailer module structure:', Object.keys(nodemailerModule));
+    
+    // Korrekte Extraktion des Nodemailer-Objects  
+    if (nodemailerModule.default) {
+      nodemailer = nodemailerModule.default;
+      console.log('✅ Using nodemailerModule.default');
+    } else if (nodemailerModule.createTransport) {
+      nodemailer = nodemailerModule;
+      console.log('✅ Using nodemailerModule directly');
+    } else {
+      throw new Error('No valid nodemailer export found');
+    }
+    
+    // Validierung der createTransport Funktion
+    if (typeof nodemailer.createTransport !== 'function') {
+      throw new Error(`nodemailer.createTransport is ${typeof nodemailer.createTransport}, expected function`);
+    }
+    
+    console.log('✅ Nodemailer loaded successfully v18.3.7');
+    console.log('📧 Available methods:', Object.keys(nodemailer).filter(key => typeof nodemailer[key] === 'function'));
+    
+  } catch (importError) {
+    console.error('❌ ESM import failed:', importError.message);
+    
+    // Strategie 2: CommonJS Fallback (falls verfügbar)
+    try {
+      console.log('🔄 Trying CommonJS fallback...');
+      // Das wird in Astro wahrscheinlich nicht funktionieren, aber versuchen wir es
+      const nodemailerCJS = require('nodemailer');
+      nodemailer = nodemailerCJS;
+      console.log('✅ CommonJS fallback successful');
+    } catch (cjsError) {
+      console.error('❌ CommonJS fallback also failed:', cjsError.message);
+      throw new Error(`Both import strategies failed: ESM: ${importError.message}, CJS: ${cjsError.message}`);
+    }
+  }
+  
+  // SMTP-Konfiguration nach erfolgreichem Nodemailer-Import
   const smtpConfig = {
     host: import.meta.env.SMTP_HOST,
     user: import.meta.env.SMTP_USER, 
@@ -35,18 +75,22 @@ try {
     secure: import.meta.env.EMAIL_SECURE
   };
   
-  console.log('🔧 SMTP Config Check v18.3.6:', {
+  console.log('🔧 SMTP Config Check v18.3.7:', {
     host: smtpConfig.host || 'MISSING',
     user: smtpConfig.user ? 'Present' : 'MISSING',
     pass: smtpConfig.pass ? 'Present' : 'MISSING',
     port: smtpConfig.port || 'Default (587)',
-    secure: smtpConfig.secure || 'Default (false)'
+    secure: smtpConfig.secure || 'Default (false)',
+    nodemailerType: typeof nodemailer,
+    createTransportType: typeof nodemailer.createTransport
   });
   
-  if (smtpConfig.host && smtpConfig.user && smtpConfig.pass) {
+  if (smtpConfig.host && smtpConfig.user && smtpConfig.pass && nodemailer && typeof nodemailer.createTransport === 'function') {
     try {
-      // ✅ STRATO-OPTIMIERTE KONFIGURATION
-      emailTransporter = nodemailer.createTransporter({
+      console.log('🔄 Creating SMTP transporter with corrected import...');
+      
+      // ✅ KORRIGIERTER FUNCTION CALL - createTransport (ohne "er")
+      emailTransporter = nodemailer.createTransport({
         host: smtpConfig.host, // smtp.strato.de
         port: parseInt(smtpConfig.port) || 587,
         secure: smtpConfig.secure === 'true' || false, // false für Port 587
@@ -79,10 +123,14 @@ try {
         }
       });
       
-      // 🔧 ERWEITERTE VERBINDUNGSTESTS
-      console.log('🔄 Testing SMTP connection with extended timeout...');
+      console.log('✅ SMTP transporter created successfully');
+      console.log('📧 Transporter type:', typeof emailTransporter);
+      console.log('📧 Transporter methods:', Object.keys(emailTransporter).filter(key => typeof emailTransporter[key] === 'function'));
       
-      // Test 1: Basis-Verbindung
+      // 🔧 ERWEITERTE VERBINDUNGSTESTS
+      console.log('🔄 Testing SMTP connection with corrected import...');
+      
+      // Test 1: Basis-Verbindung mit Timeout
       console.log('🔄 Step 1: Basic connection test...');
       await Promise.race([
         emailTransporter.verify(),
@@ -91,19 +139,18 @@ try {
         )
       ]);
       
-      console.log('✅ Step 1 passed: Basic connection OK');
-      
-      console.log('✅ Strato SMTP transporter configured and verified v18.3.6');
+      console.log('✅ Step 1 passed: Basic connection OK v18.3.7');
+      console.log('✅ Strato SMTP transporter configured and verified v18.3.7');
       
     } catch (error) {
-      console.error('❌ SMTP Transporter verification failed v18.3.6:', error.message);
+      console.error('❌ SMTP Transporter setup failed v18.3.7:', error.message);
       console.error('❌ Full error details:', error);
       
-      // 🔧 FALLBACK: ALTERNATIVE STRATO KONFIGURATION
-      console.log('🔄 Trying alternative Strato configuration...');
+      // 🔧 FALLBACK: ALTERNATIVE STRATO KONFIGURATION (Port 465/SSL)
+      console.log('🔄 Trying alternative Strato configuration (Port 465/SSL)...');
       
       try {
-        emailTransporter = nodemailer.createTransporter({
+        emailTransporter = nodemailer.createTransport({
           host: smtpConfig.host,
           port: 465, // SSL Port als Alternative
           secure: true, // SSL für Port 465
@@ -116,15 +163,29 @@ try {
           },
           connectionTimeout: 30000,
           greetingTimeout: 15000,
-          socketTimeout: 30000
+          socketTimeout: 30000,
+          debug: true,
+          logger: {
+            debug: (info) => console.log('📧 SSL DEBUG:', info),
+            info: (info) => console.log('📧 SSL INFO:', info),
+            warn: (info) => console.warn('📧 SSL WARN:', info),
+            error: (info) => console.error('📧 SSL ERROR:', info)
+          }
         });
         
-        await emailTransporter.verify();
-        console.log('✅ Alternative Strato SMTP configuration successful (Port 465/SSL)');
+        console.log('🔄 Testing SSL configuration...');
+        await Promise.race([
+          emailTransporter.verify(),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('SSL connection timeout after 20s')), 20000)
+          )
+        ]);
+        
+        console.log('✅ Alternative Strato SMTP configuration successful (Port 465/SSL) v18.3.7');
         
       } catch (fallbackError) {
-        console.error('❌ Alternative configuration also failed:', fallbackError.message);
-        emailError = `Both configurations failed: ${error.message} | Fallback: ${fallbackError.message}`;
+        console.error('❌ Alternative SSL configuration also failed:', fallbackError.message);
+        emailError = `Primary config failed: ${error.message} | SSL fallback failed: ${fallbackError.message}`;
         emailTransporter = null;
       }
     }
@@ -133,14 +194,167 @@ try {
     if (!smtpConfig.host) missing.push('SMTP_HOST');
     if (!smtpConfig.user) missing.push('SMTP_USER');  
     if (!smtpConfig.pass) missing.push('SMTP_PASS');
+    if (!nodemailer) missing.push('nodemailer import');
+    if (nodemailer && typeof nodemailer.createTransport !== 'function') missing.push('createTransport function');
     
-    emailError = `Missing environment variables: ${missing.join(', ')}`;
-    console.warn('⚠️ SMTP configuration incomplete:', emailError);
+    emailError = `Missing or invalid: ${missing.join(', ')}`;
+    console.warn('⚠️ SMTP setup incomplete v18.3.7:', emailError);
   }
   
 } catch (error) {
-  console.warn('⚠️ Nodemailer import failed:', error.message);
-  emailError = `Nodemailer import failed: ${error.message}`;
+  console.error('❌ Nodemailer setup completely failed v18.3.7:', error.message);
+  console.error('❌ Full error stack:', error.stack);
+  emailError = `Nodemailer setup failed: ${error.message}`;
+}
+
+// ===============================
+// ERWEITERTE E-MAIL FUNKTIONEN v18.3.7
+// ===============================
+
+async function sendEmail(to, subject, htmlContent) {
+  console.log(`📧 v18.3.7 Attempting to send email to: ${to}`);
+  console.log(`📧 Subject: ${subject}`);
+  console.log(`📧 Transporter available: ${!!emailTransporter}`);
+  console.log(`📧 Nodemailer available: ${!!nodemailer}`);
+  console.log(`📧 createTransport type: ${nodemailer ? typeof nodemailer.createTransport : 'N/A'}`);
+  
+  if (!emailTransporter) {
+    console.log(`📧 Email simulation (no transporter) - Reason: ${emailError || 'Unknown'}`);
+    return {
+      success: true,
+      simulation: true,
+      reason: emailError || 'No transporter configured',
+      messageId: `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      debug: {
+        nodemailerAvailable: !!nodemailer,
+        createTransportType: nodemailer ? typeof nodemailer.createTransport : 'N/A',
+        transporterCreated: !!emailTransporter
+      }
+    };
+  }
+
+  try {
+    // 🔧 STRATO-OPTIMIERTE MAIL-OPTIONEN
+    const mailOptions = {
+      from: {
+        name: 'Dominik Maier - Coaching & Interim Management',
+        address: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER
+      },
+      to: to,
+      subject: subject,
+      html: htmlContent,
+      text: htmlContent.replace(/<[^>]*>/g, ''),
+      headers: {
+        'X-Mailer': 'Dominik Maier Homepage v18.3.7',
+        'X-Priority': '3',
+        'Message-ID': `<${Date.now()}.${Math.random().toString(36)}@dominik-maier.com>`,
+        'Date': new Date().toUTCString()
+      },
+      // 🔧 STRATO-SPEZIFISCHE OPTIONEN
+      envelope: {
+        from: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER,
+        to: to
+      },
+      // 🔧 ENCODING OPTIMIERUNGEN
+      encoding: 'utf8',
+      textEncoding: 'base64'
+    };
+
+    console.log(`📧 Sending email via Strato SMTP v18.3.7...`);
+    console.log(`📧 From: ${mailOptions.from.address}`);
+    console.log(`📧 To: ${to}`);
+    console.log(`📧 Transporter methods available:`, Object.keys(emailTransporter).filter(key => typeof emailTransporter[key] === 'function'));
+    
+    // 🔧 ERWEITERTE TIMEOUTS UND RETRY-LOGIC
+    const sendWithRetry = async (attempt = 1, maxAttempts = 3) => {
+      try {
+        console.log(`📧 Send attempt ${attempt}/${maxAttempts}...`);
+        
+        // Validierung vor dem Senden
+        if (typeof emailTransporter.sendMail !== 'function') {
+          throw new Error(`emailTransporter.sendMail is ${typeof emailTransporter.sendMail}, expected function`);
+        }
+        
+        const info = await Promise.race([
+          emailTransporter.sendMail(mailOptions),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Send timeout after 45s')), 45000)
+          )
+        ]);
+        
+        console.log(`✅ Email sent successfully on attempt ${attempt}: ${info.messageId}`);
+        console.log(`📧 Response: ${info.response}`);
+        
+        return {
+          success: true,
+          simulation: false,
+          messageId: info.messageId,
+          provider: 'strato',
+          attempt: attempt,
+          response: info.response,
+          version: '18.3.7'
+        };
+        
+      } catch (error) {
+        console.error(`❌ Send attempt ${attempt} failed:`, error.message);
+        console.error(`❌ Error details:`, error);
+        
+        if (attempt < maxAttempts) {
+          console.log(`🔄 Retrying in 2 seconds... (${attempt + 1}/${maxAttempts})`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return sendWithRetry(attempt + 1, maxAttempts);
+        } else {
+          throw error;
+        }
+      }
+    };
+    
+    return await sendWithRetry();
+
+  } catch (error) {
+    console.error('❌ Email sending failed after all retries v18.3.7:', error.message);
+    console.error('❌ Full error stack:', error.stack);
+    
+    // 🔧 DETAILLIERTE ERROR-ANALYSE
+    let errorCategory = 'Unknown';
+    if (error.message.includes('ECONNREFUSED')) errorCategory = 'Connection Refused';
+    if (error.message.includes('ETIMEDOUT')) errorCategory = 'Timeout';
+    if (error.message.includes('ENOTFOUND')) errorCategory = 'DNS Resolution';
+    if (error.message.includes('535')) errorCategory = 'Authentication Failed';
+    if (error.message.includes('550')) errorCategory = 'Mailbox Error';
+    if (error.message.includes('sendMail')) errorCategory = 'Transporter Method Error';
+    
+    console.error(`❌ Error Category: ${errorCategory}`);
+    
+    return {
+      success: false,
+      simulation: true,
+      error: error.message,
+      errorCategory: errorCategory,
+      messageId: `failed_${Date.now()}`,
+      recommendation: getErrorRecommendation(errorCategory),
+      debug: {
+        nodemailerType: typeof nodemailer,
+        transporterType: typeof emailTransporter,
+        sendMailType: emailTransporter ? typeof emailTransporter.sendMail : 'N/A'
+      }
+    };
+  }
+}
+
+// 🔧 ERROR-SPEZIFISCHE EMPFEHLUNGEN - ERWEITERT
+function getErrorRecommendation(errorCategory) {
+  const recommendations = {
+    'Connection Refused': 'Prüfen Sie die SMTP_HOST und Port-Einstellungen',
+    'Timeout': 'Verlängern Sie die Timeout-Werte oder prüfen Sie die Netzwerkverbindung',
+    'DNS Resolution': 'Prüfen Sie die SMTP_HOST Adresse (smtp.strato.de)',
+    'Authentication Failed': 'Prüfen Sie SMTP_USER und SMTP_PASS Credentials',
+    'Mailbox Error': 'Prüfen Sie die Empfänger-E-Mail-Adresse',
+    'Transporter Method Error': 'Nodemailer Import-Problem - prüfen Sie die Nodemailer-Installation',
+    'Unknown': 'Aktivieren Sie Debug-Modus für detaillierte Logs'
+  };
+  
+  return recommendations[errorCategory] || recommendations['Unknown'];
 }
 
 // ===============================
