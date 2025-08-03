@@ -1,8 +1,9 @@
 /**
- * Contact API v18.3.7 - Complete with v17.12 E-Mail Integration
+ * Contact API v18.3.8 - Complete with v17.12 E-Mail Integration + Header Fix
  * 
- * CHANGELOG v18.3.7:
- * - ✅ ADDED: v17.12 E-Mail-Funktionen (Strato SMTP)
+ * CHANGELOG v18.3.8:
+ * - ✅ FIXED: IP-Adresse und User-Agent Header-Extraktion
+ * - ✅ KEEP: v17.12 E-Mail-Funktionen (Strato SMTP)
  * - ✅ KEEP: Vollständige Enhanced Statistics Integration
  * - ✅ KEEP: Database-Speicherung funktional
  * - ✅ KEEP: Alle API-Endpoints
@@ -725,6 +726,52 @@ function getDeviceType(userAgent) {
 }
 
 // ===============================
+// VERBESSERTE HEADER-EXTRAKTION v18.3.8
+// ===============================
+
+function extractRequestHeaders(request) {
+  console.log('🔍 Extracting request headers...');
+  
+  // Alle verfügbaren Headers loggen
+  const allHeaders = {};
+  for (const [key, value] of request.headers.entries()) {
+    allHeaders[key] = value;
+  }
+  console.log('📋 Available headers:', Object.keys(allHeaders));
+  
+  // IP-Adresse mit mehreren Fallbacks
+  const ipAddress = 
+    request.headers.get('cf-connecting-ip') ||        // Cloudflare
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || // Load Balancer
+    request.headers.get('x-real-ip') ||               // nginx
+    request.headers.get('x-client-ip') ||             // Apache
+    request.headers.get('forwarded')?.match(/for=([^;,\s]+)/)?.[1] || // Standard
+    request.headers.get('remote-addr') ||             // Direct
+    'Unknown';
+  
+  // User-Agent mit Fallbacks
+  const userAgent = 
+    request.headers.get('user-agent') ||
+    request.headers.get('User-Agent') ||
+    'Unknown';
+  
+  // Referer mit Fallbacks  
+  const referer = 
+    request.headers.get('referer') ||
+    request.headers.get('Referer') ||
+    '';
+  
+  console.log('📍 Extracted data:', {
+    ipAddress,
+    userAgent: userAgent.substring(0, 50) + '...',
+    referer,
+    totalHeaders: Object.keys(allHeaders).length
+  });
+  
+  return { ipAddress, userAgent, referer };
+}
+
+// ===============================
 // ASTRO API ENDPOINTS - VOLLSTÄNDIG v18.3.7
 // ===============================
 
@@ -761,7 +808,7 @@ export async function GET({ url }) {
             email_to: EMAIL_CONFIG.toAddress,
             status: 'v17.12 Integration Active'
           },
-          version: '18.3.7-with-v17.12-email',
+          version: '18.3.8-with-v17.12-email-header-fix',
           timestamp: new Date().toISOString(),
           features: {
             enhanced_statistics: true,
@@ -853,15 +900,16 @@ export async function POST({ request }) {
     console.log(`📊 Processing ${isLeadForm ? 'LEAD' : 'NORMAL'} form submission`);
 
     // ===============================
-    // ENHANCED STATISTICS INTEGRATION
+    // ENHANCED STATISTICS INTEGRATION mit Header-Fix
     // ===============================
     
     const now = new Date();
     const contactHour = getContactHour();
     const timeSlot = getTimeSlot(contactHour);
     const dayOfWeek = getContactDayOfWeek();
-    const userAgent = request.headers.get('user-agent') || '';
-    const referer = request.headers.get('referer') || '';
+    
+    // ✅ VERBESSERTE HEADER-EXTRAKTION
+    const { ipAddress, userAgent, referer } = extractRequestHeaders(request);
     
     const enhancedData = {
       name,
@@ -878,12 +926,10 @@ export async function POST({ request }) {
       contact_date: now.toISOString().split('T')[0], // YYYY-MM-DD
       browser: getBrowserInfo(userAgent),
       device: getDeviceType(userAgent),
-      // v17.12 E-Mail Kompatibilität
+      // v17.12 E-Mail Kompatibilität - MIT KORREKTEN HEADERN
       timestamp: now.toISOString(),
       userAgent: userAgent,
-      ipAddress: request.headers.get('x-forwarded-for') || 
-                request.headers.get('x-real-ip') || 
-                'Unknown'
+      ipAddress: ipAddress
     };
 
     console.log('📊 Enhanced Statistics data:', {
@@ -966,10 +1012,10 @@ export async function POST({ request }) {
         time_slot: enhancedData.time_slot,
         device: enhancedData.device
       },
-      version: '18.3.7'
+      version: '18.3.8'
     };
 
-    console.log('✅ POST completed successfully v18.3.7 with v17.12 email integration');
+    console.log('✅ POST completed successfully v18.3.8 with v17.12 email integration + header fix');
     return new Response(JSON.stringify(response), { status: 200, headers });
 
   } catch (error) {
@@ -978,7 +1024,7 @@ export async function POST({ request }) {
       error: 'Interner Server-Fehler',
       message: error.message,
       debug: error.stack,
-      version: '18.3.7'
+      version: '18.3.8'
     }), { status: 500, headers });
   }
 }
