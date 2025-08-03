@@ -1,361 +1,14 @@
 /**
- * Contact API v18.3.6 - Complete with Strato SMTP Fix
+ * Contact API v18.3.7 - Complete with v17.12 E-Mail Integration
  * 
- * CHANGELOG v18.3.6:
- * - ✅ ENHANCED: Strato SMTP optimierte Konfiguration
- * - ✅ FIX: Erweiterte Timeouts und Retry-Logic
- * - ✅ ADD: Alternative Port 465/SSL Fallback
- * - ✅ ADD: Detaillierte SMTP Debug-Logs
+ * CHANGELOG v18.3.7:
+ * - ✅ ADDED: v17.12 E-Mail-Funktionen (Strato SMTP)
  * - ✅ KEEP: Vollständige Enhanced Statistics Integration
  * - ✅ KEEP: Database-Speicherung funktional
+ * - ✅ KEEP: Alle API-Endpoints
  */
 
 import { createClient } from '@supabase/supabase-js';
-
-// ===============================
-// E-MAIL INTEGRATION v18.3.7 - NODEMAILER IMPORT FIX
-// ===============================
-// 🎯 ERSETZE NUR DIESEN TEIL IN contact.js (Zeilen ~20-140)
-
-let nodemailer = null;
-let emailTransporter = null;
-let emailError = null;
-
-// ✅ KORRIGIERTER NODEMAILER IMPORT
-try {
-  console.log('🔄 Loading Nodemailer v18.3.7...');
-  
-  // Mehrere Import-Strategien versuchen
-  try {
-    // Strategie 1: ESM Import
-    const nodemailerModule = await import('nodemailer');
-    console.log('📦 Nodemailer module structure:', Object.keys(nodemailerModule));
-    
-    // Korrekte Extraktion des Nodemailer-Objects  
-    if (nodemailerModule.default) {
-      nodemailer = nodemailerModule.default;
-      console.log('✅ Using nodemailerModule.default');
-    } else if (nodemailerModule.createTransport) {
-      nodemailer = nodemailerModule;
-      console.log('✅ Using nodemailerModule directly');
-    } else {
-      throw new Error('No valid nodemailer export found');
-    }
-    
-    // Validierung der createTransport Funktion
-    if (typeof nodemailer.createTransport !== 'function') {
-      throw new Error(`nodemailer.createTransport is ${typeof nodemailer.createTransport}, expected function`);
-    }
-    
-    console.log('✅ Nodemailer loaded successfully v18.3.7');
-    console.log('📧 Available methods:', Object.keys(nodemailer).filter(key => typeof nodemailer[key] === 'function'));
-    
-  } catch (importError) {
-    console.error('❌ ESM import failed:', importError.message);
-    
-    // Strategie 2: CommonJS Fallback (falls verfügbar)
-    try {
-      console.log('🔄 Trying CommonJS fallback...');
-      // Das wird in Astro wahrscheinlich nicht funktionieren, aber versuchen wir es
-      const nodemailerCJS = require('nodemailer');
-      nodemailer = nodemailerCJS;
-      console.log('✅ CommonJS fallback successful');
-    } catch (cjsError) {
-      console.error('❌ CommonJS fallback also failed:', cjsError.message);
-      throw new Error(`Both import strategies failed: ESM: ${importError.message}, CJS: ${cjsError.message}`);
-    }
-  }
-  
-  // SMTP-Konfiguration nach erfolgreichem Nodemailer-Import
-  const smtpConfig = {
-    host: import.meta.env.SMTP_HOST,
-    user: import.meta.env.SMTP_USER, 
-    pass: import.meta.env.SMTP_PASS,
-    port: import.meta.env.EMAIL_PORT,
-    secure: import.meta.env.EMAIL_SECURE
-  };
-  
-  console.log('🔧 SMTP Config Check v18.3.7:', {
-    host: smtpConfig.host || 'MISSING',
-    user: smtpConfig.user ? 'Present' : 'MISSING',
-    pass: smtpConfig.pass ? 'Present' : 'MISSING',
-    port: smtpConfig.port || 'Default (587)',
-    secure: smtpConfig.secure || 'Default (false)',
-    nodemailerType: typeof nodemailer,
-    createTransportType: typeof nodemailer.createTransport
-  });
-  
-  if (smtpConfig.host && smtpConfig.user && smtpConfig.pass && nodemailer && typeof nodemailer.createTransport === 'function') {
-    try {
-      console.log('🔄 Creating SMTP transporter with corrected import...');
-      
-      // ✅ KORRIGIERTER FUNCTION CALL - createTransport (ohne "er")
-      emailTransporter = nodemailer.createTransport({
-        host: smtpConfig.host, // smtp.strato.de
-        port: parseInt(smtpConfig.port) || 587,
-        secure: smtpConfig.secure === 'true' || false, // false für Port 587
-        auth: {
-          user: smtpConfig.user,
-          pass: smtpConfig.pass
-        },
-        // 🔧 STRATO-SPEZIFISCHE EINSTELLUNGEN
-        tls: {
-          ciphers: 'SSLv3',
-          rejectUnauthorized: false,
-          minVersion: 'TLSv1.2'
-        },
-        // 🔧 ERWEITERTE TIMEOUTS FÜR STRATO
-        connectionTimeout: 60000, // 60 Sekunden
-        greetingTimeout: 30000,   // 30 Sekunden  
-        socketTimeout: 60000,     // 60 Sekunden
-        // 🔧 STRATO SMTP OPTIMIERUNGEN
-        pool: false,              // Keine Connection-Pooling
-        maxConnections: 1,        // Eine Verbindung zur Zeit
-        rateDelta: 1000,         // 1 Sekunde zwischen E-Mails
-        rateLimit: 1,            // Max 1 E-Mail pro Sekunde
-        // 🔧 DEBUG-MODUS FÜR DETAILLIERTE LOGS
-        debug: true,
-        logger: {
-          debug: (info) => console.log('📧 SMTP DEBUG:', info),
-          info: (info) => console.log('📧 SMTP INFO:', info),
-          warn: (info) => console.warn('📧 SMTP WARN:', info),
-          error: (info) => console.error('📧 SMTP ERROR:', info)
-        }
-      });
-      
-      console.log('✅ SMTP transporter created successfully');
-      console.log('📧 Transporter type:', typeof emailTransporter);
-      console.log('📧 Transporter methods:', Object.keys(emailTransporter).filter(key => typeof emailTransporter[key] === 'function'));
-      
-      // 🔧 ERWEITERTE VERBINDUNGSTESTS
-      console.log('🔄 Testing SMTP connection with corrected import...');
-      
-      // Test 1: Basis-Verbindung mit Timeout
-      console.log('🔄 Step 1: Basic connection test...');
-      await Promise.race([
-        emailTransporter.verify(),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Connection timeout after 30s')), 30000)
-        )
-      ]);
-      
-      console.log('✅ Step 1 passed: Basic connection OK v18.3.7');
-      console.log('✅ Strato SMTP transporter configured and verified v18.3.7');
-      
-    } catch (error) {
-      console.error('❌ SMTP Transporter setup failed v18.3.7:', error.message);
-      console.error('❌ Full error details:', error);
-      
-      // 🔧 FALLBACK: ALTERNATIVE STRATO KONFIGURATION (Port 465/SSL)
-      console.log('🔄 Trying alternative Strato configuration (Port 465/SSL)...');
-      
-      try {
-        emailTransporter = nodemailer.createTransport({
-          host: smtpConfig.host,
-          port: 465, // SSL Port als Alternative
-          secure: true, // SSL für Port 465
-          auth: {
-            user: smtpConfig.user,
-            pass: smtpConfig.pass
-          },
-          tls: {
-            rejectUnauthorized: false
-          },
-          connectionTimeout: 30000,
-          greetingTimeout: 15000,
-          socketTimeout: 30000,
-          debug: true,
-          logger: {
-            debug: (info) => console.log('📧 SSL DEBUG:', info),
-            info: (info) => console.log('📧 SSL INFO:', info),
-            warn: (info) => console.warn('📧 SSL WARN:', info),
-            error: (info) => console.error('📧 SSL ERROR:', info)
-          }
-        });
-        
-        console.log('🔄 Testing SSL configuration...');
-        await Promise.race([
-          emailTransporter.verify(),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('SSL connection timeout after 20s')), 20000)
-          )
-        ]);
-        
-        console.log('✅ Alternative Strato SMTP configuration successful (Port 465/SSL) v18.3.7');
-        
-      } catch (fallbackError) {
-        console.error('❌ Alternative SSL configuration also failed:', fallbackError.message);
-        emailError = `Primary config failed: ${error.message} | SSL fallback failed: ${fallbackError.message}`;
-        emailTransporter = null;
-      }
-    }
-  } else {
-    const missing = [];
-    if (!smtpConfig.host) missing.push('SMTP_HOST');
-    if (!smtpConfig.user) missing.push('SMTP_USER');  
-    if (!smtpConfig.pass) missing.push('SMTP_PASS');
-    if (!nodemailer) missing.push('nodemailer import');
-    if (nodemailer && typeof nodemailer.createTransport !== 'function') missing.push('createTransport function');
-    
-    emailError = `Missing or invalid: ${missing.join(', ')}`;
-    console.warn('⚠️ SMTP setup incomplete v18.3.7:', emailError);
-  }
-  
-} catch (error) {
-  console.error('❌ Nodemailer setup completely failed v18.3.7:', error.message);
-  console.error('❌ Full error stack:', error.stack);
-  emailError = `Nodemailer setup failed: ${error.message}`;
-}
-
-// ===============================
-// ERWEITERTE E-MAIL FUNKTIONEN v18.3.7
-// ===============================
-
-async function sendEmail(to, subject, htmlContent) {
-  console.log(`📧 v18.3.7 Attempting to send email to: ${to}`);
-  console.log(`📧 Subject: ${subject}`);
-  console.log(`📧 Transporter available: ${!!emailTransporter}`);
-  console.log(`📧 Nodemailer available: ${!!nodemailer}`);
-  console.log(`📧 createTransport type: ${nodemailer ? typeof nodemailer.createTransport : 'N/A'}`);
-  
-  if (!emailTransporter) {
-    console.log(`📧 Email simulation (no transporter) - Reason: ${emailError || 'Unknown'}`);
-    return {
-      success: true,
-      simulation: true,
-      reason: emailError || 'No transporter configured',
-      messageId: `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      debug: {
-        nodemailerAvailable: !!nodemailer,
-        createTransportType: nodemailer ? typeof nodemailer.createTransport : 'N/A',
-        transporterCreated: !!emailTransporter
-      }
-    };
-  }
-
-  try {
-    // 🔧 STRATO-OPTIMIERTE MAIL-OPTIONEN
-    const mailOptions = {
-      from: {
-        name: 'Dominik Maier - Coaching & Interim Management',
-        address: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER
-      },
-      to: to,
-      subject: subject,
-      html: htmlContent,
-      text: htmlContent.replace(/<[^>]*>/g, ''),
-      headers: {
-        'X-Mailer': 'Dominik Maier Homepage v18.3.7',
-        'X-Priority': '3',
-        'Message-ID': `<${Date.now()}.${Math.random().toString(36)}@dominik-maier.com>`,
-        'Date': new Date().toUTCString()
-      },
-      // 🔧 STRATO-SPEZIFISCHE OPTIONEN
-      envelope: {
-        from: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER,
-        to: to
-      },
-      // 🔧 ENCODING OPTIMIERUNGEN
-      encoding: 'utf8',
-      textEncoding: 'base64'
-    };
-
-    console.log(`📧 Sending email via Strato SMTP v18.3.7...`);
-    console.log(`📧 From: ${mailOptions.from.address}`);
-    console.log(`📧 To: ${to}`);
-    console.log(`📧 Transporter methods available:`, Object.keys(emailTransporter).filter(key => typeof emailTransporter[key] === 'function'));
-    
-    // 🔧 ERWEITERTE TIMEOUTS UND RETRY-LOGIC
-    const sendWithRetry = async (attempt = 1, maxAttempts = 3) => {
-      try {
-        console.log(`📧 Send attempt ${attempt}/${maxAttempts}...`);
-        
-        // Validierung vor dem Senden
-        if (typeof emailTransporter.sendMail !== 'function') {
-          throw new Error(`emailTransporter.sendMail is ${typeof emailTransporter.sendMail}, expected function`);
-        }
-        
-        const info = await Promise.race([
-          emailTransporter.sendMail(mailOptions),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Send timeout after 45s')), 45000)
-          )
-        ]);
-        
-        console.log(`✅ Email sent successfully on attempt ${attempt}: ${info.messageId}`);
-        console.log(`📧 Response: ${info.response}`);
-        
-        return {
-          success: true,
-          simulation: false,
-          messageId: info.messageId,
-          provider: 'strato',
-          attempt: attempt,
-          response: info.response,
-          version: '18.3.7'
-        };
-        
-      } catch (error) {
-        console.error(`❌ Send attempt ${attempt} failed:`, error.message);
-        console.error(`❌ Error details:`, error);
-        
-        if (attempt < maxAttempts) {
-          console.log(`🔄 Retrying in 2 seconds... (${attempt + 1}/${maxAttempts})`);
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          return sendWithRetry(attempt + 1, maxAttempts);
-        } else {
-          throw error;
-        }
-      }
-    };
-    
-    return await sendWithRetry();
-
-  } catch (error) {
-    console.error('❌ Email sending failed after all retries v18.3.7:', error.message);
-    console.error('❌ Full error stack:', error.stack);
-    
-    // 🔧 DETAILLIERTE ERROR-ANALYSE
-    let errorCategory = 'Unknown';
-    if (error.message.includes('ECONNREFUSED')) errorCategory = 'Connection Refused';
-    if (error.message.includes('ETIMEDOUT')) errorCategory = 'Timeout';
-    if (error.message.includes('ENOTFOUND')) errorCategory = 'DNS Resolution';
-    if (error.message.includes('535')) errorCategory = 'Authentication Failed';
-    if (error.message.includes('550')) errorCategory = 'Mailbox Error';
-    if (error.message.includes('sendMail')) errorCategory = 'Transporter Method Error';
-    
-    console.error(`❌ Error Category: ${errorCategory}`);
-    
-    return {
-      success: false,
-      simulation: true,
-      error: error.message,
-      errorCategory: errorCategory,
-      messageId: `failed_${Date.now()}`,
-      recommendation: getErrorRecommendation(errorCategory),
-      debug: {
-        nodemailerType: typeof nodemailer,
-        transporterType: typeof emailTransporter,
-        sendMailType: emailTransporter ? typeof emailTransporter.sendMail : 'N/A'
-      }
-    };
-  }
-}
-
-// 🔧 ERROR-SPEZIFISCHE EMPFEHLUNGEN - ERWEITERT
-function getErrorRecommendation(errorCategory) {
-  const recommendations = {
-    'Connection Refused': 'Prüfen Sie die SMTP_HOST und Port-Einstellungen',
-    'Timeout': 'Verlängern Sie die Timeout-Werte oder prüfen Sie die Netzwerkverbindung',
-    'DNS Resolution': 'Prüfen Sie die SMTP_HOST Adresse (smtp.strato.de)',
-    'Authentication Failed': 'Prüfen Sie SMTP_USER und SMTP_PASS Credentials',
-    'Mailbox Error': 'Prüfen Sie die Empfänger-E-Mail-Adresse',
-    'Transporter Method Error': 'Nodemailer Import-Problem - prüfen Sie die Nodemailer-Installation',
-    'Unknown': 'Aktivieren Sie Debug-Modus für detaillierte Logs'
-  };
-  
-  return recommendations[errorCategory] || recommendations['Unknown'];
-}
 
 // ===============================
 // SUPABASE SETUP
@@ -370,7 +23,7 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.3.6');
+    console.log('✅ Supabase client initialized v18.3.7');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
@@ -408,252 +61,388 @@ async function testSupabaseConnection() {
 }
 
 // ===============================
-// E-MAIL TEMPLATES
+// E-MAIL INTEGRATION aus v17.12 - EXAKT WIE ES WAR
 // ===============================
 
-function getEmailTemplate(type, data) {
-  const baseStyle = `
-    <div style="font-family: 'Montserrat', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">
-      <div style="background: linear-gradient(135deg, #D2AE6C 0%, #B8954A 100%); padding: 40px 30px; text-align: center;">
-        <h1 style="color: #ffffff; margin: 0; font-size: 28px; font-weight: 800; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
-          Dominik Maier
-        </h1>
-        <p style="color: #ffffff; margin: 8px 0 0 0; font-size: 14px; opacity: 0.95;">
-          Coaching & Interim Management
-        </p>
-      </div>
-      <div style="padding: 40px 30px; background: #ffffff;">
-  `;
-  
-  const baseFooter = `
-      </div>
-      <div style="background: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e9ecef;">
-        <p style="color: #6c757d; margin: 0 0 15px 0; font-size: 14px;">
-          <strong>Dominik Maier</strong><br>
-          Coaching & Interim Management<br>
-          Gaisbachweg 4, 77776 Bad Rippoldsau
-        </p>
-        <p style="color: #6c757d; margin: 0 0 15px 0; font-size: 14px;">
-          📞 +49 7440 913367 | 📧 webmaster@maier-value.com<br>
-          🌐 <a href="https://dominik-maier.com" style="color: #D2AE6C; text-decoration: none;">dominik-maier.com</a>
-        </p>
-        <p style="color: #868e96; margin: 0; font-size: 12px;">
-          Diese E-Mail wurde automatisch generiert.
-        </p>
-      </div>
-    </div>
-  `;
-
-  switch (type) {
-    case 'confirmation_normal':
-      return baseStyle + `
-        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
-          Vielen Dank für Ihre Kontaktanfrage!
-        </h2>
-        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
-          Liebe/r ${data.name},
-        </p>
-        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
-          herzlichen Dank für Ihr Interesse an meinen Leistungen im Bereich Coaching und Interim Management. 
-          Ihre Nachricht ist bei mir eingegangen und ich werde mich in Kürze bei Ihnen melden.
-        </p>
-        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #D2AE6C;">
-          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Ihre Anfrage im Überblick:</h3>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
-          ${data.company ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
-          ${data.message ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Nachricht:</strong> ${data.message}</p>` : ''}
-        </div>
-        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
-          Ich melde mich zeitnah bei Ihnen zurück, um Ihr Anliegen zu besprechen.
-        </p>
-        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
-          Mit freundlichen Grüßen<br>
-          <strong style="color: #D2AE6C;">Dominik Maier</strong>
-        </p>
-      ` + baseFooter;
-
-    case 'confirmation_lead':
-      return baseStyle + `
-        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
-          Vielen Dank für Ihr Interesse!
-        </h2>
-        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
-          Liebe/r ${data.name},
-        </p>
-        <p style="color: #495057; margin: 0 0 20px 0; line-height: 1.6; font-size: 16px;">
-          herzlichen Dank für Ihr Interesse an meinen Leistungen. Ich freue mich über Ihre Kontaktaufnahme 
-          und werde mich in den nächsten Tagen bei Ihnen melden.
-        </p>
-        <div style="background: linear-gradient(135deg, #D2AE6C15 0%, #D2AE6C25 100%); padding: 25px; border-radius: 8px; margin: 25px 0;">
-          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Ihre Kontaktdaten:</h3>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
-          ${data.company ? `<p style="color: #495057; margin: 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
-        </div>
-        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
-          Mit freundlichen Grüßen<br>
-          <strong style="color: #D2AE6C;">Dominik Maier</strong>
-        </p>
-      ` + baseFooter;
-
-    case 'admin_notification':
-      return baseStyle + `
-        <h2 style="color: #343a40; margin: 0 0 25px 0; font-size: 24px; font-weight: 600;">
-          🎯 Neue ${data.isLeadForm ? 'Lead-' : ''}Kontaktanfrage
-        </h2>
-        <div style="background: #e8f4f8; padding: 25px; border-radius: 8px; margin: 25px 0; border-left: 4px solid #D2AE6C;">
-          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Kontaktdaten:</h3>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Name:</strong> ${data.name}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>E-Mail:</strong> ${data.email}</p>
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Telefon:</strong> ${data.phone}</p>
-          ${data.company ? `<p style="color: #495057; margin: 0 0 10px 0;"><strong>Unternehmen:</strong> ${data.company}</p>` : ''}
-          <p style="color: #495057; margin: 0 0 10px 0;"><strong>Formular-Typ:</strong> ${data.isLeadForm ? 'Lead-Form' : 'Vollständiges Kontaktformular'}</p>
-        </div>
-        ${data.message ? `
-        <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin: 25px 0;">
-          <h3 style="color: #343a40; margin: 0 0 15px 0; font-size: 18px;">Nachricht:</h3>
-          <p style="color: #495057; margin: 0; line-height: 1.6;">"${data.message}"</p>
-        </div>
-        ` : ''}
-        <p style="color: #495057; margin: 0; line-height: 1.6; font-size: 16px;">
-          Diese Anfrage wurde über die Homepage erfasst.
-        </p>
-      ` + baseFooter;
-
-    default:
-      return baseStyle + `<p>Unbekannter E-Mail-Typ</p>` + baseFooter;
+// ✅ STRATO SMTP KONFIGURATION (aus v17.12)
+const SMTP_CONFIG = {
+  host: import.meta.env.SMTP_HOST || 'smtp.strato.de',
+  port: parseInt(import.meta.env.EMAIL_PORT) || 587,
+  secure: import.meta.env.EMAIL_SECURE === 'true' || false,
+  auth: {
+    user: import.meta.env.SMTP_USER || 'webmaster@maier-value.com',
+    pass: import.meta.env.SMTP_PASS || 'mizpeg-siCpep-xahzi1'
   }
-}
+};
 
-// ===============================
-// ERWEITERTE E-MAIL FUNKTIONEN v18.3.6
-// ===============================
+const EMAIL_CONFIG = {
+  from: import.meta.env.EMAIL_FROM || 'Dominik Maier',
+  fromAddress: import.meta.env.SMTP_USER || 'webmaster@maier-value.com',
+  toAddress: import.meta.env.EMAIL_TO || 'maier@maier-value.com'
+};
 
-async function sendEmail(to, subject, htmlContent) {
-  console.log(`📧 v18.3.6 Attempting to send email to: ${to}`);
-  console.log(`📧 Subject: ${subject}`);
-  console.log(`📧 Transporter available: ${!!emailTransporter}`);
-  
-  if (!emailTransporter) {
-    console.log(`📧 Email simulation (no transporter) - Reason: ${emailError || 'Unknown'}`);
-    return {
-      success: true,
-      simulation: true,
-      reason: emailError || 'No transporter configured',
-      messageId: `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    };
-  }
+console.log('📧 SMTP Config v17.12:', {
+  host: SMTP_CONFIG.host,
+  port: SMTP_CONFIG.port,
+  secure: SMTP_CONFIG.secure,
+  user: SMTP_CONFIG.auth.user,
+  fromAddress: EMAIL_CONFIG.fromAddress,
+  toAddress: EMAIL_CONFIG.toAddress
+});
 
+// ✅ NODEMAILER TRANSPORT ERSTELLEN (aus v17.12)
+async function createNodemailerTransport() {
   try {
-    // 🔧 STRATO-OPTIMIERTE MAIL-OPTIONEN
-    const mailOptions = {
-      from: {
-        name: 'Dominik Maier - Coaching & Interim Management',
-        address: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER
-      },
-      to: to,
-      subject: subject,
-      html: htmlContent,
-      text: htmlContent.replace(/<[^>]*>/g, ''),
-      headers: {
-        'X-Mailer': 'Dominik Maier Homepage v18.3.6',
-        'X-Priority': '3',
-        'Message-ID': `<${Date.now()}.${Math.random().toString(36)}@dominik-maier.com>`,
-        'Date': new Date().toUTCString()
-      },
-      // 🔧 STRATO-SPEZIFISCHE OPTIONEN
-      envelope: {
-        from: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER,
-        to: to
-      },
-      // 🔧 ENCODING OPTIMIERUNGEN
-      encoding: 'utf8',
-      textEncoding: 'base64'
-    };
-
-    console.log(`📧 Sending email via Strato SMTP v18.3.6...`);
-    console.log(`📧 From: ${mailOptions.from.address}`);
-    console.log(`📧 To: ${to}`);
+    // ✅ AKTIVIERT: Echte Nodemailer-Integration
+    const nodemailer = await import('nodemailer');
     
-    // 🔧 ERWEITERTE TIMEOUTS UND RETRY-LOGIC
-    const sendWithRetry = async (attempt = 1, maxAttempts = 3) => {
-      try {
-        console.log(`📧 Send attempt ${attempt}/${maxAttempts}...`);
-        
-        const info = await Promise.race([
-          emailTransporter.sendMail(mailOptions),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Send timeout after 45s')), 45000)
-          )
-        ]);
-        
-        console.log(`✅ Email sent successfully on attempt ${attempt}: ${info.messageId}`);
-        console.log(`📧 Response: ${info.response}`);
-        
-        return {
-          success: true,
-          simulation: false,
-          messageId: info.messageId,
-          provider: 'strato',
-          attempt: attempt,
-          response: info.response
-        };
-        
-      } catch (error) {
-        console.error(`❌ Send attempt ${attempt} failed:`, error.message);
-        
-        if (attempt < maxAttempts) {
-          console.log(`🔄 Retrying in 2 seconds... (${attempt + 1}/${maxAttempts})`);
-          await new Promise(resolve => setTimeout(resolve, 2000));
-          return sendWithRetry(attempt + 1, maxAttempts);
-        } else {
-          throw error;
-        }
+    const transporter = nodemailer.default.createTransport({
+      host: SMTP_CONFIG.host,
+      port: SMTP_CONFIG.port,
+      secure: SMTP_CONFIG.secure,
+      auth: {
+        user: SMTP_CONFIG.auth.user,
+        pass: SMTP_CONFIG.auth.pass
+      },
+      tls: {
+        rejectUnauthorized: false // Für Strato SMTP
       }
-    };
+    });
     
-    return await sendWithRetry();
-
+    // SMTP-Verbindung testen
+    await transporter.verify();
+    console.log('✅ Strato SMTP-Verbindung erfolgreich v17.12');
+    
+    return { transporter, isReal: true };
+    
   } catch (error) {
-    console.error('❌ Email sending failed after all retries v18.3.6:', error.message);
-    console.error('❌ Full error stack:', error.stack);
+    console.error('❌ Nodemailer/SMTP Error v17.12:', error.message);
+    console.log('🔄 Fallback zu Simulation-Modus v17.12');
     
-    // 🔧 DETAILLIERTE ERROR-ANALYSE
-    let errorCategory = 'Unknown';
-    if (error.message.includes('ECONNREFUSED')) errorCategory = 'Connection Refused';
-    if (error.message.includes('ETIMEDOUT')) errorCategory = 'Timeout';
-    if (error.message.includes('ENOTFOUND')) errorCategory = 'DNS Resolution';
-    if (error.message.includes('535')) errorCategory = 'Authentication Failed';
-    if (error.message.includes('550')) errorCategory = 'Mailbox Error';
-    
-    console.error(`❌ Error Category: ${errorCategory}`);
-    
+    // Fallback zu Simulation
     return {
-      success: false,
-      simulation: true,
-      error: error.message,
-      errorCategory: errorCategory,
-      messageId: `failed_${Date.now()}`,
-      recommendation: getErrorRecommendation(errorCategory)
+      transporter: {
+        sendMail: async (mailOptions) => {
+          console.log('📧 FALLBACK: Simulating email send v17.12:', {
+            to: mailOptions.to,
+            subject: mailOptions.subject
+          });
+          
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          return {
+            messageId: `fallback-${Date.now()}@simulation.local`,
+            accepted: [mailOptions.to],
+            rejected: [],
+            response: '250 OK: Simulated delivery'
+          };
+        }
+      },
+      isReal: false
     };
   }
 }
 
-// 🔧 ERROR-SPEZIFISCHE EMPFEHLUNGEN
-function getErrorRecommendation(errorCategory) {
-  const recommendations = {
-    'Connection Refused': 'Prüfen Sie die SMTP_HOST und Port-Einstellungen',
-    'Timeout': 'Verlängern Sie die Timeout-Werte oder prüfen Sie die Netzwerkverbindung',
-    'DNS Resolution': 'Prüfen Sie die SMTP_HOST Adresse (smtp.strato.de)',
-    'Authentication Failed': 'Prüfen Sie SMTP_USER und SMTP_PASS Credentials',
-    'Mailbox Error': 'Prüfen Sie die Empfänger-E-Mail-Adresse',
-    'Unknown': 'Aktivieren Sie Debug-Modus für detaillierte Logs'
+// ✅ ECHTE E-MAIL INTEGRATION (aus v17.12)
+async function sendContactEmails(contactData) {
+  console.log('📧 E-Mail Service v17.12: ECHTE E-Mail-Versendung startet für:', contactData.name);
+  
+  const results = {
+    confirmation: null,
+    admin: null,
+    success: false,
+    errors: []
   };
   
-  return recommendations[errorCategory] || recommendations['Unknown'];
+  try {
+    // ✅ NODEMAILER TRANSPORT ERSTELLEN
+    const { transporter, isReal } = await createNodemailerTransport();
+    console.log(`📧 Transport Mode v17.12: ${isReal ? 'REAL SMTP' : 'SIMULATION'}`);
+    
+    // ✅ BESTÄTIGUNGS-E-MAIL AN USER
+    console.log('📤 Sending confirmation email to:', contactData.email);
+    
+    try {
+      const confirmationResult = await transporter.sendMail({
+        from: `"${EMAIL_CONFIG.from}" <${EMAIL_CONFIG.fromAddress}>`,
+        to: contactData.email,
+        subject: 'Ihre Nachricht ist bei uns angekommen - Dominik Maier',
+        html: generateConfirmationHTML(contactData),
+        text: generateConfirmationText(contactData)
+      });
+      
+      results.confirmation = {
+        success: true,
+        messageId: confirmationResult.messageId,
+        type: 'confirmation',
+        recipient: contactData.email,
+        realEmail: isReal, // ✅ EHRLICH: true bei echten E-Mails
+        response: confirmationResult.response
+      };
+      
+      console.log(`✅ Confirmation email ${isReal ? 'SENT' : 'SIMULATED'} v17.12:`, {
+        to: contactData.email,
+        messageId: confirmationResult.messageId,
+        real: isReal
+      });
+      
+    } catch (error) {
+      console.error('❌ Confirmation email failed v17.12:', error);
+      results.confirmation = {
+        success: false,
+        error: error.message,
+        type: 'confirmation',
+        recipient: contactData.email,
+        realEmail: false
+      };
+      results.errors.push(`Bestätigung: ${error.message}`);
+    }
+    
+    // ✅ ADMIN-BENACHRICHTIGUNG
+    console.log('📤 Sending admin notification to:', EMAIL_CONFIG.toAddress);
+    
+    try {
+      const adminResult = await transporter.sendMail({
+        from: `"Website Kontaktformular" <${EMAIL_CONFIG.fromAddress}>`,
+        to: EMAIL_CONFIG.toAddress,
+        subject: `${contactData.leadForm ? '🎯 LEAD' : '📧 KONTAKT'} Neue Anfrage von ${contactData.name}`,
+        html: generateAdminHTML(contactData),
+        text: generateAdminText(contactData)
+      });
+      
+      results.admin = {
+        success: true,
+        messageId: adminResult.messageId,
+        type: 'admin_notification',
+        recipient: EMAIL_CONFIG.toAddress,
+        priority: contactData.leadForm ? 'HIGH (Lead)' : 'Normal',
+        realEmail: isReal, // ✅ EHRLICH: true bei echten E-Mails
+        response: adminResult.response
+      };
+      
+      console.log(`✅ Admin notification ${isReal ? 'SENT' : 'SIMULATED'} v17.12:`, {
+        to: EMAIL_CONFIG.toAddress,
+        messageId: adminResult.messageId,
+        real: isReal,
+        priority: results.admin.priority
+      });
+      
+    } catch (error) {
+      console.error('❌ Admin notification failed v17.12:', error);
+      results.admin = {
+        success: false,
+        error: error.message,
+        type: 'admin_notification',
+        recipient: EMAIL_CONFIG.toAddress,
+        realEmail: false
+      };
+      results.errors.push(`Admin: ${error.message}`);
+    }
+    
+    // Erfolg wenn mindestens eine E-Mail erfolgreich
+    results.success = results.confirmation?.success || results.admin?.success;
+    
+    console.log('📊 Email sending summary v17.12:', {
+      confirmationSent: results.confirmation?.success || false,
+      adminSent: results.admin?.success || false,
+      overallSuccess: results.success,
+      errors: results.errors.length,
+      mode: isReal ? 'REAL_SMTP' : 'SIMULATION',
+      realEmails: (results.confirmation?.realEmail || false) || (results.admin?.realEmail || false)
+    });
+    
+    return results;
+    
+  } catch (error) {
+    console.error('❌ Error in sendContactEmails v17.12:', error);
+    
+    results.errors.push(`General: ${error.message}`);
+    return results;
+  }
+}
+
+// ✅ E-MAIL TEMPLATE GENERATOREN (aus v17.12)
+function generateConfirmationHTML(contactData) {
+  return `
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestätigung Ihrer Nachricht</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #D2AE6C, #B8941F); color: white; padding: 30px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #ffffff; padding: 30px; border: 1px solid #e0e0e0; border-top: none; }
+        .message-box { background: #f9f9f9; border-left: 4px solid #D2AE6C; padding: 15px; margin: 20px 0; }
+        .footer { background: #f5f5f5; padding: 20px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666; }
+        .contact-info { margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0; }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #D2AE6C; font-size: 18px; margin-top: 25px; }
+        .highlight { color: #D2AE6C; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>✅ Nachricht erhalten</h1>
+        <p>Vielen Dank für Ihr Interesse</p>
+    </div>
+    
+    <div class="content">
+        <h2>Sehr geehrte/r ${contactData.name},</h2>
+        
+        <p>vielen Dank für Ihre Nachricht über unser Kontaktformular. Wir haben Ihre Anfrage erhalten und werden uns <span class="highlight">schnellstmöglich</span> bei Ihnen melden.</p>
+        
+        <h2>📝 Ihre Nachricht:</h2>
+        <div class="message-box">
+            ${contactData.message.replace(/\n/g, '<br>')}
+        </div>
+        
+        <h2>📞 Nächste Schritte:</h2>
+        <ul>
+            <li>Wir bearbeiten Ihre Anfrage in der Reihenfolge des Eingangs</li>
+            <li>Sie erhalten spätestens innerhalb von <strong>24 Stunden</strong> eine Antwort</li>
+            <li>Bei dringeneden Fragen erreichen Sie uns telefonisch</li>
+        </ul>
+        
+        <div class="contact-info">
+            <h2>📧 Kontakt:</h2>
+            <p>
+                <strong>Dominik Maier</strong><br>
+                Coaching & Interim Management<br>
+                Telefon: <a href="tel:+497440913367">+49 7440 913367</a><br>
+                E-Mail: <a href="mailto:maier@maier-value.com">maier@maier-value.com</a>
+            </p>
+        </div>
+        
+        <p style="margin-top: 25px;">Mit freundlichen Grüßen<br><strong>Dominik Maier</strong></p>
+    </div>
+    
+    <div class="footer">
+        <p>Diese E-Mail wurde automatisch generiert.<br>
+        © ${new Date().getFullYear()} Dominik Maier Coaching & Interim Management</p>
+    </div>
+</body>
+</html>
+  `;
+}
+
+function generateConfirmationText(contactData) {
+  return `
+Sehr geehrte/r ${contactData.name},
+
+vielen Dank für Ihre Nachricht über unser Kontaktformular.
+
+Ihre Anfrage:
+${contactData.message}
+
+Wir haben Ihre Nachricht erhalten und werden uns schnellstmöglich bei Ihnen melden.
+
+Mit freundlichen Grüßen
+Dominik Maier
+Coaching & Interim Management
+
+---
+Kontakt:
+Telefon: +49 7440 913367
+E-Mail: maier@maier-value.com
+
+Diese E-Mail wurde automatisch generiert.
+  `;
+}
+
+function generateAdminHTML(contactData) {
+  const leadIndicator = contactData.leadForm ? '🎯 LEAD' : '📧 KONTAKT';
+  
+  return `
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neue Kontaktanfrage</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #D2AE6C, #B8941F); color: white; padding: 25px; text-align: center; border-radius: 8px 8px 0 0; }
+        .content { background: #ffffff; padding: 25px; border: 1px solid #e0e0e0; border-top: none; }
+        .contact-details { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 6px; padding: 20px; margin: 15px 0; }
+        .message-box { background: #f9f9f9; border-left: 4px solid #D2AE6C; padding: 15px; margin: 15px 0; }
+        .tech-details { background: #f1f3f4; border-radius: 6px; padding: 15px; margin: 15px 0; font-size: 12px; color: #666; }
+        .footer { background: #f5f5f5; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666; }
+        .label { font-weight: bold; color: #555; }
+        .lead-badge { background: #D2AE6C; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        .normal-badge { background: #6B7280; color: white; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; }
+        h1 { margin: 0; font-size: 22px; }
+        h2 { color: #D2AE6C; font-size: 16px; margin-top: 20px; margin-bottom: 10px; }
+        .urgent { background: #FFF8E1; border: 1px solid #D2AE6C; color: #8B6914; padding: 10px; border-radius: 6px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>${leadIndicator} Neue Kontaktanfrage</h1>
+        <p>Eingegangen: ${new Date(contactData.timestamp || new Date()).toLocaleString('de-DE')}</p>
+    </div>
+    
+    <div class="content">
+        ${contactData.leadForm ? '<div class="urgent"><strong>🎯 LEAD-ANFRAGE:</strong> Diese Anfrage kam über ein Lead-Formular und sollte priorisiert behandelt werden.</div>' : ''}
+        
+        <h2>📋 Kontaktdaten:</h2>
+        <div class="contact-details">
+            <p><span class="label">Name:</span> ${contactData.name}</p>
+            <p><span class="label">E-Mail:</span> <a href="mailto:${contactData.email}">${contactData.email}</a></p>
+            <p><span class="label">Telefon:</span> <a href="tel:${contactData.phone}">${contactData.phone}</a></p>
+            <p><span class="label">Typ:</span> 
+                ${contactData.leadForm ? 
+                    '<span class="lead-badge">🎯 LEAD</span>' : 
+                    '<span class="normal-badge">📧 KONTAKT</span>'
+                }
+            </p>
+        </div>
+        
+        <h2>💬 Nachricht:</h2>
+        <div class="message-box">
+            ${contactData.message.replace(/\n/g, '<br>')}
+        </div>
+        
+        <h2>⚙️ Technische Details:</h2>
+        <div class="tech-details">
+            <p><strong>IP-Adresse:</strong> ${contactData.ipAddress || 'Unknown'}</p>
+            <p><strong>User-Agent:</strong> ${contactData.userAgent || 'Unknown'}</p>
+        </div>
+        
+        <h2>🎯 Nächste Schritte:</h2>
+        <ul>
+            <li>Kontakt im Admin Dashboard bearbeiten</li>
+            <li>${contactData.leadForm ? 'PRIORITÄT: Lead-Anfrage zeitnah bearbeiten' : 'Anfrage innerhalb 24h beantworten'}</li>
+            <li>Status auf "offen" setzen bei Bearbeitung</li>
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Automatische Benachrichtigung von Dominik Maier Website</p>
+    </div>
+</body>
+</html>
+  `;
+}
+
+function generateAdminText(contactData) {
+  return `
+NEUE KONTAKTANFRAGE ${contactData.leadForm ? '(LEAD)' : ''}
+
+Name: ${contactData.name}
+E-Mail: ${contactData.email}
+Telefon: ${contactData.phone}
+Typ: ${contactData.leadForm ? 'Lead-Formular' : 'Normaler Kontakt'}
+Eingegangen: ${new Date(contactData.timestamp || new Date()).toLocaleString('de-DE')}
+
+Nachricht:
+${contactData.message}
+
+---
+IP-Adresse: ${contactData.ipAddress || 'Unknown'}
+User-Agent: ${contactData.userAgent || 'Unknown'}
+  `;
 }
 
 // ===============================
@@ -700,14 +489,14 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.6`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.7`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback v18.3.6');
+  console.log('📦 Using demo database fallback v18.3.7');
   return demoDatabase.contacts;
 }
 
@@ -752,7 +541,7 @@ async function createContact(contactData) {
         throw error;
       }
       
-      console.log(`✅ Contact created in Supabase v18.3.6 with ID: ${data.id}`);
+      console.log(`✅ Contact created in Supabase v18.3.7 with ID: ${data.id}`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
@@ -762,7 +551,7 @@ async function createContact(contactData) {
     console.log('⚠️ Supabase not available, using demo database');
   }
   
-  console.log('📦 Creating contact in demo database v18.3.6');
+  console.log('📦 Creating contact in demo database v18.3.7');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
@@ -936,7 +725,7 @@ function getDeviceType(userAgent) {
 }
 
 // ===============================
-// ASTRO API ENDPOINTS - VOLLSTÄNDIG
+// ASTRO API ENDPOINTS - VOLLSTÄNDIG v18.3.7
 // ===============================
 
 export async function GET({ url }) {
@@ -963,17 +752,23 @@ export async function GET({ url }) {
             tested: supabaseConnectionTested
           },
           email: {
-            transporter: emailTransporter ? 'Configured' : 'Not configured',
-            nodemailer: nodemailer ? 'Available' : 'Not available',
-            smtp_host: import.meta.env.SMTP_HOST || 'Not set',
-            smtp_user: import.meta.env.SMTP_USER ? 'Present' : 'Not set',
-            smtp_pass: import.meta.env.SMTP_PASS ? 'Present' : 'Not set',
-            email_from: import.meta.env.EMAIL_FROM ? 'Present' : 'Not set',
-            email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
-            error: emailError || 'None'
+            smtp_host: SMTP_CONFIG.host,
+            smtp_port: SMTP_CONFIG.port,
+            smtp_secure: SMTP_CONFIG.secure,
+            smtp_user: SMTP_CONFIG.auth.user ? 'Present' : 'Missing',
+            smtp_pass: SMTP_CONFIG.auth.pass ? 'Present' : 'Missing',
+            email_from: EMAIL_CONFIG.fromAddress,
+            email_to: EMAIL_CONFIG.toAddress,
+            status: 'v17.12 Integration Active'
           },
-          version: '18.3.6-strato-smtp-fix',
-          timestamp: new Date().toISOString()
+          version: '18.3.7-with-v17.12-email',
+          timestamp: new Date().toISOString(),
+          features: {
+            enhanced_statistics: true,
+            supabase_integration: true,
+            strato_smtp_email: true,
+            nodemailer_fallback: true
+          }
         };
         return new Response(JSON.stringify(debugInfo), { status: 200, headers });
 
@@ -1001,19 +796,23 @@ export async function GET({ url }) {
         }), { status: 200, headers });
 
       case 'test-email':
-        console.log('🧪 Testing email system...');
-        const testResult = await sendEmail(
-          import.meta.env.EMAIL_TO || 'test@example.com',
-          'Test E-Mail - Dominik Maier Homepage v18.3.6',
-          '<p>Dies ist eine Test-E-Mail zur Überprüfung der SMTP-Konfiguration.</p>'
-        );
+        console.log('🧪 Testing email system v18.3.7 with v17.12 integration...');
+        const testContactData = {
+          name: 'Test User',
+          email: EMAIL_CONFIG.toAddress,
+          phone: '+49 123 456789',
+          message: 'Dies ist eine Test-E-Mail zur Überprüfung der v17.12 E-Mail-Integration.',
+          leadForm: false,
+          timestamp: new Date().toISOString()
+        };
+        const testResult = await sendContactEmails(testContactData);
         return new Response(JSON.stringify(testResult), { status: 200, headers });
 
       default:
         return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400, headers });
     }
   } catch (error) {
-    console.error('GET Error v18.3.6:', error);
+    console.error('GET Error v18.3.7:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
@@ -1022,7 +821,7 @@ export async function GET({ url }) {
 }
 
 export async function POST({ request }) {
-  console.log('📥 POST request received v18.3.6');
+  console.log('📥 POST request received v18.3.7');
   
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -1078,7 +877,13 @@ export async function POST({ request }) {
       time_slot: timeSlot,
       contact_date: now.toISOString().split('T')[0], // YYYY-MM-DD
       browser: getBrowserInfo(userAgent),
-      device: getDeviceType(userAgent)
+      device: getDeviceType(userAgent),
+      // v17.12 E-Mail Kompatibilität
+      timestamp: now.toISOString(),
+      userAgent: userAgent,
+      ipAddress: request.headers.get('x-forwarded-for') || 
+                request.headers.get('x-real-ip') || 
+                'Unknown'
     };
 
     console.log('📊 Enhanced Statistics data:', {
@@ -1098,34 +903,31 @@ export async function POST({ request }) {
     console.log('✅ Database save completed:', { id: savedContact.id });
 
     // ===============================
-    // E-MAIL VERSENDUNG
+    // E-MAIL VERSENDUNG v17.12 INTEGRATION
     // ===============================
     
-    console.log('📧 Starting email sending...');
-    const emailData = { name, email, phone, company, message, isLeadForm };
-
-    // Bestätigungs-E-Mail
-    const confirmationTemplate = isLeadForm ? 'confirmation_lead' : 'confirmation_normal';
-    const confirmationHtml = getEmailTemplate(confirmationTemplate, emailData);
-    const confirmationSubject = isLeadForm 
-      ? 'Vielen Dank für Ihr Interesse - Dominik Maier'
-      : 'Bestätigung Ihrer Kontaktanfrage - Dominik Maier';
+    console.log('📧 Starting email sending v17.12...');
+    let emailResults = null;
     
-    console.log(`📧 Sending confirmation email (${confirmationTemplate})...`);
-    const confirmationResult = await sendEmail(email, confirmationSubject, confirmationHtml);
-    console.log('📧 Confirmation result:', confirmationResult);
-    
-    // Admin-Benachrichtigung
-    const adminHtml = getEmailTemplate('admin_notification', emailData);
-    const adminSubject = `🎯 Neue ${isLeadForm ? 'Lead-' : ''}Kontaktanfrage von ${name}`;
-    
-    console.log('📧 Sending admin notification...');
-    const adminResult = await sendEmail(
-      import.meta.env.EMAIL_TO || 'kontakt@dominik-maier.com',
-      adminSubject,
-      adminHtml
-    );
-    console.log('📧 Admin result:', adminResult);
+    try {
+      emailResults = await sendContactEmails(savedContact);
+      console.log('📧 Email sending completed v17.12:', {
+        confirmationSent: emailResults.confirmation?.success || false,
+        adminSent: emailResults.admin?.success || false,
+        overallSuccess: emailResults.success,
+        errors: emailResults.errors?.length || 0,
+        confirmationReal: emailResults.confirmation?.realEmail || false,
+        adminReal: emailResults.admin?.realEmail || false
+      });
+    } catch (emailError) {
+      console.error('❌ Email sending error v17.12:', emailError);
+      emailResults = {
+        success: false,
+        errors: [`E-Mail-Versand fehlgeschlagen: ${emailError.message}`],
+        confirmation: { success: false, realEmail: false },
+        admin: { success: false, realEmail: false }
+      };
+    }
 
     // ===============================
     // ERFOLGREICHE ANTWORT
@@ -1140,26 +942,43 @@ export async function POST({ request }) {
         email: savedContact.email,
         leadForm: isLeadForm
       },
-      emailStatus: {
-        confirmation: confirmationResult,
-        admin: adminResult
+      // ✅ v17.12 E-MAIL STATUS INTEGRATION
+      emails: {
+        sent: emailResults?.success || false,
+        mode: (emailResults?.confirmation?.realEmail || emailResults?.admin?.realEmail) ? 'REAL' : 'SIMULATION',
+        confirmation: {
+          sent: emailResults?.confirmation?.success || false,
+          recipient: savedContact.email,
+          messageId: emailResults?.confirmation?.messageId || null,
+          real: emailResults?.confirmation?.realEmail || false
+        },
+        admin: {
+          sent: emailResults?.admin?.success || false,
+          recipient: EMAIL_CONFIG.toAddress,
+          messageId: emailResults?.admin?.messageId || null,
+          priority: savedContact.leadForm ? 'HIGH (Lead)' : 'Normal',
+          real: emailResults?.admin?.realEmail || false
+        },
+        errors: emailResults?.errors || []
       },
       enhancedStats: {
         source_page: enhancedData.source_page,
         time_slot: enhancedData.time_slot,
         device: enhancedData.device
-      }
+      },
+      version: '18.3.7'
     };
 
-    console.log('✅ POST completed successfully v18.3.6');
+    console.log('✅ POST completed successfully v18.3.7 with v17.12 email integration');
     return new Response(JSON.stringify(response), { status: 200, headers });
 
   } catch (error) {
-    console.error('❌ POST Error v18.3.6:', error);
+    console.error('❌ POST Error v18.3.7:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       message: error.message,
-      debug: error.stack
+      debug: error.stack,
+      version: '18.3.7'
     }), { status: 500, headers });
   }
 }
@@ -1195,7 +1014,7 @@ export async function PUT({ request }) {
 
       if (error) throw error;
 
-      console.log(`✅ Contact ${id} updated in Supabase`);
+      console.log(`✅ Contact ${id} updated in Supabase v18.3.7`);
       return new Response(JSON.stringify(data), { status: 200, headers });
     } else {
       // Demo database update
@@ -1208,11 +1027,11 @@ export async function PUT({ request }) {
       if (notes !== undefined) contact.notes = notes;
       contact.updated_at = new Date().toISOString();
 
-      console.log(`✅ Contact ${id} updated in demo database`);
+      console.log(`✅ Contact ${id} updated in demo database v18.3.7`);
       return new Response(JSON.stringify(contact), { status: 200, headers });
     }
   } catch (error) {
-    console.error('PUT Error v18.3.6:', error);
+    console.error('PUT Error v18.3.7:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
@@ -1244,7 +1063,7 @@ export async function DELETE({ url }) {
 
       if (error) throw error;
 
-      console.log(`✅ Contact ${id} deleted from Supabase`);
+      console.log(`✅ Contact ${id} deleted from Supabase v18.3.7`);
       return new Response(JSON.stringify({ success: true, message: 'Contact deleted' }), { status: 200, headers });
     } else {
       // Demo database deletion
@@ -1254,11 +1073,11 @@ export async function DELETE({ url }) {
       }
 
       demoDatabase.contacts.splice(index, 1);
-      console.log(`✅ Contact ${id} deleted from demo database`);
+      console.log(`✅ Contact ${id} deleted from demo database v18.3.7`);
       return new Response(JSON.stringify({ success: true, message: 'Contact deleted' }), { status: 200, headers });
     }
   } catch (error) {
-    console.error('DELETE Error v18.3.6:', error);
+    console.error('DELETE Error v18.3.7:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
