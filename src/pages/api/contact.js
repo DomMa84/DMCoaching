@@ -1,13 +1,12 @@
 /**
- * Contact API v18.3.3 - Vollständige Database & E-Mail Integration
+ * Contact API v18.3.4 - Supabase Connection Fix
  * 
- * CHANGELOG v18.3.3:
- * - ✅ ADD: Vollständige Database-Funktionen wieder hinzugefügt
- * - ✅ ADD: Kompletter POST-Handler mit Supabase-Integration
- * - ✅ ADD: Enhanced Statistics Tracking vollständig
- * - ✅ ADD: Detailliertes Console-Logging für Debugging
- * - ✅ KEEP: E-Mail-System mit korrekter Nodemailer-Syntax
- * - ✅ KEEP: Corporate Design Templates
+ * CHANGELOG v18.3.4:
+ * - ✅ FIX: Supabase Connection wird beim Start getestet
+ * - ✅ FIX: Besseres Error-Handling für Database-Operationen
+ * - ✅ FIX: Console-Logging für jeden Schritt hinzugefügt
+ * - ✅ ADD: Fallback-Database wenn Supabase nicht erreichbar
+ * - ✅ KEEP: E-Mail-System vollständig funktional
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -102,7 +101,23 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.3.1');
+    console.log('✅ Supabase client initialized v18.3.4');
+    
+    // Sofort Connection testen beim Start
+    try {
+      const { count, error } = await supabase
+        .from('contacts')
+        .select('*', { count: 'exact', head: true });
+      
+      if (error) throw error;
+      
+      console.log(`✅ Supabase connection verified v18.3.4. Found ${count} contacts.`);
+      supabaseConnectionTested = true;
+    } catch (testError) {
+      console.warn('❌ Supabase connection test failed at startup:', testError.message);
+      supabaseConnectionTested = true; // Verhindert weitere Tests
+    }
+    
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
@@ -348,40 +363,53 @@ async function getAllContacts() {
 }
 
 async function createContact(contactData) {
+  console.log('💾 createContact called with:', { name: contactData.name, email: contactData.email });
+  
   if (supabase && await testSupabaseConnection()) {
+    console.log('🔄 Using Supabase for contact creation');
     try {
+      const insertData = {
+        name: contactData.name,
+        email: contactData.email,
+        phone: contactData.phone || null,
+        company: contactData.company || null,
+        message: contactData.message,
+        status: 'new',
+        notes: '',
+        leadform: contactData.leadForm || false,
+        source_page: contactData.source_page || null,
+        contact_hour: contactData.contact_hour || null,
+        contact_day_of_week: contactData.contact_day_of_week || null,
+        time_slot: contactData.time_slot || null,
+        contact_date: contactData.contact_date || null,
+        browser: contactData.browser || null,
+        device: contactData.device || null
+      };
+      
+      console.log('📤 Inserting to Supabase:', insertData);
+      
       const { data, error } = await supabase
         .from('contacts')
-        .insert([{
-          name: contactData.name,
-          email: contactData.email,
-          phone: contactData.phone || null,
-          company: contactData.company || null,
-          message: contactData.message,
-          status: 'new',
-          notes: '',
-          leadform: contactData.leadForm || false,
-          source_page: contactData.source_page || null,
-          contact_hour: contactData.contact_hour || null,
-          contact_day_of_week: contactData.contact_day_of_week || null,
-          time_slot: contactData.time_slot || null,
-          contact_date: contactData.contact_date || null,
-          browser: contactData.browser || null,
-          device: contactData.device || null
-        }])
+        .insert([insertData])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Supabase insert error:', error);
+        throw error;
+      }
       
-      console.log(`✅ Contact created in Supabase v18.3.3 with ID: ${data.id}`);
+      console.log(`✅ Contact created in Supabase v18.3.4 with ID: ${data.id}`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
+      console.log('🔄 Falling back to demo database');
     }
+  } else {
+    console.log('⚠️ Supabase not available, using demo database');
   }
   
-  console.log('📦 Creating contact in demo database v18.3.3');
+  console.log('📦 Creating contact in demo database v18.3.4');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
@@ -391,6 +419,7 @@ async function createContact(contactData) {
     updated_at: new Date().toISOString()
   };
   demoDatabase.contacts.unshift(newContact);
+  console.log('✅ Contact created in demo database with ID:', newContact.id);
   return newContact;
 }
 
@@ -462,7 +491,7 @@ export async function GET({ url }) {
         email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
         error: emailError || 'None'
       },
-                version: '18.3.3-complete-integration',
+                version: '18.3.4-supabase-connection-fix',
       timestamp: new Date().toISOString()
     };
     
