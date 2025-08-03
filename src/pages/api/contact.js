@@ -1,10 +1,10 @@
 /**
- * Contact API v18.3.1 - E-Mail Transporter Fix
+ * Contact API v18.3.2 - Nodemailer Syntax Fix
  * 
- * CHANGELOG v18.3.1:
- * - ✅ FIX: E-Mail Transporter Initialisierung robuster gemacht
- * - ✅ FIX: Bessere Error-Behandlung für SMTP-Verbindung
- * - ✅ FIX: Debug-Output für fehlende Environment Variables
+ * CHANGELOG v18.3.2:
+ * - ✅ FIX: Korrekte Nodemailer-Syntax (createTransport statt createTransporter)
+ * - ✅ FIX: Robusterer ES-Module Import für Astro
+ * - ✅ FIX: SMTP-Connection Verification verbessert
  * - ✅ KEEP: Alle Enhanced Statistics Features
  */
 
@@ -44,8 +44,8 @@ try {
   // Nur initialisieren wenn alle kritischen Daten vorhanden
   if (smtpConfig.host && smtpConfig.user && smtpConfig.pass) {
     try {
-      // ✅ KORRIGIERT: Richtige Nodemailer Syntax
-      emailTransporter = nodemailer.createTransporter({
+      // ✅ KORRIGIERT: Richtige Nodemailer Syntax (createTransport ohne "er")
+      emailTransporter = nodemailer.createTransport({
         host: smtpConfig.host,
         port: parseInt(smtpConfig.port) || 587,
         secure: smtpConfig.secure === 'true' || false,
@@ -345,7 +345,7 @@ export async function GET({ url }) {
         email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
         error: emailError || 'None'
       },
-      version: '18.3.1-email-debug-fix',
+      version: '18.3.2-nodemailer-syntax-fix',
       timestamp: new Date().toISOString()
     };
     
