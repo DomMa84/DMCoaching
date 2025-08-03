@@ -18,10 +18,11 @@ let nodemailer = null;
 let emailTransporter = null;
 let emailError = null;
 
-// Dynamischer Import für Nodemailer
+// Dynamischer Import für Nodemailer - KORRIGIERT
 try {
-  nodemailer = await import('nodemailer');
-  console.log('✅ Nodemailer loaded successfully v18.3.1');
+  const nodemailerModule = await import('nodemailer');
+  nodemailer = nodemailerModule.default || nodemailerModule;
+  console.log('✅ Nodemailer loaded successfully v18.3.2');
   
   // Robuste SMTP Transporter Konfiguration
   const smtpConfig = {
@@ -43,7 +44,8 @@ try {
   // Nur initialisieren wenn alle kritischen Daten vorhanden
   if (smtpConfig.host && smtpConfig.user && smtpConfig.pass) {
     try {
-      emailTransporter = nodemailer.default.createTransporter({
+      // ✅ KORRIGIERT: Richtige Nodemailer Syntax
+      emailTransporter = nodemailer.createTransporter({
         host: smtpConfig.host,
         port: parseInt(smtpConfig.port) || 587,
         secure: smtpConfig.secure === 'true' || false,
@@ -61,8 +63,9 @@ try {
       });
       
       // Transporter testen
+      console.log('🔄 Testing SMTP connection...');
       await emailTransporter.verify();
-      console.log('✅ Strato SMTP transporter configured and verified v18.3.1');
+      console.log('✅ Strato SMTP transporter configured and verified v18.3.2');
       
     } catch (error) {
       console.error('❌ SMTP Transporter verification failed:', error.message);
