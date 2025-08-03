@@ -1,12 +1,12 @@
 /**
- * Contact API v18.3.4 - Supabase Connection Fix
+ * Contact API v18.3.5 - Complete Database & E-Mail Fix
  * 
- * CHANGELOG v18.3.4:
- * - ✅ FIX: Supabase Connection wird beim Start getestet
- * - ✅ FIX: Besseres Error-Handling für Database-Operationen
- * - ✅ FIX: Console-Logging für jeden Schritt hinzugefügt
- * - ✅ ADD: Fallback-Database wenn Supabase nicht erreichbar
- * - ✅ KEEP: E-Mail-System vollständig funktional
+ * CHANGELOG v18.3.5:
+ * - ✅ FIX: POST-Route jetzt mit vollständiger Datenbank-Speicherung
+ * - ✅ FIX: Enhanced Statistics Integration wieder aktiviert
+ * - ✅ FIX: testSupabaseConnection() Funktion hinzugefügt
+ * - ✅ FIX: Alle fehlenden API-Endpoints wieder eingefügt
+ * - ✅ KEEP: E-Mail-System funktional (Strato SMTP)
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -23,7 +23,7 @@ let emailError = null;
 try {
   const nodemailerModule = await import('nodemailer');
   nodemailer = nodemailerModule.default || nodemailerModule;
-  console.log('✅ Nodemailer loaded successfully v18.3.2');
+  console.log('✅ Nodemailer loaded successfully v18.3.5');
   
   // Robuste SMTP Transporter Konfiguration
   const smtpConfig = {
@@ -45,7 +45,6 @@ try {
   // Nur initialisieren wenn alle kritischen Daten vorhanden
   if (smtpConfig.host && smtpConfig.user && smtpConfig.pass) {
     try {
-      // ✅ KORRIGIERT: Richtige Nodemailer Syntax (createTransport ohne "er")
       emailTransporter = nodemailer.createTransport({
         host: smtpConfig.host,
         port: parseInt(smtpConfig.port) || 587,
@@ -66,7 +65,7 @@ try {
       // Transporter testen
       console.log('🔄 Testing SMTP connection...');
       await emailTransporter.verify();
-      console.log('✅ Strato SMTP transporter configured and verified v18.3.3');
+      console.log('✅ Strato SMTP transporter configured and verified v18.3.5');
       
     } catch (error) {
       console.error('❌ SMTP Transporter verification failed:', error.message);
@@ -89,7 +88,7 @@ try {
 }
 
 // ===============================
-// SUPABASE SETUP (UNVERÄNDERT)
+// SUPABASE SETUP
 // ===============================
 
 const supabaseUrl = import.meta.env.SUPABASE_URL || 'https://bqcwyfzspdbcanondyyz.supabase.co';
@@ -101,25 +100,40 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.3.4');
-    
-    // Sofort Connection testen beim Start
-    try {
-      const { count, error } = await supabase
-        .from('contacts')
-        .select('*', { count: 'exact', head: true });
-      
-      if (error) throw error;
-      
-      console.log(`✅ Supabase connection verified v18.3.4. Found ${count} contacts.`);
-      supabaseConnectionTested = true;
-    } catch (testError) {
-      console.warn('❌ Supabase connection test failed at startup:', testError.message);
-      supabaseConnectionTested = true; // Verhindert weitere Tests
-    }
-    
+    console.log('✅ Supabase client initialized v18.3.5');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
+  }
+}
+
+// ===============================
+// SUPABASE CONNECTION TEST - HINZUGEFÜGT
+// ===============================
+
+async function testSupabaseConnection() {
+  if (!supabase) {
+    console.log('❌ Supabase client not available');
+    return false;
+  }
+  
+  if (supabaseConnectionTested) {
+    return true; // Bereits getestet
+  }
+  
+  try {
+    console.log('🔄 Testing Supabase connection...');
+    const { count, error } = await supabase
+      .from('contacts')
+      .select('*', { count: 'exact', head: true });
+    
+    if (error) throw error;
+    
+    console.log(`✅ Supabase connection successful. Found ${count} contacts.`);
+    supabaseConnectionTested = true;
+    return true;
+  } catch (error) {
+    console.warn('❌ Supabase connection test failed:', error.message);
+    return false;
   }
 }
 
@@ -245,11 +259,10 @@ function getEmailTemplate(type, data) {
 }
 
 // ===============================
-// E-MAIL FUNKTIONEN (VERBESSERT)
+// E-MAIL FUNKTIONEN
 // ===============================
 
 async function sendEmail(to, subject, htmlContent) {
-  // Detailliertes Logging
   console.log(`📧 Attempting to send email to: ${to}`);
   console.log(`📧 Subject: ${subject}`);
   console.log(`📧 Transporter available: ${!!emailTransporter}`);
@@ -275,7 +288,7 @@ async function sendEmail(to, subject, htmlContent) {
       html: htmlContent,
       text: htmlContent.replace(/<[^>]*>/g, ''),
       headers: {
-        'X-Mailer': 'Dominik Maier Homepage v18.3.1',
+        'X-Mailer': 'Dominik Maier Homepage v18.3.5',
         'X-Priority': '3'
       }
     };
@@ -294,7 +307,6 @@ async function sendEmail(to, subject, htmlContent) {
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);
     
-    // Fallback zu Simulation
     return {
       success: false,
       simulation: true,
@@ -305,13 +317,9 @@ async function sendEmail(to, subject, htmlContent) {
 }
 
 // ===============================
-// ALLE ANDEREN FUNKTIONEN UNVERÄNDERT
-// (Database, Enhanced Statistics, etc.)
+// DATABASE FUNCTIONS - VOLLSTÄNDIG WIEDERHERGESTELLT
 // ===============================
 
-// [... Rest des Codes bleibt gleich ...]
-
-// DATABASE FUNCTIONS (VOLLSTÄNDIG)
 const demoDatabase = {
   contacts: [
     {
@@ -331,7 +339,8 @@ const demoDatabase = {
       browser: "Chrome",
       device: "Desktop",
       created_at: "2025-07-25T10:30:00Z",
-      updated_at: "2025-07-25T10:30:00Z"
+      updated_at: "2025-07-25T10:30:00Z",
+      leadform: false
     }
   ]
 };
@@ -351,19 +360,23 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.3`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.5`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback v18.3.2');
+  console.log('📦 Using demo database fallback v18.3.5');
   return demoDatabase.contacts;
 }
 
 async function createContact(contactData) {
-  console.log('💾 createContact called with:', { name: contactData.name, email: contactData.email });
+  console.log('💾 createContact called with:', { 
+    name: contactData.name, 
+    email: contactData.email,
+    leadForm: contactData.leadForm 
+  });
   
   if (supabase && await testSupabaseConnection()) {
     console.log('🔄 Using Supabase for contact creation');
@@ -373,7 +386,7 @@ async function createContact(contactData) {
         email: contactData.email,
         phone: contactData.phone || null,
         company: contactData.company || null,
-        message: contactData.message,
+        message: contactData.message || null,
         status: 'new',
         notes: '',
         leadform: contactData.leadForm || false,
@@ -399,7 +412,7 @@ async function createContact(contactData) {
         throw error;
       }
       
-      console.log(`✅ Contact created in Supabase v18.3.4 with ID: ${data.id}`);
+      console.log(`✅ Contact created in Supabase v18.3.5 with ID: ${data.id}`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
@@ -409,19 +422,24 @@ async function createContact(contactData) {
     console.log('⚠️ Supabase not available, using demo database');
   }
   
-  console.log('📦 Creating contact in demo database v18.3.4');
+  console.log('📦 Creating contact in demo database v18.3.5');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
     status: 'new',
     notes: '',
     created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
+    leadform: contactData.leadForm || false
   };
   demoDatabase.contacts.unshift(newContact);
   console.log('✅ Contact created in demo database with ID:', newContact.id);
   return newContact;
 }
+
+// ===============================
+// ENHANCED STATISTICS FUNCTIONS - WIEDERHERGESTELLT
+// ===============================
 
 async function getEnhancedStats() {
   const contacts = await getAllContacts();
@@ -458,8 +476,127 @@ async function getEnhancedStats() {
   };
 }
 
+async function getServiceBreakdown() {
+  const contacts = await getAllContacts();
+  const serviceStats = {};
+  const totalContacts = contacts.length;
+
+  contacts.forEach(contact => {
+    const service = contact.source_page || 'Homepage';
+    serviceStats[service] = (serviceStats[service] || 0) + 1;
+  });
+
+  return Object.entries(serviceStats)
+    .map(([service, count]) => ({
+      service,
+      count,
+      percentage: totalContacts > 0 ? Math.round((count / totalContacts) * 100) : 0
+    }))
+    .sort((a, b) => b.count - a.count);
+}
+
+async function getTimeAnalysis() {
+  const contacts = await getAllContacts();
+  
+  const hourStats = {};
+  const dayStats = {};
+  const slotStats = {};
+
+  contacts.forEach(contact => {
+    if (contact.contact_hour !== null) {
+      hourStats[contact.contact_hour] = (hourStats[contact.contact_hour] || 0) + 1;
+    }
+    if (contact.contact_day_of_week) {
+      dayStats[contact.contact_day_of_week] = (dayStats[contact.contact_day_of_week] || 0) + 1;
+    }
+    if (contact.time_slot) {
+      slotStats[contact.time_slot] = (slotStats[contact.time_slot] || 0) + 1;
+    }
+  });
+
+  const peakHour = Object.entries(hourStats).sort((a, b) => b[1] - a[1])[0];
+  const peakDay = Object.entries(dayStats).sort((a, b) => b[1] - a[1])[0];
+  const peakSlot = Object.entries(slotStats).sort((a, b) => b[1] - a[1])[0];
+
+  return {
+    peakHour: peakHour ? { hour: parseInt(peakHour[0]), count: peakHour[1] } : null,
+    peakDay: peakDay ? { day: peakDay[0], count: peakDay[1] } : null,
+    peakSlot: peakSlot ? { slot: peakSlot[0], count: peakSlot[1] } : null,
+    hourDistribution: hourStats,
+    dayDistribution: dayStats,
+    slotDistribution: slotStats
+  };
+}
+
 // ===============================
-// ASTRO API ENDPOINTS (ENHANCED DEBUG)
+// ENHANCED STATISTICS HELPER FUNCTIONS - WIEDERHERGESTELLT
+// ===============================
+
+function getSourcePageFromUrl(url) {
+  if (!url) return 'Homepage';
+  
+  const serviceMapping = {
+    '/leistung/strategische-unternehmensentwicklung': 'Strategische Unternehmensentwicklung',
+    '/leistung/vertriebsoptimierung': 'Vertriebsoptimierung', 
+    '/leistung/marketing-strategien': 'Marketing Strategien',
+    '/leistung/wertanalyse': 'Wertanalyse'
+  };
+  
+  for (const [path, service] of Object.entries(serviceMapping)) {
+    if (url.includes(path)) {
+      return service;
+    }
+  }
+  
+  return 'Homepage';
+}
+
+function getContactHour() {
+  return new Date().getHours();
+}
+
+function getContactDayOfWeek() {
+  const days = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  return days[new Date().getDay()];
+}
+
+function getTimeSlot(hour) {
+  if (hour >= 6 && hour < 9) return 'Früh (06-09)';
+  if (hour >= 9 && hour < 12) return 'Vormittag (09-12)';
+  if (hour >= 12 && hour < 14) return 'Mittag (12-14)';
+  if (hour >= 14 && hour < 17) return 'Nachmittag (14-17)';
+  if (hour >= 17 && hour < 20) return 'Abend (17-20)';
+  if (hour >= 20 && hour < 23) return 'Spät (20-23)';
+  return 'Nacht (23-06)';
+}
+
+function getBrowserInfo(userAgent) {
+  if (!userAgent) return 'Unknown';
+  
+  if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) return 'Chrome';
+  if (userAgent.includes('Firefox')) return 'Firefox';
+  if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
+  if (userAgent.includes('Edg')) return 'Edge';
+  if (userAgent.includes('Opera')) return 'Opera';
+  
+  return 'Other';
+}
+
+function getDeviceType(userAgent) {
+  if (!userAgent) return 'Unknown';
+  
+  const mobileKeywords = ['Mobile', 'Android', 'iPhone', 'iPad', 'Windows Phone'];
+  for (const keyword of mobileKeywords) {
+    if (userAgent.includes(keyword)) {
+      return 'Mobile';
+    }
+  }
+  
+  return 'Desktop';
+}
+
+// ===============================
+// ASTRO API ENDPOINTS - VOLLSTÄNDIG
 // ===============================
 
 export async function GET({ url }) {
@@ -473,57 +610,149 @@ export async function GET({ url }) {
     'Content-Type': 'application/json'
   };
 
-  if (action === 'debug') {
-    const debugInfo = {
-      supabase: {
-        url: supabaseUrl ? 'Connected' : 'Not configured',
-        key: supabaseKey ? 'Present' : 'Missing',
-        client: supabase ? 'Initialized' : 'Failed',
-        tested: supabaseConnectionTested
-      },
-      email: {
-        transporter: emailTransporter ? 'Configured' : 'Not configured',
-        nodemailer: nodemailer ? 'Available' : 'Not available',
-        smtp_host: import.meta.env.SMTP_HOST || 'Not set',
-        smtp_user: import.meta.env.SMTP_USER ? 'Present' : 'Not set',
-        smtp_pass: import.meta.env.SMTP_PASS ? 'Present' : 'Not set',
-        email_from: import.meta.env.EMAIL_FROM ? 'Present' : 'Not set',
-        email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
-        error: emailError || 'None'
-      },
-                version: '18.3.4-supabase-connection-fix',
-      timestamp: new Date().toISOString()
-    };
-    
-    return new Response(JSON.stringify(debugInfo), { status: 200, headers });
-  }
+  console.log(`📡 GET request with action: ${action}`);
 
-  // Andere GET Endpoints hier...
-  return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400, headers });
+  try {
+    switch (action) {
+      case 'debug':
+        const debugInfo = {
+          supabase: {
+            url: supabaseUrl ? 'Connected' : 'Not configured',
+            key: supabaseKey ? 'Present' : 'Missing',
+            client: supabase ? 'Initialized' : 'Failed',
+            tested: supabaseConnectionTested
+          },
+          email: {
+            transporter: emailTransporter ? 'Configured' : 'Not configured',
+            nodemailer: nodemailer ? 'Available' : 'Not available',
+            smtp_host: import.meta.env.SMTP_HOST || 'Not set',
+            smtp_user: import.meta.env.SMTP_USER ? 'Present' : 'Not set',
+            smtp_pass: import.meta.env.SMTP_PASS ? 'Present' : 'Not set',
+            email_from: import.meta.env.EMAIL_FROM ? 'Present' : 'Not set',
+            email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
+            error: emailError || 'None'
+          },
+          version: '18.3.5-complete-fix',
+          timestamp: new Date().toISOString()
+        };
+        return new Response(JSON.stringify(debugInfo), { status: 200, headers });
+
+      case 'contacts':
+        const contacts = await getAllContacts();
+        return new Response(JSON.stringify(contacts), { status: 200, headers });
+
+      case 'enhanced-stats':
+        const enhancedStats = await getEnhancedStats();
+        return new Response(JSON.stringify(enhancedStats), { status: 200, headers });
+
+      case 'service-breakdown':
+        const serviceBreakdown = await getServiceBreakdown();
+        return new Response(JSON.stringify(serviceBreakdown), { status: 200, headers });
+
+      case 'time-analysis':
+        const timeAnalysis = await getTimeAnalysis();
+        return new Response(JSON.stringify(timeAnalysis), { status: 200, headers });
+
+      case 'test-supabase':
+        const supabaseTest = await testSupabaseConnection();
+        return new Response(JSON.stringify({ 
+          connected: supabaseTest,
+          message: supabaseTest ? 'Supabase connection successful' : 'Supabase connection failed'
+        }), { status: 200, headers });
+
+      default:
+        return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400, headers });
+    }
+  } catch (error) {
+    console.error('GET Error v18.3.5:', error);
+    return new Response(JSON.stringify({
+      error: 'Server error',
+      message: error.message
+    }), { status: 500, headers });
+  }
 }
 
 export async function POST({ request }) {
+  console.log('📥 POST request received v18.3.5');
+  
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  };
+
   try {
     const body = await request.json();
-    const { name, email, phone, company, message } = body;
+    console.log('📝 POST body received:', { 
+      name: body.name, 
+      email: body.email, 
+      leadForm: body.leadForm,
+      hasMessage: !!body.message 
+    });
 
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Content-Type': 'application/json'
-    };
+    const { name, email, phone, company, message } = body;
 
     // Validation
     if (!name || !email || !phone) {
+      console.log('❌ Validation failed: Missing required fields');
       return new Response(JSON.stringify({ 
         error: 'Name, E-Mail und Telefonnummer sind Pflichtfelder' 
       }), { status: 400, headers });
     }
 
     const isLeadForm = !!body.leadForm;
+    console.log(`📊 Processing ${isLeadForm ? 'LEAD' : 'NORMAL'} form submission`);
+
+    // ===============================
+    // ENHANCED STATISTICS INTEGRATION - WIEDER AKTIVIERT
+    // ===============================
     
-    // E-Mail Templates
+    const now = new Date();
+    const contactHour = getContactHour();
+    const timeSlot = getTimeSlot(contactHour);
+    const dayOfWeek = getContactDayOfWeek();
+    const userAgent = request.headers.get('user-agent') || '';
+    const referer = request.headers.get('referer') || '';
+    
+    const enhancedData = {
+      name,
+      email,
+      phone,
+      company: company || null,
+      message: message || null,
+      leadForm: isLeadForm,
+      // Enhanced Statistics Felder
+      source_page: getSourcePageFromUrl(referer),
+      contact_hour: contactHour,
+      contact_day_of_week: dayOfWeek,
+      time_slot: timeSlot,
+      contact_date: now.toISOString().split('T')[0], // YYYY-MM-DD
+      browser: getBrowserInfo(userAgent),
+      device: getDeviceType(userAgent)
+    };
+
+    console.log('📊 Enhanced Statistics data:', {
+      source_page: enhancedData.source_page,
+      contact_hour: enhancedData.contact_hour,
+      time_slot: enhancedData.time_slot,
+      browser: enhancedData.browser,
+      device: enhancedData.device
+    });
+
+    // ===============================
+    // DATENBANK SPEICHERUNG - WIEDER AKTIVIERT
+    // ===============================
+    
+    console.log('💾 Starting database save...');
+    const savedContact = await createContact(enhancedData);
+    console.log('✅ Database save completed:', { id: savedContact.id });
+
+    // ===============================
+    // E-MAIL VERSENDUNG
+    // ===============================
+    
+    console.log('📧 Starting email sending...');
     const emailData = { name, email, phone, company, message, isLeadForm };
 
     // Bestätigungs-E-Mail
@@ -533,33 +762,158 @@ export async function POST({ request }) {
       ? 'Vielen Dank für Ihr Interesse - Dominik Maier'
       : 'Bestätigung Ihrer Kontaktanfrage - Dominik Maier';
     
+    console.log(`📧 Sending confirmation email (${confirmationTemplate})...`);
     const confirmationResult = await sendEmail(email, confirmationSubject, confirmationHtml);
+    console.log('📧 Confirmation result:', confirmationResult);
     
     // Admin-Benachrichtigung
     const adminHtml = getEmailTemplate('admin_notification', emailData);
     const adminSubject = `🎯 Neue ${isLeadForm ? 'Lead-' : ''}Kontaktanfrage von ${name}`;
     
+    console.log('📧 Sending admin notification...');
     const adminResult = await sendEmail(
       import.meta.env.EMAIL_TO || 'kontakt@dominik-maier.com',
       adminSubject,
       adminHtml
     );
+    console.log('📧 Admin result:', adminResult);
 
-    return new Response(JSON.stringify({
+    // ===============================
+    // ERFOLGREICHE ANTWORT
+    // ===============================
+
+    const response = {
       success: true,
-      message: 'Vielen Dank! Ihre Nachricht wurde gespeichert.',
+      message: 'Vielen Dank! Ihre Nachricht wurde erfolgreich gespeichert und versendet.',
+      contact: {
+        id: savedContact.id,
+        name: savedContact.name,
+        email: savedContact.email,
+        leadForm: isLeadForm
+      },
       emailStatus: {
         confirmation: confirmationResult,
         admin: adminResult
+      },
+      enhancedStats: {
+        source_page: enhancedData.source_page,
+        time_slot: enhancedData.time_slot,
+        device: enhancedData.device
       }
-    }), { status: 200, headers });
+    };
+
+    console.log('✅ POST completed successfully v18.3.5');
+    return new Response(JSON.stringify(response), { status: 200, headers });
 
   } catch (error) {
-    console.error('API POST Error v18.3.1:', error);
+    console.error('❌ POST Error v18.3.5:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
-      debug: error.message
-    }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      message: error.message,
+      debug: error.stack
+    }), { status: 500, headers });
+  }
+}
+
+export async function PUT({ request }) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    const body = await request.json();
+    const { id, status, notes } = body;
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Contact ID required' }), { status: 400, headers });
+    }
+
+    if (supabase && await testSupabaseConnection()) {
+      const updateData = {};
+      if (status !== undefined) updateData.status = status;
+      if (notes !== undefined) updateData.notes = notes;
+      updateData.updated_at = new Date().toISOString();
+
+      const { data, error } = await supabase
+        .from('contacts')
+        .update(updateData)
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      console.log(`✅ Contact ${id} updated in Supabase`);
+      return new Response(JSON.stringify(data), { status: 200, headers });
+    } else {
+      // Demo database update
+      const contact = demoDatabase.contacts.find(c => c.id === parseInt(id));
+      if (!contact) {
+        return new Response(JSON.stringify({ error: 'Contact not found' }), { status: 404, headers });
+      }
+
+      if (status !== undefined) contact.status = status;
+      if (notes !== undefined) contact.notes = notes;
+      contact.updated_at = new Date().toISOString();
+
+      console.log(`✅ Contact ${id} updated in demo database`);
+      return new Response(JSON.stringify(contact), { status: 200, headers });
+    }
+  } catch (error) {
+    console.error('PUT Error v18.3.5:', error);
+    return new Response(JSON.stringify({
+      error: 'Server error',
+      message: error.message
+    }), { status: 500, headers });
+  }
+}
+
+export async function DELETE({ url }) {
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+  };
+
+  try {
+    const searchParams = new URL(url).searchParams;
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Contact ID required' }), { status: 400, headers });
+    }
+
+    if (supabase && await testSupabaseConnection()) {
+      const { error } = await supabase
+        .from('contacts')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      console.log(`✅ Contact ${id} deleted from Supabase`);
+      return new Response(JSON.stringify({ success: true, message: 'Contact deleted' }), { status: 200, headers });
+    } else {
+      // Demo database deletion
+      const index = demoDatabase.contacts.findIndex(c => c.id === parseInt(id));
+      if (index === -1) {
+        return new Response(JSON.stringify({ error: 'Contact not found' }), { status: 404, headers });
+      }
+
+      demoDatabase.contacts.splice(index, 1);
+      console.log(`✅ Contact ${id} deleted from demo database`);
+      return new Response(JSON.stringify({ success: true, message: 'Contact deleted' }), { status: 200, headers });
+    }
+  } catch (error) {
+    console.error('DELETE Error v18.3.5:', error);
+    return new Response(JSON.stringify({
+      error: 'Server error',
+      message: error.message
+    }), { status: 500, headers });
   }
 }
 
