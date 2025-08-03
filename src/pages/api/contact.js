@@ -1,31 +1,32 @@
 /**
- * Contact API v18.3.5 - Complete Database & E-Mail Fix
+ * Contact API v18.3.6 - Complete with Strato SMTP Fix
  * 
- * CHANGELOG v18.3.5:
- * - ✅ FIX: POST-Route jetzt mit vollständiger Datenbank-Speicherung
- * - ✅ FIX: Enhanced Statistics Integration wieder aktiviert
- * - ✅ FIX: testSupabaseConnection() Funktion hinzugefügt
- * - ✅ FIX: Alle fehlenden API-Endpoints wieder eingefügt
- * - ✅ KEEP: E-Mail-System funktional (Strato SMTP)
+ * CHANGELOG v18.3.6:
+ * - ✅ ENHANCED: Strato SMTP optimierte Konfiguration
+ * - ✅ FIX: Erweiterte Timeouts und Retry-Logic
+ * - ✅ ADD: Alternative Port 465/SSL Fallback
+ * - ✅ ADD: Detaillierte SMTP Debug-Logs
+ * - ✅ KEEP: Vollständige Enhanced Statistics Integration
+ * - ✅ KEEP: Database-Speicherung funktional
  */
 
 import { createClient } from '@supabase/supabase-js';
 
 // ===============================
-// E-MAIL INTEGRATION (STRATO SMTP) - IMPROVED
+// E-MAIL INTEGRATION v18.3.6 - STRATO SMTP FIX
 // ===============================
 
 let nodemailer = null;
 let emailTransporter = null;
 let emailError = null;
 
-// Dynamischer Import für Nodemailer - KORRIGIERT
+// Dynamischer Import für Nodemailer
 try {
   const nodemailerModule = await import('nodemailer');
   nodemailer = nodemailerModule.default || nodemailerModule;
-  console.log('✅ Nodemailer loaded successfully v18.3.5');
+  console.log('✅ Nodemailer loaded successfully v18.3.6');
   
-  // Robuste SMTP Transporter Konfiguration
+  // Erweiterte SMTP Transporter Konfiguration für Strato
   const smtpConfig = {
     host: import.meta.env.SMTP_HOST,
     user: import.meta.env.SMTP_USER, 
@@ -34,7 +35,7 @@ try {
     secure: import.meta.env.EMAIL_SECURE
   };
   
-  console.log('🔧 SMTP Config Check:', {
+  console.log('🔧 SMTP Config Check v18.3.6:', {
     host: smtpConfig.host || 'MISSING',
     user: smtpConfig.user ? 'Present' : 'MISSING',
     pass: smtpConfig.pass ? 'Present' : 'MISSING',
@@ -42,35 +43,90 @@ try {
     secure: smtpConfig.secure || 'Default (false)'
   });
   
-  // Nur initialisieren wenn alle kritischen Daten vorhanden
   if (smtpConfig.host && smtpConfig.user && smtpConfig.pass) {
     try {
-      emailTransporter = nodemailer.createTransport({
-        host: smtpConfig.host,
+      // ✅ STRATO-OPTIMIERTE KONFIGURATION
+      emailTransporter = nodemailer.createTransporter({
+        host: smtpConfig.host, // smtp.strato.de
         port: parseInt(smtpConfig.port) || 587,
-        secure: smtpConfig.secure === 'true' || false,
+        secure: smtpConfig.secure === 'true' || false, // false für Port 587
         auth: {
           user: smtpConfig.user,
           pass: smtpConfig.pass
         },
+        // 🔧 STRATO-SPEZIFISCHE EINSTELLUNGEN
         tls: {
           ciphers: 'SSLv3',
-          rejectUnauthorized: false
+          rejectUnauthorized: false,
+          minVersion: 'TLSv1.2'
         },
-        connectionTimeout: 10000,
-        greetingTimeout: 5000,
-        socketTimeout: 10000
+        // 🔧 ERWEITERTE TIMEOUTS FÜR STRATO
+        connectionTimeout: 60000, // 60 Sekunden
+        greetingTimeout: 30000,   // 30 Sekunden  
+        socketTimeout: 60000,     // 60 Sekunden
+        // 🔧 STRATO SMTP OPTIMIERUNGEN
+        pool: false,              // Keine Connection-Pooling
+        maxConnections: 1,        // Eine Verbindung zur Zeit
+        rateDelta: 1000,         // 1 Sekunde zwischen E-Mails
+        rateLimit: 1,            // Max 1 E-Mail pro Sekunde
+        // 🔧 DEBUG-MODUS FÜR DETAILLIERTE LOGS
+        debug: true,
+        logger: {
+          debug: (info) => console.log('📧 SMTP DEBUG:', info),
+          info: (info) => console.log('📧 SMTP INFO:', info),
+          warn: (info) => console.warn('📧 SMTP WARN:', info),
+          error: (info) => console.error('📧 SMTP ERROR:', info)
+        }
       });
       
-      // Transporter testen
-      console.log('🔄 Testing SMTP connection...');
-      await emailTransporter.verify();
-      console.log('✅ Strato SMTP transporter configured and verified v18.3.5');
+      // 🔧 ERWEITERTE VERBINDUNGSTESTS
+      console.log('🔄 Testing SMTP connection with extended timeout...');
+      
+      // Test 1: Basis-Verbindung
+      console.log('🔄 Step 1: Basic connection test...');
+      await Promise.race([
+        emailTransporter.verify(),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Connection timeout after 30s')), 30000)
+        )
+      ]);
+      
+      console.log('✅ Step 1 passed: Basic connection OK');
+      
+      console.log('✅ Strato SMTP transporter configured and verified v18.3.6');
       
     } catch (error) {
-      console.error('❌ SMTP Transporter verification failed:', error.message);
-      emailError = error.message;
-      emailTransporter = null;
+      console.error('❌ SMTP Transporter verification failed v18.3.6:', error.message);
+      console.error('❌ Full error details:', error);
+      
+      // 🔧 FALLBACK: ALTERNATIVE STRATO KONFIGURATION
+      console.log('🔄 Trying alternative Strato configuration...');
+      
+      try {
+        emailTransporter = nodemailer.createTransporter({
+          host: smtpConfig.host,
+          port: 465, // SSL Port als Alternative
+          secure: true, // SSL für Port 465
+          auth: {
+            user: smtpConfig.user,
+            pass: smtpConfig.pass
+          },
+          tls: {
+            rejectUnauthorized: false
+          },
+          connectionTimeout: 30000,
+          greetingTimeout: 15000,
+          socketTimeout: 30000
+        });
+        
+        await emailTransporter.verify();
+        console.log('✅ Alternative Strato SMTP configuration successful (Port 465/SSL)');
+        
+      } catch (fallbackError) {
+        console.error('❌ Alternative configuration also failed:', fallbackError.message);
+        emailError = `Both configurations failed: ${error.message} | Fallback: ${fallbackError.message}`;
+        emailTransporter = null;
+      }
     }
   } else {
     const missing = [];
@@ -100,14 +156,14 @@ let supabaseConnectionTested = false;
 if (supabaseUrl && supabaseKey) {
   try {
     supabase = createClient(supabaseUrl, supabaseKey);
-    console.log('✅ Supabase client initialized v18.3.5');
+    console.log('✅ Supabase client initialized v18.3.6');
   } catch (error) {
     console.warn('❌ Supabase client initialization failed:', error.message);
   }
 }
 
 // ===============================
-// SUPABASE CONNECTION TEST - HINZUGEFÜGT
+// SUPABASE CONNECTION TEST
 // ===============================
 
 async function testSupabaseConnection() {
@@ -138,7 +194,7 @@ async function testSupabaseConnection() {
 }
 
 // ===============================
-// E-MAIL TEMPLATES (UNVERÄNDERT)
+// E-MAIL TEMPLATES
 // ===============================
 
 function getEmailTemplate(type, data) {
@@ -259,11 +315,11 @@ function getEmailTemplate(type, data) {
 }
 
 // ===============================
-// E-MAIL FUNKTIONEN
+// ERWEITERTE E-MAIL FUNKTIONEN v18.3.6
 // ===============================
 
 async function sendEmail(to, subject, htmlContent) {
-  console.log(`📧 Attempting to send email to: ${to}`);
+  console.log(`📧 v18.3.6 Attempting to send email to: ${to}`);
   console.log(`📧 Subject: ${subject}`);
   console.log(`📧 Transporter available: ${!!emailTransporter}`);
   
@@ -278,6 +334,7 @@ async function sendEmail(to, subject, htmlContent) {
   }
 
   try {
+    // 🔧 STRATO-OPTIMIERTE MAIL-OPTIONEN
     const mailOptions = {
       from: {
         name: 'Dominik Maier - Coaching & Interim Management',
@@ -288,36 +345,105 @@ async function sendEmail(to, subject, htmlContent) {
       html: htmlContent,
       text: htmlContent.replace(/<[^>]*>/g, ''),
       headers: {
-        'X-Mailer': 'Dominik Maier Homepage v18.3.5',
-        'X-Priority': '3'
+        'X-Mailer': 'Dominik Maier Homepage v18.3.6',
+        'X-Priority': '3',
+        'Message-ID': `<${Date.now()}.${Math.random().toString(36)}@dominik-maier.com>`,
+        'Date': new Date().toUTCString()
+      },
+      // 🔧 STRATO-SPEZIFISCHE OPTIONEN
+      envelope: {
+        from: import.meta.env.EMAIL_FROM || import.meta.env.SMTP_USER,
+        to: to
+      },
+      // 🔧 ENCODING OPTIMIERUNGEN
+      encoding: 'utf8',
+      textEncoding: 'base64'
+    };
+
+    console.log(`📧 Sending email via Strato SMTP v18.3.6...`);
+    console.log(`📧 From: ${mailOptions.from.address}`);
+    console.log(`📧 To: ${to}`);
+    
+    // 🔧 ERWEITERTE TIMEOUTS UND RETRY-LOGIC
+    const sendWithRetry = async (attempt = 1, maxAttempts = 3) => {
+      try {
+        console.log(`📧 Send attempt ${attempt}/${maxAttempts}...`);
+        
+        const info = await Promise.race([
+          emailTransporter.sendMail(mailOptions),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Send timeout after 45s')), 45000)
+          )
+        ]);
+        
+        console.log(`✅ Email sent successfully on attempt ${attempt}: ${info.messageId}`);
+        console.log(`📧 Response: ${info.response}`);
+        
+        return {
+          success: true,
+          simulation: false,
+          messageId: info.messageId,
+          provider: 'strato',
+          attempt: attempt,
+          response: info.response
+        };
+        
+      } catch (error) {
+        console.error(`❌ Send attempt ${attempt} failed:`, error.message);
+        
+        if (attempt < maxAttempts) {
+          console.log(`🔄 Retrying in 2 seconds... (${attempt + 1}/${maxAttempts})`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return sendWithRetry(attempt + 1, maxAttempts);
+        } else {
+          throw error;
+        }
       }
     };
-
-    console.log(`📧 Sending email via SMTP...`);
-    const info = await emailTransporter.sendMail(mailOptions);
     
-    console.log(`✅ Email sent successfully: ${info.messageId}`);
-    return {
-      success: true,
-      simulation: false,
-      messageId: info.messageId,
-      provider: 'strato'
-    };
+    return await sendWithRetry();
 
   } catch (error) {
-    console.error('❌ Email sending failed:', error.message);
+    console.error('❌ Email sending failed after all retries v18.3.6:', error.message);
+    console.error('❌ Full error stack:', error.stack);
+    
+    // 🔧 DETAILLIERTE ERROR-ANALYSE
+    let errorCategory = 'Unknown';
+    if (error.message.includes('ECONNREFUSED')) errorCategory = 'Connection Refused';
+    if (error.message.includes('ETIMEDOUT')) errorCategory = 'Timeout';
+    if (error.message.includes('ENOTFOUND')) errorCategory = 'DNS Resolution';
+    if (error.message.includes('535')) errorCategory = 'Authentication Failed';
+    if (error.message.includes('550')) errorCategory = 'Mailbox Error';
+    
+    console.error(`❌ Error Category: ${errorCategory}`);
     
     return {
       success: false,
       simulation: true,
       error: error.message,
-      messageId: `fallback_${Date.now()}`
+      errorCategory: errorCategory,
+      messageId: `failed_${Date.now()}`,
+      recommendation: getErrorRecommendation(errorCategory)
     };
   }
 }
 
+// 🔧 ERROR-SPEZIFISCHE EMPFEHLUNGEN
+function getErrorRecommendation(errorCategory) {
+  const recommendations = {
+    'Connection Refused': 'Prüfen Sie die SMTP_HOST und Port-Einstellungen',
+    'Timeout': 'Verlängern Sie die Timeout-Werte oder prüfen Sie die Netzwerkverbindung',
+    'DNS Resolution': 'Prüfen Sie die SMTP_HOST Adresse (smtp.strato.de)',
+    'Authentication Failed': 'Prüfen Sie SMTP_USER und SMTP_PASS Credentials',
+    'Mailbox Error': 'Prüfen Sie die Empfänger-E-Mail-Adresse',
+    'Unknown': 'Aktivieren Sie Debug-Modus für detaillierte Logs'
+  };
+  
+  return recommendations[errorCategory] || recommendations['Unknown'];
+}
+
 // ===============================
-// DATABASE FUNCTIONS - VOLLSTÄNDIG WIEDERHERGESTELLT
+// DATABASE FUNCTIONS
 // ===============================
 
 const demoDatabase = {
@@ -360,14 +486,14 @@ async function getAllContacts() {
         leadForm: contact.leadform || false
       }));
       
-      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.5`);
+      console.log(`✅ Loaded ${contacts.length} contacts from Supabase v18.3.6`);
       return contacts;
     } catch (error) {
       console.warn('❌ Supabase getAllContacts failed:', error.message);
     }
   }
   
-  console.log('📦 Using demo database fallback v18.3.5');
+  console.log('📦 Using demo database fallback v18.3.6');
   return demoDatabase.contacts;
 }
 
@@ -412,7 +538,7 @@ async function createContact(contactData) {
         throw error;
       }
       
-      console.log(`✅ Contact created in Supabase v18.3.5 with ID: ${data.id}`);
+      console.log(`✅ Contact created in Supabase v18.3.6 with ID: ${data.id}`);
       return data;
     } catch (error) {
       console.warn('❌ Supabase createContact failed:', error.message);
@@ -422,7 +548,7 @@ async function createContact(contactData) {
     console.log('⚠️ Supabase not available, using demo database');
   }
   
-  console.log('📦 Creating contact in demo database v18.3.5');
+  console.log('📦 Creating contact in demo database v18.3.6');
   const newContact = {
     id: demoDatabase.contacts.length + 1,
     ...contactData,
@@ -438,7 +564,7 @@ async function createContact(contactData) {
 }
 
 // ===============================
-// ENHANCED STATISTICS FUNCTIONS - WIEDERHERGESTELLT
+// ENHANCED STATISTICS FUNCTIONS
 // ===============================
 
 async function getEnhancedStats() {
@@ -529,7 +655,7 @@ async function getTimeAnalysis() {
 }
 
 // ===============================
-// ENHANCED STATISTICS HELPER FUNCTIONS - WIEDERHERGESTELLT
+// ENHANCED STATISTICS HELPER FUNCTIONS
 // ===============================
 
 function getSourcePageFromUrl(url) {
@@ -632,7 +758,7 @@ export async function GET({ url }) {
             email_to: import.meta.env.EMAIL_TO ? 'Present' : 'Not set',
             error: emailError || 'None'
           },
-          version: '18.3.5-complete-fix',
+          version: '18.3.6-strato-smtp-fix',
           timestamp: new Date().toISOString()
         };
         return new Response(JSON.stringify(debugInfo), { status: 200, headers });
@@ -660,11 +786,20 @@ export async function GET({ url }) {
           message: supabaseTest ? 'Supabase connection successful' : 'Supabase connection failed'
         }), { status: 200, headers });
 
+      case 'test-email':
+        console.log('🧪 Testing email system...');
+        const testResult = await sendEmail(
+          import.meta.env.EMAIL_TO || 'test@example.com',
+          'Test E-Mail - Dominik Maier Homepage v18.3.6',
+          '<p>Dies ist eine Test-E-Mail zur Überprüfung der SMTP-Konfiguration.</p>'
+        );
+        return new Response(JSON.stringify(testResult), { status: 200, headers });
+
       default:
         return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400, headers });
     }
   } catch (error) {
-    console.error('GET Error v18.3.5:', error);
+    console.error('GET Error v18.3.6:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
@@ -673,7 +808,7 @@ export async function GET({ url }) {
 }
 
 export async function POST({ request }) {
-  console.log('📥 POST request received v18.3.5');
+  console.log('📥 POST request received v18.3.6');
   
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -705,7 +840,7 @@ export async function POST({ request }) {
     console.log(`📊 Processing ${isLeadForm ? 'LEAD' : 'NORMAL'} form submission`);
 
     // ===============================
-    // ENHANCED STATISTICS INTEGRATION - WIEDER AKTIVIERT
+    // ENHANCED STATISTICS INTEGRATION
     // ===============================
     
     const now = new Date();
@@ -741,7 +876,7 @@ export async function POST({ request }) {
     });
 
     // ===============================
-    // DATENBANK SPEICHERUNG - WIEDER AKTIVIERT
+    // DATENBANK SPEICHERUNG
     // ===============================
     
     console.log('💾 Starting database save...');
@@ -802,11 +937,11 @@ export async function POST({ request }) {
       }
     };
 
-    console.log('✅ POST completed successfully v18.3.5');
+    console.log('✅ POST completed successfully v18.3.6');
     return new Response(JSON.stringify(response), { status: 200, headers });
 
   } catch (error) {
-    console.error('❌ POST Error v18.3.5:', error);
+    console.error('❌ POST Error v18.3.6:', error);
     return new Response(JSON.stringify({
       error: 'Interner Server-Fehler',
       message: error.message,
@@ -863,7 +998,7 @@ export async function PUT({ request }) {
       return new Response(JSON.stringify(contact), { status: 200, headers });
     }
   } catch (error) {
-    console.error('PUT Error v18.3.5:', error);
+    console.error('PUT Error v18.3.6:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
@@ -909,7 +1044,7 @@ export async function DELETE({ url }) {
       return new Response(JSON.stringify({ success: true, message: 'Contact deleted' }), { status: 200, headers });
     }
   } catch (error) {
-    console.error('DELETE Error v18.3.5:', error);
+    console.error('DELETE Error v18.3.6:', error);
     return new Response(JSON.stringify({
       error: 'Server error',
       message: error.message
