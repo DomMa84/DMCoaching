@@ -1,43 +1,52 @@
 ---
-// src/pages/logo-showcase.astro v1.0 (Server-Mode & SEO optimiert)
-// Logo-Showcase - Statische Seite mit prerender
+// logo-showcase.astro v2.0 - Layout v1.2.8 Integration + Header/Footer
+// CHANGELOG v2.0:
+// - ✅ FIX: Layout v1.2.8 CSS-Klassen verwendet (bg-gray-50, text-gray-900, etc.)
+// - ✅ FIX: Header v1.5.2 und Footer v1.3 integriert  
+// - ✅ FIX: Veraltete CSS-Klassen durch Tailwind-Standard ersetzt
+// - ✅ ENHANCED: Bad Rippoldsau Adresse aktualisiert
+// - ✅ KEEP: Alle professionellen Features und Downloads
 
-// ✅ WICHTIG: Für Server-Mode - diese Seite kann statisch sein
 export const prerender = true;
 
 import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 import Logo from '../components/Logo.astro';
 
-console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimization');
+console.log('🎨 Logo Showcase v2.0 - Layout v1.2.8 Integration');
 ---
 
 <Layout 
   title="Logo-Sammlung & Brand Guidelines | Dominik Maier Design-Assets"
   description="✅ Komplette Logo-Sammlung von Dominik Maier Coaching. Download aller Formate: SVG, PNG, JPG. Monogramm, Farbversionen, Brand Guidelines & Usage-Richtlinien."
 >
-  <section class="py-16 bg-light dark:bg-dark">
+  <!-- Header Integration -->
+  <Header />
+
+  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
     <div class="container mx-auto px-4">
       <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <header class="text-center mb-12" data-aos="fade-up">
-          <h1 class="text-4xl font-bold text-text-dark dark:text-text-light mb-4">Logo-Sammlung & Brand Assets</h1>
-          <p class="text-text-muted text-lg max-w-2xl mx-auto">
+          <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Logo-Sammlung & Brand Assets</h1>
+          <p class="text-gray-600 dark:text-gray-300 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
             Vollständige Übersicht aller Logoversionen für Dominik Maier Coaching & Interim Management. 
             Inklusive <strong>Download-Links</strong> und <strong>Brand Guidelines</strong> für die korrekte Verwendung.
           </p>
-          <div class="flex flex-wrap justify-center gap-2 mt-4" aria-label="Logo-Features">
-            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">📁 Alle Formate</span>
-            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">🎨 Brand Guidelines</span>
-            <span class="bg-primary-gold/20 text-text-dark dark:text-text-light px-3 py-1 rounded-full text-sm">💾 Sofort-Download</span>
+          <div class="flex flex-wrap justify-center gap-2 mt-6" aria-label="Logo-Features">
+            <span class="bg-primary-gold-15 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm">📁 Alle Formate</span>
+            <span class="bg-primary-gold-15 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm">🎨 Brand Guidelines</span>
+            <span class="bg-primary-gold-15 text-gray-900 dark:text-white px-3 py-1 rounded-full text-sm">💾 Sofort-Download</span>
           </div>
         </header>
         
         <div class="grid grid-cols-1 gap-16">
           <!-- Original vs. DM Monogram -->
           <article id="logo-evolution" data-aos="fade-up">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Logo-Evolution: Original vs. DM Monogramm</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">Logo-Evolution: Original vs. DM Monogramm</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-              <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md flex justify-center items-center">
+              <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg flex justify-center items-center min-h-48">
                 <img 
                   src="/logo-dm.png" 
                   alt="Dominik Maier Original-Logo mit vollständiger Wortmarke" 
@@ -48,17 +57,17 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                 />
                 <div class="sr-only">Original-Logo mit Wortmarke "DOMINIK MAIER" und "COACHING UND INTERIM MANAGEMENT"</div>
               </div>
-              <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md flex justify-center items-center">
+              <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg flex justify-center items-center min-h-48">
                 <Logo height={120} />
                 <div class="sr-only">DM Monogramm - extrahierte Logo-Version ohne Wortmarke</div>
               </div>
             </div>
-            <div class="mt-4 text-text-muted">
-              <p class="mb-2">
-                <span class="font-semibold text-text-dark dark:text-text-light">Design-Modifikationen:</span> 
+            <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+              <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                <span class="font-semibold text-gray-900 dark:text-white">Design-Modifikationen:</span> 
                 Extraktion des DM Monogramms aus dem ursprünglichen Logo bei Beibehaltung der originalen Proportionen und Farbgebung.
               </p>
-              <ul class="list-disc list-inside space-y-1">
+              <ul class="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-300">
                 <li><strong>Beibehaltene Elemente:</strong> Originalfarbe (#D2AE6C), Formsprache, stilistische Details</li>
                 <li><strong>Entfernte Elemente:</strong> Wortmarke "DOMINIK MAIER" und "COACHING UND INTERIM MANAGEMENT"</li>
                 <li><strong>Vorteil:</strong> Kompakte Version für kleine Darstellungen und Icons</li>
@@ -68,20 +77,20 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
           
           <!-- Different Formats -->
           <article id="logo-formats" data-aos="fade-up">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Verfügbare Logo-Formate</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">Verfügbare Logo-Formate</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                 <div class="flex justify-center items-center h-32 mb-4">
                   <Logo height={80} />
                 </div>
-                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Farbversion</h3>
-                <p class="text-center text-text-muted text-sm mt-2">
+                <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">Farbversion</h3>
+                <p class="text-center text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   <strong>Formate:</strong> SVG, PNG (transparent), JPG<br>
                   <strong>Verwendung:</strong> Web, Print, Präsentationen
                 </p>
               </div>
               
-              <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                 <div class="flex justify-center items-center h-32 mb-4">
                   <img 
                     src="/logo/logo-monochrome.svg" 
@@ -92,19 +101,19 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                     height="80"
                   />
                 </div>
-                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Monochrome Version</h3>
-                <p class="text-center text-text-muted text-sm mt-2">
+                <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">Monochrome Version</h3>
+                <p class="text-center text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   <strong>Formate:</strong> SVG, PNG, JPG<br>
                   <strong>Verwendung:</strong> Einfarbiger Druck, Gravur
                 </p>
               </div>
               
-              <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
-                <div class="flex justify-center items-center h-32 mb-4 bg-dark rounded-md">
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                <div class="flex justify-center items-center h-32 mb-4 bg-gray-900 dark:bg-gray-700 rounded-lg">
                   <Logo height={80} inverted={true} />
                 </div>
-                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Weiße Version</h3>
-                <p class="text-center text-text-muted text-sm mt-2">
+                <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">Weiße Version</h3>
+                <p class="text-center text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   <strong>Formate:</strong> SVG, PNG (transparent), JPG<br>
                   <strong>Verwendung:</strong> Dunkle Hintergründe
                 </p>
@@ -114,9 +123,9 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
           
           <!-- Enhanced Versions -->
           <article id="enhanced-logos" data-aos="fade-up">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Erweiterte Logo-Varianten</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">Erweiterte Logo-Varianten</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
-              <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                 <div class="flex justify-center items-center h-40 mb-4">
                   <img 
                     src="/logo/logo-enhanced.svg" 
@@ -128,13 +137,13 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                     height="120"
                   />
                 </div>
-                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Logo mit Farbverlauf</h3>
-                <p class="text-center text-text-muted text-sm mt-2">
+                <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">Logo mit Farbverlauf</h3>
+                <p class="text-center text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   Elegante Version mit Gold-Gradient und Kontur für <strong>Premium-Anwendungen</strong> und hochwertige Drucksachen
                 </p>
               </div>
               
-              <div class="bg-light-darker dark:bg-dark-lighter p-6 rounded-lg shadow-md">
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
                 <div class="flex justify-center items-center h-40 mb-4">
                   <img 
                     src="/logo/logo-circle.svg" 
@@ -146,8 +155,8 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                     height="120"
                   />
                 </div>
-                <h3 class="text-center text-text-dark dark:text-text-light font-medium">Logo im Kreis</h3>
-                <p class="text-center text-text-muted text-sm mt-2">
+                <h3 class="text-center text-gray-900 dark:text-white font-semibold text-lg mb-2">Logo im Kreis</h3>
+                <p class="text-center text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                   Für <strong>Social Media Profile</strong> und App-Icons optimiert. Perfekt für LinkedIn, Facebook, Instagram
                 </p>
               </div>
@@ -156,14 +165,14 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
           
           <!-- Usage Guidelines -->
           <article id="brand-guidelines" data-aos="fade-up">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Brand Guidelines & Verwendungsrichtlinien</h2>
-            <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">Brand Guidelines & Verwendungsrichtlinien</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4 text-green-600">
+                  <h3 class="text-xl font-semibold text-green-600 dark:text-green-400 mb-4">
                     ✅ Empfohlene Verwendung
                   </h3>
-                  <ul class="space-y-3 text-text-muted">
+                  <ul class="space-y-3 text-gray-600 dark:text-gray-300">
                     <li class="flex items-start">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -192,10 +201,10 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                 </div>
                 
                 <div>
-                  <h3 class="text-xl font-medium text-text-dark dark:text-text-light mb-4 text-red-600">
+                  <h3 class="text-xl font-semibold text-red-600 dark:text-red-400 mb-4">
                     ❌ Zu vermeiden
                   </h3>
-                  <ul class="space-y-3 text-text-muted">
+                  <ul class="space-y-3 text-gray-600 dark:text-gray-300">
                     <li class="flex items-start">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
@@ -228,12 +237,12 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
 
           <!-- Technical Specifications -->
           <article id="technical-specs" data-aos="fade-up">
-            <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-6">Technische Spezifikationen</h2>
-            <div class="bg-light-darker dark:bg-dark-lighter p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8">Technische Spezifikationen</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
               <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Farbwerte</h3>
-                  <ul class="space-y-2 text-text-muted text-sm">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Farbwerte</h3>
+                  <ul class="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
                     <li><strong>Primärfarbe:</strong> #D2AE6C</li>
                     <li><strong>RGB:</strong> 210, 174, 108</li>
                     <li><strong>CMYK:</strong> 16, 26, 66, 2</li>
@@ -241,8 +250,8 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                   </ul>
                 </div>
                 <div>
-                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Dateigrößen</h3>
-                  <ul class="space-y-2 text-text-muted text-sm">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Dateigrößen</h3>
+                  <ul class="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
                     <li><strong>SVG:</strong> Vektorbasiert, skalierbar</li>
                     <li><strong>PNG:</strong> Transparent, 300-2400px</li>
                     <li><strong>JPG:</strong> Web-optimiert, 72-300 DPI</li>
@@ -250,8 +259,8 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
                   </ul>
                 </div>
                 <div>
-                  <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-3">Anwendungsgebiete</h3>
-                  <ul class="space-y-2 text-text-muted text-sm">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Anwendungsgebiete</h3>
+                  <ul class="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
                     <li><strong>Digital:</strong> Website, Social Media</li>
                     <li><strong>Print:</strong> Visitenkarten, Briefpapier</li>
                     <li><strong>Merchandise:</strong> T-Shirts, Tassen</li>
@@ -264,15 +273,15 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
         </div>
         
         <!-- Download Section -->
-        <div class="mt-12 bg-gradient-to-r from-primary-gold/10 to-primary-gold/20 rounded-lg p-8 text-center" data-aos="fade-up">
-          <h2 class="text-2xl font-semibold text-text-dark dark:text-text-light mb-4">📦 Logo-Download Center</h2>
-          <p class="text-text-muted mb-6 max-w-2xl mx-auto">
+        <div class="mt-16 bg-gradient-to-r from-primary-gold-10 to-primary-gold-20 rounded-xl p-8 text-center" data-aos="fade-up">
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">📦 Logo-Download Center</h2>
+          <p class="text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
             Alle Logoversionen sind in verschiedenen Formaten verfügbar. Sie können die komplette Logosammlung herunterladen oder einzelne Dateien nach Bedarf verwenden. <strong>Alle Downloads sind kostenfrei!</strong>
           </p>
-          <div class="flex flex-col sm:flex-row justify-center gap-4">
+          <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
             <a 
               href="/downloads/logo-package-complete.zip" 
-              class="inline-flex items-center justify-center bg-primary-gold hover:bg-primary-dark text-white font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md"
+              class="inline-flex items-center justify-center bg-primary-gold hover:bg-primary-gold-80 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               aria-label="Komplette Logo-Sammlung als ZIP-Datei herunterladen"
               download
             >
@@ -283,7 +292,7 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
             </a>
             <a 
               href="/brand-guidelines.pdf" 
-              class="inline-flex items-center justify-center bg-light-darkest dark:bg-dark-lightest text-text-dark dark:text-text-light font-medium py-3 px-6 rounded-md transition-colors duration-300 shadow-md hover:bg-primary-gold hover:text-white"
+              class="inline-flex items-center justify-center bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:bg-primary-gold hover:text-white"
               aria-label="Brand Guidelines als PDF-Dokument herunterladen"
               target="_blank"
             >
@@ -295,19 +304,19 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
           </div>
           
           <!-- Individual Downloads -->
-          <div class="mt-8 pt-8 border-t border-primary-gold/20">
-            <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-4">Einzelne Logo-Dateien</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
-              <a href="/logo/logo-color.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Farbiges Logo als SVG herunterladen">
+          <div class="pt-8 border-t border-primary-gold-30">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">Einzelne Logo-Dateien</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-2xl mx-auto">
+              <a href="/logo/logo-color.svg" download class="text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-primary-gold-10 hover:border-primary-gold transition-all duration-300" aria-label="Farbiges Logo als SVG herunterladen">
                 📄 Color SVG
               </a>
-              <a href="/logo/logo-color.png" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Farbiges Logo als PNG herunterladen">
+              <a href="/logo/logo-color.png" download class="text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-primary-gold-10 hover:border-primary-gold transition-all duration-300" aria-label="Farbiges Logo als PNG herunterladen">
                 🖼️ Color PNG
               </a>
-              <a href="/logo/logo-mono.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Monochrome Logo als SVG herunterladen">
+              <a href="/logo/logo-mono.svg" download class="text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-primary-gold-10 hover:border-primary-gold transition-all duration-300" aria-label="Monochrome Logo als SVG herunterladen">
                 ⚫ Mono SVG
               </a>
-              <a href="/logo/logo-white.svg" download class="text-sm bg-white dark:bg-dark-lighter p-2 rounded border hover:bg-primary-gold/10 transition-colors" aria-label="Weißes Logo als SVG herunterladen">
+              <a href="/logo/logo-white.svg" download class="text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:bg-primary-gold-10 hover:border-primary-gold transition-all duration-300" aria-label="Weißes Logo als SVG herunterladen">
                 ⚪ White SVG
               </a>
             </div>
@@ -315,18 +324,40 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
         </div>
 
         <!-- Quick Navigation -->
-        <nav class="mt-8 bg-white dark:bg-dark rounded-lg shadow-md p-6" aria-label="Logo-Showcase Navigation">
-          <h3 class="text-lg font-medium text-text-dark dark:text-text-light mb-4">📍 Schnellnavigation</h3>
+        <nav class="mt-12 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6" aria-label="Logo-Showcase Navigation">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-6">📍 Schnellnavigation</h3>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-            <a href="#logo-evolution" class="text-primary-gold hover:underline">Logo-Evolution</a>
-            <a href="#logo-formats" class="text-primary-gold hover:underline">Verfügbare Formate</a>
-            <a href="#enhanced-logos" class="text-primary-gold hover:underline">Erweiterte Varianten</a>
-            <a href="#brand-guidelines" class="text-primary-gold hover:underline">Brand Guidelines</a>
+            <a href="#logo-evolution" class="text-primary-gold hover:text-primary-gold-80 hover:underline transition-colors duration-300">Logo-Evolution</a>
+            <a href="#logo-formats" class="text-primary-gold hover:text-primary-gold-80 hover:underline transition-colors duration-300">Verfügbare Formate</a>
+            <a href="#enhanced-logos" class="text-primary-gold hover:text-primary-gold-80 hover:underline transition-colors duration-300">Erweiterte Varianten</a>
+            <a href="#brand-guidelines" class="text-primary-gold hover:text-primary-gold-80 hover:underline transition-colors duration-300">Brand Guidelines</a>
           </div>
         </nav>
+
+        <!-- Contact Info Update -->
+        <div class="mt-12 bg-primary-gold-10 rounded-xl p-6 text-center">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Fragen zu den Brand Guidelines?</h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">
+            Bei Fragen zur Logo-Verwendung oder für individuelle Anpassungen stehe ich gerne zur Verfügung.
+          </p>
+          <div class="flex flex-col sm:flex-row justify-center gap-4 text-sm">
+            <a href="mailto:maier@maier-value.com" class="text-primary-gold hover:text-primary-gold-80 font-medium">
+              📧 maier@maier-value.com
+            </a>
+            <a href="tel:+497440913367" class="text-primary-gold hover:text-primary-gold-80 font-medium">
+              📞 +49 7440 913367
+            </a>
+            <span class="text-gray-500 dark:text-gray-400">
+              📍 Bad Rippoldsau, Schwarzwald
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <!-- Footer Integration -->
+  <Footer />
 
   <!-- Schema.org JSON-LD für Logo-Seite -->
   <script type="application/ld+json">
@@ -334,37 +365,41 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     "name": "Dominik Maier Logo-Sammlung",
-    "description": "Komplette Logo-Sammlung und Brand Guidelines für Dominik Maier Coaching & Interim Management",
+    "description": "Komplette Logo-Sammlung und Brand Guidelines für Dominik Maier Coaching & Interim Management aus Bad Rippoldsau",
     "creator": {
       "@type": "Organization",
       "name": "Dominik Maier Coaching & Interim Management",
-      "url": "https://maier-value.com"
+      "url": "https://maier-value.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gaisbachweg 4", 
+        "addressLocality": "Bad Rippoldsau",
+        "postalCode": "77776",
+        "addressCountry": "DE"
+      }
     },
     "license": "https://maier-value.com/logo-license",
     "usageInfo": "Brand Guidelines verfügbar",
     "contentLocation": "https://maier-value.com/logo-showcase",
-    "keywords": ["Logo", "Brand Guidelines", "Corporate Design", "Monogramm", "Download"],
+    "keywords": ["Logo", "Brand Guidelines", "Corporate Design", "Monogramm", "Download", "Bad Rippoldsau", "Schwarzwald"],
     "inLanguage": "de-DE",
     "dateCreated": "2025",
     "copyrightHolder": {
       "@type": "Person",
-      "name": "Dominik Maier"
+      "name": "Dominik Maier",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Gaisbachweg 4",
+        "addressLocality": "Bad Rippoldsau", 
+        "postalCode": "77776",
+        "addressCountry": "DE"
+      }
     }
   }
   </script>
 </Layout>
 
 <style>
-  /* Footer version info */
-  .footer-version::after {
-    content: "Logo Showcase v1.0 - Server-Mode & SEO optimiert";
-    display: block;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 1rem;
-    text-align: center;
-  }
-
   /* Smooth scrolling for anchor links */
   html {
     scroll-behavior: smooth;
@@ -401,5 +436,54 @@ console.log('🎨 Logo Showcase v1.0 loaded - Static prerendered with SEO optimi
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+  }
+
+  /* AOS Animation Support */
+  [data-aos] {
+    pointer-events: none;
+  }
+  
+  [data-aos].aos-animate {
+    pointer-events: auto;
+  }
+  
+  /* Custom primary-gold utilities for this page */
+  .bg-primary-gold-10 {
+    background-color: rgba(210, 174, 108, 0.1);
+  }
+  
+  .bg-primary-gold-15 {
+    background-color: rgba(210, 174, 108, 0.15);
+  }
+  
+  .bg-primary-gold-20 {
+    background-color: rgba(210, 174, 108, 0.2);
+  }
+  
+  .bg-primary-gold-30 {
+    background-color: rgba(210, 174, 108, 0.3);
+  }
+  
+  .border-primary-gold-30 {
+    border-color: rgba(210, 174, 108, 0.3);
+  }
+  
+  .text-primary-gold-80 {
+    color: rgba(210, 174, 108, 0.8);
+  }
+  
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .bg-primary-gold-10 {
+      background-color: rgba(210, 174, 108, 0.05);
+    }
+    
+    .bg-primary-gold-15 {
+      background-color: rgba(210, 174, 108, 0.1);
+    }
+    
+    .bg-primary-gold-20 {
+      background-color: rgba(210, 174, 108, 0.15);
+    }
   }
 </style>
