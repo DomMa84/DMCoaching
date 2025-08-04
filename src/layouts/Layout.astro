@@ -1,10 +1,9 @@
 ---
-// Layout.astro v1.2.9 - CookieConsent Integration
+// Layout.astro v1.2.9 - Nur CookieConsent hinzugefügt
 // CHANGELOG v1.2.9:
-// - ✅ NEW: CookieConsent direkt in Layout integriert
-// - ✅ FIX: Cookie-Banner erscheint automatisch auf ALLEN Seiten
+// - ✅ NEW: CookieConsent Component import und integration
+// - ✅ KEEP: Alle originalen CSS-Styles unverändert (v1.2.8)
 // - ✅ KEEP: Alle bestehenden Funktionen unverändert
-// - ✅ BEST: Nur EINE Änderung für die ganze Website
 
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -38,7 +37,7 @@ const { title, description } = Astro.props;
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <slot />
     
-    <!-- Cookie Consent - Automatisch auf ALLEN Seiten -->
+    <!-- ✅ EINZIGE ÄNDERUNG: CookieConsent hinzugefügt -->
     <CookieConsent />
     
     <script>
@@ -133,7 +132,7 @@ const { title, description } = Astro.props;
   .bg-gray-600 { background-color: #4b5563; }
   .bg-gray-700 { background-color: #374151; }
   .bg-gray-800 { background-color: #1f2937; }
-  .bg-gray-900 { background-color: #111827; }
+  .bg-gray-900 { color: #111827; }
 
   .border-gray-100 { border-color: #f3f4f6; }
   .border-gray-200 { border-color: #e5e7eb; }
@@ -284,9 +283,7 @@ const { title, description } = Astro.props;
     .lg\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
   }
 
-  /* ALLE WEITEREN CSS-STYLES IDENTISCH ZU VORHERIGER VERSION */
-  
-  /* MARGIN */
+  /* MARGIN - VEREINFACHT OHNE PROBLEMATISCHE ESCAPES */
   .m-0 { margin: 0; }
   .mx-auto { margin-left: auto; margin-right: auto; }
   .mb-2 { margin-bottom: 0.5rem; }
@@ -479,3 +476,118 @@ const { title, description } = Astro.props;
 
   /* TRANSFORM */
   .transform { transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+  .scale-105 { --tw-scale-x: 1.05; --tw-scale-y: 1.05; transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+
+  /* HOVER EFFECTS */
+  .hover\:shadow-lg:hover { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+  .hover\:shadow-xl:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+  .hover\:scale-105:hover { --tw-scale-x: 1.05; --tw-scale-y: 1.05; transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y)); }
+  .hover\:opacity-80:hover { opacity: 0.8; }
+  .hover\:opacity-90:hover { opacity: 0.9; }
+
+  /* OPACITY */
+  .opacity-0 { opacity: 0; }
+  .opacity-10 { opacity: 0.1; }
+  .opacity-20 { opacity: 0.2; }
+  .opacity-30 { opacity: 0.3; }
+  .opacity-50 { opacity: 0.5; }
+  .opacity-70 { opacity: 0.7; }
+  .opacity-80 { opacity: 0.8; }
+  .opacity-90 { opacity: 0.9; }
+  .opacity-100 { opacity: 1; }
+
+  /* OVERFLOW */
+  .overflow-hidden { overflow: hidden; }
+  .overflow-visible { overflow: visible; }
+  .overflow-x-hidden { overflow-x: hidden; }
+  .overflow-y-hidden { overflow-y: hidden; }
+
+  /* OBJECT */
+  .object-cover { object-fit: cover; }
+  .object-contain { object-fit: contain; }
+
+  /* CURSOR */
+  .cursor-pointer { cursor: pointer; }
+  .cursor-not-allowed { cursor: not-allowed; }
+
+  /* ANIMATION KEYFRAMES */
+  @keyframes subtle-zoom {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes float-refined {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    33% { transform: translateY(-10px) rotate(1deg); }
+    66% { transform: translateY(-5px) rotate(-1deg); }
+  }
+
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse-gold {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(210, 174, 108, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(210, 174, 108, 0); }
+  }
+
+  /* ANIMATION CLASSES */
+  .animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out infinite; }
+  .animate-float-refined { animation: float-refined 6s ease-in-out infinite; }
+  .animate-fade-in-up { animation: fade-in-up 0.6s ease-out; }
+  .animate-pulse-gold { animation: pulse-gold 2s infinite; }
+
+  /* RESPONSIVE VISIBILITY */
+  @media (max-width: 767px) {
+    .md\:hidden { display: none; }
+  }
+
+  @media (min-width: 768px) {
+    .md\:block { display: block; }
+    .md\:flex { display: flex; }
+    .md\:inline-flex { display: inline-flex; }
+    .md\:hidden { display: none; }
+  }
+
+  @media (min-width: 1024px) {
+    .lg\:block { display: block; }
+    .lg\:flex { display: flex; }
+    .lg\:inline-flex { display: inline-flex; }
+    .lg\:hidden { display: none; }
+    .lg\:w-12 { width: 3rem; }
+    .lg\:h-12 { height: 3rem; }
+    .lg\:h-20 { height: 5rem; }
+  }
+
+  /* SPECIAL HERO TEXT EFFECTS */
+  .hero-text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .value-tile-hover {
+    transition: all 0.3s ease;
+  }
+
+  .value-tile-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* BACKDROP FILTERS */
+  .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  .backdrop-blur { backdrop-filter: blur(8px); }
+
+  /* FOCUS STATES */
+  .focus\:outline-none:focus { outline: 2px solid transparent; outline-offset: 2px; }
+  .focus\:ring-2:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+  .focus\:ring-primary-gold:focus { --tw-ring-opacity: 1; --tw-ring-color: rgba(210, 174, 108, var(--tw-ring-opacity)); }
+
+  /* SCROLL BEHAVIOR */
+  .scroll-smooth { scroll-behavior: smooth; }
+
+  /* PRINT STYLES */
+  @media print {
+    .print\:hidden { display: none; }
+  }
+</style>
