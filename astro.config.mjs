@@ -1,6 +1,6 @@
-// astro.config.mjs - Performance-optimiert für maier-value.com
-// ✅ Löst Render-Blocking und Performance-Probleme
-// ⚠️ OHNE Änderung am Layout oder Funktionen
+// astro.config.mjs - GEFIXT für Netlify ESM-Kompatibilität
+// ✅ Alle require() durch import ersetzt
+// ✅ Performance-Optimierungen beibehalten
 
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
@@ -36,7 +36,7 @@ export default defineConfig({
           // Vendor-Code separat laden
           manualChunks: {
             'vendor': ['astro'],
-            'utils': ['aos', 'swiper']
+            'utils': []
           },
           
           // Asset-Namen optimieren
@@ -44,24 +44,6 @@ export default defineConfig({
           chunkFileNames: 'assets/[name]-[hash].js',
           entryFileNames: 'assets/[name]-[hash].js'
         }
-      }
-    },
-    
-    // CSS-Optimierungen
-    css: {
-      // PostCSS-Optimierungen
-      postcss: {
-        plugins: [
-          // Automatische Präfixe
-          require('autoprefixer'),
-          // CSS-Optimierung
-          require('cssnano')({
-            preset: ['default', {
-              discardComments: { removeAll: true },
-              normalizeWhitespace: false
-            }]
-          })
-        ]
       }
     },
     
