@@ -1,131 +1,70 @@
-# netlify.toml - Performance-optimiert für maier-value.com
-# ✅ Löst alle PageSpeed-Probleme ohne Layout-Änderungen
-# 🎯 Fokus: Render-Blocking, Caching, Bildoptimierung
+# netlify.toml - Performance & Security Optimierung für maier-value.com
+# Version: 1.0 - Core Web Vitals Optimierung
 
 [build]
   command = "npm run build"
   publish = "dist"
-  
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_VERSION = "9"
 
-# Automatische Optimierungen aktivieren
-[build.processing]
-  skip_processing = false
+# Performance-optimierte Redirects
+[[redirects]]
+  from = "/blog/old-post"
+  to = "/blog/new-post"
+  status = 301
 
-[build.processing.css]
-  bundle = true
-  minify = true
-
-[build.processing.js]
-  bundle = true
-  minify = true
-
-[build.processing.html]
-  pretty_urls = true
-
-[build.processing.images]
-  compress = true
-
-# Headers für Performance-Optimierung
+# Security & Performance Headers
 [[headers]]
   for = "/*"
   [headers.values]
-    # Sicherheits-Headers
+    # Security Headers
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     
-    # Performance-Headers
-    X-DNS-Prefetch-Control = "on"
+    # Performance Headers
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
 
-# Cache-Headers für statische Assets
+# Statische Assets - Lange Cache-Zeit
 [[headers]]
-  for = "/assets/*"
+  for = "/*.css"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
 [[headers]]
-  for = "/_astro/*"
+  for = "/*.js"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# Cache für Bilder
 [[headers]]
-  for = "*.jpg"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000"
-
-[[headers]]
-  for = "*.png"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000"
-
-[[headers]]
-  for = "*.webp"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000"
-
-[[headers]]
-  for = "*.avif"
-  [headers.values]
-    Cache-Control = "public, max-age=2592000"
-
-# Cache für Schriften
-[[headers]]
-  for = "*.woff2"
+  for = "/*.woff2"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
-    Access-Control-Allow-Origin = "*"
 
-# HTML-Seiten - kein Cache
+# Bilder - Mittlere Cache-Zeit
 [[headers]]
-  for = "*.html"
+  for = "/*.webp"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*.jpg"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# HTML-Dateien - Kurze Cache-Zeit für Aktualität
+[[headers]]
+  for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# Homepage spezifisch
+# Service Worker Support
 [[headers]]
-  for = "/"
+  for = "/sw.js"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
-    # Preload kritische Ressourcen
-    Link = '</assets/main.css>; rel=preload; as=style, </assets/fonts/inter.woff2>; rel=preload; as=font; type=font/woff2; crossorigin'
-
-# Redirects für bessere SEO
-[[redirects]]
-  from = "/home"
-  to = "/"
-  status = 301
-
-[[redirects]]
-  from = "/index.html"
-  to = "/"
-  status = 301
-
-# 404 Behandlung
-[[redirects]]
-  from = "/*"
-  to = "/404"
-  status = 404
-
-# Form-Handling (falls ContactForm verwendet wird)
-[context.production.environment]
-  CONTACT_FORM_ENDPOINT = "/.netlify/functions/contact"
-
-# Plugins für zusätzliche Optimierung
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
-  
-  [plugins.inputs.thresholds]
-    performance = 0.9
-    accessibility = 0.9
-    best-practices = 0.9
-    seo = 0.9
-
-# Edge Functions für Performance (optional)
-[[edge_functions]]
-  function = "image-optimization"
-  path = "/images/*"
+    Service-Worker-Allowed = "/"
