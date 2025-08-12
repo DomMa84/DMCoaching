@@ -1,12 +1,10 @@
 ---
-// Layout.astro v1.2.9 - Performance Safe Update (Design v1.2.8 unverändert!)
-// CHANGELOG v1.2.9:
-// - ✅ KEEP: Komplettes Design v1.2.8 erhalten
-// - ✅ ADD: Service Worker Registration (falls noch nicht aktiv)
-// - ✅ ADD: Performance Monitoring & Core Web Vitals
-// - ✅ ADD: Critical Resource Preloading für LCP-Optimierung
-// - ✅ ADD: DNS Prefetch für externe Ressourcen
-// - ✅ SAFE: Keine visuellen oder strukturellen Änderungen
+// Layout.astro v1.3.0 - PWA Detection + CSS Override (VOLLSTÄNDIGE VERSION)
+// CHANGELOG v1.3.0:
+// - ✅ ADD: PWA-Detection JavaScript für automatisches Desktop-Layout
+// - ✅ ADD: CSS Override Classes für PWA-Desktop-Force
+// - ✅ KEEP: KOMPLETTES CSS v1.2.8 - NICHTS entfernt!
+// - ✅ BONUS: Mobile Navigation JavaScript-Fix
 
 export interface Props {
   title: string;
@@ -24,7 +22,6 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     
-    <!-- =================== PERFORMANCE OPTIMIERUNG START =================== -->
     <!-- DNS Prefetch für externe Ressourcen -->
     <link rel="dns-prefetch" href="//fonts.googleapis.com">
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -35,46 +32,101 @@ const { title, description } = Astro.props;
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Manifest für PWA Features (falls vorhanden) -->
+    <!-- Manifest für PWA Features -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D2AE6C">
     
-    <!-- Performance Hints -->
-    <meta name="format-detection" content="telephone=no">
-    <!-- =================== PERFORMANCE OPTIMIERUNG ENDE =================== -->
-    
-    <!-- ORIGINAL FONTS - UNVERÄNDERT -->
+    <!-- ORIGINAL FONTS -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <title>{title}</title>
     
-    <!-- ORIGINAL AOS - UNVERÄNDERT -->
+    <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
     
-    <!-- ORIGINAL Alpine.js - UNVERÄNDERT -->
+    <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <slot />
     
-    <!-- =================== PERFORMANCE SCRIPTS START =================== -->
+    <!-- PWA Detection & Layout Override -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('🎯 PWA Detection v1.3.0 - Starting...');
+        
+        // PWA Detection
+        const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+        const isWideScreen = window.innerWidth >= 1200;
+        const screenInfo = `${window.innerWidth}x${window.innerHeight}`;
+        
+        console.log('📱 PWA Mode:', isPWA);
+        console.log('💻 Wide Screen:', isWideScreen, `(${screenInfo})`);
+        
+        // PWA + Wide Screen = Force Desktop Layout
+        if (isPWA && isWideScreen) {
+          console.log('🚀 PWA Desktop Mode activated!');
+          
+          document.body.classList.add('pwa-desktop-mode');
+          document.documentElement.classList.add('force-desktop-layout');
+          
+          // Hide Mobile Navigation
+          const mobileMenu = document.getElementById('mobile-menu-toggle');
+          const mobileMenuContainer = document.getElementById('mobile-menu');
+          
+          if (mobileMenu) {
+            mobileMenu.style.display = 'none';
+            console.log('📱 Mobile menu hidden in PWA Desktop mode');
+          }
+          
+          if (mobileMenuContainer) {
+            mobileMenuContainer.style.display = 'none';
+          }
+          
+          // Force Grid Layouts
+          setTimeout(() => {
+            const services = document.querySelectorAll('.services-desktop-grid, .value-desktop-grid, .process-desktop-grid');
+            services.forEach(grid => {
+              grid.classList.add('pwa-force-desktop-grid');
+            });
+          }, 100);
+          
+        } else if (isPWA && !isWideScreen) {
+          console.log('📱 PWA Mobile Mode - keeping mobile layout');
+          document.body.classList.add('pwa-mobile-mode');
+        } else {
+          console.log('🌐 Regular Browser Mode');
+          document.body.classList.add('browser-mode');
+        }
+        
+        // Mobile Menu Toggle Fix
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuToggle && mobileMenu) {
+          mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('📱 Mobile menu toggle clicked');
+            mobileMenu.classList.toggle('hidden');
+          });
+        }
+      });
+    </script>
+
     <!-- Service Worker Registration -->
     <script>
-      // Service Worker Registration (nur wenn noch nicht aktiv)
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', async () => {
           try {
             const registration = await navigator.serviceWorker.register('/sw.js');
             console.log('✅ Service Worker registered:', registration.scope);
             
-            // Check for updates
             registration.addEventListener('updatefound', () => {
               const newWorker = registration.installing;
               if (newWorker) {
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                     console.log('🔄 Service Worker update available');
-                    // Optional: Notify user about update
                   }
                 });
               }
@@ -88,9 +140,7 @@ const { title, description } = Astro.props;
 
     <!-- Core Web Vitals Monitoring -->
     <script>
-      // Performance Monitoring (nur wenn Performance API verfügbar)
       if ('performance' in window && 'PerformanceObserver' in window) {
-        // LCP (Largest Contentful Paint) Observer
         try {
           new PerformanceObserver((entryList) => {
             const entries = entryList.getEntries();
@@ -101,7 +151,6 @@ const { title, description } = Astro.props;
           console.log('LCP monitoring not supported');
         }
 
-        // CLS (Cumulative Layout Shift) Observer
         try {
           let clsValue = 0;
           new PerformanceObserver((entryList) => {
@@ -116,7 +165,6 @@ const { title, description } = Astro.props;
           console.log('CLS monitoring not supported');
         }
 
-        // Page Load Performance
         window.addEventListener('load', () => {
           const perfData = performance.getEntriesByType('navigation')[0];
           if (perfData) {
@@ -127,9 +175,8 @@ const { title, description } = Astro.props;
       }
     </script>
 
-    <!-- Prefetch wichtiger Seiten bei Hover -->
+    <!-- Link Prefetching -->
     <script>
-      // Intelligent Link Prefetching (nur bei ausreichend Bandbreite)
       if ('connection' in navigator && navigator.connection.effectiveType !== 'slow-2g') {
         let prefetchTimer;
         
@@ -142,7 +189,7 @@ const { title, description } = Astro.props;
               prefetchLink.href = link.href;
               document.head.appendChild(prefetchLink);
               link.setAttribute('data-prefetched', 'true');
-            }, 100); // 100ms delay
+            }, 100);
           }
         });
 
@@ -151,13 +198,10 @@ const { title, description } = Astro.props;
         });
       }
     </script>
-    <!-- =================== PERFORMANCE SCRIPTS ENDE =================== -->
     
-    <!-- ORIGINAL SCRIPTS - UNVERÄNDERT -->
+    <!-- AOS & Dark Mode Initialization -->
     <script>
-      // ORIGINAL AOS Safe Initialization - UNVERÄNDERT
       document.addEventListener('DOMContentLoaded', function() {
-        // Check if AOS is loaded
         if (typeof AOS !== 'undefined') {
           AOS.init({
             duration: 1000,
@@ -169,7 +213,6 @@ const { title, description } = Astro.props;
           console.warn('AOS library not loaded, skipping animation initialization');
         }
         
-        // ORIGINAL Dark mode logic - UNVERÄNDERT
         if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
           document.documentElement.classList.add('dark');
         } else {
@@ -180,7 +223,6 @@ const { title, description } = Astro.props;
   </body>
 </html>
 
-<!-- ALLE ORIGINAL CSS STYLES v1.2.8 - KOMPLETT UNVERÄNDERT -->
 <style is:global>
   /* RESET & BASE STYLES */
   * {
@@ -268,7 +310,7 @@ const { title, description } = Astro.props;
   .bg-black-90 { background-color: var(--black-90); }
   .bg-black-70 { background-color: var(--black-70); }
 
-  /* ===== UTILITY CLASSES v1.2.8 - UNVERÄNDERT ===== */
+  /* ===== UTILITY CLASSES v1.2.8 - KOMPLETT ===== */
   
   /* DISPLAY */
   .block { display: block; }
@@ -413,7 +455,7 @@ const { title, description } = Astro.props;
     .md\:py-20 { padding-top: 5rem; padding-bottom: 5rem; }
   }
 
-  /* MARGIN - VEREINFACHT OHNE PROBLEMATISCHE ESCAPES */
+  /* MARGIN */
   .m-0 { margin: 0; }
   .mx-auto { margin-left: auto; margin-right: auto; }
   .mb-2 { margin-bottom: 0.5rem; }
@@ -673,7 +715,7 @@ const { title, description } = Astro.props;
   /* FONT FAMILY */
   .font-sans { font-family: 'Montserrat', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
 
-  /* ===== CUSTOM COMPONENTS & ANIMATIONS v1.2.8 - UNVERÄNDERT ===== */
+  /* ===== CUSTOM COMPONENTS & ANIMATIONS v1.2.8 ===== */
 
   /* HERO TEXT STYLING */
   .hero-text-simple-white h1,
@@ -733,6 +775,68 @@ const { title, description } = Astro.props;
   .process-step-box {
     padding: 1.5rem;
     margin-top: 1rem;
+  }
+
+  /* DESKTOP GRID FORCE-FIX */
+  @media (min-width: 1024px) {
+    .services-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .value-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .process-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+  }
+
+  /* ===== PWA CSS OVERRIDE SYSTEM ===== */
+  
+  /* PWA Desktop Mode Overrides */
+  .pwa-desktop-mode .services-desktop-grid,
+  .pwa-desktop-mode .value-desktop-grid,
+  .pwa-desktop-mode .process-desktop-grid,
+  .force-desktop-layout .services-desktop-grid,
+  .force-desktop-layout .value-desktop-grid,
+  .force-desktop-layout .process-desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2rem !important;
+  }
+  
+  /* Force Desktop Grid for Wide Screens */
+  .pwa-force-desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2rem !important;
+  }
+  
+  /* PWA Desktop Container Optimization */
+  .pwa-desktop-mode .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Hide Mobile Navigation in PWA Desktop Mode */
+  .pwa-desktop-mode #mobile-menu-toggle {
+    display: none !important;
+  }
+  
+  .pwa-desktop-mode #mobile-menu {
+    display: none !important;
+  }
+  
+  /* Show Desktop Navigation in PWA */
+  .pwa-desktop-mode .hidden.lg\:flex {
+    display: flex !important;
   }
 
   /* ANIMATIONS */
