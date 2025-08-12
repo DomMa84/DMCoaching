@@ -1,27 +1,58 @@
 {
-  "name": "dominik-maier-coaching",
+  "name": "maier-value-website",
   "type": "module",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "Performance-optimierte Website für Dominik Maier Coaching & Interim Management",
   "scripts": {
     "dev": "astro dev",
+    "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "build:analyze": "astro build && npx webpack-bundle-analyzer dist/_astro/*.js",
+    "optimize:images": "imagemin src/assets/images/* --out-dir=public/optimized --plugin=imagemin-webp --plugin=imagemin-avif",
+    "lighthouse": "lighthouse https://maier-value.com --output=html --output-path=./lighthouse-report.html",
+    "check:performance": "npm run build && npm run lighthouse"
   },
   "dependencies": {
-    "@astrojs/alpinejs": "^0.4.0",
-    "@astrojs/netlify": "^6.5.1",
-    "@astrojs/tailwind": "^5.1.5",
-    "@supabase/supabase-js": "^2.38.0",
-    "@types/alpinejs": "^3.13.7",
-    "@types/nodemailer": "^6.4.17",
-    "alpinejs": "^3.13.5",
-    "aos": "^2.3.4",
-    "astro": "^5.7.12",
-    "nodemailer": "^6.10.1",
-    "swiper": "^11.0.5",
-    "tailwindcss": "^3.4.1",
-    "vanilla-cookieconsent": "^3.0.0"
-  }
+    "astro": "^4.0.0",
+    "@astrojs/tailwind": "^5.0.0",
+    "tailwindcss": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "autoprefixer": "^10.4.16",
+    "cssnano": "^6.0.1",
+    "imagemin": "^8.0.1",
+    "imagemin-avif": "^0.1.6",
+    "imagemin-webp": "^8.0.0",
+    "postcss": "^8.4.31",
+    "@astrojs/sitemap": "^3.0.0",
+    "lighthouse": "^11.0.0",
+    "webpack-bundle-analyzer": "^4.9.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ],
+  "keywords": [
+    "astro",
+    "coaching",
+    "interim-management",
+    "performance-optimized",
+    "tailwindcss"
+  ],
+  "author": "Dominik Maier",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/maier-value-website.git"
+  },
+  "homepage": "https://maier-value.com"
 }
