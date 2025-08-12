@@ -29,12 +29,6 @@
       "purpose": "maskable"
     },
     {
-      "src": "/logo/full-logo-color.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
@@ -46,70 +40,24 @@
       "name": "Kontakt",
       "short_name": "Kontakt",
       "description": "Kostenloses Erstgespräch vereinbaren",
-      "url": "/kontakt",
-      "icons": [
-        {
-          "src": "/logo/logo-circle.svg",
-          "sizes": "96x96"
-        }
-      ]
+      "url": "/kontakt"
     },
     {
       "name": "Leistungen", 
       "short_name": "Services",
       "description": "Unsere Beratungsleistungen",
-      "url": "/leistung/strategische-unternehmensentwicklung",
-      "icons": [
-        {
-          "src": "/logo/logo-circle.svg",
-          "sizes": "96x96"
-        }
-      ]
+      "url": "/leistung/strategische-unternehmensentwicklung"
     },
     {
       "name": "Blog",
       "short_name": "Blog", 
       "description": "Insights & Expertise",
-      "url": "/blog",
-      "icons": [
-        {
-          "src": "/logo/logo-circle.svg",
-          "sizes": "96x96"
-        }
-      ]
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshots/desktop-homepage.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Homepage auf Desktop"
-    },
-    {
-      "src": "/screenshots/mobile-homepage.png", 
-      "sizes": "375x667",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Homepage auf Mobile"
-    },
-    {
-      "src": "/screenshots/mobile-contact.png",
-      "sizes": "375x667", 
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Kontaktformular"
+      "url": "/blog"
     }
   ],
   "related_applications": [],
   "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
   "launch_handler": {
     "client_mode": "focus-existing"
-  },
-  "handle_links": "preferred",
-  "capture_links": "existing-client-navigate"
+  }
 }
