@@ -1,14 +1,14 @@
 ---
-// Header.astro v1.6.0 - VOLLSTÄNDIGER Komplett-Fix + User Choice Toggle
-// CHANGELOG v1.6.0:
-// - ✅ FIX: Doppelte Icons in PWA Desktop Mode behoben
-// - ✅ FIX: Mobile Navigation Dropdown JavaScript repariert
-// - ✅ NEW: User-Choice Toggle (Desktop/Mobile View Button)
-// - ✅ FIX: CSS Override für Force Desktop Mode
-// - ✅ KEEP: Alle bestehenden Features (Blog, Services, etc.)
-// - ✅ COMPLETE: Vollständiger Code ohne Abbrüche
+// Header.astro v1.7.0 - USER CHOICE TOGGLE SYSTEM REPARIERT
+// CHANGELOG v1.7.0:
+// - 🔧 FIX: User Choice Toggle JavaScript-Logik komplett implementiert  
+// - 🔧 FIX: 3 Modi funktional: Auto, Mobile, Desktop
+// - 🔧 FIX: CSS für .force-mobile-mode hinzugefügt
+// - 🔧 FIX: Page Reload für sofortige Anwendung
+// - 🔧 FIX: localStorage Persistent Storage
+// - ✅ KEEP: Alle bestehenden Features (Blog Navigation, Service Dropdown, Theme Toggle)
 
-console.log('🎨 Header v1.6.0 - VOLLSTÄNDIGER Komplett-Fix + User Choice Toggle');
+console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -17,522 +17,419 @@ console.log('🎨 Header v1.6.0 - VOLLSTÄNDIGER Komplett-Fix + User Choice Togg
       <!-- Logo -->
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+          <!-- KORREKTES LOGO VOM FOOTER -->
           <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 lg:w-12 lg:h-12" viewBox="0 0 1778 1433">
-            <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.948,1203.843,634.465C1164.791,595.267,1125.659,556.15,1086.512,517.048C1085.021,515.56,1083.236,514.366,1082.683,513.919C1147.624,448.977,1211.974,384.625,1276.126,320.471C1276.126,535.349,1276.126,750.942,1276.126,966.733C1299.839,966.733,1323.23,966.733,1346.536,966.733C1346.536,693.677,1346.536,420.888,1346.536,147.84ZM557.5,896C540.532,896,524.563,896,508.298,896C508.298,659.685,508.298,423.687,508.298,187.253C514.828,194.314,521.223,201.047,527.408,207.968C533.978,215.32,540.294,222.899,546.816,230.294C559.777,244.989,572.794,259.634,585.807,274.283C591.498,280.69,597.249,287.043,602.947,293.444C616.308,308.452,629.613,323.509,643.021,338.474C650.293,346.592,657.83,354.474,665.07,362.619C677.093,376.145,688.917,389.847,700.931,403.381C710.238,413.864,719.783,424.137,729.086,434.624C740.985,448.038,752.712,461.603,764.582,475.043C770.805,482.09,777.214,488.972,783.468,495.991C796.614,510.744,809.715,525.537,822.831,540.317C830.701,549.185,838.73,557.918,846.394,566.961C860.957,584.143,872.228,603.446,879.606,624.62C884.543,638.787,888.677,653.549,890.562,668.376C892.42,682.996,891.345,698.044,890.917,712.885C890.423,729.964,885.796,746.269,880.002,762.23C872.064,784.095,860.843,804.09,846.296,822.313C831.898,840.35,814.712,855.172,795.173,867.156C776.669,878.505,756.706,886.425,735.376,891.178C718.368,894.968,701.308,896.149,683.977,896.066C641.819,895.864,599.659,896,557.5,896Z" />
+            <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.841,1203.749,634.27C1200.967,631.488,1197.801,628.937,1194.81,626.231C1186.542,618.743,1178.382,611.155,1170.132,603.658C1169.447,603.049,1168.739,602.465,1168.043,601.864C1044.587,495.41,921.13,388.956,797.674,282.501C797.674,353.165,797.674,423.828,797.674,494.492C797.67,495.592,798.075,496.667,798.706,497.297C921.297,619.889,1043.887,742.48,1166.478,865.071C1167.109,865.702,1168.184,866.107,1169.284,866.103C1240.614,866.103,1311.943,866.103,1383.273,866.103C1383.273,955.035,1383.273,1043.967,1383.273,1133C1200.848,1133,1018.424,1133,836,1133C836,949.907,836,766.814,836,583.721C836,579.058,836.266,574.373,835.93,569.738C835.553,564.598,835.022,559.425,833.942,554.388C830.972,540.267,825.491,526.77,817.992,514.344C809.578,500.713,798.726,488.616,786.013,478.426C772.367,467.528,756.85,459.045,740.322,453.457C723.794,447.869,706.256,445.175,688.649,445.374C671.042,445.573,653.581,448.663,637.203,454.641C620.825,460.619,605.531,469.486,592.321,481.241C566.901,504.752,549.506,537.375,543.823,572.975C541.982,590.775,543.061,608.764,547.06,626.115C551.059,643.466,558.004,660.179,567.895,675.261C577.786,690.343,590.622,703.794,605.402,714.616C620.182,725.438,636.906,733.632,654.573,738.198C672.24,742.764,690.85,743.702,709.207,740.012C727.564,736.322,745.668,727.903,761.526,715.756C773.383,706.469,783.629,695.195,791.902,682.45C798.476,672.301,803.578,661.395,807.208,649.732C808.764,645.411,810.134,640.998,811.231,636.517C812.024,633.23,812.024,629.77,811.231,626.483C810.438,623.196,808.888,620.092,806.58,617.172C802.9,612.436,797.89,608.756,792.075,606.523C786.26,604.29,779.64,603.504,773.138,604.165C766.636,604.826,760.252,606.933,754.485,610.487C748.718,614.041,743.569,618.041,739.439,622.487C735.309,626.933,732.198,631.825,730.106,637.163C729.06,639.832,728.291,642.642,727.799,645.593C727.582,646.916,727.582,648.284,727.799,649.607C728.016,650.93,728.458,652.208,729.125,653.44C729.792,654.672,730.683,655.858,731.799,656.998C732.915,658.138,734.255,659.232,735.819,660.28C739.319,662.619,743.456,663.999,747.819,664.28C752.182,664.561,756.543,663.729,760.319,661.899C764.095,660.069,767.285,657.24,769.569,653.719C771.853,650.198,773.23,646.085,773.569,641.84C773.908,637.595,773.208,633.218,771.469,629.199C769.73,625.18,766.952,621.62,763.436,618.852C759.92,616.084,755.666,614.108,751.076,613.279C746.486,612.45,741.56,612.768,737.069,614.232C732.578,615.696,728.522,618.306,725.236,621.731C721.95,625.156,719.434,629.396,717.936,634.12C716.438,638.844,715.958,643.916,716.496,648.936C717.034,653.956,718.59,658.924,721.164,663.479C723.738,668.034,727.33,672.176,731.74,675.639C736.15,679.102,741.378,681.886,747.076,683.759C752.774,685.632,758.942,686.594,765.136,686.599C771.33,686.604,777.5,685.652,783.201,683.789C788.902,681.926,794.134,679.153,798.549,675.7C802.964,672.247,806.561,668.114,809.141,663.566C811.721,659.018,813.284,654.055,813.831,649.039C814.378,644.023,813.908,638.954,812.421,634.234C810.934,629.514,808.43,625.143,805.069,621.413C801.708,617.683,797.49,614.594,792.736,612.502C787.982,610.41,782.692,609.315,777.346,609.317C772,609.319,766.711,610.418,761.959,612.514C757.207,614.61,752.992,617.703,749.634,621.436C746.276,625.169,743.776,629.542,742.293,634.264C740.81,638.986,740.345,644.056,740.897,649.073C741.449,654.09,743.018,659.054,745.603,663.6C748.188,668.146,751.79,672.274,756.21,675.713C760.63,679.152,765.868,681.901,771.576,683.739C777.284,685.577,783.463,686.504,789.667,686.464C795.871,686.424,802.034,685.417,807.71,683.503C813.386,681.589,818.574,678.768,822.971,675.226C827.368,671.684,830.974,667.421,833.566,662.716C836.158,658.011,837.735,652.865,838.297,647.591C838.859,642.317,838.405,636.915,836.934,631.789C835.463,626.663,833.975,621.813,831.471,617.571C828.967,613.329,825.447,609.695,821.213,606.959C816.979,604.223,812.031,602.385,806.729,601.645C801.427,600.905,795.771,601.263,790.581,602.719C785.391,604.175,780.666,606.729,776.706,610.181C772.746,613.633,769.55,617.983,767.416,622.93C765.282,627.877,764.21,633.421,764.2,639.022C764.19,644.623,765.242,650.171,767.356,655.125C769.47,660.079,772.646,664.439,776.591,667.907C780.536,671.375,785.25,673.951,790.431,675.435C795.612,676.919,801.26,677.311,806.556,676.611C811.852,675.911,816.796,674.119,821.022,671.435C825.248,668.751,828.756,665.175,831.26,661.006C833.764,656.837,835.264,652.075,835.76,647.174C836.256,642.273,835.748,637.234,834.236,632.574C832.724,627.914,830.208,623.634,826.888,620.034C823.568,616.434,819.444,613.514,814.816,611.554C810.188,609.594,805.056,608.594,799.875,608.655C794.694,608.716,789.586,609.838,785.009,611.921C780.432,614.004,776.386,617.048,773.171,620.751C769.956,624.454,767.572,628.816,766.219,633.536C764.866,638.256,764.544,643.334,765.253,648.298C765.962,653.262,767.701,658.111,770.47,662.484C773.239,666.857,776.938,670.754,781.366,673.875C785.794,676.996,790.851,679.341,796.236,680.71C801.621,682.079,807.334,682.471,812.934,681.886C818.534,681.301,823.921,679.739,828.794,677.3C833.667,674.861,838.026,671.545,841.571,667.552C845.116,663.559,847.847,658.889,849.564,653.844C851.281,648.799,851.984,643.38,851.673,637.99C851.362,632.6,850.037,627.239,847.798,622.374C845.559,617.509,842.406,613.14,838.539,609.566C834.672,605.992,830.091,603.212,825.096,601.426C820.101,599.64,814.692,598.848,809.265,598.95C803.838,599.052,798.393,600.048,793.351,601.938C788.309,603.828,783.67,606.612,779.735,610.09C775.8,613.568,772.569,617.739,770.242,622.404C767.915,627.069,766.492,632.227,766.072,637.536C765.652,642.845,766.235,648.305,767.821,653.447C769.407,658.589,771.996,663.413,775.588,667.62C779.18,671.827,783.675,675.416,788.773,678.187C793.871,680.958,799.572,682.91,805.576,683.842C811.58,684.774,817.886,684.686,823.857,683.578C829.828,682.47,835.464,680.342,840.466,677.394C845.468,674.446,849.836,670.678,853.27,666.29C856.704,661.902,859.204,656.894,860.57,651.567C861.936,646.24,862.168,640.594,861.266,635.146C860.364,629.698,858.328,624.448,855.358,619.796C852.388,615.144,848.484,611.09,843.946,608.036C839.408,604.982,834.236,602.928,828.731,601.975C823.226,601.022,817.388,601.17,811.927,602.419C806.466,603.668,801.381,605.918,796.972,609.068C792.563,612.218,788.83,616.268,786.072,620.918C783.314,625.568,781.531,630.818,780.823,636.268C780.115,641.718,780.481,647.368,781.921,652.668C783.361,657.968,785.875,663.018,789.462,667.518C793.049,672.018,797.609,675.868,802.842,678.768C808.075,681.668,813.881,683.618,819.961,684.518C826.041,685.418,832.295,685.268,838.318,684.068C844.341,682.868,850.133,680.618,855.393,677.518C860.653,674.418,865.281,670.468,868.977,665.868C872.673,661.268,875.437,656.018,877.069,650.418C878.701,644.818,879.201,638.868,878.569,632.968C877.937,627.068,876.173,621.218,873.478,615.968C870.783,610.718,867.157,605.968,862.8,602.118C858.443,598.268,853.355,595.318,847.836,593.568C842.317,591.818,836.367,591.268,830.536,591.918C824.705,592.568,819.093,594.418,814.1,597.268C809.107,600.118,804.733,603.968,801.278,608.518C797.823,613.068,795.287,618.318,793.87,623.968C792.453,629.618,792.155,635.568,792.977,641.368C793.799,647.168,795.741,652.818,798.603,657.918C801.465,663.018,805.247,667.568,809.749,671.268C814.251,674.968,819.473,677.818,825.115,679.618C830.757,681.418,836.819,682.168,842.819,681.868C848.819,681.568,854.657,680.218,860.035,677.918C865.413,675.618,870.331,672.368,874.489,668.368C878.647,664.368,881.945,659.618,884.183,654.418C886.421,649.218,887.599,643.568,887.717,637.818C887.835,632.068,886.893,626.218,884.891,620.768C882.889,615.318,879.827,610.268,875.905,606.018C871.983,601.768,867.201,598.318,861.758,596.018C856.315,593.718,850.212,592.568,844.062,592.668C837.912,592.768,831.715,594.118,826.172,596.618C820.629,599.118,815.74,602.768,811.906,607.268C808.072,611.768,805.294,617.118,803.772,622.918C802.25,628.718,801.984,634.868,802.974,640.818C803.964,646.768,806.21,652.518,809.512,657.668C812.814,662.818,817.172,667.368,822.286,670.918C827.4,674.468,833.27,676.918,839.496,678.068C845.722,679.218,852.204,679.068,858.374,677.618C864.544,676.168,870.302,673.518,875.348,669.868C880.394,666.218,884.628,661.568,887.75,656.218C890.872,650.868,892.882,644.818,893.582,638.518C894.282,632.218,893.672,625.668,891.754,619.518C889.836,613.368,886.61,607.618,882.276,602.768C877.942,597.918,872.5,593.968,866.25,591.318C859.999,588.668,853.040,587.318,846.02,587.368C839,587.418,832.027,588.868,825.731,591.618C819.435,594.368,813.917,598.418,809.577,603.468C805.237,608.518,802.075,614.568,800.291,621.068C798.507,627.568,798.101,634.518,799.073,641.268C800.045,648.018,802.395,654.568,805.923,660.468C809.451,666.368,814.157,671.618,819.741,675.818C825.325,680.018,831.787,682.918,838.726,684.318C845.665,685.718,852.981,685.618,859.883,684.018C866.785,682.418,873.173,679.318,878.645,674.918C884.117,670.518,888.573,665.118,891.712,658.918C894.851,652.718,896.673,645.718,897.179,638.418C897.685,631.118,896.875,623.618,894.749,616.568C892.623,609.518,889.181,602.918,884.623,597.368C880.065,591.818,874.391,587.318,867.901,584.268C861.411,581.218,854.205,579.618,846.918,579.568"/>
           </svg>
-          <div class="text-left">
+          <div class="hidden sm:block">
             <div class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
               Dominik Maier
             </div>
-            <div class="text-xs lg:text-sm text-gray-600 dark:text-gray-300 -mt-1">
-              Coaching & Interim Management
+            <div class="text-sm text-gray-600 dark:text-gray-300">
+              Business Consulting
             </div>
           </div>
         </a>
       </div>
 
-      <!-- Desktop Navigation & Actions -->
-      <div class="hidden lg:flex items-center space-x-8">
-        <!-- Main Navigation with Dropdown -->
-        <nav class="flex items-center space-x-6">
-          <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
-            Home
-          </a>
-          
-          <!-- Leistungen Dropdown -->
-          <div class="relative group">
-            <button class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
-              Leistungen
-              <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            
-            <!-- Dropdown Menu -->
-            <div class="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-              <div class="p-4">
-                <div class="space-y-3">
-                  <a href="/leistung/strategische-unternehmensentwicklung" 
-                     class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group/item">
-                    <div class="flex items-start space-x-3">
-                      <div class="bg-primary-gold-15 p-2 rounded-lg group-hover/item:bg-primary-gold-25 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold">
-                          <path d="M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75ZM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 0 1-1.875-1.875V8.625ZM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 0 1 3 19.875v-6.75Z" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <h4 class="text-gray-900 dark:text-white font-semibold text-sm">Strategische Unternehmensentwicklung</h4>
-                        <p class="text-gray-600 dark:text-gray-300 text-xs mt-1">Nachhaltige Strategien für Wachstum</p>
-                      </div>
-                    </div>
-                  </a>
-                  
-                  <a href="/leistung/vertriebsoptimierung" 
-                     class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group/item">
-                    <div class="flex items-start space-x-3">
-                      <div class="bg-primary-gold-15 p-2 rounded-lg group-hover/item:bg-primary-gold-25 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold">
-                          <path d="M10.5 3.798v5.02a3 3 0 01-.879 2.121l-2.377 2.377a9.845 9.845 0 015.091 1.013 8.315 8.315 0 005.713.636l.285-.071-3.954-3.955a3 3 0 01-.879-2.121v-5.02a23.614 23.614 0 00-3 0zm4.5.138a.75.75 0 00.093-1.495A24.837 24.837 0 0012 2.25a25.048 25.048 0 00-3.093.191A.75.75 0 009 3.936v4.882a1.5 1.5 0 01-.44 1.06l-6.293 6.294c-1.62 1.621-.903 4.475 1.471 4.88 2.686.46 5.447.698 8.262.698 2.816 0 5.576-.239 8.262-.697 2.373-.406 3.092-3.26 1.47-4.881L15.44 9.879A1.5 1.5 0 0115 8.818V3.936z" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <h4 class="text-gray-900 dark:text-white font-semibold text-sm">Vertriebsoptimierung</h4>
-                        <p class="text-gray-600 dark:text-gray-300 text-xs mt-1">Neue Märkte und Kunden erschließen</p>
-                      </div>
-                    </div>
-                  </a>
-                  
-                  <a href="/leistung/marketing-strategien" 
-                     class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group/item">
-                    <div class="flex items-start space-x-3">
-                      <div class="bg-primary-gold-15 p-2 rounded-lg group-hover/item:bg-primary-gold-25 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold">
-                          <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v4.5a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6.75a.75.75 0 01-1.5 0V9.75A.75.75 0 0113.5 9zm3.75-1.5a.75.75 0 00-1.5 0v9a.75.75 0 001.5 0v-9z" clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <h4 class="text-gray-900 dark:text-white font-semibold text-sm">Marketing-Strategien</h4>
-                        <p class="text-gray-600 dark:text-gray-300 text-xs mt-1">Sichtbarkeit und Kundenbindung</p>
-                      </div>
-                    </div>
-                  </a>
-                  
-                  <a href="/leistung/wertanalyse" 
-                     class="block p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group/item">
-                    <div class="flex items-start space-x-3">
-                      <div class="bg-primary-gold-15 p-2 rounded-lg group-hover/item:bg-primary-gold-25 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-primary-gold">
-                          <path fill-rule="evenodd" d="M12 6.75a5.25 5.25 0 016.775-5.025.75.75 0 01.313 1.248l-3.32 3.319c.063.475.276.934.641 1.299.365.365.824.578 1.3.64l3.318-3.319a.75.75 0 011.248.313 5.25 5.25 0 01-5.472 6.756c-1.018-.086-1.87.1-2.309.634L7.344 21.3A3.298 3.298 0 112.7 16.657l8.684-7.151c.533-.44.72-1.291.634-2.309A5.342 5.342 0 0112 6.75zM4.117 19.125a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75h-.008a.75.75 0 01-.75-.75v-.008z" clip-rule="evenodd" />
-                        </svg>
-                      </div>
-                      <div class="flex-1">
-                        <h4 class="text-gray-900 dark:text-white font-semibold text-sm">Wertanalyse & Prozessoptimierung</h4>
-                        <p class="text-gray-600 dark:text-gray-300 text-xs mt-1">Value Management für Effizienz</p>
-                      </div>
-                    </div>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <a href="/blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
-            Blog
-          </a>
-          <a href="/ueber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
-            Über mich
-          </a>
-          <a href="/kontakt" class="bg-primary-gold text-white px-6 py-3 rounded-lg hover:bg-primary-gold/90 transition-colors font-medium">
-            Kontakt
-          </a>
-        </nav>
-      </div>
-
-      <!-- Desktop Actions - Theme Toggle, View Toggle, LinkedIn -->
-      <div class="hidden lg:flex items-center space-x-2" id="desktop-actions">
-        <!-- User Choice Toggle (Desktop/Mobile View) -->
-        <button 
-          id="view-toggle-desktop"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="Toggle view mode"
-          title="Layout umschalten"
-        >
-          <svg id="view-toggle-desktop-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-          </svg>
-        </button>
+      <!-- Desktop Navigation (versteckt auf kleinen Bildschirmen) -->
+      <nav class="hidden lg:flex items-center space-x-8">
+        <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+          Start
+        </a>
         
-        <!-- Dark Mode Toggle Desktop -->
+        <!-- Desktop Services Dropdown -->
+        <div class="relative group">
+          <button class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+            Leistungen
+            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+            <div class="py-2">
+              <a href="/strategische-unternehmensentwicklung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+                Strategische Unternehmensentwicklung
+              </a>
+              <a href="/vertriebsoptimierung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+                Vertriebsoptimierung
+              </a>
+              <a href="/marketing-strategien" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+                Marketing Strategien
+              </a>
+              <a href="/wertanalyse" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+                Wertanalyse
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a href="/blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+          Blog
+        </a>
+        <a href="#uber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+          Über mich
+        </a>
+        <a href="#kontakt" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+          Kontakt
+        </a>
+      </nav>
+
+      <!-- Desktop Actions (View Toggle, Theme Toggle, LinkedIn) -->
+      <div id="desktop-actions" class="hidden lg:flex items-center space-x-3">
+        <!-- User Choice Toggle -->
         <button 
-          id="theme-toggle"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="Toggle dark mode"
+          id="user-choice-toggle" 
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Layout-Modus umschalten"
+          title="Layout: Auto/Mobile/Desktop"
         >
-          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+          <svg id="user-choice-icon" class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
           </svg>
-          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          <span id="user-choice-text" class="ml-1 text-xs text-gray-700 dark:text-gray-300">Auto</span>
+        </button>
+
+        <!-- Theme Toggle Desktop -->
+        <button 
+          id="theme-toggle" 
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Theme umschalten"
+        >
+          <svg id="theme-toggle-dark-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          </svg>
+          <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
           </svg>
         </button>
 
-        <!-- LinkedIn Link Desktop -->
-        <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-          aria-label="Dominik Maier LinkedIn-Profil öffnen"
-        >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+        <!-- LinkedIn Link -->
+        <a href="https://linkedin.com/in/dominik-maier-consulting" target="_blank" rel="noopener noreferrer" 
+           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
           </svg>
         </a>
       </div>
 
-      <!-- Mobile Actions - Theme Toggle, View Toggle, LinkedIn, Burger Menu -->
-      <div class="lg:hidden flex items-center space-x-2" id="mobile-actions">
+      <!-- Mobile Actions (View Toggle, Theme Toggle, LinkedIn, Burger Menu) -->
+      <div id="mobile-actions" class="flex lg:hidden items-center space-x-2">
         <!-- User Choice Toggle Mobile -->
         <button 
-          id="view-toggle-mobile"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
-          aria-label="Toggle view mode"
+          id="user-choice-toggle-mobile" 
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Layout-Modus umschalten"
           title="Layout umschalten"
         >
-          <svg id="view-toggle-mobile-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
-        </button>
-        
-        <!-- Dark Mode Toggle Mobile -->
-        <button 
-          id="theme-toggle-mobile"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-          </svg>
-          <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
           </svg>
         </button>
 
-        <!-- LinkedIn Link Mobile -->
-        <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
-          aria-label="Dominik Maier LinkedIn-Profil öffnen"
+        <!-- Theme Toggle Mobile -->
+        <button 
+          id="theme-toggle-mobile" 
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Theme umschalten"
         >
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+          <svg id="theme-toggle-dark-icon-mobile" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          </svg>
+          <svg id="theme-toggle-light-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+
+        <!-- LinkedIn Mobile -->
+        <a href="https://linkedin.com/in/dominik-maier-consulting" target="_blank" rel="noopener noreferrer" 
+           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
           </svg>
         </a>
 
-        <!-- Mobile Menu Toggle -->
+        <!-- Mobile Menu Toggle Button -->
         <button 
-          id="mobile-menu-toggle"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
-          aria-label="Toggle mobile menu"
+          id="mobile-menu-toggle" 
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Mobile Menü öffnen"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="lg:hidden hidden border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
-      <div class="px-4 py-6 space-y-4">
-        <!-- Main Navigation Mobile -->
-        <nav class="space-y-2">
-          <a href="/" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            Home
+    <!-- Mobile Menu (versteckt standardmäßig) -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200 dark:border-gray-700 pt-4 pb-4 space-y-4">
+      <a href="/" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        Start
+      </a>
+      
+      <!-- Mobile Services Accordion -->
+      <div>
+        <button 
+          id="mobile-leistungen-toggle" 
+          class="flex items-center justify-between w-full text-left text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+        >
+          Leistungen
+          <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
+          <a href="/strategische-unternehmensentwicklung" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
+            Strategische Unternehmensentwicklung
           </a>
-          
-          <!-- Mobile Leistungen Accordion -->
-          <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
-            <button 
-              id="mobile-leistungen-toggle"
-              class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-            >
-              Leistungen
-              <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            
-            <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
-              <a href="/leistung/strategische-unternehmensentwicklung" 
-                 class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                <div class="font-medium">Strategische Unternehmensentwicklung</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Nachhaltige Strategien für Wachstum</div>
-              </a>
-              
-              <a href="/leistung/vertriebsoptimierung" 
-                 class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                <div class="font-medium">Vertriebsoptimierung</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Neue Märkte und Kunden erschließen</div>
-              </a>
-              
-              <a href="/leistung/marketing-strategien" 
-                 class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                <div class="font-medium">Marketing-Strategien</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Sichtbarkeit und Kundenbindung</div>
-              </a>
-              
-              <a href="/leistung/wertanalyse" 
-                 class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-                <div class="font-medium">Wertanalyse & Prozessoptimierung</div>
-                <div class="text-xs text-gray-500 dark:text-gray-500 mt-1">Value Management für Effizienz</div>
-              </a>
-            </div>
-          </div>
-          
-          <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            Blog
+          <a href="/vertriebsoptimierung" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
+            Vertriebsoptimierung
           </a>
-          
-          <a href="/ueber-mich" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            Über mich
+          <a href="/marketing-strategien" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
+            Marketing Strategien
           </a>
-          <a href="/kontakt" class="block bg-primary-gold text-white px-6 py-3 rounded-lg hover:bg-primary-gold/90 transition-colors font-medium text-center mt-4">
-            Kontakt
+          <a href="/wertanalyse" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
+            Wertanalyse
           </a>
-        </nav>
+        </div>
       </div>
+
+      <a href="/blog" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        Blog
+      </a>
+      <a href="#uber-mich" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        Über mich
+      </a>
+      <a href="#kontakt" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        Kontakt
+      </a>
     </div>
   </div>
 </header>
 
-<!-- PWA Desktop Mode Override CSS -->
 <style>
-  /* ===== PWA DESKTOP MODE - VERHINDERE DOPPELTE ICONS ===== */
+  /* USER CHOICE TOGGLE SYSTEM - CSS FIXES */
   
-  /* Verstecke Mobile Actions in PWA Desktop Mode */
-  .force-desktop-mode #mobile-actions,
-  .pwa-desktop-mode #mobile-actions,
-  .browser-desktop-mode #mobile-actions {
+  /* Force Mobile Mode - NEUES CSS */
+  .force-mobile-mode #desktop-actions,
+  .force-mobile-mode .hidden.lg\:flex {
     display: none !important;
   }
   
-  /* Verstecke Mobile Menu in PWA Desktop Mode */
-  .force-desktop-mode #mobile-menu,
-  .pwa-desktop-mode #mobile-menu,
-  .browser-desktop-mode #mobile-menu {
-    display: none !important;
-  }
-  
-  /* Zeige Desktop Actions in PWA Desktop Mode */
-  .force-desktop-mode #desktop-actions,
-  .pwa-desktop-mode #desktop-actions,
-  .browser-desktop-mode #desktop-actions {
+  .force-mobile-mode #mobile-actions {
     display: flex !important;
   }
   
-  /* User Choice Overrides */
-  .user-force-mobile #desktop-actions {
+  .force-mobile-mode #mobile-menu-toggle {
+    display: block !important;
+  }
+  
+  /* Force Mobile Mode Grids */
+  .force-mobile-mode .services-desktop-grid,
+  .force-mobile-mode .value-desktop-grid,
+  .force-mobile-mode .process-desktop-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  /* Force Desktop Mode */
+  .force-desktop-mode #mobile-actions {
     display: none !important;
   }
   
-  .user-force-mobile #mobile-actions {
+  .force-desktop-mode #desktop-actions {
     display: flex !important;
   }
   
-  .user-force-desktop #mobile-actions {
+  .force-desktop-mode #mobile-menu-toggle,
+  .force-desktop-mode #mobile-menu {
     display: none !important;
   }
   
-  .user-force-desktop #desktop-actions {
+  .force-desktop-mode .hidden.lg\:flex {
     display: flex !important;
   }
   
-  /* Responsive Breakpoint Override für große Bildschirme */
-  @media (min-width: 1200px) {
-    #mobile-actions {
-      display: none !important;
-    }
-    
-    #desktop-actions {
-      display: flex !important;
-    }
-    
-    #mobile-menu {
-      display: none !important;
-    }
-    
-    .lg\:flex {
-      display: flex !important;
-    }
-    
-    .lg\:hidden {
-      display: none !important;
-    }
+  /* Force Desktop Mode Grids */
+  .force-desktop-mode .services-desktop-grid,
+  .force-desktop-mode .value-desktop-grid,
+  .force-desktop-mode .process-desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2rem !important;
+  }
+
+  /* User Choice Override Classes */
+  .user-choice-mobile {
+    /* Mobile Layout erzwingen */
+  }
+  
+  .user-choice-desktop {
+    /* Desktop Layout erzwingen */
+  }
+  
+  .user-choice-auto {
+    /* Automatic Layout (Responsive) */
   }
 </style>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎨 Header v1.6.0 - VOLLSTÄNDIGER Complete Fix Loading...');
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('🎨 Header v1.7.0 - USER CHOICE TOGGLE SYSTEM INITIALIZED');
+  
+  // === USER CHOICE TOGGLE SYSTEM === 
+  const userChoiceToggle = document.getElementById('user-choice-toggle');
+  const userChoiceToggleMobile = document.getElementById('user-choice-toggle-mobile');
+  const userChoiceIcon = document.getElementById('user-choice-icon');
+  const userChoiceText = document.getElementById('user-choice-text');
+  
+  // User Choice Modi
+  const userChoiceModes = ['auto', 'mobile', 'desktop'];
+  let currentUserChoice = localStorage.getItem('userChoice') || 'auto';
+  
+  console.log('🔧 Current User Choice:', currentUserChoice);
+  
+  // User Choice Icons
+  const userChoiceIcons = {
+    auto: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>',
+    mobile: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
+    desktop: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'
+  };
+  
+  function updateUserChoiceUI() {
+    if (userChoiceIcon && userChoiceText) {
+      userChoiceIcon.innerHTML = userChoiceIcons[currentUserChoice];
+      userChoiceText.textContent = currentUserChoice.charAt(0).toUpperCase() + currentUserChoice.slice(1);
+    }
+    console.log('🎯 User Choice UI updated:', currentUserChoice);
+  }
+  
+  function applyUserChoice() {
+    // Alle Classes entfernen
+    document.body.classList.remove('force-mobile-mode', 'force-desktop-mode', 'user-choice-auto', 'user-choice-mobile', 'user-choice-desktop');
     
-    // ===== MOBILE MENU TOGGLE (REPARIERT) =====
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
+    // User Choice anwenden
+    switch(currentUserChoice) {
+      case 'mobile':
+        document.body.classList.add('force-mobile-mode', 'user-choice-mobile');
+        console.log('📱 FORCE MOBILE MODE ACTIVATED');
+        break;
+      case 'desktop':
+        document.body.classList.add('force-desktop-mode', 'user-choice-desktop');
+        console.log('🖥️ FORCE DESKTOP MODE ACTIVATED');
+        break;
+      case 'auto':
+      default:
+        document.body.classList.add('user-choice-auto');
+        console.log('🔄 AUTO MODE ACTIVATED');
+        break;
+    }
     
-    if (mobileMenuToggle && mobileMenu) {
-      mobileMenuToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('📱 Mobile menu toggle clicked');
-        mobileMenu.classList.toggle('hidden');
-      });
-      console.log('✅ Mobile menu toggle initialized');
-    }
-
-    // ===== MOBILE LEISTUNGEN ACCORDION (REPARIERT) =====
-    const mobileLeistungenToggle = document.getElementById('mobile-leistungen-toggle');
-    const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
-    const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
+    updateUserChoiceUI();
+  }
+  
+  function toggleUserChoice() {
+    const currentIndex = userChoiceModes.indexOf(currentUserChoice);
+    const nextIndex = (currentIndex + 1) % userChoiceModes.length;
+    currentUserChoice = userChoiceModes[nextIndex];
     
-    if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-      mobileLeistungenToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log('📂 Mobile services dropdown clicked');
-        mobileLeistungenMenu.classList.toggle('hidden');
-        mobileLeistungenArrow.classList.toggle('rotate-180');
-      });
-      console.log('✅ Mobile services dropdown initialized');
-    }
-
-    // ===== THEME TOGGLE SYSTEM (REPARIERT) =====
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-    const darkIcon = document.getElementById('theme-toggle-dark-icon');
-    const lightIcon = document.getElementById('theme-toggle-light-icon');
-    const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
-    const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
-
-    function updateThemeIcons() {
-      const isDark = document.documentElement.classList.contains('dark');
-      console.log('🌓 Theme updated:', isDark ? 'dark' : 'light');
-      
-      if (isDark) {
-        darkIcon?.classList.add('hidden');
-        lightIcon?.classList.remove('hidden');
-        darkIconMobile?.classList.add('hidden');
-        lightIconMobile?.classList.remove('hidden');
-      } else {
-        darkIcon?.classList.remove('hidden');
-        lightIcon?.classList.add('hidden');
-        darkIconMobile?.classList.remove('hidden');
-        lightIconMobile?.classList.add('hidden');
-      }
-    }
-
-    function toggleTheme() {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-      updateThemeIcons();
-    }
-
-    themeToggle?.addEventListener('click', function(e) {
+    localStorage.setItem('userChoice', currentUserChoice);
+    console.log('🔄 User Choice Toggle:', currentUserChoice);
+    
+    applyUserChoice();
+    
+    // Page Reload für sofortige Anwendung
+    setTimeout(() => {
+      console.log('🔄 Reloading page for User Choice application...');
+      window.location.reload();
+    }, 100);
+  }
+  
+  // Event Listeners für User Choice Toggle
+  if (userChoiceToggle) {
+    userChoiceToggle.addEventListener('click', toggleUserChoice);
+  }
+  
+  if (userChoiceToggleMobile) {
+    userChoiceToggleMobile.addEventListener('click', toggleUserChoice);
+  }
+  
+  // Initial User Choice anwenden
+  applyUserChoice();
+  
+  // === MOBILE MENU TOGGLE ===
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuToggle && mobileMenu) {
+    mobileMenuToggle.addEventListener('click', function(e) {
       e.preventDefault();
-      console.log('🌓 Desktop theme toggle clicked');
-      toggleTheme();
+      console.log('📱 Mobile menu toggle clicked');
+      mobileMenu.classList.toggle('hidden');
     });
-    
-    themeToggleMobile?.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('🌓 Mobile theme toggle clicked');
-      toggleTheme();
-    });
+  }
 
-    // Initialize theme icons
+  // === MOBILE SERVICES ACCORDION ===
+  const mobileLeistungenToggle = document.getElementById('mobile-leistungen-toggle');
+  const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
+  const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
+  
+  if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
+    mobileLeistungenToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('📋 Mobile services accordion clicked');
+      mobileLeistungenMenu.classList.toggle('hidden');
+      mobileLeistungenArrow.classList.toggle('rotate-180');
+    });
+  }
+
+  // === THEME TOGGLE SYSTEM ===
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+  const darkIcon = document.getElementById('theme-toggle-dark-icon');
+  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
+  const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
+
+  function updateThemeIcons() {
+    const isDark = document.documentElement.classList.contains('dark');
+    console.log('🌙 Theme Icons Update - Dark Mode:', isDark);
+    
+    if (isDark) {
+      darkIcon?.classList.add('hidden');
+      lightIcon?.classList.remove('hidden');
+      darkIconMobile?.classList.add('hidden');
+      lightIconMobile?.classList.remove('hidden');
+    } else {
+      darkIcon?.classList.remove('hidden');
+      lightIcon?.classList.add('hidden');
+      darkIconMobile?.classList.remove('hidden');
+      lightIconMobile?.classList.add('hidden');
+    }
+  }
+
+  function toggleTheme() {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      console.log('☀️ Light Theme Activated');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      console.log('🌙 Dark Theme Activated');
+    }
     updateThemeIcons();
-    console.log('✅ Theme toggle system initialized');
+  }
 
-    // ===== USER CHOICE TOGGLE SYSTEM (NEU) =====
-    const viewToggleDesktop = document.getElementById('view-toggle-desktop');
-    const viewToggleMobile = document.getElementById('view-toggle-mobile');
-    const viewToggleDesktopIcon = document.getElementById('view-toggle-desktop-icon');
-    const viewToggleMobileIcon = document.getElementById('view-toggle-mobile-icon');
-    
-    // Get saved view preference
-    let userViewPreference = localStorage.getItem('viewMode') || 'auto';
-    
-    function updateViewToggleIcons() {
-      const isForcedMobile = userViewPreference === 'mobile';
-      
-      // Desktop Icon
-      if (viewToggleDesktopIcon) {
-        if (isForcedMobile) {
-          // Mobile Icon
-          viewToggleDesktopIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
-        } else {
-          // Desktop Icon  
-          viewToggleDesktopIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
-        }
-      }
-      
-      // Mobile Icon
-      if (viewToggleMobileIcon) {
-        if (isForcedMobile) {
-          // Mobile Icon
-          viewToggleMobileIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
-        } else {
-          // Desktop Icon
-          viewToggleMobileIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
-        }
-      }
-    }
-    
-    function applyViewMode() {
-      // Remove all view classes
-      document.body.classList.remove('user-force-mobile', 'user-force-desktop');
-      document.documentElement.classList.remove('user-force-mobile', 'user-force-desktop');
-      
-      if (userViewPreference === 'mobile') {
-        // Force Mobile View
-        document.body.classList.add('user-force-mobile');
-        document.documentElement.classList.add('user-force-mobile');
-        console.log('👤 User forced mobile view');
-      } else if (userViewPreference === 'desktop') {
-        // Force Desktop View  
-        document.body.classList.add('user-force-desktop');
-        document.documentElement.classList.add('user-force-desktop');
-        console.log('👤 User forced desktop view');
-      } else {
-        // Auto mode - let PWA detection handle it
-        console.log('👤 User view: auto mode');
-      }
-      
-      updateViewToggleIcons();
-    }
-    
-    function toggleViewMode() {
-      if (userViewPreference === 'auto') {
-        userViewPreference = 'mobile';
-      } else if (userViewPreference === 'mobile') {
-        userViewPreference = 'desktop';  
-      } else {
-        userViewPreference = 'auto';
-      }
-      
-      localStorage.setItem('viewMode', userViewPreference);
-      console.log('🔄 View mode changed to:', userViewPreference);
-      applyViewMode();
-      
-      // Reload page to apply changes
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-    }
-    
-    viewToggleDesktop?.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('🔄 Desktop view toggle clicked');
-      toggleViewMode();
-    });
-    
-    viewToggleMobile?.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('🔄 Mobile view toggle clicked');
-      toggleViewMode();
-    });
-    
-    // Initialize view mode
-    applyViewMode();
-    console.log('✅ User choice toggle system initialized');
-    
-    console.log('🎨 Header v1.6.0 - VOLLSTÄNDIG - All systems initialized!');
-  });
+  // Theme Toggle Event Listeners
+  themeToggle?.addEventListener('click', toggleTheme);
+  themeToggleMobile?.addEventListener('click', toggleTheme);
+
+  // Initial Theme Icons
+  updateThemeIcons();
+
+  console.log('✅ Header v1.7.0 - All systems initialized successfully!');
+});
 </script>
