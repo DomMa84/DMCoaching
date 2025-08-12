@@ -9,8 +9,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "build:analyze": "astro build && npx webpack-bundle-analyzer dist/_astro/*.js",
-    "optimize:images": "imagemin src/assets/images/* --out-dir=public/optimized --plugin=imagemin-webp --plugin=imagemin-avif",
     "lighthouse": "lighthouse https://maier-value.com --output=html --output-path=./lighthouse-report.html",
     "check:performance": "npm run build && npm run lighthouse"
   },
@@ -23,13 +21,8 @@
     "@types/node": "^20.0.0",
     "autoprefixer": "^10.4.16",
     "cssnano": "^6.0.1",
-    "imagemin": "^8.0.1",
-    "imagemin-avif": "^0.1.6",
-    "imagemin-webp": "^8.0.0",
     "postcss": "^8.4.31",
-    "@astrojs/sitemap": "^3.0.0",
-    "lighthouse": "^11.0.0",
-    "webpack-bundle-analyzer": "^4.9.1"
+    "@astrojs/sitemap": "^3.0.0"
   },
   "engines": {
     "node": ">=18.0.0",
