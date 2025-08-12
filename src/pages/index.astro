@@ -10,6 +10,7 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
+import OptimizedImage from '../components/OptimizedImage.astro';
 
 console.log('🎨 Index v1.3.11 - KOMPLETT KORREKTE Version');
 ---
@@ -25,12 +26,15 @@ console.log('🎨 Index v1.3.11 - KOMPLETT KORREKTE Version');
   <section class="relative min-h-80vh flex items-center py-16 md:py-20 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <div class="absolute inset-0 bg-gradient-to-b from-black-85 to-black-60 dark:from-black-90 dark:to-black-70 z-10"></div>
-      <img 
-        src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2940&auto=format&fit=crop" 
-        alt="" 
-        class="absolute inset-0 w-full h-full object-cover animate-subtle-zoom"
-        fetchpriority="high"
-      />
+<OptimizedImage
+  src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2940&auto=format&fit=crop"
+  alt="Modernes Bürogebäude bei Sonnenuntergang - Symbol für strategische Unternehmensentwicklung"
+  width={2940}
+  height={1960}
+  class="absolute inset-0 w-full h-full object-cover animate-subtle-zoom"
+  fetchpriority="high"
+  loading="eager"
+/>
       <div class="absolute inset-0 flex items-center justify-center z-5 opacity-10">
         <svg xmlns="http://www.w3.org/2000/svg" 
              class="w-half max-w-3xl animate-float-refined" 
