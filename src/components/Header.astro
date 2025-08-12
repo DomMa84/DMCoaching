@@ -1,11 +1,14 @@
 ---
-// Header.astro v1.5.2 - Blog Navigation Integration
-// CHANGELOG v1.5.2:
-// - ✅ NEW: "Blog" Menüpunkt in Desktop und Mobile Navigation hinzugefügt
-// - ✅ KEEP: Alle bestehenden Service-Dropdown Funktionen
-// - ✅ KEEP: Layout und Styling unverändert
+// Header.astro v1.6.0 - VOLLSTÄNDIGER Komplett-Fix + User Choice Toggle
+// CHANGELOG v1.6.0:
+// - ✅ FIX: Doppelte Icons in PWA Desktop Mode behoben
+// - ✅ FIX: Mobile Navigation Dropdown JavaScript repariert
+// - ✅ NEW: User-Choice Toggle (Desktop/Mobile View Button)
+// - ✅ FIX: CSS Override für Force Desktop Mode
+// - ✅ KEEP: Alle bestehenden Features (Blog, Services, etc.)
+// - ✅ COMPLETE: Vollständiger Code ohne Abbrüche
 
-console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
+console.log('🎨 Header v1.6.0 - VOLLSTÄNDIGER Komplett-Fix + User Choice Toggle');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -14,7 +17,6 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
       <!-- Logo -->
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-          <!-- KORREKTES LOGO VOM FOOTER -->
           <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 lg:w-12 lg:h-12" viewBox="0 0 1778 1433">
             <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.948,1203.843,634.465C1164.791,595.267,1125.659,556.15,1086.512,517.048C1085.021,515.56,1083.236,514.366,1082.683,513.919C1147.624,448.977,1211.974,384.625,1276.126,320.471C1276.126,535.349,1276.126,750.942,1276.126,966.733C1299.839,966.733,1323.23,966.733,1346.536,966.733C1346.536,693.677,1346.536,420.888,1346.536,147.84ZM557.5,896C540.532,896,524.563,896,508.298,896C508.298,659.685,508.298,423.687,508.298,187.253C514.828,194.314,521.223,201.047,527.408,207.968C533.978,215.32,540.294,222.899,546.816,230.294C559.777,244.989,572.794,259.634,585.807,274.283C591.498,280.69,597.249,287.043,602.947,293.444C616.308,308.452,629.613,323.509,643.021,338.474C650.293,346.592,657.83,354.474,665.07,362.619C677.093,376.145,688.917,389.847,700.931,403.381C710.238,413.864,719.783,424.137,729.086,434.624C740.985,448.038,752.712,461.603,764.582,475.043C770.805,482.09,777.214,488.972,783.468,495.991C796.614,510.744,809.715,525.537,822.831,540.317C830.701,549.185,838.73,557.918,846.394,566.961C860.957,584.143,872.228,603.446,879.606,624.62C884.543,638.787,888.677,653.549,890.562,668.376C892.42,682.996,891.345,698.044,890.917,712.885C890.423,729.964,885.796,746.269,880.002,762.23C872.064,784.095,860.843,804.09,846.296,822.313C831.898,840.35,814.712,855.172,795.173,867.156C776.669,878.505,756.706,886.425,735.376,891.178C718.368,894.968,701.308,896.149,683.977,896.066C641.819,895.864,599.659,896,557.5,896Z" />
           </svg>
@@ -29,7 +31,7 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
         </a>
       </div>
 
-      <!-- Desktop Navigation & Service Buttons -->
+      <!-- Desktop Navigation & Actions -->
       <div class="hidden lg:flex items-center space-x-8">
         <!-- Main Navigation with Dropdown -->
         <nav class="flex items-center space-x-6">
@@ -114,41 +116,52 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
             </div>
           </div>
           
-          <!-- ✅ NEW: Blog Navigation -->
           <a href="/blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
             Blog
           </a>
-          
           <a href="/ueber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors font-medium">
             Über mich
           </a>
-          <a href="/kontakt" class="bg-primary-gold text-white px-6 py-2 rounded-lg hover:bg-primary-gold/90 transition-colors font-medium">
+          <a href="/kontakt" class="bg-primary-gold text-white px-6 py-3 rounded-lg hover:bg-primary-gold/90 transition-colors font-medium">
             Kontakt
           </a>
         </nav>
+      </div>
 
-        <!-- Dark Mode Toggle -->
+      <!-- Desktop Actions - Theme Toggle, View Toggle, LinkedIn -->
+      <div class="hidden lg:flex items-center space-x-2" id="desktop-actions">
+        <!-- User Choice Toggle (Desktop/Mobile View) -->
+        <button 
+          id="view-toggle-desktop"
+          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+          aria-label="Toggle view mode"
+          title="Layout umschalten"
+        >
+          <svg id="view-toggle-desktop-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+          </svg>
+        </button>
+        
+        <!-- Dark Mode Toggle Desktop -->
         <button 
           id="theme-toggle"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           aria-label="Toggle dark mode"
         >
-          <!-- SONNE für Light Mode -->
           <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
           </svg>
-          <!-- MOND für Dark Mode -->
           <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
           </svg>
         </button>
 
-        <!-- LinkedIn Link -->
+        <!-- LinkedIn Link Desktop -->
         <a 
           href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
           target="_blank" 
           rel="noopener noreferrer"
-          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
           aria-label="Dominik Maier LinkedIn-Profil öffnen"
         >
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -157,19 +170,29 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
         </a>
       </div>
 
-      <!-- Mobile Menu Button -->
-      <div class="lg:hidden flex items-center space-x-4">
+      <!-- Mobile Actions - Theme Toggle, View Toggle, LinkedIn, Burger Menu -->
+      <div class="lg:hidden flex items-center space-x-2" id="mobile-actions">
+        <!-- User Choice Toggle Mobile -->
+        <button 
+          id="view-toggle-mobile"
+          class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+          aria-label="Toggle view mode"
+          title="Layout umschalten"
+        >
+          <svg id="view-toggle-mobile-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </button>
+        
         <!-- Dark Mode Toggle Mobile -->
         <button 
           id="theme-toggle-mobile"
           class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
           aria-label="Toggle dark mode"
         >
-          <!-- SONNE für Light Mode -->
           <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
           </svg>
-          <!-- MOND für Dark Mode -->
           <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
           </svg>
@@ -188,6 +211,7 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
           </svg>
         </a>
 
+        <!-- Mobile Menu Toggle -->
         <button 
           id="mobile-menu-toggle"
           class="p-2 text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
@@ -222,7 +246,6 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
             </button>
             
             <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
-              
               <a href="/leistung/strategische-unternehmensentwicklung" 
                  class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
                 <div class="font-medium">Strategische Unternehmensentwicklung</div>
@@ -249,7 +272,6 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
             </div>
           </div>
           
-          <!-- ✅ NEW: Blog Mobile Navigation -->
           <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             Blog
           </a>
@@ -266,31 +288,107 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
   </div>
 </header>
 
+<!-- PWA Desktop Mode Override CSS -->
+<style>
+  /* ===== PWA DESKTOP MODE - VERHINDERE DOPPELTE ICONS ===== */
+  
+  /* Verstecke Mobile Actions in PWA Desktop Mode */
+  .force-desktop-mode #mobile-actions,
+  .pwa-desktop-mode #mobile-actions,
+  .browser-desktop-mode #mobile-actions {
+    display: none !important;
+  }
+  
+  /* Verstecke Mobile Menu in PWA Desktop Mode */
+  .force-desktop-mode #mobile-menu,
+  .pwa-desktop-mode #mobile-menu,
+  .browser-desktop-mode #mobile-menu {
+    display: none !important;
+  }
+  
+  /* Zeige Desktop Actions in PWA Desktop Mode */
+  .force-desktop-mode #desktop-actions,
+  .pwa-desktop-mode #desktop-actions,
+  .browser-desktop-mode #desktop-actions {
+    display: flex !important;
+  }
+  
+  /* User Choice Overrides */
+  .user-force-mobile #desktop-actions {
+    display: none !important;
+  }
+  
+  .user-force-mobile #mobile-actions {
+    display: flex !important;
+  }
+  
+  .user-force-desktop #mobile-actions {
+    display: none !important;
+  }
+  
+  .user-force-desktop #desktop-actions {
+    display: flex !important;
+  }
+  
+  /* Responsive Breakpoint Override für große Bildschirme */
+  @media (min-width: 1200px) {
+    #mobile-actions {
+      display: none !important;
+    }
+    
+    #desktop-actions {
+      display: flex !important;
+    }
+    
+    #mobile-menu {
+      display: none !important;
+    }
+    
+    .lg\:flex {
+      display: flex !important;
+    }
+    
+    .lg\:hidden {
+      display: none !important;
+    }
+  }
+</style>
+
 <script>
-  // Mobile Menu Toggle
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎨 Header v1.6.0 - VOLLSTÄNDIGER Complete Fix Loading...');
+    
+    // ===== MOBILE MENU TOGGLE (REPARIERT) =====
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     
     if (mobileMenuToggle && mobileMenu) {
-      mobileMenuToggle.addEventListener('click', function() {
+      mobileMenuToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('📱 Mobile menu toggle clicked');
         mobileMenu.classList.toggle('hidden');
       });
+      console.log('✅ Mobile menu toggle initialized');
     }
 
-    // Mobile Leistungen Accordion
+    // ===== MOBILE LEISTUNGEN ACCORDION (REPARIERT) =====
     const mobileLeistungenToggle = document.getElementById('mobile-leistungen-toggle');
     const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
     const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
     
     if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-      mobileLeistungenToggle.addEventListener('click', function() {
+      mobileLeistungenToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('📂 Mobile services dropdown clicked');
         mobileLeistungenMenu.classList.toggle('hidden');
         mobileLeistungenArrow.classList.toggle('rotate-180');
       });
+      console.log('✅ Mobile services dropdown initialized');
     }
 
-    // Dark Mode Toggle
+    // ===== THEME TOGGLE SYSTEM (REPARIERT) =====
     const themeToggle = document.getElementById('theme-toggle');
     const themeToggleMobile = document.getElementById('theme-toggle-mobile');
     const darkIcon = document.getElementById('theme-toggle-dark-icon');
@@ -299,7 +397,10 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
     const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
 
     function updateThemeIcons() {
-      if (document.documentElement.classList.contains('dark')) {
+      const isDark = document.documentElement.classList.contains('dark');
+      console.log('🌓 Theme updated:', isDark ? 'dark' : 'light');
+      
+      if (isDark) {
         darkIcon?.classList.add('hidden');
         lightIcon?.classList.remove('hidden');
         darkIconMobile?.classList.add('hidden');
@@ -323,10 +424,115 @@ console.log('🎨 Header v1.5.2 - Blog Navigation Integration');
       updateThemeIcons();
     }
 
-    themeToggle?.addEventListener('click', toggleTheme);
-    themeToggleMobile?.addEventListener('click', toggleTheme);
+    themeToggle?.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('🌓 Desktop theme toggle clicked');
+      toggleTheme();
+    });
+    
+    themeToggleMobile?.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('🌓 Mobile theme toggle clicked');
+      toggleTheme();
+    });
 
     // Initialize theme icons
     updateThemeIcons();
+    console.log('✅ Theme toggle system initialized');
+
+    // ===== USER CHOICE TOGGLE SYSTEM (NEU) =====
+    const viewToggleDesktop = document.getElementById('view-toggle-desktop');
+    const viewToggleMobile = document.getElementById('view-toggle-mobile');
+    const viewToggleDesktopIcon = document.getElementById('view-toggle-desktop-icon');
+    const viewToggleMobileIcon = document.getElementById('view-toggle-mobile-icon');
+    
+    // Get saved view preference
+    let userViewPreference = localStorage.getItem('viewMode') || 'auto';
+    
+    function updateViewToggleIcons() {
+      const isForcedMobile = userViewPreference === 'mobile';
+      
+      // Desktop Icon
+      if (viewToggleDesktopIcon) {
+        if (isForcedMobile) {
+          // Mobile Icon
+          viewToggleDesktopIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
+        } else {
+          // Desktop Icon  
+          viewToggleDesktopIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
+        }
+      }
+      
+      // Mobile Icon
+      if (viewToggleMobileIcon) {
+        if (isForcedMobile) {
+          // Mobile Icon
+          viewToggleMobileIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
+        } else {
+          // Desktop Icon
+          viewToggleMobileIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>';
+        }
+      }
+    }
+    
+    function applyViewMode() {
+      // Remove all view classes
+      document.body.classList.remove('user-force-mobile', 'user-force-desktop');
+      document.documentElement.classList.remove('user-force-mobile', 'user-force-desktop');
+      
+      if (userViewPreference === 'mobile') {
+        // Force Mobile View
+        document.body.classList.add('user-force-mobile');
+        document.documentElement.classList.add('user-force-mobile');
+        console.log('👤 User forced mobile view');
+      } else if (userViewPreference === 'desktop') {
+        // Force Desktop View  
+        document.body.classList.add('user-force-desktop');
+        document.documentElement.classList.add('user-force-desktop');
+        console.log('👤 User forced desktop view');
+      } else {
+        // Auto mode - let PWA detection handle it
+        console.log('👤 User view: auto mode');
+      }
+      
+      updateViewToggleIcons();
+    }
+    
+    function toggleViewMode() {
+      if (userViewPreference === 'auto') {
+        userViewPreference = 'mobile';
+      } else if (userViewPreference === 'mobile') {
+        userViewPreference = 'desktop';  
+      } else {
+        userViewPreference = 'auto';
+      }
+      
+      localStorage.setItem('viewMode', userViewPreference);
+      console.log('🔄 View mode changed to:', userViewPreference);
+      applyViewMode();
+      
+      // Reload page to apply changes
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+    }
+    
+    viewToggleDesktop?.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('🔄 Desktop view toggle clicked');
+      toggleViewMode();
+    });
+    
+    viewToggleMobile?.addEventListener('click', function(e) {
+      e.preventDefault();
+      console.log('🔄 Mobile view toggle clicked');
+      toggleViewMode();
+    });
+    
+    // Initialize view mode
+    applyViewMode();
+    console.log('✅ User choice toggle system initialized');
+    
+    console.log('🎨 Header v1.6.0 - VOLLSTÄNDIG - All systems initialized!');
   });
 </script>
