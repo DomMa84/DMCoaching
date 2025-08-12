@@ -53,30 +53,33 @@ const { title, description } = Astro.props;
     <!-- PWA Detection & Layout Override -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('🎯 PWA Detection v1.3.0 - Starting...');
+        console.log('🎯 PWA Detection v1.3.1 - Starting...');
         
         // PWA Detection
         const isPWA = window.matchMedia('(display-mode: standalone)').matches;
         const isWideScreen = window.innerWidth >= 1200;
+        const isSuperWide = window.innerWidth >= 1400; // Zusätzlich für große PWA-Fenster
         const screenInfo = `${window.innerWidth}x${window.innerHeight}`;
         
         console.log('📱 PWA Mode:', isPWA);
-        console.log('💻 Wide Screen:', isWideScreen, `(${screenInfo})`);
+        console.log('💻 Wide Screen (1200px+):', isWideScreen, `(${screenInfo})`);
+        console.log('🖥️ Super Wide (1400px+):', isSuperWide);
         
-        // PWA + Wide Screen = Force Desktop Layout
-        if (isPWA && isWideScreen) {
-          console.log('🚀 PWA Desktop Mode activated!');
+        // NEUE LOGIK: Force Desktop auch im Browser-Mode bei großen Bildschirmen
+        if ((isPWA && isWideScreen) || (!isPWA && isSuperWide) || window.innerWidth >= 1400) {
+          console.log('🚀 Force Desktop Mode activated!');
+          console.log('📄 Reason: PWA+Wide OR Browser+SuperWide OR 1400px+');
           
-          document.body.classList.add('pwa-desktop-mode');
+          document.body.classList.add('force-desktop-mode');
           document.documentElement.classList.add('force-desktop-layout');
           
-          // Hide Mobile Navigation
+          // Hide Mobile Navigation für große Bildschirme
           const mobileMenu = document.getElementById('mobile-menu-toggle');
           const mobileMenuContainer = document.getElementById('mobile-menu');
           
           if (mobileMenu) {
             mobileMenu.style.display = 'none';
-            console.log('📱 Mobile menu hidden in PWA Desktop mode');
+            console.log('📱 Mobile menu hidden - Desktop mode forced');
           }
           
           if (mobileMenuContainer) {
@@ -87,8 +90,12 @@ const { title, description } = Astro.props;
           setTimeout(() => {
             const services = document.querySelectorAll('.services-desktop-grid, .value-desktop-grid, .process-desktop-grid');
             services.forEach(grid => {
-              grid.classList.add('pwa-force-desktop-grid');
+              grid.classList.add('force-desktop-grid');
+              grid.style.display = 'grid';
+              grid.style.gridTemplateColumns = 'repeat(2, minmax(0, 1fr))';
+              grid.style.gap = '2rem';
             });
+            console.log('🔧 Grid layouts forced to desktop mode');
           }, 100);
           
         } else if (isPWA && !isWideScreen) {
@@ -97,6 +104,12 @@ const { title, description } = Astro.props;
         } else {
           console.log('🌐 Regular Browser Mode');
           document.body.classList.add('browser-mode');
+          
+          // Auch im Browser-Mode bei sehr breiten Bildschirmen Desktop erzwingen
+          if (window.innerWidth >= 1200) {
+            console.log('💻 Browser Desktop Mode - Wide screen detected');
+            document.body.classList.add('browser-desktop-mode');
+          }
         }
         
         // Mobile Menu Toggle Fix
@@ -777,33 +790,76 @@ const { title, description } = Astro.props;
     margin-top: 1rem;
   }
 
-  /* DESKTOP GRID FORCE-FIX */
-  @media (min-width: 1024px) {
+  /* DESKTOP GRID FORCE-FIX - ERWEITERT für PWA Browser-Mode */
+  @media (min-width: 900px) {
     .services-desktop-grid {
       display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       gap: 2rem !important;
     }
     
     .value-desktop-grid {
       display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       gap: 2rem !important;
     }
     
     .process-desktop-grid {
       display: grid !important;
-      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
       gap: 2rem !important;
     }
   }
 
-  /* ===== PWA CSS OVERRIDE SYSTEM ===== */
+  /* EXTRA FORCE für große Bildschirme (PWA Browser-Mode) */
+  @media (min-width: 1200px) {
+    .services-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .value-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+    
+    .process-desktop-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      gap: 2rem !important;
+    }
+
+    /* Hide Mobile Menu bei großen Bildschirmen */
+    #mobile-menu-toggle {
+      display: none !important;
+    }
+    
+    #mobile-menu {
+      display: none !important;
+    }
+    
+    /* Force Desktop Navigation */
+    .hidden.lg\:flex {
+      display: flex !important;
+    }
+    
+    /* Container optimization */
+    .container {
+      max-width: 1200px !important;
+    }
+  }
+
+  /* ===== PWA + BROWSER CSS OVERRIDE SYSTEM ===== */
   
-  /* PWA Desktop Mode Overrides */
-  .pwa-desktop-mode .services-desktop-grid,
-  .pwa-desktop-mode .value-desktop-grid,
-  .pwa-desktop-mode .process-desktop-grid,
+  /* Force Desktop Mode - Funktioniert für PWA UND Browser */
+  .force-desktop-mode .services-desktop-grid,
+  .force-desktop-mode .value-desktop-grid,
+  .force-desktop-mode .process-desktop-grid,
+  .browser-desktop-mode .services-desktop-grid,
+  .browser-desktop-mode .value-desktop-grid,
+  .browser-desktop-mode .process-desktop-grid,
   .force-desktop-layout .services-desktop-grid,
   .force-desktop-layout .value-desktop-grid,
   .force-desktop-layout .process-desktop-grid {
@@ -812,20 +868,51 @@ const { title, description } = Astro.props;
     gap: 2rem !important;
   }
   
-  /* Force Desktop Grid for Wide Screens */
-  .pwa-force-desktop-grid {
+  /* Force Desktop Grid Class */
+  .force-desktop-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 2rem !important;
   }
   
-  /* PWA Desktop Container Optimization */
+  /* Container Optimization für Force Desktop Mode */
+  .force-desktop-mode .container,
+  .browser-desktop-mode .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Hide Mobile Navigation in Force Desktop Mode */
+  .force-desktop-mode #mobile-menu-toggle,
+  .browser-desktop-mode #mobile-menu-toggle {
+    display: none !important;
+  }
+  
+  .force-desktop-mode #mobile-menu,
+  .browser-desktop-mode #mobile-menu {
+    display: none !important;
+  }
+  
+  /* Show Desktop Navigation */
+  .force-desktop-mode .hidden.lg\:flex,
+  .browser-desktop-mode .hidden.lg\:flex {
+    display: flex !important;
+  }
+
+  /* LEGACY PWA Desktop Mode Overrides (für echte PWAs) */
+  .pwa-desktop-mode .services-desktop-grid,
+  .pwa-desktop-mode .value-desktop-grid,
+  .pwa-desktop-mode .process-desktop-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 2rem !important;
+  }
+  
   .pwa-desktop-mode .container {
     max-width: 1200px !important;
     margin: 0 auto !important;
   }
   
-  /* Hide Mobile Navigation in PWA Desktop Mode */
   .pwa-desktop-mode #mobile-menu-toggle {
     display: none !important;
   }
@@ -834,7 +921,6 @@ const { title, description } = Astro.props;
     display: none !important;
   }
   
-  /* Show Desktop Navigation in PWA */
   .pwa-desktop-mode .hidden.lg\:flex {
     display: flex !important;
   }
