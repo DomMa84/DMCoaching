@@ -1,14 +1,13 @@
 ---
-// Header.astro v1.7.0 - USER CHOICE TOGGLE SYSTEM REPARIERT
-// CHANGELOG v1.7.0:
-// - 🔧 FIX: User Choice Toggle JavaScript-Logik komplett implementiert  
-// - 🔧 FIX: 3 Modi funktional: Auto, Mobile, Desktop
-// - 🔧 FIX: CSS für .force-mobile-mode hinzugefügt
-// - 🔧 FIX: Page Reload für sofortige Anwendung
-// - 🔧 FIX: localStorage Persistent Storage
-// - ✅ KEEP: Alle bestehenden Features (Blog Navigation, Service Dropdown, Theme Toggle)
+// Header.astro v1.7.1 - SAUBERE User Choice Integration (basiert auf v1.5.2)
+// CHANGELOG v1.7.1:
+// - 🔧 BASE: Header v1.5.2 als saubere Grundlage 
+// - ✅ ADD: User Choice Toggle Button (OHNE Duplikate)
+// - ✅ KEEP: Bestehende Theme Toggle Logik unverändert
+// - ✅ KEEP: Alle Navigation und Mobile Menu Features
+// - 🔧 FIX: Nur EIN User Choice Toggle pro Bereich (Desktop/Mobile)
 
-console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
+console.log('🎨 Header v1.7.1 - SAUBERE User Choice Integration');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -32,7 +31,7 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
         </a>
       </div>
 
-      <!-- Desktop Navigation (versteckt auf kleinen Bildschirmen) -->
+      <!-- Desktop Navigation -->
       <nav class="hidden lg:flex items-center space-x-8">
         <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
           Start
@@ -75,14 +74,14 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
         </a>
       </nav>
 
-      <!-- Desktop Actions (View Toggle, Theme Toggle, LinkedIn) -->
-      <div id="desktop-actions" class="hidden lg:flex items-center space-x-3">
-        <!-- User Choice Toggle -->
+      <!-- Desktop Action Buttons -->
+      <div class="hidden lg:flex items-center space-x-3">
+        <!-- USER CHOICE TOGGLE - Desktop -->
         <button 
           id="user-choice-toggle" 
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           aria-label="Layout-Modus umschalten"
-          title="Layout: Auto/Mobile/Desktop"
+          title="Layout umschalten: Auto/Mobile/Desktop"
         >
           <svg id="user-choice-icon" class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
@@ -92,30 +91,37 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
 
         <!-- Theme Toggle Desktop -->
         <button 
-          id="theme-toggle" 
+          id="theme-toggle"
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Theme umschalten"
+          aria-label="Toggle dark mode"
         >
-          <svg id="theme-toggle-dark-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          <!-- SONNE für Light Mode -->
+          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
           </svg>
-          <svg id="theme-toggle-light-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          <!-- MOND für Dark Mode -->
+          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
           </svg>
         </button>
 
         <!-- LinkedIn Link -->
-        <a href="https://linkedin.com/in/dominik-maier-consulting" target="_blank" rel="noopener noreferrer" 
-           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        <a 
+          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Dominik Maier LinkedIn-Profil öffnen"
+        >
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
           </svg>
         </a>
       </div>
 
-      <!-- Mobile Actions (View Toggle, Theme Toggle, LinkedIn, Burger Menu) -->
-      <div id="mobile-actions" class="flex lg:hidden items-center space-x-2">
-        <!-- User Choice Toggle Mobile -->
+      <!-- Mobile Action Buttons -->
+      <div class="lg:hidden flex items-center space-x-3">
+        <!-- USER CHOICE TOGGLE - Mobile -->
         <button 
           id="user-choice-toggle-mobile" 
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -129,31 +135,38 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
 
         <!-- Theme Toggle Mobile -->
         <button 
-          id="theme-toggle-mobile" 
+          id="theme-toggle-mobile"
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Theme umschalten"
+          aria-label="Toggle dark mode"
         >
-          <svg id="theme-toggle-dark-icon-mobile" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          <!-- SONNE für Light Mode -->
+          <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
           </svg>
-          <svg id="theme-toggle-light-icon-mobile" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          <!-- MOND für Dark Mode -->
+          <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
           </svg>
         </button>
 
-        <!-- LinkedIn Mobile -->
-        <a href="https://linkedin.com/in/dominik-maier-consulting" target="_blank" rel="noopener noreferrer" 
-           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        <!-- LinkedIn Link Mobile -->
+        <a 
+          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          aria-label="Dominik Maier LinkedIn-Profil öffnen"
+        >
+          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
           </svg>
         </a>
 
-        <!-- Mobile Menu Toggle Button -->
+        <!-- Mobile Menu Button -->
         <button 
-          id="mobile-menu-toggle" 
+          id="mobile-menu-toggle"
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Mobile Menü öffnen"
+          aria-label="Toggle mobile menu"
         >
           <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -162,70 +175,70 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
       </div>
     </div>
 
-    <!-- Mobile Menu (versteckt standardmäßig) -->
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-gray-200 dark:border-gray-700 pt-4 pb-4 space-y-4">
-      <a href="/" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
-        Start
-      </a>
-      
-      <!-- Mobile Services Accordion -->
-      <div>
-        <button 
-          id="mobile-leistungen-toggle" 
-          class="flex items-center justify-between w-full text-left text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
-        >
-          Leistungen
-          <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-        <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
-          <a href="/strategische-unternehmensentwicklung" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
-            Strategische Unternehmensentwicklung
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="lg:hidden hidden border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
+      <div class="px-4 py-6 space-y-4">
+        <!-- Main Navigation Mobile -->
+        <nav class="space-y-2">
+          <a href="/" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            Start
           </a>
-          <a href="/vertriebsoptimierung" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
-            Vertriebsoptimierung
-          </a>
-          <a href="/marketing-strategien" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
-            Marketing Strategien
-          </a>
-          <a href="/wertanalyse" class="block text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold">
-            Wertanalyse
-          </a>
-        </div>
-      </div>
+          
+          <!-- Mobile Leistungen Accordion -->
+          <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
+            <button 
+              id="mobile-leistungen-toggle"
+              class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              Leistungen
+              <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            
+            <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
+              <a href="/strategische-unternehmensentwicklung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                Strategische Unternehmensentwicklung
+              </a>
+              <a href="/vertriebsoptimierung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                Vertriebsoptimierung
+              </a>
+              <a href="/marketing-strategien" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                Marketing Strategien
+              </a>
+              <a href="/wertanalyse" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+                Wertanalyse
+              </a>
+            </div>
+          </div>
 
-      <a href="/blog" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
-        Blog
-      </a>
-      <a href="#uber-mich" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
-        Über mich
-      </a>
-      <a href="#kontakt" class="block text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
-        Kontakt
-      </a>
+          <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            Blog
+          </a>
+          <a href="#uber-mich" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            Über mich
+          </a>
+          <a href="#kontakt" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+            Kontakt
+          </a>
+        </nav>
+      </div>
     </div>
   </div>
 </header>
 
 <style>
-  /* USER CHOICE TOGGLE SYSTEM - CSS FIXES */
+  /* USER CHOICE TOGGLE SYSTEM CSS */
   
-  /* Force Mobile Mode - NEUES CSS */
-  .force-mobile-mode #desktop-actions,
+  /* Force Mobile Mode */
   .force-mobile-mode .hidden.lg\:flex {
     display: none !important;
   }
   
-  .force-mobile-mode #mobile-actions {
+  .force-mobile-mode .lg\:hidden {
     display: flex !important;
   }
   
-  .force-mobile-mode #mobile-menu-toggle {
-    display: block !important;
-  }
-  
-  /* Force Mobile Mode Grids */
   .force-mobile-mode .services-desktop-grid,
   .force-mobile-mode .value-desktop-grid,
   .force-mobile-mode .process-desktop-grid {
@@ -235,16 +248,7 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
   }
 
   /* Force Desktop Mode */
-  .force-desktop-mode #mobile-actions {
-    display: none !important;
-  }
-  
-  .force-desktop-mode #desktop-actions {
-    display: flex !important;
-  }
-  
-  .force-desktop-mode #mobile-menu-toggle,
-  .force-desktop-mode #mobile-menu {
+  .force-desktop-mode .lg\:hidden {
     display: none !important;
   }
   
@@ -252,7 +256,6 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
     display: flex !important;
   }
   
-  /* Force Desktop Mode Grids */
   .force-desktop-mode .services-desktop-grid,
   .force-desktop-mode .value-desktop-grid,
   .force-desktop-mode .process-desktop-grid {
@@ -260,26 +263,13 @@ console.log('🎨 Header v1.7.0 - User Choice Toggle System REPARIERT');
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 2rem !important;
   }
-
-  /* User Choice Override Classes */
-  .user-choice-mobile {
-    /* Mobile Layout erzwingen */
-  }
-  
-  .user-choice-desktop {
-    /* Desktop Layout erzwingen */
-  }
-  
-  .user-choice-auto {
-    /* Automatic Layout (Responsive) */
-  }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('🎨 Header v1.7.0 - USER CHOICE TOGGLE SYSTEM INITIALIZED');
+  console.log('🎨 Header v1.7.1 - SAUBERE User Choice Integration');
   
-  // === USER CHOICE TOGGLE SYSTEM === 
+  // === USER CHOICE TOGGLE SYSTEM ===
   const userChoiceToggle = document.getElementById('user-choice-toggle');
   const userChoiceToggleMobile = document.getElementById('user-choice-toggle-mobile');
   const userChoiceIcon = document.getElementById('user-choice-icon');
@@ -308,22 +298,21 @@ document.addEventListener('DOMContentLoaded', function() {
   
   function applyUserChoice() {
     // Alle Classes entfernen
-    document.body.classList.remove('force-mobile-mode', 'force-desktop-mode', 'user-choice-auto', 'user-choice-mobile', 'user-choice-desktop');
+    document.body.classList.remove('force-mobile-mode', 'force-desktop-mode');
     
     // User Choice anwenden
     switch(currentUserChoice) {
       case 'mobile':
-        document.body.classList.add('force-mobile-mode', 'user-choice-mobile');
+        document.body.classList.add('force-mobile-mode');
         console.log('📱 FORCE MOBILE MODE ACTIVATED');
         break;
       case 'desktop':
-        document.body.classList.add('force-desktop-mode', 'user-choice-desktop');
+        document.body.classList.add('force-desktop-mode');
         console.log('🖥️ FORCE DESKTOP MODE ACTIVATED');
         break;
       case 'auto':
       default:
-        document.body.classList.add('user-choice-auto');
-        console.log('🔄 AUTO MODE ACTIVATED');
+        console.log('🔄 AUTO MODE ACTIVATED (Responsive)');
         break;
     }
     
@@ -364,10 +353,9 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileMenu = document.getElementById('mobile-menu');
   
   if (mobileMenuToggle && mobileMenu) {
-    mobileMenuToggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('📱 Mobile menu toggle clicked');
+    mobileMenuToggle.addEventListener('click', function() {
       mobileMenu.classList.toggle('hidden');
+      console.log('📱 Mobile menu toggled');
     });
   }
 
@@ -377,11 +365,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
   
   if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-    mobileLeistungenToggle.addEventListener('click', function(e) {
-      e.preventDefault();
-      console.log('📋 Mobile services accordion clicked');
+    mobileLeistungenToggle.addEventListener('click', function() {
       mobileLeistungenMenu.classList.toggle('hidden');
       mobileLeistungenArrow.classList.toggle('rotate-180');
+      console.log('📋 Mobile services accordion toggled');
     });
   }
 
@@ -430,6 +417,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial Theme Icons
   updateThemeIcons();
 
-  console.log('✅ Header v1.7.0 - All systems initialized successfully!');
+  console.log('✅ Header v1.7.1 - All systems initialized successfully!');
 });
 </script>
