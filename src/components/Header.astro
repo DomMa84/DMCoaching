@@ -1,12 +1,12 @@
 ---
-// Header.astro v1.7.4 - Navigation Fix + Doppelte Toggle Problem gelöst
-// CHANGELOG v1.7.4:
-// - ✅ FIX: Navigation ohne # (kontakt, uber-mich)
-// - ✅ FIX: Theme + LinkedIn Buttons komplett entfernt (PWA übernimmt alles)
-// - ✅ KEEP: Nur Navigation und Mobile Menu
+// Header.astro v1.7.5 - Mobile Dropdown Fix
+// CHANGELOG v1.7.5:
+// - ✅ FIX: Mobile Services Accordion Click-Handler repariert
+// - ✅ FIX: Desktop Dropdown Click-Handler hinzugefügt (nicht nur hover)
+// - ✅ KEEP: Minimale Navigation (185 Zeilen Basis)
 // - ✅ KEEP: Korrekte /leistung/ Pfade
 
-console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
+console.log('Header v1.7.5 - Mobile Dropdown funktional');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -37,14 +37,17 @@ console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
         </a>
         
         <!-- Desktop Services Dropdown -->
-        <div class="relative group">
-          <button class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        <div class="relative">
+          <button 
+            id="desktop-services-btn"
+            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+          >
             Leistungen
-            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg id="desktop-services-arrow" class="ml-1 w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+          <div id="desktop-services-menu" class="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible transition-all duration-200 z-10">
             <div class="py-2">
               <a href="/leistung/strategische-unternehmensentwicklung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
                 Strategische Unternehmensentwicklung
@@ -73,7 +76,7 @@ console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
         </a>
       </nav>
 
-      <!-- Mobile Menu Button (NUR Menu Button) -->
+      <!-- Mobile Menu Button -->
       <div class="lg:hidden">
         <button 
           id="mobile-menu-toggle"
@@ -103,7 +106,7 @@ console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
               class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               Leistungen
-              <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
               </svg>
             </button>
@@ -141,16 +144,65 @@ console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
+  console.log('Header v1.7.5 - Mobile Dropdown funktional');
+  
+  // === DESKTOP SERVICES DROPDOWN ===
+  const desktopServicesBtn = document.getElementById('desktop-services-btn');
+  const desktopServicesMenu = document.getElementById('desktop-services-menu');
+  const desktopServicesArrow = document.getElementById('desktop-services-arrow');
+  
+  if (desktopServicesBtn && desktopServicesMenu && desktopServicesArrow) {
+    let isDesktopDropdownOpen = false;
+    
+    // Click Handler für Desktop Dropdown
+    desktopServicesBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      isDesktopDropdownOpen = !isDesktopDropdownOpen;
+      
+      if (isDesktopDropdownOpen) {
+        desktopServicesMenu.classList.remove('opacity-0', 'invisible');
+        desktopServicesMenu.classList.add('opacity-100', 'visible');
+        desktopServicesArrow.classList.add('rotate-180');
+        console.log('Desktop dropdown opened');
+      } else {
+        desktopServicesMenu.classList.add('opacity-0', 'invisible');
+        desktopServicesMenu.classList.remove('opacity-100', 'visible');
+        desktopServicesArrow.classList.remove('rotate-180');
+        console.log('Desktop dropdown closed');
+      }
+    });
+    
+    // Click outside to close desktop dropdown
+    document.addEventListener('click', function(e) {
+      if (!desktopServicesBtn.contains(e.target) && !desktopServicesMenu.contains(e.target)) {
+        isDesktopDropdownOpen = false;
+        desktopServicesMenu.classList.add('opacity-0', 'invisible');
+        desktopServicesMenu.classList.remove('opacity-100', 'visible');
+        desktopServicesArrow.classList.remove('rotate-180');
+      }
+    });
+  }
   
   // === MOBILE MENU TOGGLE ===
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
   
   if (mobileMenuToggle && mobileMenu) {
-    mobileMenuToggle.addEventListener('click', function() {
-      mobileMenu.classList.toggle('hidden');
-      console.log('Mobile menu toggled');
+    mobileMenuToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const isHidden = mobileMenu.classList.contains('hidden');
+      
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        console.log('Mobile menu opened');
+      } else {
+        mobileMenu.classList.add('hidden');
+        console.log('Mobile menu closed');
+      }
     });
   }
 
@@ -163,23 +215,54 @@ document.addEventListener('DOMContentLoaded', function() {
     mobileLeistungenToggle.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      mobileLeistungenMenu.classList.toggle('hidden');
-      mobileLeistungenArrow.classList.toggle('rotate-180');
-      console.log('Mobile services accordion toggled');
+      
+      const isHidden = mobileLeistungenMenu.classList.contains('hidden');
+      
+      if (isHidden) {
+        mobileLeistungenMenu.classList.remove('hidden');
+        mobileLeistungenArrow.classList.add('rotate-180');
+        console.log('Mobile services accordion opened');
+      } else {
+        mobileLeistungenMenu.classList.add('hidden');
+        mobileLeistungenArrow.classList.remove('rotate-180');
+        console.log('Mobile services accordion closed');
+      }
     });
+  } else {
+    console.log('FEHLER: Mobile services accordion Elemente nicht gefunden');
+    console.log('Toggle:', mobileLeistungenToggle);
+    console.log('Menu:', mobileLeistungenMenu);
+    console.log('Arrow:', mobileLeistungenArrow);
   }
 
-  console.log('Header v1.7.4 - Basic navigation initialized successfully!');
+  console.log('Header v1.7.5 - Alle Dropdown-Systeme initialisiert');
 });
 </script>
 
 <style>
-  /* Rotation Animation für Mobile Accordion */
+  /* Rotation Animation für Dropdowns */
   .rotate-180 {
     transform: rotate(180deg);
   }
   
   .transition-transform {
     transition: transform 0.3s ease;
+  }
+  
+  /* Dropdown Visibility States */
+  .opacity-0 {
+    opacity: 0;
+  }
+  
+  .opacity-100 {
+    opacity: 1;
+  }
+  
+  .invisible {
+    visibility: hidden;
+  }
+  
+  .visible {
+    visibility: visible;
   }
 </style>
