@@ -7,7 +7,7 @@
 // - ✅ KEEP: Alle Navigation und Mobile Menu Features
 // - 🔧 FIX: Nur EIN User Choice Toggle pro Bereich (Desktop/Mobile)
 
-console.log('🎨 Header v1.7.1 - SAUBERE User Choice Integration');
+console.log('🎨 Header v1.7.2 - Mobile Dropdown & User Choice Icons Fixed');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -256,12 +256,21 @@ console.log('🎨 Header v1.7.1 - SAUBERE User Choice Integration');
     display: flex !important;
   }
   
-  .force-desktop-mode .services-desktop-grid,
+.force-desktop-mode .services-desktop-grid,
   .force-desktop-mode .value-desktop-grid,
   .force-desktop-mode .process-desktop-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 2rem !important;
+  }
+
+  /* Rotation Animation */
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+  
+  .transition-transform {
+    transition: transform 0.3s ease;
   }
 </style>
 
