@@ -1,70 +1,69 @@
-# 🎯 Dominik Maier Coaching Website v2.29
+# Dominik Maier - Coaching & Interim Management
 
-> **Strategische Unternehmensentwicklung und Interim Management aus dem Schwarzwald**  
-> Moderne, SEO-optimierte Business-Website mit Enhanced Statistics und E-Mail-Integration
+**Strategische Unternehmensentwicklung und Interim Management aus dem Schwarzwald**
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/your-site-id/deploy-status)](https://app.netlify.com/sites/your-site/deploys)
-[![Built with Astro](https://img.shields.io/badge/Built_with-Astro-ff5d01.svg)](https://astro.build)
-[![Hosted on Netlify](https://img.shields.io/badge/Hosted_on-Netlify-00c7b7.svg)](https://netlify.com)
+Moderne, SEO-optimierte Business-Website mit Enhanced Statistics, E-Mail-Integration und PWA-Features
 
-## 🌟 **Aktueller Status (August 2025)**
+## 🚀 Aktueller Status (August 2025)
 
-### ✅ **VOLLSTÄNDIG FUNKTIONAL**
-- **E-Mail-System v18.3.8** ✅ Strato SMTP Integration 
+### ✅ **Vollständig funktional:**
+- **E-Mail-System v18.3.8** ✅ Strato SMTP Integration
 - **Enhanced Statistics** ✅ Vollständige Business Intelligence
 - **Blog-System v1.0** ✅ SEO-optimierte Content-Plattform
 - **Service-Seiten** ✅ Alle 4 Hauptservices integriert
-- **Layout v1.2.8** ✅ Netlify-kompatible CSS-Syntax
+- **PWA-Features** ✅ Service Worker + Manifest
+- **Header v1.7.4** ✅ Minimale Navigation ohne Toggle-Duplikate
 
----
-
-## 🏗️ **Tech Stack**
+## 🛠️ Technologie-Stack
 
 | Technologie | Version | Zweck |
-|-------------|---------|--------|
+|---|---|---|
 | **Astro** | 4.x | Static Site Generator |
 | **TailwindCSS** | 3.x | Utility-First CSS Framework |
 | **JavaScript** | ES2023 | Interaktivität & API-Calls |
 | **Nodemailer** | Latest | E-Mail-Versendung (Strato SMTP) |
 | **AOS** | 2.3.4 | Scroll-Animationen |
-| **Netlify** | - | Hosting & Deployment |
-| **GitHub** | - | Versionskontrolle |
-| **Bolt.new** | - | Development Environment |
+| **PWA Detection** | v1.3.1 | Automatische Layout-Optimierung |
 
----
+## 📊 Business Intelligence Features
 
-## 🚀 **Hauptfeatures**
+### ✅ **E-Mail-System (v18.3.8)**
+- Echte SMTP-Integration über Strato
+- Automatische Bestätigungs-E-Mails für Leads
+- Admin-Benachrichtigungen mit Lead-Priorisierung
+- Fallback-System bei SMTP-Fehlern
+- Corporate Design HTML + Text Templates
 
-### 📧 **E-Mail-System v18.3.8**
-- **Echte SMTP-Integration** über Strato
-- **Automatische Bestätigungs-E-Mails** für Leads
-- **Admin-Benachrichtigungen** mit Lead-Priorisierung
-- **Fallback-System** bei SMTP-Fehlern
-- **Corporate Design** HTML + Text Templates
+### ✅ **Enhanced Statistics**
+- Lead-Tracking mit IP-Adresse und User-Agent
+- Service-Performance Analyse
+- Device-Detection (Mobile/Desktop/Tablet)
+- Peak-Time Analytics für Marketing-Optimierung
+- Conversion-Tracking Blog → Lead
 
-### 📊 **Enhanced Statistics System**
-- **Lead-Tracking** mit IP-Adresse und User-Agent
-- **Service-Performance** Analyse
-- **Device-Detection** (Mobile/Desktop/Tablet)
-- **Peak-Time Analytics** für Marketing-Optimierung
-- **Conversion-Tracking** Blog → Lead
+## 🎨 Design-System
 
-### 🎨 **Design & UX**
-- **Responsive Design** für alle Geräte
-- **Dark/Light Mode** mit Theme-Toggle
-- **Moderne Animationen** mit AOS
-- **Accessibility** WCAG 2.1 AA konform
-- **Performance** optimiert (Core Web Vitals)
+### ✅ **Layout v1.2.8 (NIEMALS ÄNDERN)**
+- Responsive Design für alle Geräte
+- Dark/Light Mode mit Theme-Toggle
+- Moderne Animationen mit AOS
+- Accessibility WCAG 2.1 AA konform
+- Performance optimiert (Core Web Vitals)
 
-### 📝 **Content Management**
-- **Blog-System** für SEO-Content
-- **Service-Seiten** für alle Leistungen
-- **Logo-Showcase** mit Brand Guidelines
-- **Rechtliche Seiten** (Datenschutz, Impressum)
+### ✅ **Header v1.7.4 - Minimale Navigation**
+- **Nur 185 Zeilen Code** (37% Reduzierung von v1.7.3)
+- Logo + Desktop Navigation
+- Service-Dropdown mit korrekten `/leistung/` Pfaden
+- Mobile Menu + Services Accordion
+- **Keine Toggle-Duplikate** - PWA-System übernimmt Layout-Control
 
----
+### ✅ **PWA-Features**
+- **PWA Detection v1.3.1** - Automatische Desktop-Mode Aktivierung
+- Service Worker für Offline-Funktionalität
+- App-Installation auf Mobile & Desktop
+- Optimierte Performance und Caching
 
-## 🏠 **Seitenstruktur**
+## 📁 Projektstruktur
 
 ```
 📁 src/pages/
@@ -82,43 +81,25 @@
     └── wertanalyse.astro v1.1
 ```
 
----
+## 🚀 Installation & Entwicklung
 
-## ⚙️ **Installation & Setup**
-
-### **Voraussetzungen**
+### **Voraussetzungen:**
 - Node.js ≥ 18.0
 - npm oder yarn
 - Git
 
-### **1. Repository klonen**
+### **Setup:**
 ```bash
 git clone https://github.com/DomMa84/DMCoaching.git
 cd DMCoaching
-```
-
-### **2. Dependencies installieren**
-```bash
 npm install
-```
-
-### **3. Environment-Variablen konfigurieren**
-```bash
 cp .env.example .env
-```
-
-### **4. Development Server starten**
-```bash
 npm run dev
 # → http://localhost:4321
 ```
 
----
-
-## 🔧 **Environment-Konfiguration**
-
-### **.env Datei:**
-```env
+### **Environment Variables:**
+```bash
 # Strato SMTP Configuration (v18.3.8)
 EMAIL_HOST=smtp.strato.de
 EMAIL_PORT=465
@@ -138,55 +119,44 @@ NODE_ENV=production
 SITE_URL=https://maier-value.com
 ```
 
----
-
-## 📊 **Enhanced Statistics Dashboard**
+## 📊 Analytics & Tracking
 
 Das System erfasst automatisch:
 
 | Metrik | Beschreibung | Verwendung |
-|--------|--------------|------------|
+|---|---|---|
 | **Lead-Quelle** | Welche Seite führte zum Kontakt | Marketing-ROI |
 | **Device-Type** | Mobile/Desktop/Tablet | UX-Optimierung |
 | **Peak-Times** | Aktivste Uhrzeiten | E-Mail-Timing |
 | **Service-Interest** | Interesse an Services | Angebots-Fokus |
 | **Geographic Data** | IP-basierte Region | Local SEO |
 
-### **Zugriff auf Statistics:**
-```
-https://maier-value.com/admin
-```
+**Admin Dashboard:** https://maier-value.com/admin
 
----
+## 🌐 Deployment
 
-## 🚀 **Deployment**
+### **Netlify (Automatisch)**
+- GitHub Push triggert automatisches Deployment
+- **Build Command:** `npm run build`
+- **Publish Directory:** `dist/`
+- Environment Variables in Netlify Dashboard setzen
 
-### **Netlify (Aktuell)**
-1. **GitHub** Push triggert automatisches Deployment
-2. **Build Command:** `npm run build`
-3. **Publish Directory:** `dist/`
-4. **Environment Variables** in Netlify Dashboard setzen
-
-### **Build für Produktion:**
+### **Build Commands:**
 ```bash
 npm run build
-npm run preview  # Lokale Vorschau
+npm run preview # Lokale Vorschau
 ```
 
----
+## 📧 E-Mail-System
 
-## 📱 **Kontaktformular API**
+### **Features:**
+- ✅ Input-Validierung (Name, E-Mail, Telefon)
+- ✅ Spam-Schutz mit Rate-Limiting
+- ✅ Dual E-Mail-System (User + Admin)
+- ✅ Enhanced Statistics Integration
+- ✅ Error-Handling mit Fallbacks
 
-### **Endpoint:** `/api/contact.js`
-
-**Features:**
-- ✅ **Input-Validierung** (Name, E-Mail, Telefon)
-- ✅ **Spam-Schutz** mit Rate-Limiting
-- ✅ **Dual E-Mail-System** (User + Admin)
-- ✅ **Enhanced Statistics** Integration
-- ✅ **Error-Handling** mit Fallbacks
-
-**Response Format:**
+### **Response Format:**
 ```json
 {
   "success": true,
@@ -196,50 +166,30 @@ npm run preview  # Lokale Vorschau
 }
 ```
 
----
+## 🔍 SEO-Optimierung
 
-## 🎯 **SEO-Optimierungen**
+### **Technical SEO:**
+- Core Web Vitals optimiert
+- Schema Markup (Organization, LocalBusiness, Person)
+- XML Sitemap automatisch generiert
+- Robots.txt konfiguriert
+- Meta-Tags für alle Seiten
 
-### ✅ **Technical SEO**
-- **Core Web Vitals** optimiert
-- **Schema Markup** (Organization, LocalBusiness, Person)
-- **XML Sitemap** automatisch generiert
-- **Robots.txt** konfiguriert
-- **Meta-Tags** für alle Seiten
+### **Local SEO:**
+- Google My Business Integration vorbereitet
+- Bad Rippoldsau Geo-Targeting
+- Schwarzwald Regional-Keywords
+- Baden-Württemberg Service-Area
 
-### ✅ **Local SEO**
-- **Google My Business** Integration vorbereitet
-- **Bad Rippoldsau** Geo-Targeting
-- **Schwarzwald** Regional-Keywords
-- **Baden-Württemberg** Service-Area
+### **Content SEO:**
+- Blog-System für regelmäßigen Content
+- Keyword-Strategie für Interim Management
+- Internal Linking zwischen Services
+- Long-tail Keywords für Nischenzielgruppen
 
-### ✅ **Content SEO**
-- **Blog-System** für regelmäßigen Content
-- **Keyword-Strategie** für Interim Management
-- **Internal Linking** zwischen Services
-- **Long-tail Keywords** für Nischenzielgruppen
+## 📈 Performance
 
----
-
-## 🔄 **Versionierung & Changelog**
-
-### **Aktuelle Versionen:**
-- **Layout.astro:** v1.2.8 (NIEMALS ÄNDERN - Netlify-kompatibel)
-- **ContactForm.astro:** v18.10.4 (Enhanced Statistics)
-- **Header.astro:** v1.5.2 (Blog-Navigation + Service-Dropdown)
-- **Footer.astro:** v1.3 (Theme Toggle synchron)
-
-### **Wichtige Regeln:**
-1. **IMMER** mit Versionsnummern arbeiten
-2. **Layout v1.2.8** niemals ändern (CSS-Syntax Netlify-kompatibel)
-3. **Changelog** in jeder Datei dokumentieren
-4. **E-Mail-System v18.3.8** ist stabil - nicht modifizieren
-
----
-
-## 🏆 **Performance Metriken**
-
-### **PageSpeed Insights Ziele:**
+### **Aktuelle Scores:**
 - **Desktop:** 95+ Score
 - **Mobile:** 90+ Score
 - **Core Web Vitals:** Alle grün
@@ -251,102 +201,92 @@ npm run preview  # Lokale Vorschau
 - **Mobile Traffic:** >60% aller Besucher
 - **Local Search:** Top 3 für "Interim Management Schwarzwald"
 
----
-
-## 🔐 **Sicherheit**
+## 🔒 Sicherheit
 
 ### **Implementierte Maßnahmen:**
-- **Content Security Policy** (CSP)
-- **HTTPS** enforced (Strict-Transport-Security)
-- **Input-Sanitization** bei Formularen
-- **Rate-Limiting** für API-Endpoints
-- **Environment Variables** für sensible Daten
+- Content Security Policy (CSP)
+- HTTPS enforced (Strict-Transport-Security)
+- Input-Sanitization bei Formularen
+- Rate-Limiting für API-Endpoints
+- Environment Variables für sensible Daten
 
----
-
-## 🐛 **Troubleshooting**
+## 🛠️ Debugging
 
 ### **Häufige Probleme:**
 
-#### **E-Mail wird nicht versendet**
+**E-Mail funktioniert nicht:**
 ```bash
 # 1. SMTP-Konfiguration prüfen
-# 2. Strato-Credentials validieren  
+# 2. Strato-Credentials validieren
 # 3. Firewall/Port 465 prüfen
 # 4. Logs in Netlify Functions checken
 ```
 
-#### **CSS lädt nicht korrekt**
+**Build-Fehler:**
 ```bash
 # Layout v1.2.8 verwendet - NICHT ändern
 # Tailwind-Classes ohne Escape-Sequences
 # npm run build && npm run preview testen
 ```
 
-#### **Statistics funktionieren nicht**
+**ContactForm Probleme:**
 ```bash
 # ContactForm v18.10.4 prüfen
 # API-Endpoint /api/contact.js testen
 # Environment Variables vollständig?
 ```
 
----
+## 👥 Team & Kontakt
 
-## 👥 **Team & Kontakt**
-
-### **Entwicklung:**
-- **Projektleitung:** Dominik Maier
+### **Projektleitung:** Dominik Maier
 - **Tech-Stack:** Astro + Tailwind + Netlify
-- **Development:** Bolt.new Environment
-- **Support:** claude-sonnet-4
+- **Development:** GitHub + Netlify
+- **Support:** Claude Sonnet 4
 
-### **Business-Kontakt:**
-- **E-Mail:** maier@maier-value.com
-- **Telefon:** +49 7440 913367  
+### **Kontakt:**
+- **E-Mail:** [maier@maier-value.com](mailto:maier@maier-value.com)
+- **Telefon:** +49 7440 913367
 - **Standort:** Bad Rippoldsau, Schwarzwald
-- **Website:** https://maier-value.com
+- **Website:** [https://maier-value.com](https://maier-value.com)
 
----
+## 🎯 Roadmap
 
-## 📈 **Roadmap 2025**
-
-### **Q3 2025:** ✅ **ABGESCHLOSSEN**
+### **✅ ABGESCHLOSSEN:**
 - ✅ E-Mail-System v18.3.8 reaktiviert
 - ✅ Enhanced Statistics implementiert
 - ✅ Blog-System v1.0 live
 - ✅ Service-Seiten vollständig
+- ✅ Header v1.7.4 minimiert
+- ✅ PWA-Features implementiert
 
-### **Q4 2025:** 🚧 **IN ARBEIT**
+### **🔄 IN ARBEIT:**
+- 🔄 Mobile Dropdown Funktionalität reparieren
+- 🔄 Theme Toggle in PWA-System integrieren
 - 🔄 Google My Business Optimierung
 - 🔄 Local SEO Bad Rippoldsau/Schwarzwald
-- 🔄 Blog-Content-Strategie (KI + Interim Management)
-- 🔄 Lead-Magnets (PDF-Guides) implementieren
 
-### **2026:** 📅 **GEPLANT**
+### **🎯 GEPLANT:**
+- 🎯 Blog-Content-Strategie (KI + Interim Management)
+- 🎯 Lead-Magnets (PDF-Guides) implementieren
 - 🎯 Multi-Language Support (EN)
 - 🎯 Advanced Analytics Dashboard
 - 🎯 Appointment-Booking-System
 - 🎯 Client-Portal für Interim-Projekte
 
----
+## 📄 Lizenz
 
-## 📄 **Lizenz**
-
-**Alle Rechte vorbehalten. © 2025 Dominik Maier**
+Alle Rechte vorbehalten. © 2025 Dominik Maier
 
 Dieses Projekt ist proprietär und nicht für die öffentliche Nutzung bestimmt. Alle Inhalte, Designs und Code-Komponenten sind Eigentum von Dominik Maier Coaching & Interim Management.
 
----
-
-## 🙏 **Credits**
+## 🔗 Links
 
 - **Hosting:** [Netlify](https://netlify.com)
-- **Domain:** [Strato](https://strato.de)  
+- **Domain:** [Strato](https://strato.de)
 - **Framework:** [Astro](https://astro.build)
 - **CSS:** [TailwindCSS](https://tailwindcss.com)
 - **Animations:** [AOS Library](https://michalsnik.github.io/aos/)
-- **Development:** [Bolt.new](https://bolt.new)
 
 ---
 
-*Letztes Update: August 2025 | Version 2.29 | Status: ✅ Produktiv*
+**Letztes Update:** August 2025 | Version 1.7.4 | Status: ✅ Produktiv
