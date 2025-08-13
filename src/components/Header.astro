@@ -1,30 +1,31 @@
 ---
-// Header.astro v1.7.8 - Logo Text + Theme Toggle + LinkedIn Fix
-// CHANGELOG v1.7.8:
-// - ✅ FIX: Logo Text immer sichtbar (nicht nur sm:block)
-// - ✅ ADD: Theme Toggle (Desktop + Mobile)
-// - ✅ ADD: LinkedIn Link (Desktop + Mobile)
-// - ✅ KEEP: Universal Touch Events für alle Geräte
+// Header.astro v1.7.9 - SVG Fix + Logo Zentrierung + Theme Toggle entfernt (Option B)
+// CHANGELOG v1.7.9:
+// - ✅ FIX: Logo vertikal zentriert zu Text
+// - ✅ REMOVE: Theme Toggle (Desktop + Mobile) - PWA übernimmt
+// - ✅ KEEP: LinkedIn Links (Desktop + Mobile)
+// - ✅ KEEP: Alle Navigation und Dropdown-Funktionen
+// - ✅ KEEP: Universal Touch Events
 
-console.log('Header v1.7.8 - Complete Header mit Theme Toggle + LinkedIn');
+console.log('Header v1.7.9 - PWA Theme Control + Logo zentriert');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
   <div class="container mx-auto px-4">
     <div class="flex items-center justify-between h-16 lg:h-20">
-      <!-- Logo mit sichtbarem Text -->
+      <!-- Logo mit zentriertem Text -->
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
           <!-- KORREKTES LOGO VOM FOOTER -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 lg:w-12 lg:h-12" viewBox="0 0 1778 1433">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 lg:w-12 lg:h-12 flex-shrink-0" viewBox="0 0 1778 1433">
             <path fill="#D2AE6C" d="M1346.536,147.84C1241.455,252.922,1136.736,357.643,1031.126,463.254C926.022,358.15,821.475,253.602,716.82,148.947C716.82,203.569,716.82,258.414,716.82,313.896C713.113,309.612,709.955,305.872,706.703,302.216C693.015,286.826,679.3,271.461,665.594,256.087C651.889,240.714,638.182,225.341,624.476,209.968C613.511,197.669,602.537,185.378,591.583,173.07C578.221,158.058,564.882,143.026,551.521,128.015C540.566,115.707,529.59,103.418,518.625,91.119C504.919,75.746,491.251,60.338,477.497,45.009C464.938,31.012,452.279,17.106,439.705,3.124C439.248,2.616,439.225,1.717,439.000,1.000C437.889,1.000,437.444,1.000,437,1.469C437,323.54,437,645.144,437,967C439.472,967,441.286,967,443.1,967C527.43,967,611.761,967.18,696.089,966.822C710.137,966.763,724.228,964.769,738.205,962.948C760.242,960.076,781.202,953.138,801.419,944.109C834.312,929.417,863.347,909.257,887.929,882.712C898.875,870.892,908.721,858.354,917.675,844.968C934.006,820.556,945.575,794.075,953.544,765.921C958.579,748.137,962.186,729.968,962.741,711.568C963.274,693.915,962.362,676.134,960.765,658.529C959.655,646.293,957.024,634.068,953.82,622.176C946.982,596.801,936.304,573.058,922.406,550.641C906.631,525.195,885.842,503.979,866.225,481.746C860.114,474.82,853.814,468.062,847.685,461.152C835.121,446.989,822.642,432.751,810.072,418.594C803.719,411.438,797.2,404.429,790.841,397.279C788.065,394.159,786.795,390.692,786.863,386.193C787.174,365.532,786.996,344.863,787.009,324.198C787.01,322.633,787.137,321.068,787.206,319.503C787.828,319.038,788.45,318.573,789.072,318.108C928.428,457.463,1067.783,596.819,1206.904,735.939C1206.807,736.29,1206.964,735.984,1206.965,735.679C1206.984,703.847,1207.045,672.014,1206.867,640.183C1206.856,638.253,1205.32,635.948,1203.843,634.465C1164.791,595.267,1125.659,556.15,1086.512,517.048C1085.021,515.56,1083.236,514.366,1082.683,513.919C1147.624,448.977,1211.974,384.625,1276.126,320.471C1276.126,535.349,1276.126,750.942,1276.126,966.733C1299.839,966.733,1323.23,966.733,1346.536,966.733C1346.536,693.677,1346.536,420.888,1346.536,147.84ZM557.5,896C540.532,896,524.563,896,508.298,896C508.298,659.685,508.298,423.687,508.298,187.253C514.828,194.314,521.223,201.047,527.408,207.968C533.978,215.32,540.294,222.899,546.816,230.294C559.777,244.989,572.794,259.634,585.807,274.283C591.498,280.69,597.249,287.043,602.947,293.444C616.308,308.452,629.613,323.509,643.021,338.474C650.293,346.592,657.83,354.474,665.07,362.619C677.093,376.145,688.917,389.847,700.931,403.381C710.238,413.864,719.783,424.137,729.086,434.624C740.985,448.038,752.712,461.603,764.582,475.043C770.805,482.09,777.214,488.972,783.468,495.991C796.614,510.744,809.715,525.537,822.831,540.317C830.701,549.185,838.73,557.918,846.394,566.961C860.957,584.143,872.228,603.446,879.606,624.62C884.543,638.787,888.677,653.549,890.562,668.376C892.42,682.996,891.345,698.044,890.917,712.885C890.423,729.964,885.796,746.269,880.002,762.23C872.064,784.095,860.843,804.09,846.296,822.313C831.898,840.35,814.712,855.172,795.173,867.156C776.669,878.505,756.706,886.425,735.376,891.178C718.368,894.968,701.308,896.149,683.977,896.066C641.819,895.864,599.659,896,557.5,896Z" />
           </svg>
-          <!-- IMMER SICHTBARER TEXT -->
-          <div class="text-left">
-            <div class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
+          <!-- ZENTRIERTER TEXT zum Logo -->
+          <div class="flex flex-col justify-center">
+            <div class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white leading-tight">
               Dominik Maier
             </div>
-            <div class="text-sm lg:text-base text-gray-600 dark:text-gray-300 -mt-1">
+            <div class="text-sm lg:text-base text-gray-600 dark:text-gray-300 leading-tight">
               Coaching & Interim Management
             </div>
           </div>
@@ -77,24 +78,8 @@ console.log('Header v1.7.8 - Complete Header mit Theme Toggle + LinkedIn');
         </a>
       </nav>
 
-      <!-- Desktop Action Buttons -->
-      <div class="hidden lg:flex items-center space-x-3">
-        <!-- Theme Toggle Desktop -->
-        <button 
-          id="theme-toggle"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <!-- SONNE für Light Mode -->
-          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-          </svg>
-          <!-- MOND für Dark Mode -->
-          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-          </svg>
-        </button>
-
+      <!-- Desktop Action Buttons (NUR LinkedIn) -->
+      <div class="hidden lg:flex items-center">
         <!-- LinkedIn Link Desktop -->
         <a 
           href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
@@ -109,24 +94,8 @@ console.log('Header v1.7.8 - Complete Header mit Theme Toggle + LinkedIn');
         </a>
       </div>
 
-      <!-- Mobile Action Buttons -->
+      <!-- Mobile Action Buttons (NUR LinkedIn + Menu) -->
       <div class="lg:hidden flex items-center space-x-2">
-        <!-- Theme Toggle Mobile -->
-        <button 
-          id="theme-toggle-mobile"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <!-- SONNE für Light Mode -->
-          <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-          </svg>
-          <!-- MOND für Dark Mode -->
-          <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 716.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-          </svg>
-        </button>
-
         <!-- LinkedIn Link Mobile -->
         <a 
           href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
@@ -207,7 +176,7 @@ console.log('Header v1.7.8 - Complete Header mit Theme Toggle + LinkedIn');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Header v1.7.8 - Complete Header mit Theme Toggle + LinkedIn');
+  console.log('Header v1.7.9 - PWA Theme Control + Logo zentriert');
   
   // Mobile/Touch Gerät Detection
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -215,6 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   console.log('Is Mobile:', isMobile);
   console.log('Is Touch Device:', isTouchDevice);
+  console.log('Theme Control: PWA System handles all theme toggles');
   
   // Universelle Event-Handler Funktion
   function addUniversalEventListener(element, callback) {
@@ -245,63 +215,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }, { passive: false });
     }
   }
-  
-  // === THEME TOGGLE SYSTEM ===
-  const themeToggle = document.getElementById('theme-toggle');
-  const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-  const darkIcon = document.getElementById('theme-toggle-dark-icon');
-  const lightIcon = document.getElementById('theme-toggle-light-icon');
-  const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
-  const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
-
-  function updateThemeIcons() {
-    const isDark = document.documentElement.classList.contains('dark');
-    console.log('Theme Icons Update - Dark Mode:', isDark);
-    
-    if (isDark) {
-      darkIcon?.classList.add('hidden');
-      lightIcon?.classList.remove('hidden');
-      darkIconMobile?.classList.add('hidden');
-      lightIconMobile?.classList.remove('hidden');
-    } else {
-      darkIcon?.classList.remove('hidden');
-      lightIcon?.classList.add('hidden');
-      darkIconMobile?.classList.remove('hidden');
-      lightIconMobile?.classList.add('hidden');
-    }
-  }
-
-  function toggleTheme() {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      console.log('Light Theme Activated');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      console.log('Dark Theme Activated');
-    }
-    updateThemeIcons();
-  }
-
-  // Theme Toggle Event Listeners
-  if (themeToggle) {
-    addUniversalEventListener(themeToggle, toggleTheme);
-  }
-  
-  if (themeToggleMobile) {
-    addUniversalEventListener(themeToggleMobile, toggleTheme);
-  }
-
-  // Initial Theme Setup
-  const savedTheme = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  
-  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-    document.documentElement.classList.add('dark');
-  }
-  
-  updateThemeIcons();
   
   // === DESKTOP SERVICES DROPDOWN ===
   const desktopServicesBtn = document.getElementById('desktop-services-btn');
@@ -383,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
     addUniversalEventListener(mobileLeistungenToggle, toggleMobileServices);
   }
 
-  console.log('Header v1.7.8 - Alle Features initialisiert: Theme Toggle, LinkedIn, Dropdowns');
+  console.log('Header v1.7.9 - Navigation + LinkedIn initialisiert (PWA übernimmt Theme Toggle)');
 });
 </script>
 
@@ -395,6 +308,15 @@ document.addEventListener('DOMContentLoaded', function() {
     -webkit-user-select: none;
     user-select: none;
     touch-action: manipulation;
+  }
+  
+  /* Logo-Text Zentrierung */
+  .flex-shrink-0 {
+    flex-shrink: 0;
+  }
+  
+  .leading-tight {
+    line-height: 1.25;
   }
   
   /* Rotation Animation */
