@@ -1,12 +1,13 @@
 ---
-// Header.astro v1.7.2 - Mobile Dropdown & User Choice Icons Fixed + PFADE KORRIGIERT
-// CHANGELOG v1.7.2 PFAD-FIX:
-// - ✅ FIX: Alle Service-Links auf /leistung/ umgestellt
-// - ✅ FIX: Encoding-Probleme behoben (ä, ö, ü korrekt)
-// - ✅ KEEP: User Choice Toggle System beibehalten
-// - ✅ KEEP: Alle Navigation und Mobile Menu Features
+// Header.astro v1.7.3 - PWA-System Only (User Choice Toggle entfernt)
+// CHANGELOG v1.7.3:
+// - ✅ REMOVE: User Choice Toggle System komplett entfernt
+// - ✅ KEEP: PWA Detection System (extern) als einziges Toggle-System
+// - ✅ KEEP: Theme Toggle (Desktop + Mobile)
+// - ✅ KEEP: LinkedIn Links und Navigation
+// - ✅ KEEP: Korrekte /leistung/ Pfade
 
-console.log('Header v1.7.2 - Pfade korrigiert fuer /leistung/');
+console.log('Header v1.7.3 - PWA-System Only');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -73,21 +74,8 @@ console.log('Header v1.7.2 - Pfade korrigiert fuer /leistung/');
         </a>
       </nav>
 
-      <!-- Desktop Action Buttons -->
+      <!-- Desktop Action Buttons (OHNE User Choice Toggle) -->
       <div class="hidden lg:flex items-center space-x-3">
-        <!-- USER CHOICE TOGGLE - Desktop -->
-        <button 
-          id="user-choice-toggle" 
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Layout-Modus umschalten"
-          title="Layout umschalten: Auto/Mobile/Desktop"
-        >
-          <svg id="user-choice-icon" class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
-          <span id="user-choice-text" class="ml-1 text-xs text-gray-700 dark:text-gray-300">Auto</span>
-        </button>
-
         <!-- Theme Toggle Desktop -->
         <button 
           id="theme-toggle"
@@ -118,20 +106,8 @@ console.log('Header v1.7.2 - Pfade korrigiert fuer /leistung/');
         </a>
       </div>
 
-      <!-- Mobile Action Buttons -->
+      <!-- Mobile Action Buttons (OHNE User Choice Toggle) -->
       <div class="lg:hidden flex items-center space-x-3">
-        <!-- USER CHOICE TOGGLE - Mobile -->
-        <button 
-          id="user-choice-toggle-mobile" 
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Layout-Modus umschalten"
-          title="Layout umschalten"
-        >
-          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
-        </button>
-
         <!-- Theme Toggle Mobile -->
         <button 
           id="theme-toggle-mobile"
@@ -226,135 +202,9 @@ console.log('Header v1.7.2 - Pfade korrigiert fuer /leistung/');
   </div>
 </header>
 
-<style>
-  /* USER CHOICE TOGGLE SYSTEM CSS */
-  
-  /* Force Mobile Mode */
-  .force-mobile-mode .hidden.lg\:flex {
-    display: none !important;
-  }
-  
-  .force-mobile-mode .lg\:hidden {
-    display: flex !important;
-  }
-  
-  .force-mobile-mode .services-desktop-grid,
-  .force-mobile-mode .value-desktop-grid,
-  .force-mobile-mode .process-desktop-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 1rem !important;
-  }
-
-  /* Force Desktop Mode */
-  .force-desktop-mode .lg\:hidden {
-    display: none !important;
-  }
-  
-  .force-desktop-mode .hidden.lg\:flex {
-    display: flex !important;
-  }
-  
-.force-desktop-mode .services-desktop-grid,
-  .force-desktop-mode .value-desktop-grid,
-  .force-desktop-mode .process-desktop-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 2rem !important;
-  }
-
-  /* Rotation Animation */
-  .rotate-180 {
-    transform: rotate(180deg);
-  }
-  
-  .transition-transform {
-    transition: transform 0.3s ease;
-  }
-</style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Header v1.7.2 - Pfade korrigiert für /leistung/');
-  
-  // === USER CHOICE TOGGLE SYSTEM ===
-  const userChoiceToggle = document.getElementById('user-choice-toggle');
-  const userChoiceToggleMobile = document.getElementById('user-choice-toggle-mobile');
-  const userChoiceIcon = document.getElementById('user-choice-icon');
-  const userChoiceText = document.getElementById('user-choice-text');
-  
-  // User Choice Modi
-  const userChoiceModes = ['auto', 'mobile', 'desktop'];
-  let currentUserChoice = localStorage.getItem('userChoice') || 'auto';
-  
-  console.log('Current User Choice:', currentUserChoice);
-  
-  // User Choice Icons
-const userChoiceIcons = {
-  auto: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"/>',
-  mobile: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>',
-  desktop: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>'
-};
-  
-  function updateUserChoiceUI() {
-    if (userChoiceIcon && userChoiceText) {
-      userChoiceIcon.innerHTML = userChoiceIcons[currentUserChoice];
-      userChoiceText.textContent = currentUserChoice.charAt(0).toUpperCase() + currentUserChoice.slice(1);
-    }
-    console.log('User Choice UI updated:', currentUserChoice);
-  }
-  
-  function applyUserChoice() {
-    // Alle Classes entfernen
-    document.body.classList.remove('force-mobile-mode', 'force-desktop-mode');
-    
-    // User Choice anwenden
-    switch(currentUserChoice) {
-      case 'mobile':
-        document.body.classList.add('force-mobile-mode');
-        console.log('FORCE MOBILE MODE ACTIVATED');
-        break;
-      case 'desktop':
-        document.body.classList.add('force-desktop-mode');
-        console.log('FORCE DESKTOP MODE ACTIVATED');
-        break;
-      case 'auto':
-      default:
-        console.log('AUTO MODE ACTIVATED (Responsive)');
-        break;
-    }
-    
-    updateUserChoiceUI();
-  }
-  
-  function toggleUserChoice() {
-    const currentIndex = userChoiceModes.indexOf(currentUserChoice);
-    const nextIndex = (currentIndex + 1) % userChoiceModes.length;
-    currentUserChoice = userChoiceModes[nextIndex];
-    
-    localStorage.setItem('userChoice', currentUserChoice);
-    console.log('User Choice Toggle:', currentUserChoice);
-    
-    applyUserChoice();
-    
-    // Page Reload für sofortige Anwendung
-    setTimeout(() => {
-      console.log('Reloading page for User Choice application...');
-      window.location.reload();
-    }, 100);
-  }
-  
-  // Event Listeners für User Choice Toggle
-  if (userChoiceToggle) {
-    userChoiceToggle.addEventListener('click', toggleUserChoice);
-  }
-  
-  if (userChoiceToggleMobile) {
-    userChoiceToggleMobile.addEventListener('click', toggleUserChoice);
-  }
-  
-  // Initial User Choice anwenden
-  applyUserChoice();
+  console.log('Header v1.7.3 - PWA-System Only');
   
   // === MOBILE MENU TOGGLE ===
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
@@ -372,15 +222,15 @@ const userChoiceIcons = {
   const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
   const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
   
-if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-  mobileLeistungenToggle.addEventListener('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    mobileLeistungenMenu.classList.toggle('hidden');
-    mobileLeistungenArrow.classList.toggle('rotate-180');
-    console.log('Mobile services accordion toggled');
-  });
-}
+  if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
+    mobileLeistungenToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      mobileLeistungenMenu.classList.toggle('hidden');
+      mobileLeistungenArrow.classList.toggle('rotate-180');
+      console.log('Mobile services accordion toggled');
+    });
+  }
 
   // === THEME TOGGLE SYSTEM ===
   const themeToggle = document.getElementById('theme-toggle');
@@ -427,6 +277,17 @@ if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
   // Initial Theme Icons
   updateThemeIcons();
 
-  console.log('Header v1.7.2 - All systems initialized successfully!');
+  console.log('Header v1.7.3 - All systems initialized successfully!');
 });
 </script>
+
+<style>
+  /* Rotation Animation für Mobile Accordion */
+  .rotate-180 {
+    transform: rotate(180deg);
+  }
+  
+  .transition-transform {
+    transition: transform 0.3s ease;
+  }
+</style>
