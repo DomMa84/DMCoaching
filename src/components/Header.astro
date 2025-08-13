@@ -1,12 +1,12 @@
 ---
-// Header.astro v1.7.5 - Mobile Dropdown Fix
-// CHANGELOG v1.7.5:
-// - ✅ FIX: Mobile Services Accordion Click-Handler repariert
-// - ✅ FIX: Desktop Dropdown Click-Handler hinzugefügt (nicht nur hover)
-// - ✅ KEEP: Minimale Navigation (185 Zeilen Basis)
-// - ✅ KEEP: Korrekte /leistung/ Pfade
+// Header.astro v1.7.6 - iOS Touch Events Fix
+// CHANGELOG v1.7.6:
+// - ✅ FIX: iOS Safari Touch Events (touchstart + click)
+// - ✅ FIX: Cursor pointer für alle Touch-Targets
+// - ✅ FIX: Event-Handler Debugging für iPhone
+// - ✅ KEEP: Alle bestehenden Desktop/Mobile Features
 
-console.log('Header v1.7.5 - Mobile Dropdown funktional');
+console.log('Header v1.7.6 - iOS Touch Events Fix');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -40,7 +40,7 @@ console.log('Header v1.7.5 - Mobile Dropdown funktional');
         <div class="relative">
           <button 
             id="desktop-services-btn"
-            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors"
+            class="flex items-center text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors cursor-pointer"
           >
             Leistungen
             <svg id="desktop-services-arrow" class="ml-1 w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ console.log('Header v1.7.5 - Mobile Dropdown funktional');
       <div class="lg:hidden">
         <button 
           id="mobile-menu-toggle"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer touch-manipulation"
           aria-label="Toggle mobile menu"
         >
           <svg class="w-6 h-6 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,7 +103,7 @@ console.log('Header v1.7.5 - Mobile Dropdown funktional');
           <div class="border-b border-gray-200 dark:border-gray-700 pb-4 mb-4">
             <button 
               id="mobile-leistungen-toggle"
-              class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer touch-manipulation"
             >
               Leistungen
               <svg id="mobile-leistungen-arrow" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,7 +144,31 @@ console.log('Header v1.7.5 - Mobile Dropdown funktional');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Header v1.7.5 - Mobile Dropdown funktional');
+  console.log('Header v1.7.6 - iOS Touch Events Fix');
+  console.log('User Agent:', navigator.userAgent);
+  console.log('Is iOS:', /iPad|iPhone|iPod/.test(navigator.userAgent));
+  
+  // iOS-spezifische Touch Event Funktion
+  function addTouchEventListeners(element, callback) {
+    if (element) {
+      // Standard Click Event
+      element.addEventListener('click', callback, { passive: false });
+      
+      // iOS-spezifische Touch Events
+      element.addEventListener('touchstart', function(e) {
+        console.log('Touch start detected on:', element.id);
+        e.preventDefault();
+        callback(e);
+      }, { passive: false });
+      
+      // Fallback für Touch End
+      element.addEventListener('touchend', function(e) {
+        console.log('Touch end detected on:', element.id);
+        e.preventDefault();
+        callback(e);
+      }, { passive: false });
+    }
+  }
   
   // === DESKTOP SERVICES DROPDOWN ===
   const desktopServicesBtn = document.getElementById('desktop-services-btn');
@@ -154,27 +178,27 @@ document.addEventListener('DOMContentLoaded', function() {
   if (desktopServicesBtn && desktopServicesMenu && desktopServicesArrow) {
     let isDesktopDropdownOpen = false;
     
-    // Click Handler für Desktop Dropdown
-    desktopServicesBtn.addEventListener('click', function(e) {
+    function toggleDesktopDropdown(e) {
       e.preventDefault();
       e.stopPropagation();
       
       isDesktopDropdownOpen = !isDesktopDropdownOpen;
+      console.log('Desktop dropdown toggle:', isDesktopDropdownOpen);
       
       if (isDesktopDropdownOpen) {
         desktopServicesMenu.classList.remove('opacity-0', 'invisible');
         desktopServicesMenu.classList.add('opacity-100', 'visible');
         desktopServicesArrow.classList.add('rotate-180');
-        console.log('Desktop dropdown opened');
       } else {
         desktopServicesMenu.classList.add('opacity-0', 'invisible');
         desktopServicesMenu.classList.remove('opacity-100', 'visible');
         desktopServicesArrow.classList.remove('rotate-180');
-        console.log('Desktop dropdown closed');
       }
-    });
+    }
     
-    // Click outside to close desktop dropdown
+    addTouchEventListeners(desktopServicesBtn, toggleDesktopDropdown);
+    
+    // Click outside to close
     document.addEventListener('click', function(e) {
       if (!desktopServicesBtn.contains(e.target) && !desktopServicesMenu.contains(e.target)) {
         isDesktopDropdownOpen = false;
@@ -190,11 +214,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileMenu = document.getElementById('mobile-menu');
   
   if (mobileMenuToggle && mobileMenu) {
-    mobileMenuToggle.addEventListener('click', function(e) {
+    function toggleMobileMenu(e) {
       e.preventDefault();
       e.stopPropagation();
       
       const isHidden = mobileMenu.classList.contains('hidden');
+      console.log('Mobile menu toggle. Current hidden:', isHidden);
       
       if (isHidden) {
         mobileMenu.classList.remove('hidden');
@@ -203,7 +228,9 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenu.classList.add('hidden');
         console.log('Mobile menu closed');
       }
-    });
+    }
+    
+    addTouchEventListeners(mobileMenuToggle, toggleMobileMenu);
   }
 
   // === MOBILE SERVICES ACCORDION ===
@@ -211,12 +238,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
   const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
   
+  console.log('Mobile Leistungen Elements:');
+  console.log('Toggle:', mobileLeistungenToggle);
+  console.log('Menu:', mobileLeistungenMenu);
+  console.log('Arrow:', mobileLeistungenArrow);
+  
   if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-    mobileLeistungenToggle.addEventListener('click', function(e) {
+    function toggleMobileServices(e) {
       e.preventDefault();
       e.stopPropagation();
       
       const isHidden = mobileLeistungenMenu.classList.contains('hidden');
+      console.log('Mobile services toggle. Current hidden:', isHidden);
       
       if (isHidden) {
         mobileLeistungenMenu.classList.remove('hidden');
@@ -227,19 +260,27 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileLeistungenArrow.classList.remove('rotate-180');
         console.log('Mobile services accordion closed');
       }
-    });
+    }
+    
+    addTouchEventListeners(mobileLeistungenToggle, toggleMobileServices);
   } else {
-    console.log('FEHLER: Mobile services accordion Elemente nicht gefunden');
-    console.log('Toggle:', mobileLeistungenToggle);
-    console.log('Menu:', mobileLeistungenMenu);
-    console.log('Arrow:', mobileLeistungenArrow);
+    console.error('FEHLER: Mobile services accordion Elemente nicht gefunden!');
   }
 
-  console.log('Header v1.7.5 - Alle Dropdown-Systeme initialisiert');
+  console.log('Header v1.7.6 - Alle iOS Touch Events initialisiert');
 });
 </script>
 
 <style>
+  /* iOS-spezifische Touch Optimierungen */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
   /* Rotation Animation für Dropdowns */
   .rotate-180 {
     transform: rotate(180deg);
@@ -264,5 +305,17 @@ document.addEventListener('DOMContentLoaded', function() {
   
   .visible {
     visibility: visible;
+  }
+  
+  /* iOS Safari Button Fix */
+  button {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+  }
+  
+  button:focus {
+    outline: 2px solid #D2AE6C;
+    outline-offset: 2px;
   }
 </style>
