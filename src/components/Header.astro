@@ -364,13 +364,15 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileLeistungenMenu = document.getElementById('mobile-leistungen-menu');
   const mobileLeistungenArrow = document.getElementById('mobile-leistungen-arrow');
   
-  if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
-    mobileLeistungenToggle.addEventListener('click', function() {
-      mobileLeistungenMenu.classList.toggle('hidden');
-      mobileLeistungenArrow.classList.toggle('rotate-180');
-      console.log('📋 Mobile services accordion toggled');
-    });
-  }
+if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
+  mobileLeistungenToggle.addEventListener('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    mobileLeistungenMenu.classList.toggle('hidden');
+    mobileLeistungenArrow.classList.toggle('rotate-180');
+    console.log('📋 Mobile services accordion toggled');
+  });
+}
 
   // === THEME TOGGLE SYSTEM ===
   const themeToggle = document.getElementById('theme-toggle');
