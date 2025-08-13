@@ -1,13 +1,12 @@
 ---
-// Header.astro v1.7.2 - Mobile Dropdown & User Choice Icons Fixed(basiert auf v1.5.2)
-// CHANGELOG v1.7.2:
-// - 🔧 BASE: Header v1.5.2 als saubere Grundlage 
-// - ✅ ADD: User Choice Toggle Button (OHNE Duplikate)
-// - ✅ KEEP: Bestehende Theme Toggle Logik unverändert
+// Header.astro v1.7.2 - Mobile Dropdown & User Choice Icons Fixed + PFADE KORRIGIERT
+// CHANGELOG v1.7.2 PFAD-FIX:
+// - ✅ FIX: Alle Service-Links auf /leistung/ umgestellt
+// - ✅ FIX: Encoding-Probleme behoben (ä, ö, ü korrekt)
+// - ✅ KEEP: User Choice Toggle System beibehalten
 // - ✅ KEEP: Alle Navigation und Mobile Menu Features
-// - 🔧 FIX: Nur EIN User Choice Toggle pro Bereich (Desktop/Mobile)
 
-console.log('🎨 Header v1.7.2 - Mobile Dropdown & User Choice Icons Fixed');
+console.log('Header v1.7.2 - Pfade korrigiert fuer /leistung/');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -47,16 +46,16 @@ console.log('🎨 Header v1.7.2 - Mobile Dropdown & User Choice Icons Fixed');
           </button>
           <div class="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
             <div class="py-2">
-              <a href="/strategische-unternehmensentwicklung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+              <a href="/leistung/strategische-unternehmensentwicklung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
                 Strategische Unternehmensentwicklung
               </a>
-              <a href="/vertriebsoptimierung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+              <a href="/leistung/vertriebsoptimierung" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
                 Vertriebsoptimierung
               </a>
-              <a href="/marketing-strategien" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+              <a href="/leistung/marketing-strategien" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
                 Marketing Strategien
               </a>
-              <a href="/wertanalyse" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
+              <a href="/leistung/wertanalyse" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-gold">
                 Wertanalyse
               </a>
             </div>
@@ -197,16 +196,16 @@ console.log('🎨 Header v1.7.2 - Mobile Dropdown & User Choice Icons Fixed');
             </button>
             
             <div id="mobile-leistungen-menu" class="hidden mt-2 ml-4 space-y-2">
-              <a href="/strategische-unternehmensentwicklung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+              <a href="/leistung/strategische-unternehmensentwicklung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
                 Strategische Unternehmensentwicklung
               </a>
-              <a href="/vertriebsoptimierung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+              <a href="/leistung/vertriebsoptimierung" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
                 Vertriebsoptimierung
               </a>
-              <a href="/marketing-strategien" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+              <a href="/leistung/marketing-strategien" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
                 Marketing Strategien
               </a>
-              <a href="/wertanalyse" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
+              <a href="/leistung/wertanalyse" class="block px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-gold transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-800">
                 Wertanalyse
               </a>
             </div>
@@ -276,7 +275,7 @@ console.log('🎨 Header v1.7.2 - Mobile Dropdown & User Choice Icons Fixed');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('🎨 Header v1.7.1 - SAUBERE User Choice Integration');
+  console.log('Header v1.7.2 - Pfade korrigiert für /leistung/');
   
   // === USER CHOICE TOGGLE SYSTEM ===
   const userChoiceToggle = document.getElementById('user-choice-toggle');
@@ -288,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const userChoiceModes = ['auto', 'mobile', 'desktop'];
   let currentUserChoice = localStorage.getItem('userChoice') || 'auto';
   
-  console.log('🔧 Current User Choice:', currentUserChoice);
+  console.log('Current User Choice:', currentUserChoice);
   
   // User Choice Icons
 const userChoiceIcons = {
@@ -302,7 +301,7 @@ const userChoiceIcons = {
       userChoiceIcon.innerHTML = userChoiceIcons[currentUserChoice];
       userChoiceText.textContent = currentUserChoice.charAt(0).toUpperCase() + currentUserChoice.slice(1);
     }
-    console.log('🎯 User Choice UI updated:', currentUserChoice);
+    console.log('User Choice UI updated:', currentUserChoice);
   }
   
   function applyUserChoice() {
@@ -313,15 +312,15 @@ const userChoiceIcons = {
     switch(currentUserChoice) {
       case 'mobile':
         document.body.classList.add('force-mobile-mode');
-        console.log('📱 FORCE MOBILE MODE ACTIVATED');
+        console.log('FORCE MOBILE MODE ACTIVATED');
         break;
       case 'desktop':
         document.body.classList.add('force-desktop-mode');
-        console.log('🖥️ FORCE DESKTOP MODE ACTIVATED');
+        console.log('FORCE DESKTOP MODE ACTIVATED');
         break;
       case 'auto':
       default:
-        console.log('🔄 AUTO MODE ACTIVATED (Responsive)');
+        console.log('AUTO MODE ACTIVATED (Responsive)');
         break;
     }
     
@@ -334,13 +333,13 @@ const userChoiceIcons = {
     currentUserChoice = userChoiceModes[nextIndex];
     
     localStorage.setItem('userChoice', currentUserChoice);
-    console.log('🔄 User Choice Toggle:', currentUserChoice);
+    console.log('User Choice Toggle:', currentUserChoice);
     
     applyUserChoice();
     
     // Page Reload für sofortige Anwendung
     setTimeout(() => {
-      console.log('🔄 Reloading page for User Choice application...');
+      console.log('Reloading page for User Choice application...');
       window.location.reload();
     }, 100);
   }
@@ -364,7 +363,7 @@ const userChoiceIcons = {
   if (mobileMenuToggle && mobileMenu) {
     mobileMenuToggle.addEventListener('click', function() {
       mobileMenu.classList.toggle('hidden');
-      console.log('📱 Mobile menu toggled');
+      console.log('Mobile menu toggled');
     });
   }
 
@@ -379,7 +378,7 @@ if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
     e.stopPropagation();
     mobileLeistungenMenu.classList.toggle('hidden');
     mobileLeistungenArrow.classList.toggle('rotate-180');
-    console.log('📋 Mobile services accordion toggled');
+    console.log('Mobile services accordion toggled');
   });
 }
 
@@ -393,7 +392,7 @@ if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
 
   function updateThemeIcons() {
     const isDark = document.documentElement.classList.contains('dark');
-    console.log('🌙 Theme Icons Update - Dark Mode:', isDark);
+    console.log('Theme Icons Update - Dark Mode:', isDark);
     
     if (isDark) {
       darkIcon?.classList.add('hidden');
@@ -412,11 +411,11 @@ if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
     if (document.documentElement.classList.contains('dark')) {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
-      console.log('☀️ Light Theme Activated');
+      console.log('Light Theme Activated');
     } else {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
-      console.log('🌙 Dark Theme Activated');
+      console.log('Dark Theme Activated');
     }
     updateThemeIcons();
   }
@@ -428,6 +427,6 @@ if (mobileLeistungenToggle && mobileLeistungenMenu && mobileLeistungenArrow) {
   // Initial Theme Icons
   updateThemeIcons();
 
-  console.log('✅ Header v1.7.1 - All systems initialized successfully!');
+  console.log('Header v1.7.2 - All systems initialized successfully!');
 });
 </script>
