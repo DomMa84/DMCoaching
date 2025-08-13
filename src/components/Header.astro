@@ -1,13 +1,12 @@
 ---
-// Header.astro v1.7.3 - PWA-System Only (User Choice Toggle entfernt)
-// CHANGELOG v1.7.3:
-// - ✅ REMOVE: User Choice Toggle System komplett entfernt
-// - ✅ KEEP: PWA Detection System (extern) als einziges Toggle-System
-// - ✅ KEEP: Theme Toggle (Desktop + Mobile)
-// - ✅ KEEP: LinkedIn Links und Navigation
+// Header.astro v1.7.4 - Navigation Fix + Doppelte Toggle Problem gelöst
+// CHANGELOG v1.7.4:
+// - ✅ FIX: Navigation ohne # (kontakt, uber-mich)
+// - ✅ FIX: Theme + LinkedIn Buttons komplett entfernt (PWA übernimmt alles)
+// - ✅ KEEP: Nur Navigation und Mobile Menu
 // - ✅ KEEP: Korrekte /leistung/ Pfade
 
-console.log('Header v1.7.3 - PWA-System Only');
+console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
 ---
 
 <header class="bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 fixed w-full top-0 z-50 transition-all duration-300">
@@ -66,78 +65,16 @@ console.log('Header v1.7.3 - PWA-System Only');
         <a href="/blog" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
           Blog
         </a>
-        <a href="#uber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        <a href="/ueber-mich" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
           Über mich
         </a>
-        <a href="#kontakt" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
+        <a href="/kontakt" class="text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors">
           Kontakt
         </a>
       </nav>
 
-      <!-- Desktop Action Buttons (OHNE User Choice Toggle) -->
-      <div class="hidden lg:flex items-center space-x-3">
-        <!-- Theme Toggle Desktop -->
-        <button 
-          id="theme-toggle"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <!-- SONNE für Light Mode -->
-          <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-          </svg>
-          <!-- MOND für Dark Mode -->
-          <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-          </svg>
-        </button>
-
-        <!-- LinkedIn Link -->
-        <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Dominik Maier LinkedIn-Profil öffnen"
-        >
-          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
-          </svg>
-        </a>
-      </div>
-
-      <!-- Mobile Action Buttons (OHNE User Choice Toggle) -->
-      <div class="lg:hidden flex items-center space-x-3">
-        <!-- Theme Toggle Mobile -->
-        <button 
-          id="theme-toggle-mobile"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Toggle dark mode"
-        >
-          <!-- SONNE für Light Mode -->
-          <svg id="theme-toggle-light-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
-          </svg>
-          <!-- MOND für Dark Mode -->
-          <svg id="theme-toggle-dark-icon-mobile" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-          </svg>
-        </button>
-
-        <!-- LinkedIn Link Mobile -->
-        <a 
-          href="https://www.linkedin.com/in/dominik-maier-22144710a/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-          aria-label="Dominik Maier LinkedIn-Profil öffnen"
-        >
-          <svg class="w-5 h-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/>
-          </svg>
-        </a>
-
-        <!-- Mobile Menu Button -->
+      <!-- Mobile Menu Button (NUR Menu Button) -->
+      <div class="lg:hidden">
         <button 
           id="mobile-menu-toggle"
           class="p-2 rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
@@ -190,10 +127,10 @@ console.log('Header v1.7.3 - PWA-System Only');
           <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             Blog
           </a>
-          <a href="#uber-mich" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+          <a href="/ueber-mich" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             Über mich
           </a>
-          <a href="#kontakt" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
+          <a href="/kontakt" class="block px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-gold dark:hover:text-primary-gold transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
             Kontakt
           </a>
         </nav>
@@ -204,7 +141,7 @@ console.log('Header v1.7.3 - PWA-System Only');
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('Header v1.7.3 - PWA-System Only');
+  console.log('Header v1.7.4 - Minimal Version ohne Toggle-Duplikate');
   
   // === MOBILE MENU TOGGLE ===
   const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
@@ -232,52 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // === THEME TOGGLE SYSTEM ===
-  const themeToggle = document.getElementById('theme-toggle');
-  const themeToggleMobile = document.getElementById('theme-toggle-mobile');
-  const darkIcon = document.getElementById('theme-toggle-dark-icon');
-  const lightIcon = document.getElementById('theme-toggle-light-icon');
-  const darkIconMobile = document.getElementById('theme-toggle-dark-icon-mobile');
-  const lightIconMobile = document.getElementById('theme-toggle-light-icon-mobile');
-
-  function updateThemeIcons() {
-    const isDark = document.documentElement.classList.contains('dark');
-    console.log('Theme Icons Update - Dark Mode:', isDark);
-    
-    if (isDark) {
-      darkIcon?.classList.add('hidden');
-      lightIcon?.classList.remove('hidden');
-      darkIconMobile?.classList.add('hidden');
-      lightIconMobile?.classList.remove('hidden');
-    } else {
-      darkIcon?.classList.remove('hidden');
-      lightIcon?.classList.add('hidden');
-      darkIconMobile?.classList.remove('hidden');
-      lightIconMobile?.classList.add('hidden');
-    }
-  }
-
-  function toggleTheme() {
-    if (document.documentElement.classList.contains('dark')) {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      console.log('Light Theme Activated');
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-      console.log('Dark Theme Activated');
-    }
-    updateThemeIcons();
-  }
-
-  // Theme Toggle Event Listeners
-  themeToggle?.addEventListener('click', toggleTheme);
-  themeToggleMobile?.addEventListener('click', toggleTheme);
-
-  // Initial Theme Icons
-  updateThemeIcons();
-
-  console.log('Header v1.7.3 - All systems initialized successfully!');
+  console.log('Header v1.7.4 - Basic navigation initialized successfully!');
 });
 </script>
 
