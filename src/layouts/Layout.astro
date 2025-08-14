@@ -1,11 +1,10 @@
 ---
-// Layout.astro v1.4.0 - CSS-Only Grid System (Force Mode Layout ohne JavaScript)
-// CHANGELOG v1.4.0:
-// - ✅ FIX: JavaScript Force System komplett entfernt
-// - ✅ FIX: Saubere CSS Media Queries für Desktop Grid (1200px+)
-// - ✅ KEEP: Force Mode Layout beibehalten (2-Spalten, max-width 1200px)
-// - ✅ KEEP: Header v1.9.1 Kompatibilität (keine Navigation-Overrides)
-// - ✅ KEEP: PWA Detection + Service Worker + Enhanced Statistics
+// Layout.astro v1.4.1 - Responsive Classes repariert für Header v1.9.5
+// CHANGELOG v1.4.1:
+// - ✅ FIX: Fehlende responsive CSS-Klassen hinzugefügt (lg:hidden, hidden lg:flex)
+// - ✅ FIX: sm:block, md:block für vollständige Breakpoint-Unterstützung
+// - ✅ KEEP: Kompletter v1.4.0 Code unverändert
+// - ✅ KEEP: Force Mode Layout + PWA Detection + Service Worker
 
 export interface Props {
   title: string;
@@ -54,7 +53,7 @@ const { title, description } = Astro.props;
     <!-- Vereinfachte PWA Detection (nur für Logging) -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('🎯 Layout v1.4.0 - CSS-Only Grid System');
+        console.log('🎯 Layout v1.4.1 - Responsive Classes repariert');
         
         // PWA Detection (nur für Logging)
         const isPWA = window.matchMedia('(display-mode: standalone)').matches;
@@ -64,6 +63,7 @@ const { title, description } = Astro.props;
         console.log(`💻 Screen: ${screenInfo}`);
         console.log('✅ Grid System: Pure CSS Media Queries');
         console.log('🎨 Layout: Force Mode Design (2-Spalten ab 1200px)');
+        console.log('🔧 FIX: Responsive Classes für Header hinzugefügt');
         
         // AOS Safe Initialization (wie v1.2.8)
         if (typeof AOS !== 'undefined') {
@@ -474,6 +474,7 @@ const { title, description } = Astro.props;
   }
   
   @media (min-width: 1024px) {
+    .lg\:text-2xl { font-size: 1.5rem; line-height: 2rem; }
     .lg\:text-7xl { font-size: 4.5rem; line-height: 1; }
   }
 
@@ -492,6 +493,7 @@ const { title, description } = Astro.props;
   .text-black { color: #000000; }
   .text-gray-300 { color: #d1d5db; }
   .text-gray-600 { color: #6b7280; }
+  .text-gray-700 { color: #374151; }
   .text-gray-800 { color: #1f2937; }
   .text-gray-900 { color: #111827; }
   
@@ -532,6 +534,7 @@ const { title, description } = Astro.props;
   .dark .dark\:border-gray-700 { border-color: #374151; }
   
   .dark .hover\:text-primary-gold:hover { color: #D2AE6C; }
+  .dark .dark\:hover\:text-primary-gold:hover { color: #D2AE6C; }
   .dark .hover\:border-primary-gold:hover { border-color: #D2AE6C; }
 
   /* ===== TRANSPARENCY & GRADIENTS ===== */
@@ -577,14 +580,34 @@ const { title, description } = Astro.props;
   .z-10 { z-index: 10; }
   .z-50 { z-index: 50; }
 
-  /* ===== DISPLAY ===== */
+  /* ===== DISPLAY & RESPONSIVE DISPLAY (FIX FÜR HEADER) ===== */
   .block { display: block; }
   .inline-block { display: inline-block; }
   .hidden { display: none; }
   
+  /* Small Screens (640px+) */
+  @media (min-width: 640px) {
+    .sm\:block { display: block; }
+    .sm\:flex { display: flex; }
+    .sm\:hidden { display: none; }
+  }
+  
+  /* Medium Screens (768px+) */
+  @media (min-width: 768px) {
+    .md\:block { display: block; }
+    .md\:flex { display: flex; }
+    .md\:hidden { display: none; }
+  }
+  
+  /* Large Screens (1024px+) - KRITISCH FÜR HEADER */
   @media (min-width: 1024px) {
     .lg\:block { display: block; }
     .lg\:flex { display: flex; }
+    .lg\:hidden { display: none; }
+    
+    /* Kombinierte responsive Classes */
+    .hidden.lg\:block { display: block; }
+    .hidden.lg\:flex { display: flex; }
   }
 
   /* ===== SIZING ===== */
@@ -742,6 +765,14 @@ const { title, description } = Astro.props;
     color: white;
     transform: translateY(-2px);
   }
+
+  /* ===== HOVER EFFECTS ===== */
+  .hover\:text-primary-gold:hover { color: #D2AE6C; }
+  .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+  .hover\:bg-gray-100:hover { background-color: #f3f4f6; }
+  
+  .dark .hover\:bg-gray-700:hover { background-color: #374151; }
+  .dark .hover\:bg-gray-800:hover { background-color: #1f2937; }
 
   /* ===== UTILITY CLASSES ===== */
   .object-cover { object-fit: cover; }
