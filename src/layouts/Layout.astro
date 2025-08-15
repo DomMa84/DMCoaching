@@ -1,14 +1,13 @@
 ---
-// Layout.astro v1.4.2 - CSS Cleanup & Critical Fixes
-// CHANGELOG v1.4.2:
-// - ✅ CSS CLEANUP: ~40% Reduktion durch Entfernung von Redundanzen
-// - ✅ STRUKTUR: Logische CSS-Gruppierung und bessere Lesbarkeit
-// - ✅ FARBEN: Einheitliches CSS Custom Properties System
-// - ✅ SAFARI FIX: font-display: swap für Google Fonts
-// - ✅ COOKIE CONSENT: Integration hinzugefügt
-// - ✅ KEEP: Alle bestehenden Funktionen unverändert
-// - ✅ KEEP: Force Mode Layout + PWA Detection + Service Worker
-// - ✅ KEEP: Responsive Classes für Header v1.9.5
+// Layout.astro v1.4.3 - Safari Fix + Kontrast-Optimierung
+// CHANGELOG v1.4.3:
+// - ✅ SAFARI FIX: Content-Rendering ohne JavaScript-Abhängigkeit
+// - ✅ SAFARI FIX: AOS Safe Loading mit CSS-Fallbacks
+// - ✅ SAFARI FIX: Immediate Content Display
+// - ✅ KONTRAST FIX: Hero-Buttons für Light/Dark Mode optimiert
+// - ✅ KONTRAST FIX: Verbesserte Goldfarben-Definitionen
+// - ✅ KONTRAST FIX: Stärkere Schatten und Hintergründe
+// - ✅ KEEP: Alle bestehenden Funktionen und CSS-Cleanup von v1.4.2
 
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -42,16 +41,36 @@ const { title, description } = Astro.props;
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#D2AE6C">
     
-    <!-- ✅ SAFARI FIX: Google Fonts mit font-display: swap -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- ✅ SAFARI FIX: Google Fonts mit font-display: swap + preload -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
     <title>{title}</title>
     
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+    <!-- ✅ SAFARI FIX: AOS mit CSS-Fallbacks -->
+    <style>
+      /* CSS-Fallback für Safari - Content sofort sichtbar */
+      [data-aos] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+      
+      /* Wird von AOS überschrieben wenn geladen */
+      .aos-init[data-aos] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      
+      .aos-animate {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
     
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- AOS Animation Library - Non-blocking -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"></noscript>
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white font-sans antialiased">
     <slot />
@@ -59,10 +78,13 @@ const { title, description } = Astro.props;
     <!-- ✅ COOKIE CONSENT Integration -->
     <CookieConsent />
     
-    <!-- Vereinfachte PWA Detection (nur für Logging) -->
+    <!-- ✅ SAFARI FIX: Enhanced Content Loading -->
     <script>
+      // Immediate content display - Safari Fix
+      document.documentElement.style.setProperty('--content-loaded', '1');
+      
       document.addEventListener('DOMContentLoaded', function() {
-        console.log('🎯 Layout v1.4.2 - CSS Cleanup & Critical Fixes');
+        console.log('🎯 Layout v1.4.3 - Safari Fix + Kontrast-Optimierung');
         
         // PWA Detection (nur für Logging)
         const isPWA = window.matchMedia('(display-mode: standalone)').matches;
@@ -73,27 +95,82 @@ const { title, description } = Astro.props;
         console.log('✅ Grid System: Pure CSS Media Queries');
         console.log('🎨 Layout: Standard Responsive Design');
         console.log('🧹 CSS: Cleaned up & optimized');
+        console.log('🦘 Safari: Fixed content loading');
+        console.log('🌓 Kontrast: Hero-Buttons optimiert');
         
-        // AOS Safe Initialization
-        if (typeof AOS !== 'undefined') {
-          AOS.init({
-            duration: 1000,
-            easing: 'ease-in-out',
-            once: true,
-            offset: 100
-          });
-        } else {
-          console.warn('AOS library not loaded, skipping animation initialization');
-        }
+        // Dark mode logic - immediate
+        const isDark = localStorage.getItem('theme') === 'dark' || 
+                      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
         
-        // Dark mode logic
-        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (isDark) {
           document.documentElement.classList.add('dark');
         } else {
           document.documentElement.classList.remove('dark');
         }
       });
     </script>
+
+    <!-- ✅ SAFARI FIX: AOS Enhanced Loading -->
+    <script>
+      // AOS Loading mit Safari-Optimierung
+      function initAOS() {
+        if (typeof AOS !== 'undefined') {
+          // Entferne CSS-Fallback
+          document.querySelectorAll('[data-aos]').forEach(el => {
+            el.style.opacity = '';
+            el.style.transform = '';
+            el.style.transition = '';
+          });
+          
+          AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 50,
+            delay: 0,
+            disable: false,
+            startEvent: 'DOMContentLoaded',
+            initClassName: 'aos-init',
+            animatedClassName: 'aos-animate',
+            useClassNames: false,
+            disableMutationObserver: false,
+            debounceDelay: 50,
+            throttleDelay: 99
+          });
+          
+          console.log('🎬 AOS initialized successfully');
+        } else {
+          console.log('📱 AOS not loaded - using CSS fallbacks (Safari-friendly)');
+        }
+      }
+
+      // Try immediate initialization
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAOS);
+      } else {
+        initAOS();
+      }
+
+      // Fallback for slow connections
+      setTimeout(initAOS, 1000);
+    </script>
+
+    <!-- AOS Script - Async Loading -->
+    <script async>
+      (function() {
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.onload = function() {
+          if (typeof AOS !== 'undefined') {
+            initAOS();
+          }
+        };
+        document.head.appendChild(script);
+      })();
+    </script>
+    
+    <!-- Alpine.js - Non-blocking -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Service Worker Registration -->
     <script>
@@ -112,15 +189,28 @@ const { title, description } = Astro.props;
 </html>
 
 <style is:global>
-  /* ===== CSS CUSTOM PROPERTIES (Einheitliches Farbsystem) ===== */
+  /* ===== CSS CUSTOM PROPERTIES (Erweitert für Kontrast-Fix) ===== */
   :root {
     --primary-gold: #D2AE6C;
     --primary-gold-dark: #C5A05C;
     --primary-gold-light: #E2C084;
+    --primary-gold-contrast: #B8941A; /* Dunklere Variante für besseren Kontrast */
+    
+    /* ✅ KONTRAST FIX: Optimierte Goldfarben für Light Mode */
     --primary-gold-opacity-5: rgba(210, 174, 108, 0.05);
     --primary-gold-opacity-15: rgba(210, 174, 108, 0.15);
     --primary-gold-opacity-25: rgba(210, 174, 108, 0.25);
     --primary-gold-opacity-30: rgba(210, 174, 108, 0.3);
+    --primary-gold-opacity-40: rgba(210, 174, 108, 0.4);
+    --primary-gold-opacity-60: rgba(210, 174, 108, 0.6);
+    --primary-gold-opacity-80: rgba(210, 174, 108, 0.8);
+    --primary-gold-opacity-90: rgba(210, 174, 108, 0.9);
+    
+    /* ✅ KONTRAST FIX: Button-spezifische Farben */
+    --hero-button-bg: rgba(210, 174, 108, 0.9);
+    --hero-button-bg-hover: rgba(197, 160, 92, 0.95);
+    --hero-button-shadow: rgba(210, 174, 108, 0.4);
+    --hero-button-border: rgba(255, 255, 255, 0.3);
     
     --gray-50: #f9fafb;
     --gray-100: #f3f4f6;
@@ -140,6 +230,20 @@ const { title, description } = Astro.props;
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
     --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* ✅ KONTRAST FIX: Dark Mode Optimierungen */
+  .dark {
+    /* Dark Mode Button-Farben */
+    --hero-button-bg: rgba(210, 174, 108, 0.95);
+    --hero-button-bg-hover: rgba(226, 192, 132, 1);
+    --hero-button-shadow: rgba(210, 174, 108, 0.6);
+    --hero-button-border: rgba(0, 0, 0, 0.3);
+    
+    /* Verbesserte Goldfarben für Dark Mode */
+    --primary-gold: #E2C084;
+    --primary-gold-dark: #D2AE6C;
+    --primary-gold-contrast: #F0D1A0;
   }
 
   /* ===== RESET & BASE STYLES ===== */
@@ -176,6 +280,8 @@ const { title, description } = Astro.props;
     scroll-padding-top: 80px;
     color-scheme: light dark;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    /* ✅ SAFARI FIX: Force font loading */
+    font-display: swap;
   }
   
   body {
@@ -190,6 +296,14 @@ const { title, description } = Astro.props;
     -moz-osx-font-smoothing: grayscale;
     font-size: 16px;
     text-rendering: optimizeLegibility;
+    /* ✅ SAFARI FIX: Immediate visibility */
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ✅ SAFARI FIX: Prevent content flash */
+  body:not(.loaded) {
+    opacity: 1 !important;
   }
 
   /* ===== LAYOUT SYSTEM ===== */
@@ -297,6 +411,58 @@ const { title, description } = Astro.props;
   .hero-text-white p {
     color: white;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ✅ KONTRAST FIX: Hero-Buttons mit verbessertem Kontrast */
+  .hero-button {
+    background: var(--hero-button-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid var(--hero-button-border);
+    color: var(--white);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    box-shadow: 0 8px 20px var(--hero-button-shadow);
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .hero-button:hover {
+    background: var(--hero-button-bg-hover);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px var(--hero-button-shadow);
+    color: var(--white);
+  }
+
+  .hero-button:hover::before {
+    left: 100%;
+  }
+
+  /* Dark Mode Hero-Button Anpassungen */
+  .dark .hero-button {
+    color: var(--gray-900);
+    text-shadow: none;
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .dark .hero-button:hover {
+    color: var(--gray-900);
+    border-color: rgba(0, 0, 0, 0.3);
   }
 
   .value-tile-improved {
@@ -607,6 +773,7 @@ const { title, description } = Astro.props;
 
   /* ===== BACKDROP & EFFECTS ===== */
   .backdrop-blur-sm { backdrop-filter: blur(4px); }
+  .backdrop-blur-md { backdrop-filter: blur(12px); }
   .hover\:opacity-80:hover { opacity: 0.8; }
   .opacity-10 { opacity: 0.1; }
 
@@ -633,12 +800,18 @@ const { title, description } = Astro.props;
     50% { opacity: 1; }
   }
 
+  /* ✅ SAFARI FIX: Animation-Optimierung */
+  @keyframes hero-button-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
   .animate-subtle-zoom { animation: subtle-zoom 20s ease-in-out infinite; }
   .animate-float-refined { animation: float-refined 6s ease-in-out infinite; }
   .animate-draw-circle { animation: draw-circle 2s ease-out forwards; }
   .animate-pulse-line { animation: pulse-line 3s ease-in-out infinite; }
 
-  /* ===== BUTTON STYLES (Mit Custom Properties) ===== */
+  /* ===== BUTTON STYLES (Mit Custom Properties + Kontrast-Fix) ===== */
   .btn-primary {
     background: linear-gradient(135deg, var(--primary-gold) 0%, var(--primary-gold-dark) 100%);
     color: white;
@@ -782,6 +955,15 @@ const { title, description } = Astro.props;
     .animate-pulse-line {
       animation: none !important;
     }
+    
+    /* ✅ SAFARI FIX: Disable hero button effects for reduced motion */
+    .hero-button {
+      transition: none !important;
+    }
+    
+    .hero-button::before {
+      display: none !important;
+    }
   }
 
   .sr-only {
@@ -810,10 +992,57 @@ const { title, description } = Astro.props;
       max-width: none !important;
       padding: 0 !important;
     }
+    
+    .hero-button {
+      background: #D2AE6C !important;
+      color: white !important;
+      border: 1px solid #D2AE6C !important;
+    }
   }
 
   /* ===== PERFORMANCE OPTIMIZATIONS ===== */
   .will-change-transform { will-change: transform; }
   .will-change-opacity { will-change: opacity; }
   .gpu-acceleration { transform: translateZ(0); }
+
+  /* ===== SAFARI SPECIFIC FIXES ===== */
+  @supports (-webkit-appearance: none) {
+    /* Safari-spezifische Styles */
+    .hero-button {
+      -webkit-backdrop-filter: blur(10px);
+      -webkit-transform: translateZ(0);
+    }
+    
+    body {
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+    }
+  }
+
+  /* ===== KONTRAST-UTILITIES für verschiedene Hintergründe ===== */
+  .contrast-enhanced {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .bg-overlay-dark {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 100%);
+  }
+
+  .bg-overlay-light {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.7) 100%);
+  }
+
+  /* ✅ KONTRAST FIX: Spezielle Klassen für Hero-Section */
+  .hero-overlay {
+    background: linear-gradient(135deg, 
+      rgba(0, 0, 0, 0.3) 0%, 
+      rgba(0, 0, 0, 0.1) 50%, 
+      rgba(0, 0, 0, 0.2) 100%);
+  }
+
+  .hero-text-contrast {
+    text-shadow: 
+      0 1px 2px rgba(0, 0, 0, 0.5),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+  }
 </style>
