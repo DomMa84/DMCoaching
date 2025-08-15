@@ -1,11 +1,10 @@
 ---
-// Index.astro v1.3.12 - KOMPLETT KORREKTE Version
-// CHANGELOG v1.3.12:
-// - ✅ FIX: Alle Value Cards vollständig und korrekt platziert
-// - ✅ FIX: Komplette Services-Sektion korrekt
-// - ✅ FIX: Alle Sektionen in korrekter Reihenfolge
-// - ✅ VERIFIED: Kein abgeschnittener Code mehr
-// - ✅ FIX: OptimizedImage eingefügt und HEro Bild geändert
+// Index.astro v1.3.13 - Hero-Buttons mit verbessertem Kontrast
+// CHANGELOG v1.3.13:
+// - ✅ FIX: Hero-Buttons verwenden neue .hero-button Klasse
+// - ✅ FIX: Verbesserte Lesbarkeit der 3 Buttons im Hero-Bereich
+// - ✅ FIX: Optimierter Kontrast für Light/Dark Mode
+// - ✅ KEEP: Alle anderen Inhalte unverändert von v1.3.12
 
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
@@ -13,7 +12,7 @@ import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
 import OptimizedImage from '../components/OptimizedImage.astro';
 
-console.log('🎨 Index v1.3.11 - KOMPLETT KORREKTE Version');
+console.log('🎨 Index v1.3.13 - Hero-Buttons mit verbessertem Kontrast');
 ---
 
 <Layout 
@@ -54,14 +53,15 @@ console.log('🎨 Index v1.3.11 - KOMPLETT KORREKTE Version');
           <p class="text-xl md:text-2xl mb-8 md:mb-10 leading-relaxed">
             Wir helfen Ihnen ihre Prozesse und Produkte im Unternehmen weiterzuentwickeln und wachsen zu lassen – mit einem Fokus auf Ihren Kunden!
           </p>
+          <!-- ✅ NEUE HERO-BUTTONS mit verbessertem Kontrast -->
           <div class="flex flex-wrap gap-3 mb-6">
-            <span class="bg-primary-gold-30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold-50">
+            <span class="hero-button text-sm">
               ✓ 10-50% Kostenreduzierung
             </span>
-            <span class="bg-primary-gold-30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold-50">
+            <span class="hero-button text-sm">
               ✓ Strategische Beratung
             </span>
-            <span class="bg-primary-gold-30 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold border border-primary-gold-50">
+            <span class="hero-button text-sm">
               ✓ Value Management
             </span>
           </div>
