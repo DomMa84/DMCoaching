@@ -1,10 +1,10 @@
 ---
-// Index.astro v1.3.13 - Hero-Buttons mit verbessertem Kontrast
-// CHANGELOG v1.3.13:
-// - ✅ FIX: Hero-Buttons verwenden neue .hero-button Klasse
-// - ✅ FIX: Verbesserte Lesbarkeit der 3 Buttons im Hero-Bereich
-// - ✅ FIX: Optimierter Kontrast für Light/Dark Mode
-// - ✅ KEEP: Alle anderen Inhalte unverändert von v1.3.12
+// Index.astro v1.3.14 - Glasmorphism Hero-Text implementiert
+// CHANGELOG v1.3.14:
+// - ✅ GLASMORPHISM: Hero-Text mit .hero-text-glassmorphism Klasse
+// - ✅ FIX: Weißes Milchglas um Hero-Text für besseren Kontrast
+// - ✅ KEEP: Hero-Buttons mit verbessertem Kontrast (ohne Rand)
+// - ✅ KEEP: Alle anderen Inhalte unverändert von v1.3.13
 
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
@@ -12,7 +12,7 @@ import Footer from '../components/Footer.astro';
 import ContactForm from '../components/ContactForm.astro';
 import OptimizedImage from '../components/OptimizedImage.astro';
 
-console.log('🎨 Index v1.3.13 - Hero-Buttons mit verbessertem Kontrast');
+console.log('🎨 Index v1.3.14 - Glasmorphism Hero-Text implementiert');
 ---
 
 <Layout 
@@ -46,7 +46,7 @@ console.log('🎨 Index v1.3.13 - Hero-Buttons mit verbessertem Kontrast');
     
     <div class="container mx-auto px-4 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center max-w-7xl mx-auto">
-        <div class="text-white hero-text-simple-white" data-aos="fade-right">
+        <div class="hero-text-glassmorphism" data-aos="fade-right">
           <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 md:mb-8 leading-tight">
             Erfolg beginnt mit uns
           </h1>
