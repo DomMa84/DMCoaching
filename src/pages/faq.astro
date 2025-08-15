@@ -1,6 +1,6 @@
 ---
 // src/pages/faq.astro
-// FAQ-Seite mit Value Management Fokus
+// FAQ-Seite im Service-Seiten-Design
 // Layout v1.4.4 kompatibel, Header v1.9.7.4 kompatibel
 // Enhanced Statistics + E-Mail Integration v18.10.4
 
@@ -34,14 +34,6 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           "@type": "Answer",
           "text": "Value Management ist ein Managementstil und übergeordneter Rahmen, während Wertanalyse die konkrete Methodik darstellt. Value Management schafft die Unternehmenskultur und Führungsphilosophie für wertorientiertes Arbeiten. Die Wertanalyse ist das praktische Werkzeug zur systematischen Wertsteigerung von Produkten und Prozessen. Beide ergänzen sich optimal für nachhaltigen Unternehmenserfolg."
         }
-      },
-      {
-        "@type": "Question", 
-        "name": "Für welche Unternehmensbereiche eignet sich Value Management?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Value Management ist universell einsetzbar: Produktentwicklung und -optimierung, Prozessverbesserung, administrative Abläufe, Kostenmanagement und strategische Unternehmensführung. Besonders wirkungsvoll bei komplexen Aufgabenstellungen, die schnelle und nachhaltige Lösungen erfordern. Vom Mittelstand bis zum Konzern profitieren alle Unternehmensgrößen von der strukturierten Herangehensweise."
-        }
       }
     ]
   }
@@ -50,37 +42,30 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
   <!-- Header Integration -->
   <Header />
 
-  <!-- Hero Section -->
-  <section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900">
-    <!-- Background with overlay -->
-    <div class="absolute inset-0 bg-black/30"></div>
-    
-    <!-- Animated background elements -->
-    <div class="absolute inset-0 overflow-hidden">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary-gold/10 rounded-full blur-3xl animate-pulse"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000"></div>
-    </div>
-
-    <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
-      <!-- Glassmorphism effect for hero text -->
-      <div class="backdrop-blur-sm bg-white/10 rounded-2xl p-8 border border-white/20 shadow-xl">
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+  <!-- Hero Section - Service-Seiten Design -->
+  <section class="relative py-16 md:py-20 bg-white dark:bg-gray-800 overflow-hidden">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <div class="text-center max-w-4xl mx-auto" data-aos="fade-up">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
           Häufig gestellte 
           <span class="text-primary-gold">Fragen</span>
         </h1>
-        <p class="text-xl md:text-2xl mb-8 text-gray-200 leading-relaxed max-w-3xl mx-auto">
+        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
           Alles über Value Management, Interim Management und Business Coaching
         </p>
         
         <!-- Quick navigation buttons -->
         <div class="flex flex-wrap justify-center gap-4 mt-8">
-          <button onclick="scrollToSection('value-management')" class="bg-primary-gold hover:bg-primary-gold-80 text-gray-900 font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+          <button onclick="scrollToSection('allgemeine-fragen')" class="bg-primary-gold hover:bg-primary-gold-80 text-gray-900 font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105">
+            Allgemeine Fragen
+          </button>
+          <button onclick="scrollToSection('value-management')" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300">
             Value Management
           </button>
-          <button onclick="scrollToSection('interim-management')" class="bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/30">
+          <button onclick="scrollToSection('interim-management')" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300">
             Interim Management
           </button>
-          <button onclick="scrollToSection('coaching')" class="bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/30">
+          <button onclick="scrollToSection('coaching')" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300">
             Business Coaching
           </button>
         </div>
@@ -89,165 +74,27 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
   </section>
 
   <!-- Main FAQ Content -->
-  <section class="py-16 md:py-20 bg-gray-50 dark:bg-gray-900">
+  <section class="py-16 md:py-20 bg-white dark:bg-gray-800">
     <div class="container mx-auto px-4 max-w-6xl">
       
-      <!-- Value Management FAQ - HAUPTFOKUS -->
-      <div id="value-management" class="mb-16 md:mb-20" data-aos="fade-up">
+      <!-- Allgemeine FAQ - ERSTE POSITION -->
+      <div id="allgemeine-fragen" class="mb-16 md:mb-20" data-aos="fade-up">
         <div class="text-center mb-12">
           <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Value Management & Wertanalyse
+            Allgemeine Fragen
           </h2>
           <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Unsere Kernkompetenz für nachhaltige Wertsteigerung in Ihrem Unternehmen
+            Praktische Informationen zu unserer Zusammenarbeit
           </p>
         </div>
 
         <div class="space-y-6">
-          <!-- FAQ Item 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <!-- Allgemein FAQ Item 1 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Was ist Value Management und wie unterscheidet es sich von der Wertanalyse?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Value Management ist ein Managementstil und übergeordneter Rahmen, während Wertanalyse die konkrete Methodik darstellt. Value Management schafft die Unternehmenskultur und Führungsphilosophie für wertorientiertes Arbeiten. Die Wertanalyse ist das praktische Werkzeug zur systematischen Wertsteigerung von Produkten und Prozessen. Beide ergänzen sich optimal für nachhaltigen Unternehmenserfolg.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Für welche Unternehmensbereiche eignet sich Value Management?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Value Management ist universell einsetzbar: Produktentwicklung und -optimierung, Prozessverbesserung, administrative Abläufe, Kostenmanagement und strategische Unternehmensführung. Besonders wirkungsvoll bei komplexen Aufgabenstellungen, die schnelle und nachhaltige Lösungen erfordern. Vom Mittelstand bis zum Konzern profitieren alle Unternehmensgrößen von der strukturierten Herangehensweise.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Wie läuft ein typisches Wertanalyse-Projekt ab?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Ein Wertanalyse-Projekt folgt dem strukturierten 10-Stufen-Arbeitsplan nach VDI 2800: Projektvorbereitung, Objektanalyse, Funktionsanalyse, Ideenfindung, Bewertung und Implementierung. Interdisziplinäre Teams arbeiten systematisch an der Wertsteigerung durch funktionales Denken. Die Projektdauer variiert je nach Komplexität zwischen 3-12 Monaten. Der Fokus liegt auf messbaren Ergebnissen und nachhaltiger Umsetzung.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 4 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Welche Erfolge kann ich mit Value Management erwarten?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Typische Erfolge sind 15-30% Kosteneinsparungen bei gleichzeitiger Qualitätsverbesserung, verkürzte Entwicklungszeiten und erhöhte Kundenzufriedenheit. Zusätzlich entstehen innovative Lösungsansätze, verbesserte Kommunikation zwischen Abteilungen und eine nachhaltige Verbesserungskultur. Die Investition in Value Management amortisiert sich meist innerhalb von 6-12 Monaten durch die erzielten Optimierungen.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 5 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Was bedeutet "funktionales Denken" in der Wertanalyse?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Funktionales Denken bedeutet, nicht nach dem "Wie" sondern nach dem "Wozu" zu fragen. Statt bestehende Lösungen zu optimieren, analysieren wir die eigentlichen Funktionen und Kundenbedürfnisse. Diese Denkweise öffnet völlig neue Lösungsräume und führt zu innovativen Ansätzen. Durch die Trennung von Funktion und Lösung entstehen oft überraschende und wirtschaftlichere Alternativen.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 6 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="600">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Welche Qualifikationen haben Sie im Bereich Value Management?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Zertifizierter Value Manager nach VDI-Standards mit über 15 Jahren Praxiserfahrung in verschiedenen Branchen. Spezialisierung auf die Integration von Value Management in strategische Unternehmensentwicklung und Changeprozesse. Kontinuierliche Weiterbildung in neuesten VM-Methoden und erfolgreiche Projektleitung von über 50 Wertanalyse-Projekten. Mitgliedschaft in relevanten Fachverbänden für Value Management.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ Item 7 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="700">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Wie messen wir den Erfolg eines Value Management Projekts?
+                  Wie läuft die erste Kontaktaufnahme ab?
                 </h3>
                 <div class="flex-shrink-0">
                   <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,9 +112,9 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
             </div>
           </div>
 
-          <!-- FAQ Item 8 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="800">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <!-- VM FAQ Item 8 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="800">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Wie integrieren wir Value Management in bestehende Unternehmensprozesse?
@@ -303,8 +150,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
 
         <div class="space-y-6">
           <!-- Interim FAQ Item 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Was ist Interim Management und wann ist es sinnvoll?
@@ -326,8 +173,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Interim FAQ Item 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Wie lange dauern typische Interim-Mandate?
@@ -349,8 +196,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Interim FAQ Item 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Was kostet Interim Management?
@@ -372,8 +219,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Interim FAQ Item 4 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Welche Branchen und Funktionsbereiche decken Sie ab?
@@ -409,8 +256,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
 
         <div class="space-y-6">
           <!-- Coaching FAQ Item 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Was ist Business Coaching und für wen ist es geeignet?
@@ -432,8 +279,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Coaching FAQ Item 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Wie läuft ein Coaching-Prozess ab?
@@ -455,14 +302,14 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Coaching FAQ Item 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Online oder Präsenz - was ist besser?
                 </h3>
                 <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transformation duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                   </svg>
                 </div>
@@ -478,8 +325,8 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
           </div>
 
           <!-- Coaching FAQ Item 4 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
                   Wie wird Vertraulichkeit im Coaching gewährleistet?
@@ -499,27 +346,13 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- Allgemeine FAQ -->
-      <div id="allgemein" class="mb-16" data-aos="fade-up">
-        <div class="text-center mb-12">
-          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Allgemeine Fragen
-          </h2>
-          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Praktische Informationen zu unserer Zusammenarbeit
-          </p>
-        </div>
-
-        <div class="space-y-6">
-          <!-- Allgemein FAQ Item 1 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
+          <!-- NEW: KI/AI-Agents FAQ Item -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
               <div class="flex justify-between items-center">
                 <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Wie läuft die erste Kontaktaufnahme ab?
+                  Nutzen Sie moderne Technologien wie KI und AI-Agents im Coaching?
                 </h3>
                 <div class="flex-shrink-0">
                   <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -531,99 +364,7 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
             <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
               <div class="px-6 md:px-8 pb-6">
                 <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Nach der ersten Kontaktaufnahme folgt ein unverbindliches Erstgespräch, in dem wir Ihre Bedürfnisse analysieren. Anschließend entwickeln wir ein individuelles Konzept für unser weiteres Vorgehen mit klaren Meilensteinen und messbaren Zielen. Dieses Erstgespräch ist kostenlos und dient dem gegenseitigen Kennenlernen sowie der Bewertung der Erfolgschancen einer Zusammenarbeit.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Allgemein FAQ Item 2 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Sind Sie deutschlandweit verfügbar?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Wir sind deutschlandweit und international tätig. Vor-Ort-Termine sind je nach Projekt und Absprache möglich, ebenso wie virtuelle Beratungen via Video-Call für maximale Flexibilität. Schwerpunkt liegt auf Baden-Württemberg und angrenzenden Regionen, jedoch keine geografischen Einschränkungen bei interessanten Projekten. Reisekosten werden transparent und fair abgerechnet.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Allgemein FAQ Item 3 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Wie schnell können Sie verfügbar sein?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Die Verfügbarkeit hängt von unserer aktuellen Auslastung ab. In der Regel können wir binnen 1-2 Wochen mit neuen Projekten beginnen. Bei kritischen Situationen sind auch kurzfristigere Starts möglich. Kontaktieren Sie uns gerne für einen konkreten Startzeitpunkt - wir finden gemeinsam eine Lösung für Ihren Zeitrahmen.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Allgemein FAQ Item 4 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Wie sind Ihre Konditionen?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Das Erstgespräch ist kostenlos. Die weitere Beratung wird individuell nach Projektumfang und -dauer kalkuliert. Wir bieten transparente Festpreise oder Tagessätze je nach Ihren Präferenzen. Alle Konditionen werden vor Projektbeginn klar definiert und schriftlich vereinbart. Keine versteckten Kosten oder nachträglichen Überraschungen.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Allgemein FAQ Item 5 -->
-          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
-            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300" onclick="toggleFAQ(this)">
-              <div class="flex justify-between items-center">
-                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
-                  Welche Qualifikationen und Referenzen haben Sie?
-                </h3>
-                <div class="flex-shrink-0">
-                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                  </svg>
-                </div>
-              </div>
-            </button>
-            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
-              <div class="px-6 md:px-8 pb-6">
-                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
-                  Über 20 Jahre Führungserfahrung in verschiedenen Branchen und Unternehmen. Zertifizierter Business Coach und Value Manager mit kontinuierlicher Weiterbildung. Mitgliedschaft in relevanten Berufsverbänden und regelmäßige Teilnahme an Fachkonferenzen. Referenzen und Erfolgsgeschichten teilen wir gerne im persönlichen Gespräch unter Beachtung der Vertraulichkeit.
+                  Ja, wir integrieren gezielt moderne KI-Tools und AI-Agents zur Effizienzsteigerung im Coaching-Prozess. Diese unterstützen bei der Vorbereitung von Sessions, Analyse von Verhaltensmustern und Follow-up-Maßnahmen. Der persönliche Coaching-Prozess und die zwischenmenschliche Beziehung bleiben jedoch im Mittelpunkt. Technologie ergänzt, ersetzt aber niemals die menschliche Expertise und Empathie.
                 </p>
               </div>
             </div>
@@ -632,11 +373,11 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
       </div>
 
       <!-- Call-to-Action Section -->
-      <div class="bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 rounded-2xl p-8 md:p-12 text-center text-white" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+      <div class="bg-primary-gold-15 rounded-2xl p-8 md:p-12 text-center" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
           Ihre Frage war nicht dabei?
         </h2>
-        <p class="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-xl md:text-2xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
           Lassen Sie uns in einem unverbindlichen Gespräch besprechen, wie wir Ihr Unternehmen voranbringen können.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -646,7 +387,7 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
             </svg>
             Direkt anrufen
           </a>
-          <a href="#contact-form" class="inline-flex items-center bg-white/20 hover:bg-white/30 text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/30" onclick="scrollToContactForm()">
+          <a href="#contact-form" class="inline-flex items-center bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold py-4 px-8 rounded-lg transition-all duration-300" onclick="scrollToContactForm()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 mr-3">
               <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
               <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
@@ -658,7 +399,7 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
 
       <!-- Contact Form Section -->
       <div id="contact-form" class="mt-16" data-aos="fade-up">
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 md:p-8">
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg p-6 md:p-8">
           <h2 class="text-2xl md:text-3xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
             Kontaktieren Sie uns
           </h2>
@@ -703,9 +444,13 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
     function scrollToSection(sectionId) {
       const element = document.getElementById(sectionId);
       if (element) {
-        element.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start' 
+        const headerHeight = 100; // Account for fixed header
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
         });
       }
     }
@@ -713,9 +458,13 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
     function scrollToContactForm() {
       const element = document.getElementById('contact-form');
       if (element) {
-        element.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start' 
+        const headerHeight = 100; // Account for fixed header
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
         });
       }
     }
@@ -731,3 +480,270 @@ const pageDescription = "Antworten auf häufige Fragen zu Value Management, Inte
     }
   </script>
 </Layout>
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Nach der ersten Kontaktaufnahme folgt ein unverbindliches Erstgespräch, in dem wir Ihre Bedürfnisse analysieren. Anschließend entwickeln wir ein individuelles Konzept für unser weiteres Vorgehen mit klaren Meilensteinen und messbaren Zielen. Dieses Erstgespräch ist kostenlos und dient dem gegenseitigen Kennenlernen sowie der Bewertung der Erfolgschancen einer Zusammenarbeit.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allgemein FAQ Item 2 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Sind Sie deutschlandweit verfügbar?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Wir sind deutschlandweit und international tätig. Vor-Ort-Termine sind je nach Projekt und Absprache möglich, ebenso wie virtuelle Beratungen via Video-Call für maximale Flexibilität. Schwerpunkt liegt auf Baden-Württemberg und angrenzenden Regionen, jedoch keine geografischen Einschränkungen bei interessanten Projekten. Reisekosten werden transparent und fair abgerechnet.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allgemein FAQ Item 3 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Wie schnell können Sie verfügbar sein?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Die Verfügbarkeit hängt von unserer aktuellen Auslastung ab. In der Regel können wir binnen 1-2 Wochen mit neuen Projekten beginnen. Bei kritischen Situationen sind auch kurzfristigere Starts möglich. Kontaktieren Sie uns gerne für einen konkreten Startzeitpunkt - wir finden gemeinsam eine Lösung für Ihren Zeitrahmen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allgemein FAQ Item 4 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Wie sind Ihre Konditionen?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Das Erstgespräch ist kostenlos. Die weitere Beratung wird individuell nach Projektumfang und -dauer kalkuliert. Wir bieten transparente Festpreise oder Tagessätze je nach Ihren Präferenzen. Alle Konditionen werden vor Projektbeginn klar definiert und schriftlich vereinbart. Keine versteckten Kosten oder nachträglichen Überraschungen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allgemein FAQ Item 5 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Welche Qualifikationen und Referenzen haben Sie?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Über 20 Jahre Führungserfahrung in verschiedenen Branchen und Unternehmen. Zertifizierter Business Coach und Value Manager mit kontinuierlicher Weiterbildung. Mitgliedschaft in relevanten Berufsverbänden und regelmäßige Teilnahme an Fachkonferenzen. Referenzen und Erfolgsgeschichten teilen wir gerne im persönlichen Gespräch unter Beachtung der Vertraulichkeit.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Value Management FAQ - HAUPTFOKUS -->
+      <div id="value-management" class="mb-16 md:mb-20" data-aos="fade-up">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Value Management & Wertanalyse
+          </h2>
+          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Unsere Kernkompetenz für nachhaltige Wertsteigerung in Ihrem Unternehmen
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <!-- VM FAQ Item 1 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Was ist Value Management und wie unterscheidet es sich von der Wertanalyse?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Value Management ist ein Managementstil und übergeordneter Rahmen, während Wertanalyse die konkrete Methodik darstellt. Value Management schafft die Unternehmenskultur und Führungsphilosophie für wertorientiertes Arbeiten. Die Wertanalyse ist das praktische Werkzeug zur systematischen Wertsteigerung von Produkten und Prozessen. Beide ergänzen sich optimal für nachhaltigen Unternehmenserfolg.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 2 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Für welche Unternehmensbereiche eignet sich Value Management?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Value Management ist universell einsetzbar: Produktentwicklung und -optimierung, Prozessverbesserung, administrative Abläufe, Kostenmanagement und strategische Unternehmensführung. Besonders wirkungsvoll bei komplexen Aufgabenstellungen, die schnelle und nachhaltige Lösungen erfordern. Vom Mittelstand bis zum Konzern profitieren alle Unternehmensgrößen von der strukturierten Herangehensweise.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 3 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Wie läuft ein typisches Wertanalyse-Projekt ab?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Ein Wertanalyse-Projekt folgt dem strukturierten 10-Stufen-Arbeitsplan nach VDI 2800: Projektvorbereitung, Objektanalyse, Funktionsanalyse, Ideenfindung, Bewertung und Implementierung. Interdisziplinäre Teams arbeiten systematisch an der Wertsteigerung durch funktionales Denken. Die Projektdauer variiert je nach Komplexität zwischen 3-12 Monaten. Der Fokus liegt auf messbaren Ergebnissen und nachhaltiger Umsetzung.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 4 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Welche Erfolge kann ich mit Value Management erwarten?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Typische Erfolge sind 15-30% Kosteneinsparungen bei gleichzeitiger Qualitätsverbesserung, verkürzte Entwicklungszeiten und erhöhte Kundenzufriedenheit. Zusätzlich entstehen innovative Lösungsansätze, verbesserte Kommunikation zwischen Abteilungen und eine nachhaltige Verbesserungskultur. Die Investition in Value Management amortisiert sich meist innerhalb von 6-12 Monaten durch die erzielten Optimierungen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 5 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="500">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Was bedeutet "funktionales Denken" in der Wertanalyse?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Funktionales Denken bedeutet, nicht nach dem "Wie" sondern nach dem "Wozu" zu fragen. Statt bestehende Lösungen zu optimieren, analysieren wir die eigentlichen Funktionen und Kundenbedürfnisse. Diese Denkweise öffnet völlig neue Lösungsräume und führt zu innovativen Ansätzen. Durch die Trennung von Funktion und Lösung entstehen oft überraschende und wirtschaftlichere Alternativen.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 6 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="600">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Welche Qualifikationen haben Sie im Bereich Value Management?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
+              <div class="px-6 md:px-8 pb-6">
+                <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg leading-relaxed">
+                  Zertifizierter Value Manager nach VDI-Standards mit über 15 Jahren Praxiserfahrung in verschiedenen Branchen. Spezialisierung auf die Integration von Value Management in strategische Unternehmensentwicklung und Changeprozesse. Kontinuierliche Weiterbildung in neuesten VM-Methoden und erfolgreiche Projektleitung von über 50 Wertanalyse-Projekten. Mitgliedschaft in relevanten Fachverbänden für Value Management.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- VM FAQ Item 7 -->
+          <div class="bg-gray-50 dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden" data-aos="fade-up" data-aos-delay="700">
+            <button class="w-full px-6 md:px-8 py-6 text-left hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300" onclick="toggleFAQ(this)">
+              <div class="flex justify-between items-center">
+                <h3 class="text-lg md:text-xl font-semibold text-gray-900 dark:text-white pr-8">
+                  Wie messen wir den Erfolg eines Value Management Projekts?
+                </h3>
+                <div class="flex-shrink-0">
+                  <svg class="w-6 h-6 text-primary-gold transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </button>
+            <div class="faq-content max-h-0 overflow-hidden transition-all duration-500 ease-in-out">
