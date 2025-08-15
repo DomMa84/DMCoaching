@@ -1,13 +1,10 @@
 ---
-// Layout.astro v1.4.3 - Safari Fix + Kontrast-Optimierung
-// CHANGELOG v1.4.3:
-// - ✅ SAFARI FIX: Content-Rendering ohne JavaScript-Abhängigkeit
-// - ✅ SAFARI FIX: AOS Safe Loading mit CSS-Fallbacks
-// - ✅ SAFARI FIX: Immediate Content Display
-// - ✅ KONTRAST FIX: Hero-Buttons für Light/Dark Mode optimiert
-// - ✅ KONTRAST FIX: Verbesserte Goldfarben-Definitionen
-// - ✅ KONTRAST FIX: Stärkere Schatten und Hintergründe
-// - ✅ KEEP: Alle bestehenden Funktionen und CSS-Cleanup von v1.4.2
+// Layout.astro v1.4.4 - Glasmorphism Hero-Text + Hero-Buttons ohne Rand
+// CHANGELOG v1.4.4:
+// - ✅ GLASMORPHISM: Hero-Text mit weißem Milchglas-Effekt
+// - ✅ FIX: Hero-Buttons ohne Rand (nur Backdrop-Filter + Schatten)
+// - ✅ TEXTFARBE: Hellere Farbe wie bei Service-Beschreibungen (#6b7280)
+// - ✅ KEEP: Safari Fix + alle bestehenden Optimierungen
 
 import CookieConsent from '../components/CookieConsent.astro';
 
@@ -206,11 +203,15 @@ const { title, description } = Astro.props;
     --primary-gold-opacity-80: rgba(210, 174, 108, 0.8);
     --primary-gold-opacity-90: rgba(210, 174, 108, 0.9);
     
-    /* ✅ KONTRAST FIX: Button-spezifische Farben */
+    /* ✅ GLASMORPHISM: Hero-Text Styles */
+    --hero-glass-bg: rgba(255, 255, 255, 0.25);
+    --hero-glass-border: rgba(255, 255, 255, 0.3);
+    --hero-glass-text: #6b7280; /* Gleiche Farbe wie Service-Beschreibungen */
+    
+    /* ✅ KONTRAST FIX: Button-spezifische Farben (ohne Rand) */
     --hero-button-bg: rgba(210, 174, 108, 0.9);
     --hero-button-bg-hover: rgba(197, 160, 92, 0.95);
     --hero-button-shadow: rgba(210, 174, 108, 0.4);
-    --hero-button-border: rgba(255, 255, 255, 0.3);
     
     --gray-50: #f9fafb;
     --gray-100: #f3f4f6;
@@ -232,13 +233,17 @@ const { title, description } = Astro.props;
     --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   }
 
-  /* ✅ KONTRAST FIX: Dark Mode Optimierungen */
+  /* ✅ GLASMORPHISM: Dark Mode Optimierungen */
   .dark {
     /* Dark Mode Button-Farben */
     --hero-button-bg: rgba(210, 174, 108, 0.95);
     --hero-button-bg-hover: rgba(226, 192, 132, 1);
     --hero-button-shadow: rgba(210, 174, 108, 0.6);
-    --hero-button-border: rgba(0, 0, 0, 0.3);
+    
+    /* Dark Mode Glasmorphism */
+    --hero-glass-bg: rgba(0, 0, 0, 0.3);
+    --hero-glass-border: rgba(255, 255, 255, 0.2);
+    --hero-glass-text: #d1d5db; /* Hellgraue Farbe für Dark Mode */
     
     /* Verbesserte Goldfarben für Dark Mode */
     --primary-gold: #E2C084;
@@ -413,12 +418,38 @@ const { title, description } = Astro.props;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
 
-  /* ✅ KONTRAST FIX: Hero-Buttons mit verbessertem Kontrast */
+  /* ✅ GLASMORPHISM: Hero-Text mit Milchglas-Effekt */
+  .hero-text-glassmorphism {
+    background: var(--hero-glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--hero-glass-border);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    color: var(--hero-glass-text);
+  }
+
+  .hero-text-glassmorphism h1 {
+    color: var(--hero-glass-text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-text-glassmorphism p {
+    color: var(--hero-glass-text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
+  }
+
+  /* ✅ KONTRAST FIX: Hero-Buttons ohne Rand */
   .hero-button {
     background: var(--hero-button-bg);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 2px solid var(--hero-button-border);
+    /* KEIN border mehr */
     color: var(--white);
     font-weight: 600;
     padding: 0.75rem 1.5rem;
@@ -443,7 +474,6 @@ const { title, description } = Astro.props;
 
   .hero-button:hover {
     background: var(--hero-button-bg-hover);
-    border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 0 12px 30px var(--hero-button-shadow);
     color: var(--white);
@@ -457,12 +487,10 @@ const { title, description } = Astro.props;
   .dark .hero-button {
     color: var(--gray-900);
     text-shadow: none;
-    border-color: rgba(0, 0, 0, 0.2);
   }
 
   .dark .hero-button:hover {
     color: var(--gray-900);
-    border-color: rgba(0, 0, 0, 0.3);
   }
 
   .value-tile-improved {
